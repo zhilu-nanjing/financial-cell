@@ -45,7 +45,7 @@ https://zhilu-nanjing.github.io/zhilu-demo/dist/index.html
 ## 项目开发环境搭建
 ```cmd
 git clone https://github.com/zhilu-nanjing/financial-cell.git
-cd sheet
+cd financial-cell
 npm install
 npm run dev
 ```
