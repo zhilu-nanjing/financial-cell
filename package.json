@@ -1,0 +1,79 @@
+{
+  "name": "x-data-spreadsheet",
+  "version": "1.0.24",
+  "description": "a javascript xpreadsheet",
+  "main": "src/index.js",
+  "files": [
+    "assets",
+    "dist",
+    "src"
+  ],
+  "author": "myliang <liangyuliang0335@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/myliang/x-spreadsheet.git"
+  },
+  "nyc": {
+    "all": true,
+    "include": [
+      "src/core/*.js"
+    ],
+    "exclude": [
+      "**/*.spec.js"
+    ]
+  },
+  "scripts": {
+    "dev": "webpack-dev-server --config build/webpack.dev.js",
+    "build": "webpack --config build/webpack.prod.js",
+    "build-locale": "webpack --config build/webpack.locale.js",
+    "lint": "./node_modules/eslint/bin/eslint.js src",
+    "karma": "karma start",
+    "test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/*",
+    "format_test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/core/format_test.js",
+    "chrome_test": "node /Users/wen/Downloads/karma-webpack-example/node_modules/karma/bin/karma start --single-run --browsers PhantomJS --require css-loader",
+    "selectors_test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/core/selectors_test.js",
+    "errorPop_test": "nyc  ./node_modules/mocha/bin/mocha   --require @babel/register --require css-loader test/core/errorPop_test.js",
+    "cell_proxy_test": "nyc  ./node_modules/mocha/bin/mocha   --require @babel/register --require css-loader test/core/cell_proxy_test.js",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov -t 31ecdb12-8ecb-46f7-a486-65c2516307dd"
+  },
+  "keywords": [
+    "javascript",
+    "spreadsheet",
+    "canvas"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/register": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-transform-runtime": "^7.0.0-beta.3",
+    "babel-runtime": "^7.0.0-beta.3",
+    "clean-webpack-plugin": "^0.1.19",
+    "codecov": "^3.3.0",
+    "css-loader": "^1.0.0",
+    "eslint": "^5.5.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "file-loader": "^2.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "less": "^3.8.1",
+    "less-loader": "^4.1.0",
+    "mini-css-extract-plugin": "^0.4.4",
+    "mocha": "^5.2.0",
+    "nyc": "^13.3.0",
+    "style-loader": "^0.23.0",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.14",
+    "webpack-merge": "^4.1.4",
+    "worker-loader": "^2.0.0"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "dayjs": "^1.8.16",
+    "formulajs": "^1.0.8",
+    "xlsx-calc": "^0.6.0"
+  }
+}
