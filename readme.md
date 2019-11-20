@@ -1,8 +1,7 @@
 ## 非常感谢您关注到我们的项目。demo如下：
 https://zhilu-nanjing.github.io/zhilu-demo/dist/index.html
 ## 本项目核心目标是让数据分析师享受到比Excel更好的体验。
--- 如果您遇到bug或发现产品细节不够好，欢迎提交issue。
--- 如果您能实现新功能点，欢迎提交pull request。
+-- 除了bug以外，如果发现产品细节不够好，也欢迎提issue。
 
 ## 本项目已经完成的功能点如下：
 基本功能
@@ -35,7 +34,7 @@ https://zhilu-nanjing.github.io/zhilu-demo/dist/index.html
 + 多值函数
 + 插入行列（公式自动调整）
 
-## 社区可以帮助我们的功能点
+## 期盼您可以帮我们完成的功能点
 + 图表（例如柱形图，折现图）
 + 数据透视表
 + 数据透视图
