@@ -1,5 +1,5 @@
 ## 非常感谢您关注到我们的项目。demo如下：
-https://zhilu-nanjing.github.io/financial-cell/dist/index.html
+https://zhilu-nanjing.github.io/zhilu-demo/dist/index.html
 ## 本项目核心目标是让数据分析师享受到比Excel更好的体验。
 -- 如果您遇到bug或发现产品细节不够好，欢迎提交issue。
 -- 如果您能实现新功能点，欢迎提交pull request。
@@ -35,7 +35,7 @@ https://zhilu-nanjing.github.io/financial-cell/dist/index.html
 + 多值函数
 + 插入行列（公式自动调整）
 
-## 盼望大神帮助我们完成的功能点
+## 社区可以帮助我们的功能点
 + 图表（例如柱形图，折现图）
 + 数据透视表
 + 数据透视图
@@ -50,8 +50,8 @@ cd sheet
 npm install
 npm run dev
 ```
-技术文档是自动生成的，网址如下：
-https://zhilu-nanjing.github.io/financial-cell/docs/index.html
+技术文档是自动生成的，正在完善中：
+https://zhilu-nanjing.github.io/zhilu-demo/docs/index.html
 
 ## LICENSE
 
