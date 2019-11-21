@@ -52,11 +52,14 @@ class CalcWorkBook { // 对workbook处理的类
     Object.keys(sheet).forEach(i => {
       let arg = exp.expr2xy(i);
       if (isHave(sheet[i]) && isHave(sheet[i].v) && isHave(sheet[i].f)) {
+        var cell = rows.getCell(arg[1], arg[0])
+        cell.text = sheet[i].v
+        cell.formulas = sheet[i].f
+        cell.multivalueRefsCell = sheet[i].multivalueRefsCell
         if (isHave(sheet[i].source_v)){
-          rows.setCell(arg[1], arg[0], {text: sheet[i].v, formulas: sheet[i].f, multivalueRefsCell: sheet[i].multivalueRefsCell, source_v: sheet[i].source_v});
-        }else{
-          rows.setCell(arg[1], arg[0], {text: sheet[i].v, formulas: sheet[i].f, multivalueRefsCell: sheet[i].multivalueRefsCell});
+          cell.source_v = sheet[i].source_v
         }
+        rows.setCell(arg[1], arg[0], cell);
       }
     });
   }
@@ -174,6 +177,7 @@ class CalcWorkBook { // 对workbook处理的类
           wb[c] = {
             "v": formulas_i.cell.v,
             "f": formulas_i.cell.f,
+            "source_v": ""
           }
         } else if (this.rows.getCell(cell_y + j, cell_x + i).text !== cell_v[i][j]) {
           wb[c] = {

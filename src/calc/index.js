@@ -9,10 +9,11 @@ const CalcCell = require('./CalcCell.js');
 const checker = require('./formula_check.js');
 const helper = require("../core/helper")
 const CalcWorkBook = require('./CalcWorkBook')
+const utils = require('./utils')
 var mymodule = function(rows, tileArr) {
     if (helper.isHave(tileArr)){
         var Calc_WorkBook = new CalcWorkBook(rows, tileArr)
-        var workbook = Calc_WorkBook.get_workbook()
+        var workbook = utils.Rows2Workbook(rows)
         var formulas = find_all_need_calc_cell(workbook, tileArr, exec_formula)
         for (var i = formulas.length - 1; i >= 0; i--) {
             try {
@@ -27,10 +28,10 @@ var mymodule = function(rows, tileArr) {
                     exec_formula(formulas[i]);
                     formulas[i].cell.f = calc_cell.recover_formula()
                     checker.recover_sheet(formulas[i].sheet)
-                    //如果是多值单元格或公式返回结果为array，进入多单元格处理
-                    if (Calc_WorkBook.is_muti_cell(formulas[i]) || Array.isArray(formulas[i].cell.v)){
-                        Calc_WorkBook.deal_muti_cell(workbook, formulas[i])
-                    }
+                }
+                //如果是多值单元格或公式返回结果为array，进入多单元格处理
+                if (Calc_WorkBook.is_muti_cell(formulas[i]) || Array.isArray(formulas[i].cell.v)){
+                    Calc_WorkBook.deal_muti_cell(workbook, formulas[i])
                 }
             } catch (e) {
                 console.log(e)
