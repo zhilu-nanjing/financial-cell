@@ -26,4 +26,5 @@ after_script:
  - git add .
  - git commit -m "update dist"
  - git remote add origin https://github.com/zhilu-nanjing/zhilu-demo.git
- - git push
+ - git push --set-upstream origin master
+
