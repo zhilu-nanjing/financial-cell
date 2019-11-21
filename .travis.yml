@@ -3,6 +3,10 @@ language: node_js
 node_js:
  - 10.12.0
 
+cache:
+  directories:
+    - node_modules
+
 branches:
   only:
   - master
@@ -25,5 +29,5 @@ after_script:
  - git config user.email "515822856@qq.com"
  - git add .
  - git commit -m "update dist"
- - git push --force --quiet "https://0392320685b2e278818a566fa99d3855b62a99a9@https://github.com/zhilu-nanjing/zhilu-demo.git" master:master
+ - git push --force --quiet "https://0392320685b2e278818a566fa99d3855b62a99a9@github.com:zhilu-nanjing/zhilu-demo.git" master:master
 
