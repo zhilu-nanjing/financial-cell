@@ -30,7 +30,6 @@ var/
 wheels/
 *.egg-info/
 .installed.cfg
-package-lock.json
 *.egg
 node_modules.zip
 
