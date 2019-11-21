@@ -18,5 +18,5 @@ script:
   - npm run test
 
 after_script:
-  - cp ./dist/* ./docs/ -r
+ - ls
 
