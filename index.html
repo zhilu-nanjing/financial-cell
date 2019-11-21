@@ -8,7 +8,7 @@
 <body onload="load()">
 
 
-<div id="x-spreadsheet-demo"></div>
+<div id="financial-cell"></div>
 <script>
     function cellTypeRandom(type) {
         let cell = {};
@@ -57,12 +57,6 @@
 
     function load() {
         let options = {
-            // date_formula: {
-            //     wland: () => {
-            //         console.log("17wland")
-            //
-            //     }
-            // },
             showFreeze: true,
             showEditor: true,
             rowsInit: true,
@@ -71,7 +65,6 @@
                 width: 180
             },
             view: {
-                // height: () => ,
             },
             row: {
                 len: 200,
@@ -422,7 +415,7 @@
 
         let spaces = ['          ', '                    '];     // 10个空格，和20个空格
 
-        var xs = x.spreadsheet('#x-spreadsheet-demo', options, {})
+        var xs = x.spreadsheet('#financial-cell', options, {})
             .loadData({
                 styles: [
                     {
