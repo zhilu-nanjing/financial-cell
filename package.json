@@ -73,7 +73,9 @@
     "js-spreadsheet": "^1.0.1",
     "bessel": "^1.0.2",
     "jStat": "^1.8.6",
-    "numeral": "^2.0.6"
+    "numeral": "^2.0.6",
+    "numeric": "^1.2.6",
+
   },
   "dependencies": {
     "axios": "^0.19.0",
