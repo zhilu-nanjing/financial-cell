@@ -5,8 +5,8 @@
  render
  */
 import {tf} from '../locale/locale';
-import XLSX_CALC from "../xlsx-calc"
-var formulajs = require('../xlsx-calc/formulajs/index');
+import XLSX_CALC from "../calc"
+var formulajs = require('../calc/formulajs/index');
 const baseFormulas = [
     {
         key: 'MD.WLAND',

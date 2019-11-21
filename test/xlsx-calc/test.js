@@ -1,7 +1,7 @@
 import {describe, it} from "mocha";
 import DataProxy from "../../src/core/data_proxy";
 
-describe('  xlsx-calc  ', () => {
+describe('  calc  ', () => {
     let data = new DataProxy("sheet1", {}, {});
 
     it(' test ', function () {

@@ -3,7 +3,6 @@
 import {formulaCalc} from '../core/formula';
 import Selector from './selector';
 import Scroll from './scroll';
-import History from './history';
 import Clipboard from './clipboard';
 import AutoFilter from './auto_filter';
 import {Merges} from './merge';

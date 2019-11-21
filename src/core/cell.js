@@ -1,6 +1,6 @@
 import {expr2xy, xy2expr} from './alphabet';
 import {look, look2} from "../config";
-// import XLSX_CALC from "xlsx-calc"
+// import XLSX_CALC from "calc"
 // var formulajs = require('formulajs');
 // Converting infix expression to a suffix expression
 // src: AVERAGE(SUM(A1,A2), B1) + 50 + B20
