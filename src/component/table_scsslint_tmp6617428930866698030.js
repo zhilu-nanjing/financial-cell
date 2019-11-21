@@ -265,6 +265,7 @@ function renderAutofilter(viewRange) {
 }
 
 function renderContent(viewRange, fw, fh, tx, ty) {
+    // let sheetbook = args.data;
     const {draw, data} = this;
     draw.save();
     draw.translate(fw, fh)
