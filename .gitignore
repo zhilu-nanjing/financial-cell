@@ -25,6 +25,9 @@ demo/
 eggs/
 .eggs/
 lib64/
+test/test.js
+test/helper_test.js
+
 parts/
 
 var/
