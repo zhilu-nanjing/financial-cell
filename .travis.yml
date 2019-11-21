@@ -15,8 +15,7 @@ before_script:
 
 script:
   - npm run build
-  - npm run test
+  - npm run errorPop_test
 
 after_script:
  - ls
-
