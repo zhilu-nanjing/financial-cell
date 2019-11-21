@@ -1,5 +1,8 @@
 ## 非常感谢您关注到我们的项目。demo如下：
 https://zhilu-nanjing.github.io/zhilu-demo/dist/index.html
+
+![估值模型示例](https://github.com/zhilu-nanjing/zhilu-demo/blob/master/img/d306e2504393d69bd9079cb0190c7668.jpg)
+
 ## 本项目核心目标是让数据分析师享受到比Excel更好的体验。
 -- 除了bug以外，如果发现产品细节不够好，也欢迎提issue。
 
