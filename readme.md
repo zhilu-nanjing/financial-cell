@@ -42,8 +42,9 @@ https://zhilu-nanjing.github.io/zhilu-demo/dist/index.html
 + 数据透视表
 + 数据透视图
 + 数据切片器
-+ 拖拽式控件（类似于Excel中的activeX 件）
++ 拖拽式控件（类似于Excel中的activeX控件）
 + 多人实时协作编辑
++ 第三方插件开发平台（类似于Excel的addin）
 
 ## 项目开发环境搭建
 ```cmd
@@ -55,6 +56,8 @@ npm run dev
 技术文档是自动生成的，正在完善中：
 https://zhilu-nanjing.github.io/zhilu-demo/docs/index.html
 
-## LICENSE
+## 代码贡献指南
+https://www.notion.so/financial-cell-6ed2e5093897477fbea6088b4dab8122
 
+## LICENSE
 MIT
