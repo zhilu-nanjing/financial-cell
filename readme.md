@@ -42,8 +42,9 @@ https://zhilu-nanjing.github.io/zhilu-demo/dist/index.html
 + 数据透视表
 + 数据透视图
 + 数据切片器
-+ 拖拽式控件（类似于Excel中的activeX 件）
++ 拖拽式控件（类似于Excel中的activeX控件）
 + 多人实时协作编辑
++ 第三方插件开发平台（类似于Excel的addin）
 
 ## 项目开发环境搭建
 ```cmd
