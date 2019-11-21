@@ -25,6 +25,5 @@ after_script:
  - git config user.email "515822856@qq.com"
  - git add .
  - git commit -m "update dist"
- - git remote add origin https://github.com/zhilu-nanjing/zhilu-demo.git
- - git push --set-upstream origin master
+ - git push --force --quiet "https://${zhilu}@github.com:zhilu-nanjing/zhilu-demo.git" master:master
 
