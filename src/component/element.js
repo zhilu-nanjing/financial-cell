@@ -276,9 +276,9 @@ class Element {
     }
 }
 
-const h = (tag, className = '') => new Element(tag, className);
+const h = (tag, className = '') => new Element(tag, className);//用箭头函数将返回的值赋给h
 
 export {
     Element,
     h,
-};
+};//命名导出，js一个文件是一个模块，每个模块中需要导出，然后在其他模块中才能导入其导出的内容

@@ -1,6 +1,6 @@
 {
   "name": "financial-cell",
-  "version": "0.1",
+  "version": "0.0.1",
   "description": "一种有助于财务分析的电子表格系统",
   "main": "src/index.js",
   "files": [

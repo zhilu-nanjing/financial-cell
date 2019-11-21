@@ -1,5 +1,5 @@
 /* global window, document */
-import {h} from './component/element';
+import {h} from './component/element';//导入经过命名导出的常量h
 import DataProxy from './core/data_proxy';
 import Sheet from './component/sheet';
 import {cssPrefix} from './config';
