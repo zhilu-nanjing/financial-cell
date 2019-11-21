@@ -19,3 +19,11 @@ script:
 
 after_script:
  - ls
+ - cd ./dist
+ - git init
+ - git config user.name "zhilu2020"
+ - git config user.email "515822856@qq.com"
+ - git add .
+ - git commit -m "update dist"
+ - git remote add origin https://github.com/zhilu-nanjing/zhilu-demo.git
+ - git push
