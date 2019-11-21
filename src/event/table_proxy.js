@@ -4,7 +4,7 @@ import {splitStr} from "../core/operator";
 import {xy2expr} from "../core/alphabet";
 import CellRange from '../core/cell_range';
 import {isHave} from "../core/helper";
-
+// jobs: todo: 为什么TableProxy放在event文件夹里面，似乎应该放到core文件夹？
 export default class TableProxy {
     constructor(data ) {
         this.data = data;

@@ -1,3 +1,4 @@
+// jobs: todo: 正则表达式可以统一放到utils/reg_pattern.js文件中去
 export const logicOperator = "([(-\\/,+*，=^&])";
 export const blankOperator = "(^\\s*)|(\\s*$)";
 export const letterOperator = "^[A-Z]+\\d+$";

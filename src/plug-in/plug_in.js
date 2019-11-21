@@ -8,7 +8,7 @@ function setCssToRight() {
     this.sheet.toolbar.el.css('position', 'relative');
 }
 
-export default class PlugIn {
+export default class PlugIn { // jobs: todo: 这个是做什么的？代码好奇怪
     constructor(targetEl, sheet, data) {
         this.targetEl = targetEl;
         this.sheet = sheet;
