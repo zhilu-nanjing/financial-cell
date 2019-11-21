@@ -74,8 +74,6 @@
   },
   "dependencies": {
     "axios": "^0.19.0",
-    "dayjs": "^1.8.16",
-    "formulajs": "^1.0.8",
-    "xlsx-calc": "^0.6.0"
+    "dayjs": "^1.8.16"
   }
 }
