@@ -1099,7 +1099,7 @@ export default class DataProxy {
         }
     }
 
-    changeToHistory({ri, type, ci, cellRange, property, value, oldCell, oldMergesData, newData}, oldStep) {
+    changeToHistory({ri, type, ci, cellRange, property, value, oldCell, oldMergesData}, oldStep) {
         if (type === -1) {
             return {"state": false,}
         }
@@ -1117,7 +1117,7 @@ export default class DataProxy {
             ci,
             cellRange: cellRange,
         });
-        multiPreAction.addStep(step, {oldCell, oldMergesData, newMergesData: this.merges.getData(), oldStep, newData});
+        multiPreAction.addStep(step, {oldCell, oldMergesData, newMergesData: this.merges.getData(), oldStep,});
         return {
             "state": true
         }

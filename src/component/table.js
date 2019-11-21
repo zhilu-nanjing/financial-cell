@@ -86,7 +86,7 @@ function parseCell() {
     let {data} = this;
 
     let changeDataArgs = getChangeDataToCalc.call(this);
-    data.calc(data.rows, changeDataArgs.data);
+    // data.calc(data.rows, changeDataArgs.data);
 
     if (changeDataArgs.state) {
         data.changeDataForCalc = null;
@@ -245,7 +245,6 @@ function renderFlexible() {
 }
 
 function renderAutofilter(viewRange) {
-    // debugger
     const {data, draw} = this;
     if (viewRange) {
         const {autoFilter} = data;
@@ -266,7 +265,6 @@ function renderAutofilter(viewRange) {
 }
 
 function renderContent(viewRange, fw, fh, tx, ty) {
-    // let sheetbook = args.data;
     const {draw, data} = this;
     draw.save();
     draw.translate(fw, fh)

@@ -1,18 +1,18 @@
 {
-  "name": "x-data-spreadsheet",
-  "version": "1.0.24",
-  "description": "a javascript xpreadsheet",
+  "name": "financial-cell",
+  "version": "0.0.1",
+  "description": "一种有助于财务分析的电子表格系统",
   "main": "src/index.js",
   "files": [
     "assets",
     "dist",
     "src"
   ],
-  "author": "myliang <liangyuliang0335@gmail.com>",
+  "author": "南京智录信息科技有限公司",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/myliang/x-spreadsheet.git"
+    "url": "https://github.com/zhilu-nanjing/financial-cell.git"
   },
   "nyc": {
     "all": true,
@@ -28,7 +28,6 @@
     "build": "webpack --config build/webpack.prod.js",
     "build-locale": "webpack --config build/webpack.locale.js",
     "lint": "./node_modules/eslint/bin/eslint.js src",
-    "karma": "karma start",
     "test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/*",
     "format_test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/core/format_test.js",
     "chrome_test": "node /Users/wen/Downloads/karma-webpack-example/node_modules/karma/bin/karma start --single-run --browsers PhantomJS --require css-loader",
