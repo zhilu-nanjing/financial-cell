@@ -22,9 +22,10 @@ script:
   - npm run errorPop_test
 
 after_script:
- - ls
- - cd ./dist
- - git init
+ - git clone https://github.com/zhilu-nanjing/zhilu-demo.git
+ - cd zhilu-demo
+ - rm -rf dist
+ - cp -r ../dist .
  - git config user.name "zhilu2020"
  - git config user.email "515822856@qq.com"
  - git add .
