@@ -10,7 +10,6 @@ import {deepCopy, distinct} from "../core/operator";
 import {testValid} from "../utils/test";
 import {isHave} from "../core/helper";
 // import Worker from 'worker-loader!../external/Worker2.js';
-var formulajs = require('formulajs');
 // gobal var
 const cellPaddingWidth = 5;
 const tableFixedHeaderCleanStyle = {fillStyle: '#f4f5f8'};
