@@ -24,6 +24,7 @@ export default class Cell {
         this.merge = null;
         this.formatText = null;
         this.multivalueRefsCell = null;
+        this.source_v = null;
     }
 
     /**
@@ -60,6 +61,10 @@ export default class Cell {
 
         if (isHave(cell.merge)) {
             this.merge = cell.merge;
+        }
+
+        if (isHave(cell.source_v)) {
+            this.source_v = cell.source_v;
         }
     }
 
