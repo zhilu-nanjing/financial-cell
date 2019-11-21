@@ -20,6 +20,10 @@ class CalcCell { // 对cell中的参数做转换，判断,多单元格处理等�
     if (params != null && this.f.indexOf('(') <0 && this.f.indexOf(')')<0){
       return error.name
     }
+    // 处理"" 中""的转义
+    if (this.f.indexOf('""') >= 1 && this.f.indexOf('(') < 0 && this.f.indexOf(')') < 0) {
+      return this.f.slice(2, this.f.length - 1).replace('""', '"')
+    }
     return true
   }
 
