@@ -9,11 +9,11 @@ const CalcCell = require('./CalcCell.js');
 const checker = require('./formula_check.js');
 const helper = require("../core/helper")
 const CalcWorkBook = require('./CalcWorkBook')
-const utils = require('./utils');
 var mymodule = function(rows, tileArr) {
     if (helper.isHave(tileArr)){
         var Calc_WorkBook = new CalcWorkBook(rows, tileArr)
-        var workbook = utils.Rows2Workbook(rows)
+        var workbook = rows.workbook
+        workbook = Calc_WorkBook.get_workbook(workbook)
         var formulas = find_all_need_calc_cell(workbook, tileArr, exec_formula)
         for (var i = formulas.length - 1; i >= 0; i--) {
             try {

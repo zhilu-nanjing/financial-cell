@@ -421,7 +421,9 @@ exports.UNICHAR = function (text) {
   return String.fromCharCode(text);
 };
 
-exports.UNICODE = this.CODE;
+exports.UNICODE = function (text){
+  return text.charCodeAt(0)
+}
 
 exports.UPPER = function(text) {
   if (typeof text !== 'string') {
