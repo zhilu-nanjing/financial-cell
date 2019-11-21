@@ -10,7 +10,7 @@ import CellProxy from "./cell_proxy";
 import CellRange from "./cell_range";
 import CellProp from "../model/cell_prop";
 import Cell from "../model/cell";
-var calcUtils = require('../calc/utils');
+var 
 
 export function isFormula(text) {
     if (text && text[0] === "=") {
@@ -100,7 +100,6 @@ class Rows {
         this.height = height;
         this.data = data;
         this.pasteProxy = new PasteProxy();
-        this.workbook = null;
     }
 
     getHeight(ri) {
@@ -1297,18 +1296,28 @@ class Rows {
             this._ = d;
 
 
+            // 为什么要判断sheet = '' ?
             if (out) {
+
 
             } else if (sheet !== '') {
                 console.time("setData")
                 if (rowsInit) {
                     this.init();
-                    this.workbook = calcUtils.Rows2Workbook(this);
                     sheet.toolbar.change('close', '');
                 }
                 console.timeEnd("setData")
 
             }
+
+            // this.each((ri, row) => {
+            //     this.eachCells(ri, (ci, cell) => {
+            //         if(this.isReferOtherSheet(cell, true)) {
+            //             this.recast(cell);
+            //         }
+            //     });
+            // });
+
         } catch (e) {
             console.error("745", e);
         }

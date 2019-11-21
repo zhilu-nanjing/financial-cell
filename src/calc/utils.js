@@ -1,10 +1,13 @@
 var exp = require("../core/alphabet");
-const helper = require("../core/helper")
+const helper = require("../core/helper");
+
 exports.Rows2Workbook = function (rows) {
   var cells = rows._
   var workbook = {
     Sheets:{}
-  }
+  };
+  //  data['name']
+    // let {data} = rows;
   workbook.Sheets.sheet1 = {}
   Object.keys(cells).forEach(ri => {
     Object.keys(cells[ri].cells).forEach(ci => {

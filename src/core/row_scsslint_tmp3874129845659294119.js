@@ -100,7 +100,6 @@ class Rows {
         this.height = height;
         this.data = data;
         this.pasteProxy = new PasteProxy();
-        this.workbook = null;
     }
 
     getHeight(ri) {
@@ -1303,7 +1302,7 @@ class Rows {
                 console.time("setData")
                 if (rowsInit) {
                     this.init();
-                    this.workbook = calcUtils.Rows2Workbook(this);
+                    calcUtils.Rows2Workbook(this._);
                     sheet.toolbar.change('close', '');
                 }
                 console.timeEnd("setData")

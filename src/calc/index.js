@@ -9,7 +9,7 @@ const CalcCell = require('./CalcCell.js');
 const checker = require('./formula_check.js');
 const helper = require("../core/helper")
 const CalcWorkBook = require('./CalcWorkBook')
-const utils = require('./utils')
+const utils = require('./utils');
 var mymodule = function(rows, tileArr) {
     if (helper.isHave(tileArr)){
         var Calc_WorkBook = new CalcWorkBook(rows, tileArr)

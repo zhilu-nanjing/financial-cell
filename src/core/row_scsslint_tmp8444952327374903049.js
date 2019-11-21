@@ -1303,7 +1303,7 @@ class Rows {
                 console.time("setData")
                 if (rowsInit) {
                     this.init();
-                    this.workbook = calcUtils.Rows2Workbook(this);
+                    calcUtils.Rows2Workbook(this._);
                     sheet.toolbar.change('close', '');
                 }
                 console.timeEnd("setData")
