@@ -7,6 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = merge(common, {
     mode: 'production',
+    devtool: 'source-map',
     plugins: [
         new CleanWebpackPlugin(['dist']),
         //  you should know that the HtmlWebpackPlugin by default will generate its own index.html

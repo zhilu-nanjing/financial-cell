@@ -7,7 +7,9 @@
 </head>
 <body onload="load()">
 
-
+<div style="background: rgb(80,145,243); position: fixed; display: inline-block;  z-index: 19999;" id="calcHelp">
+    帮我算一算(可移动)
+</div>
 <div id="financial-cell"></div>
 <script>
     function load() {
@@ -1330,7 +1332,7 @@
                     7: {'width': 104},
                     8: {'width': 99},
                     9: {'width': 101},
-                    10: {'width': 86},
+                    10: {'width': 106},
                     11: {'width': 99},
                     12: {'width': 92},
                     13: {'width': 100}
@@ -1339,6 +1341,20 @@
                 console.log(cdata);
                 console.log(xs.validate());
             });
+
+        let calcHelp = document.getElementById("calcHelp");
+        let drag = window.drag;
+        new drag({}, this).register(calcHelp);
+
+
+        calcHelp.addEventListener('click', () => {
+            // let event = new KeyboardEvent('keydown', {
+            //     keyCode: 68,
+            //     metaKey: true,
+            //     isTrusted: true, key: "d", code: "KeyD"
+            // });
+            // window.dispatchEvent(event);
+        });
     }
 </script>
 
