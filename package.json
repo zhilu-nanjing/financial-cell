@@ -1,5 +1,5 @@
 {
-  "name": "x-data-spreadsheet",
+  "name": "financial-cell",
   "version": "1.0.24",
   "description": "a javascript xpreadsheet",
   "main": "src/index.js",
@@ -8,11 +8,11 @@
     "dist",
     "src"
   ],
-  "author": "myliang <liangyuliang0335@gmail.com>",
+  "author": "南京智录",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/myliang/x-spreadsheet.git"
+    "url": "https://github.com/zhilu-nanjing/financial-cell.git"
   },
   "nyc": {
     "all": true,

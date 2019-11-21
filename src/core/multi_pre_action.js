@@ -9,7 +9,7 @@ export default class MultiPreAction {
         this.data = data;
     }
 
-    addStep({type, action, ri, ci, expr, cellRange, cells, height, width, property, value, oldData}, {oldCell, newCell, oldMergesData, newMergesData, oldStep, newData}) {
+    addStep({type, action, ri, ci, expr, cellRange, cells, height, width, property, value, oldData}, {oldCell, newCell, oldMergesData, newMergesData, oldStep}) {
         let preAction = "";
         switch (type) {
             case 1:
@@ -34,7 +34,7 @@ export default class MultiPreAction {
                 break;
             case 13:
                 preAction = new PreAction({
-                    type, oldData, newData,
+                    type, oldData, newData: oldStep.oldData,
                     action,
                 }, this.data);
                 this.undoItems.push(preAction);

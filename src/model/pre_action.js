@@ -77,14 +77,14 @@ export default class PreAction {
 
         } else if(type === 13) {
             let {oldData, newData} = this;
-            let data = "";
+            let _data = "";
             if (isRedo === 1) {
-                data = deepCopy(oldData);
+                _data = deepCopy(newData);
             } else {
-                data = deepCopy(newData);
+                _data = deepCopy(oldData);
             }
 
-            this.data.setData(data);
+            data.setData(_data);
         } else if (type === 2 || type === 5 || type === 6 || type === 11 || type === 12) {
             let {newCell, oldCell, oldMergesData, newMergesData, cellRange, property, value} = this;
             let _cells = "";
