@@ -1,13 +1,4 @@
 "use strict";
-function isHave(param) {
-    if (typeof param === "undefined") {
-        return false;
-    }
-    if (param === null) {
-        return false;
-    }
-    return true;
-}
 module.exports = function find_all_need_calc_cell(wb, tileArr, exec_formula) {
     var need_calc_cells = tileArr.findAllNeedCalcCell()
     let formula_ref = {};

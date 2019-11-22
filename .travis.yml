@@ -3,6 +3,10 @@ language: node_js
 node_js:
  - 10.12.0
 
+cache:
+  directories:
+    - node_modules
+
 branches:
   only:
   - master
@@ -15,9 +19,16 @@ before_script:
 
 script:
   - npm run build
-  - npm run test
-  - npm run coverage
+  - npm run errorPop_test
 
 after_script:
-  - cp ./dist/* ./docs/ -r
+ - git clone https://github.com/zhilu-nanjing/zhilu-demo.git
+ - cd zhilu-demo
+ - rm -rf dist
+ - cp -r ../dist .
+ - git config user.name "zhilu2020"
+ - git config user.email "515822856@qq.com"
+ - git add .
+ - git commit -m "update dist"
+ - git push --quiet "https://${zhilu}@github.com/zhilu-nanjing/zhilu-demo.git" master:master
 

@@ -56,6 +56,8 @@ npm run dev
 技术文档是自动生成的，正在完善中：
 https://zhilu-nanjing.github.io/zhilu-demo/docs/index.html
 
-## LICENSE
+## 代码贡献指南
+https://www.notion.so/financial-cell-6ed2e5093897477fbea6088b4dab8122
 
+## LICENSE
 MIT

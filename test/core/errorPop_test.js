@@ -1359,7 +1359,7 @@ describe('qq', () => {
 
             data.rows.insert(0, 1);
             assert.equal(data.rows.getCell(2, 1).formulas, "=A4");
-            assert.equal(data.rows.getCell(2, 2).formulas, "=A1:A3");
+            assert.equal(data.rows.getCell(2, 2).formulas, "=A2:A3");
             assert.equal(data.rows.getCell(2, 3).formulas, "=$A4:A6");
             assert.equal(data.rows.getCell(2, 4).formulas, "=ABS(A5)");
             assert.equal(data.rows.getCell(2, 5).formulas, "=ABS($A5)");
@@ -1367,7 +1367,7 @@ describe('qq', () => {
             data.rows.insertColumn(0, 1);
             assert.equal(data.rows.getCell(2, 1).formulas, "A2");
             assert.equal(data.rows.getCell(2, 2).formulas, "=B4");
-            assert.equal(data.rows.getCell(2, 3).formulas, "=B1:B3");
+            assert.equal(data.rows.getCell(2, 3).formulas, "=B2:B3");
             assert.equal(data.rows.getCell(2, 4).formulas, "=$B4:B6");
             assert.equal(data.rows.getCell(2, 5).formulas, "=ABS(B5)");
             assert.equal(data.rows.getCell(2, 6).formulas, "=ABS($B5)");

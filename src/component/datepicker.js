@@ -15,7 +15,7 @@ export default class Datepicker {
     const { calendar } = this;
     if (typeof date === 'string') {
       // console.log(/^\d{4}-\d{1,2}-\d{1,2}$/.test(date));
-      if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(date)) {
+      if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(date)) { // jobs: todo: 正则表达式抽取出来
         calendar.setValue(new Date(date.replace(new RegExp('-', 'g'), '/')));
       }
     } else if (date instanceof Date) {

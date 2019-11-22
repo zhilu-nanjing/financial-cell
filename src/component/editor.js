@@ -784,16 +784,16 @@ export default class Editor {
 
     setCellEnd(cell) {
         let text = '';
-        if(isHave(cell) && isHave(cell.formulas)) {
-            text = cell.formulas;
-        }
         if(isHave(cell) && isHave(cell.text)) {
             text = cell.text;
         }
 
+        if(isHave(cell) && isHave(cell.formulas)) {
+            text = cell.formulas;
+        }
+
         let {data} = this;
         const style = data.getCellStyleOrDefault( this.ri, this.ci);
-        // 为什么要着2行？？ 用户是对格式不可见的
         let args = data.renderFormat(style, cell, this.ri, this.ci, true);
         text = args.state ? args.cellText : text;
 

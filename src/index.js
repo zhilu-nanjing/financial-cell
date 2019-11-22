@@ -8,7 +8,7 @@ import './index.less';
 import zhCN from './locale/zh-cn';
 import PlugIn from "./plug-in/plug_in";
 import {bugout} from "./log/log_proxy";
-
+import Drag from "./external/drag";
 class Spreadsheet {
     constructor(selectors, options = {}, methods = {}, alias = 'sheet1') {
         let targetEl = selectors;
@@ -114,6 +114,7 @@ const spreadsheet = (el, options = {}) => new Spreadsheet(el, options);
 
 if (window) {
     window.jsSpreadsheet = require('js-spreadsheet');
+    window.drag = Drag;
     window.x = window.x || {};
     window.bugout = bugout;
     window.x.spreadsheet = spreadsheet;

@@ -28,19 +28,17 @@ class CalcWorkBook { // 对workbook处理的类
     this.tileArr = tileArr
   }
 
-  // rows 转workbook
-  get_workbook(){
+  // 变动数据传入workbook
+  get_workbook(workbook){
+    let {data} = this.rows;
+    let name = data['name']
     var need_calc_cells = this.tileArr.findAllNeedCalcCell()
-    var workbook = {
-      Sheets:{}
-    }
-    workbook.Sheets.sheet1 = {}
     for (var i=0;i<need_calc_cells.length;i++){
       var cell_name = need_calc_cells[i]
       var zb = exp.expr2xy(cell_name)
       var cell = this.rows.getCell(zb[1], zb[0])
       if(isHave(cell)){
-        workbook.Sheets.sheet1[cell_name] = {v: cell.text, f: cell.formulas, multivalueRefsCell: cell.multivalueRefsCell}
+        workbook.Sheets[name][cell_name] = {v: cell.text, f: cell.formulas, multivalueRefsCell: cell.multivalueRefsCell, source_v: cell.source_v}
       }
     }
     return workbook
@@ -48,17 +46,26 @@ class CalcWorkBook { // 对workbook处理的类
 
   //workbook填入rows
   calcDoneToSetCells(workbook, rows) {
-    var sheet = workbook.Sheets.sheet1
+    let {data} = rows;
+    let name = data['name']
+    var sheet = workbook.Sheets[name]
     Object.keys(sheet).forEach(i => {
       let arg = exp.expr2xy(i);
       if (isHave(sheet[i]) && isHave(sheet[i].v) && isHave(sheet[i].f)) {
-        if (isHave(sheet[i].source_v)){
-          rows.setCell(arg[1], arg[0], {text: sheet[i].v, formulas: sheet[i].f, multivalueRefsCell: sheet[i].multivalueRefsCell, source_v: sheet[i].source_v});
-        }else{
-          rows.setCell(arg[1], arg[0], {text: sheet[i].v, formulas: sheet[i].f, multivalueRefsCell: sheet[i].multivalueRefsCell});
+        var cell = rows.getCell(arg[1], arg[0])
+        if (!isHave(cell)){
+          cell = {}
         }
+        cell.text = sheet[i].v
+        cell.formulas = sheet[i].f
+        cell.multivalueRefsCell = sheet[i].multivalueRefsCell
+        if (isHave(sheet[i].source_v)){
+          cell.source_v = sheet[i].source_v
+        }
+        rows.setCell(arg[1], arg[0], cell);
       }
     });
+    rows.workbook = workbook
   }
 
   // 判断是否是多值函数的单元格
@@ -174,6 +181,7 @@ class CalcWorkBook { // 对workbook处理的类
           wb[c] = {
             "v": formulas_i.cell.v,
             "f": formulas_i.cell.f,
+            "source_v": ""
           }
         } else if (this.rows.getCell(cell_y + j, cell_x + i).text !== cell_v[i][j]) {
           wb[c] = {
@@ -196,6 +204,8 @@ class CalcWorkBook { // 对workbook处理的类
   //处理多值函数单元格
   deal_muti_cell(workbook, formulas_i) {
     var multivalueRefsCell = formulas_i.cell
+    let {data} = this.rows;
+    let name = data['name']
     if (isHave(multivalueRefsCell) && isHave(multivalueRefsCell.multivalueRefsCell)) {
       multivalueRefsCell = multivalueRefsCell.multivalueRefsCell
     } else {
@@ -204,26 +214,26 @@ class CalcWorkBook { // 对workbook处理的类
     var cell_v = formulas_i.cell.v
     if (formulas_i.name !== multivalueRefsCell){
       if (cell_v instanceof Array){
-        workbook.Sheets.sheet1[formulas_i.name].v = error.ref
-        workbook.Sheets.sheet1[formulas_i.name].source_v = cell_v
+        workbook.Sheets[name][formulas_i.name].v = error.ref
+        workbook.Sheets[name][formulas_i.name].source_v = cell_v
       }else if(isHave(cell_v)){
-        workbook.Sheets.sheet1[formulas_i.name].v = cell_v
+        workbook.Sheets[name][formulas_i.name].v = cell_v
       }
     }else {
       if(!(cell_v instanceof Array)) {
-        workbook.Sheets.sheet1 = this.clean_all_flag(formulas_i, multivalueRefsCell)
+        workbook.Sheets[name] = this.clean_all_flag(formulas_i, multivalueRefsCell)
       }else{
         var zb = exp.expr2xy(multivalueRefsCell)
         if (isHave(this.rows.getCell(zb[1], zb[0]).source_v) && this.rows.getCell(zb[1], zb[0]).source_v !== cell_v){
-          workbook.Sheets.sheet1 = this.clean_all_flag(formulas_i, multivalueRefsCell)
+          workbook.Sheets[name] = this.clean_all_flag(formulas_i, multivalueRefsCell)
         }
         var len = cell_v.length
         if (len === 1){
-          workbook.Sheets.sheet1 = this.process_arr(formulas_i, multivalueRefsCell)
-          workbook.Sheets.sheet1[formulas_i.name].source_v = cell_v
+          workbook.Sheets[name] = this.process_arr(formulas_i, multivalueRefsCell)
+          workbook.Sheets[name][formulas_i.name].source_v = cell_v
         }else{
-          workbook.Sheets.sheet1 = this.process_matrix(formulas_i, multivalueRefsCell)
-          workbook.Sheets.sheet1[formulas_i.name].source_v = cell_v
+          workbook.Sheets[name] = this.process_matrix(formulas_i, multivalueRefsCell)
+          workbook.Sheets[name][formulas_i.name].source_v = cell_v
         }
       }
     }

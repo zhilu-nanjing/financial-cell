@@ -1,7 +1,7 @@
 const recast = require("recast");
 
 const colon = "$$$";
-const fqm = '"\\"\\""';
+const fqm = '';
 const exclamationPoint = "";
 const braceLeft = "";
 const braceRight = "";

@@ -6,6 +6,7 @@ __pycache__/
 .nyc_output/
 # C extensions
 *.so
+package-lock.json
 node_modules/
 demo/
 build/coverage/
@@ -24,13 +25,15 @@ demo/
 eggs/
 .eggs/
 lib64/
+test/test.js
+test/helper_test.js
+
 parts/
 
 var/
 wheels/
 *.egg-info/
 .installed.cfg
-package-lock.json
 *.egg
 node_modules.zip
 

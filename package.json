@@ -29,6 +29,7 @@
     "build-locale": "webpack --config build/webpack.locale.js",
     "lint": "./node_modules/eslint/bin/eslint.js src",
     "test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/*",
+    "calc_test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/calc_test.js",
     "format_test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/core/format_test.js",
     "chrome_test": "node /Users/wen/Downloads/karma-webpack-example/node_modules/karma/bin/karma start --single-run --browsers PhantomJS --require css-loader",
     "selectors_test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/core/selectors_test.js",
@@ -70,12 +71,15 @@
     "worker-loader": "^2.0.0",
     "recast": "^0.18.5",
     "jsdoc": "^3.6.3",
-    "js-spreadsheet": "^1.0.1"
+    "js-spreadsheet": "^1.0.1",
+    "bessel": "^1.0.2",
+    "jStat": "^1.8.6",
+    "numeral": "^2.0.6",
+    "numeric": "^1.2.6"
+
   },
   "dependencies": {
     "axios": "^0.19.0",
-    "dayjs": "^1.8.16",
-    "formulajs": "^1.0.8",
-    "xlsx-calc": "^0.6.0"
+    "dayjs": "^1.8.16"
   }
 }
