@@ -17,7 +17,6 @@ function buildFilterBody(items) {
     const {filterbEl, filterValues} = this;
     filterbEl.html('');
     const itemKeys = Object.keys(items);
-    console.log("20")
     itemKeys.forEach((it, index) => {
         const cnt = items[it];
         const active = filterValues.includes(it) ? 'checked' : '';

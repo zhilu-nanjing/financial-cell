@@ -9,12 +9,11 @@ export default class FormatProxy {
         let cText = cb(formatNumberRender(text, -1));
         formula = isFormula(formula) ? formula : cText;
         if (!isNaN(cText)) {
-            let _cell = {
+            return {
                 "text": position === 'begin' ? symbol + cText : cText + symbol,
                 "value": text,
                 "formulas": formula,
             };
-            return _cell;
         } else {
             return null;
         }

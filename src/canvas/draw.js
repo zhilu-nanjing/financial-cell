@@ -10,12 +10,43 @@ function thinLineWidth() {
 }
 
 function npx(px) {
-    return parseInt(px * dpr(), 10);
+    let d = px * dpr() + "";
+    return parseInt(d, 10);
 }
 
 function npxLine(px) {
     const n = npx(px);
     return n > 0 ? n - 0.5 : 0.5;
+}
+
+function drawFlexFalse(ctx, sx, sy) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.fillStyle = "#707070";
+    ctx.moveTo(sx, sy + 6);
+    ctx.lineTo(sx + 12, sy + 6);
+    ctx.stroke();
+
+    ctx.strokeRect(sx, sy, 12, 12);
+    ctx.clip();
+    ctx.fill();
+    ctx.restore();
+}
+
+function drawFlexTrue(ctx, sx, sy) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.fillStyle = "#707070";
+    ctx.moveTo(sx + 6, sy);
+    ctx.lineTo(sx + 6, sy + 12);
+    ctx.moveTo(sx, sy + 6);
+    ctx.lineTo(sx + 12, sy + 6);
+    ctx.stroke();
+
+    ctx.strokeRect(sx, sy, 12, 12);
+    ctx.clip();
+    ctx.fill();
+    ctx.restore();
 }
 
 class DrawBox {
@@ -141,7 +172,7 @@ class Draw {
         this.el = el;
         this.ctx = el.getContext('2d');
         this.resize(width, height);
-        this.ctx.scale(dpr(), dpr());
+        this.ctx.scale(dpr() * 1, dpr() * 1);
         this.cxc = {
             indent: 250,
             vIndent: 200,
@@ -208,7 +239,7 @@ class Draw {
     }
 
     selfAdaptionHeight(box, txt, font) {
-        if (font == undefined || txt == undefined)
+        if (font === undefined || txt === undefined)
             return;
         let n = 1;
         const textLine = {len: 0, start: 0};
@@ -219,30 +250,28 @@ class Draw {
                 textLine.len = 0;
                 textLine.start = i;
             }
-            textLine.len += this.selfAdaptionOneTxtWidth(txt[i], font, box);
+            textLine.len += this.selfAdaptionOneTxtWidth(txt[i], font);
         }
 
         return n;
     }
 
     selfAdaptionTxtWidth(txt, font, box) {
-        if (isHave(txt) === false || isHave(font) == false || txt.length <= 0)
+        if (isHave(txt) === false || isHave(font) === false || txt.length <= 0)
             return 0;
         const {ctx} = this;
         ctx.font = `${font.italic ? 'italic' : ''} ${font.bold ? 'bold' : ''} ${npx(font.size)}px ${font.name}`;
 
-        const txtWidth = ctx.measureText(txt).width + box.padding * 2;
-        return txtWidth;
+        return ctx.measureText(txt).width + box.padding * 2;
     }
 
-    selfAdaptionOneTxtWidth(txt, font, box) {
-        if (isHave(txt) === false || isHave(font) == false || txt.length <= 0)
+    selfAdaptionOneTxtWidth(txt, font) {
+        if (isHave(txt) === false || isHave(font) === false || txt.length <= 0)
             return 0;
         const {ctx} = this;
         ctx.font = `${font.italic ? 'italic' : ''} ${font.bold ? 'bold' : ''} ${npx(font.size)}px ${font.name}`;
 
-        const txtWidth = ctx.measureText(txt).width;
-        return txtWidth;
+        return ctx.measureText(txt).width;
     }
 
     /*
@@ -264,8 +293,11 @@ class Draw {
     */
     text(txt, box, attr = {}, textWrap = true) {
         const {ctx} = this;
+        // const {
+        //     align, valign, font, color, strike, underline, ignore, cindex
+        // } = attr;
         const {
-            align, valign, font, color, strike, underline, ignore, cindex
+            align, valign, font, color, strike, underline, ignore
         } = attr;
 
         const tx = box.textx(align);
@@ -311,7 +343,7 @@ class Draw {
                     textLine.len = 0;
                     textLine.start = i;
                 }
-                textLine.len += this.selfAdaptionOneTxtWidth(txt[i], font, box);
+                textLine.len += this.selfAdaptionOneTxtWidth(txt[i], font);
             }
             if (textLine.len > 0) {
                 this.fillText(txt.substring(textLine.start), tx, ty);
@@ -396,10 +428,10 @@ class Draw {
         ctx.restore();
     }
 
-    dropup(box, state, diff) {
+    dropUp(box, state, diff) {
         const {ctx} = this;
         const {
-            x, y, width, height,
+            x, y, height,
         } = box;
 
         const sx = x + 10;
@@ -414,46 +446,13 @@ class Draw {
         //   ctx.drawImage(img, npx(sx), npx(sy), 16, 16);
         // }
         if (state) {
-            this.drawFlexTrue(ctx, npx(sx), npx(sy))
+            drawFlexTrue.call(this, ctx, npx(sx), npx(sy))
         } else {
-            this.drawFlexFalse(ctx, npx(sx), npx(sy))
+            drawFlexFalse.call(this, ctx, npx(sx), npx(sy))
         }
     }
 
 
-    drawFlexFalse(ctx, sx, sy) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.fillStyle = "#707070";
-        ctx.moveTo(sx, sy + 6);
-        ctx.lineTo(sx + 12, sy + 6);
-        ctx.stroke();
-
-        ctx.strokeRect(sx, sy, 12, 12);
-        ctx.clip();
-        ctx.fill();
-        ctx.restore();
-    }
-
-    drawFlexTrue(ctx, sx, sy) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.fillStyle = "#707070";
-        ctx.moveTo(sx + 6, sy);
-        ctx.lineTo(sx + 6, sy + 12);
-        ctx.moveTo(sx, sy + 6);
-        ctx.lineTo(sx + 12, sy + 6);
-        ctx.stroke();
-
-        ctx.strokeRect(sx, sy, 12, 12);
-        ctx.clip();
-        ctx.fill();
-        ctx.restore();
-    }
-
-    translatex(x, y) {
-        this.cxc.canvasContext.translate(x + this.cxc.indent, y + this.cxc.vIndent);
-    }
 
     lineTo(x, y) {
         this.cxc.canvasContext.lineTo(x + this.cxc.indent, y + this.cxc.vIndent);
@@ -463,12 +462,6 @@ class Draw {
         this.cxc.canvasContext.moveTo(x + this.cxc.indent, y + this.cxc.vIndent);
     };
 
-    bezierCurveTo(x, y, x1, y1, x2, y2) {
-        this.cxc.canvasContext.bezierCurveTo(
-            x + this.cxc.indent, y + this.cxc.vIndent,
-            x1 + this.cxc.indent, y1 + this.cxc.vIndent,
-            x2 + this.cxc.indent, y2 + this.cxc.vIndent);
-    }
 
     dropdown(box) {
         const {ctx} = this;
@@ -478,7 +471,6 @@ class Draw {
 
         const sx = x + width - 15;
         const sy = y + height - 15;
-        console.log("350", sy, sx)
         ctx.save();
         ctx.beginPath();
         ctx.moveTo(npx(sx), npx(sy));
@@ -520,7 +512,7 @@ class Draw {
         ctx.restore();
     }
 
-    rect2(box, dtextcb, textwrap, cellText) {
+    rect2(box, dtextcb) {
         const {ctx} = this;
         const {
             x, y, width, bgcolor,
@@ -543,7 +535,6 @@ class Draw {
     }
 }
 
-export default {};
 export {
     Draw,
     DrawBox,

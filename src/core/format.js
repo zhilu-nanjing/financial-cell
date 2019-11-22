@@ -195,7 +195,6 @@ baseFormats.forEach((f) => {
     formatm[f.key] = f;
 });
 
-export default {};
 export {
     formatm,
     baseFormats,

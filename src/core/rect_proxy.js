@@ -9,10 +9,10 @@ export default class RectProxy {
     isLocInside(x, y) {
         let {rect} = this;
 
-        if (x < rect.width + rect.left && x > rect.left && y - offsetTop > rect.top && y - offsetTop < rect.top + rect.height) {
-            return true;
-        }
-        return false;
+        // if (x < rect.width + rect.left && x > rect.left && y - offsetTop > rect.top && y - offsetTop < rect.top + rect.height) {
+        //     return true;
+        // }
+        return x < rect.width + rect.left && x > rect.left && y - offsetTop > rect.top && y - offsetTop < rect.top + rect.height;
     }
 
     getUpDownLeftRight(ex, ey, clientX, clientY) {
@@ -34,7 +34,6 @@ export default class RectProxy {
             }
         }
 
-        console.log(pos);
         if (pos === 0) {
             pos = positionAngle(clientX, ex, clientY, ey);
         }

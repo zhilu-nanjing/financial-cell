@@ -1,6 +1,6 @@
 import {h} from './element';
 import {cssPrefix} from '../config';
-import {moveArr} from "../event/paste";
+// import {moveArr} from "../event/paste";
 
 export default class Scrollbar {
     constructor(vertical) {

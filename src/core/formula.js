@@ -6,7 +6,7 @@
  */
 import {tf} from '../locale/locale';
 import XLSX_CALC from "../calc"
-var formulajs = require('../calc/formulajs/index'); // jobs: todo: 这里为何又多出3个函数？似乎应该统一放到formulajs中解决。
+let formulajs = require('../calc/formulajs/index'); // jobs: todo: 这里为何又多出3个函数？似乎应该统一放到formulajs中解决。
 const baseFormulas = [
     {
         key: 'MD.WLAND',
@@ -45,8 +45,8 @@ const formulaCalc = () => {
 };
 
 function deepCopy(obj) {
-    var result = Array.isArray(obj) ? [] : {};
-    for (var key in obj) {
+    let result = Array.isArray(obj) ? [] : {};
+    for (let key in obj) {
         if (obj.hasOwnProperty(key)) {
             if (typeof obj[key] === 'object' && obj[key] !== null) {
                 result[key] = deepCopy(obj[key]);
@@ -69,8 +69,6 @@ const formulam = {};
 baseFormulas.forEach((f) => {
     formulam[f.key] = f;
 });
-
-export default {};
 
 export {
     formulam,

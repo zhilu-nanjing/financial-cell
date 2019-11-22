@@ -40,18 +40,16 @@ function getFontSizePxByPt(pt) {
   return pt;
 }
 
-const fonts = (ary = []) => {
-  const map = {};
-  baseFonts.concat(ary).forEach((f) => {
-    map[f.key] = f;
-  });
-  return map;
-};
+// const fonts = (ary = []) => {
+//   const map = {};
+//   baseFonts.concat(ary).forEach((f) => {
+//     map[f.key] = f;
+//   });
+//   return map;
+// };
 
-export default {};
 export {
   fontSizes,
-  fonts,
   baseFonts,
   getFontSizePxByPt,
 };
