@@ -1011,7 +1011,7 @@ class Rows {
 
     // what: all | format | text
     // 填充
-    copyPaste(srcCellRange, dstCellRange, what, autofill = false, cb = () => {
+    copyPaste(srcCellRange, dstCellRange, what, autofill = false, cb = () => {  
     }) {
         const {pasteProxy} = this;
         pasteProxy.setSrcAndDstCellRange(srcCellRange, dstCellRange);
