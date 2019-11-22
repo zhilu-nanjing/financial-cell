@@ -37,7 +37,7 @@ export default class MultiPreAction {
                     type, oldData, newData: oldStep.oldData,
                     action,
                 }, this.data);
-                this.undoItems.push(preAction);
+                this.undoItems.push(preAction); // jobs: todo: this.undoItems.push(preAction),this.redoItems = [],break; 这三个语句是重复的可以直接包装成一个methold
                 this.redoItems = [];
                 break;
             case 3:
