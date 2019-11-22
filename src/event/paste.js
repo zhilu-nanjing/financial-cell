@@ -4,10 +4,10 @@ import Drag from "../external/drag";
 import Resize from "../external/resize";
 import {cssPrefix} from "../config";
 import {getChooseImg} from "../event/copy";
-import {xy2expr} from "../core/alphabet";
+// import {xy2expr} from "../core/alphabet";
 import CellRange from "../core/cell_range";
-import {deepCopy} from "../core/operator";
-import TableProxy from "./table_proxy";
+// import {deepCopy} from "../core/operator";
+import TableProxy from "../core/table_proxy";
 
 export let resizeOption = {
     onBegin(data) {
@@ -63,7 +63,7 @@ export let dragOption = {
         img.lastCi = range.ci;
         img.lastRi = range.ri;
 
-        self.data.history.addPic(deepCopy(self.data.pasteDirectionsArr), "delete");
+        // self.data.history.addPic(deepCopy(self.data.pasteDirectionsArr), "delete");
     },
     onDrag(data) {
     },
@@ -114,7 +114,7 @@ function mountPaste(e, cb) {
             item.getAsString((str) => {
                 let textDom = h('head', '');
                 let d = h('span', '');
-                if ((str.indexOf('<span') == -1 && str.indexOf('span>') == -1) && (str.indexOf('<table') == -1 && str.indexOf('table>') == -1)) {
+                if ((str.indexOf('<span') === -1 && str.indexOf('span>') === -1) && (str.indexOf('<table') === -1 && str.indexOf('table>') === -1)) {
                     d.html(str);
                     textDom.child(d.el);
                     textDom = textDom.el;
@@ -144,7 +144,7 @@ function mountPaste(e, cb) {
                                 el.child(styleDom);
                             }
 
-                            if (tableDom && p == false) {
+                            if (tableDom && p === false) {
                                 let {el} = this;
                                 el.child(tableDom);
                                 GetInfoFromTable.call(this, tableDom);
@@ -162,7 +162,7 @@ function mountPaste(e, cb) {
                             el.child(styleDom);
                         }
 
-                        if (tableDom && p == false) {
+                        if (tableDom && p === false) {
                             process.call(this, tableDom, styleDom);
                             p = true;
                         }
@@ -173,8 +173,8 @@ function mountPaste(e, cb) {
             let f = item.getAsFile();
             let reader = new FileReader();
             reader.onload = (evt) => {
-                let {x, y, overlayerEl} = this;
-                let {pasteDirectionsArr} = this.data;
+                // let {x, y, overlayerEl} = this;
+                // let {pasteDirectionsArr} = this.data;
                 let img = h('img', 'paste-img');
                 img.el.src = evt.target.result;
 
@@ -202,35 +202,35 @@ function mountPaste(e, cb) {
     })
 }
 
-function processImg(item) {
-    let f = item.getAsFile();
-    let reader = new FileReader();
-    reader.onload = (evt) => {
-        // let {x, y, overlayerEl, pasteDirectionsArr} = this;
-        let img = h('img', 'paste-img');
-        img.el.src = evt.target.result;
+// function processImg(item) {
+//     let f = item.getAsFile();
+//     let reader = new FileReader();
+//     reader.onload = (evt) => {
+//         // let {x, y, overlayerEl, pasteDirectionsArr} = this;
+//         let img = h('img', 'paste-img');
+//         img.el.src = evt.target.result;
+//
+//         setTimeout(() => {
+//             if (p) {
+//                 return;
+//             }
+//             p = true;
+//             mountImg.call(this, img.el);
+//         }, 0);
+//     };
+//
+//     reader.readAsDataURL(f);
+// }
 
-        setTimeout(() => {
-            if (p) {
-                return;
-            }
-            p = true;
-            mountImg.call(this, img.el);
-        }, 0);
-    };
-
-    reader.readAsDataURL(f);
-}
-
-function moveArr(top, left) {
-    let {pasteDirectionsArr} = this.data;
-    for (let i = 0; i < pasteDirectionsArr.length; i++) {
-        let p = pasteDirectionsArr[i];
-        console.log(p.img.el['style'].top, "108");
-        p.img.css("top", `${top }px`)
-            .css("left", `${left  }px`)
-    }
-}
+// function moveArr(top, left) {
+//     let {pasteDirectionsArr} = this.data;
+//     for (let i = 0; i < pasteDirectionsArr.length; i++) {
+//         let p = pasteDirectionsArr[i];
+//         console.log(p.img.el['style'].top, "108");
+//         p.img.css("top", `${top }px`)
+//             .css("left", `${left  }px`)
+//     }
+// }
 
 function getMaxCoord(ri, ci) {
     let top = 0;
@@ -258,7 +258,8 @@ function getMaxCoord(ri, ci) {
 }
 
 
-export function mountImg(imgDom, init = false, sri, sci, range, add = true) {
+// 删掉了 入参   add = true
+export function mountImg(imgDom, init = false, sri, sci, range) {
     let image = new Image();
     image.src = imgDom.src;
     image.onload = () => {
@@ -267,9 +268,9 @@ export function mountImg(imgDom, init = false, sri, sci, range, add = true) {
         let img = imgDom;
         let {container, data} = this;
         let {pasteDirectionsArr} = data;
-        if (add) {
-            data.history.addPic(Object.assign([], pasteDirectionsArr), "delete");
-        }
+        // if (add) {
+        //     // data.history.addPic(Object.assign([], pasteDirectionsArr), "delete");
+        // }
 
         let {ri, ci} = data.selector;
         if (init) {
@@ -332,7 +333,7 @@ export function mountImg(imgDom, init = false, sri, sci, range, add = true) {
             div.css("width", `${img.offsetWidth}px`);
             div.css("height", `${img.offsetHeight}px`);
             containerHandlerEvent.call(this, directionsArr, index, pasteDirectionsArr, init);
-            div.on('mousedown', evt => containerHandlerEvent.call(this, directionsArr, index, pasteDirectionsArr));
+            div.on('mousedown', () => containerHandlerEvent.call(this, directionsArr, index, pasteDirectionsArr));
         }, 0);
     };
 }
@@ -362,7 +363,7 @@ function deleteImg(d = false) {
     this.direction = false;
     if (pasteDirectionsArr.length > 0) {
         for (let i = 0; i < pasteDirectionsArr.length; i++) {
-            if (pasteDirectionsArr[i].state === true || d == true) {
+            if (pasteDirectionsArr[i].state === true || d === true) {
                 direction_delete.push(pasteDirectionsArr[i]);
             } else {
                 direction_new.push(pasteDirectionsArr[i]);
@@ -381,23 +382,23 @@ function deleteImg(d = false) {
     data.change(data.getData());
 }
 
-function deleteAllImg() {
-    let {pasteDirectionsArr} = this.data;
-    let direction_new = [];
-    let direction_delete = [];
-    this.direction = false;
-    if (pasteDirectionsArr.length > 0) {
-        for (let i = 0; i < pasteDirectionsArr.length; i++) {
-            direction_delete.push(pasteDirectionsArr[i]);
-        }
-    }
-
-    Object.keys(pasteDirectionsArr).forEach(i => {
-        direction_delete[i].img.removeEl();
-    });
-
-    this.pasteDirectionsArr = direction_new;
-}
+// function deleteAllImg() {
+//     let {pasteDirectionsArr} = this.data;
+//     let direction_new = [];
+//     let direction_delete = [];
+//     this.direction = false;
+//     if (pasteDirectionsArr.length > 0) {
+//         for (let i = 0; i < pasteDirectionsArr.length; i++) {
+//             direction_delete.push(pasteDirectionsArr[i]);
+//         }
+//     }
+//
+//     Object.keys(pasteDirectionsArr).forEach(i => {
+//         direction_delete[i].img.removeEl();
+//     });
+//
+//     this.pasteDirectionsArr = direction_new;
+// }
 
 function containerHandlerEvent(directionsArr, index, pasteDirectionsArr, init) {
     hideDirectionArr.call(this);
@@ -433,11 +434,11 @@ function equals(x, y) {
         let a = x[p] instanceof Object;
         let b = y[p] instanceof Object;
         if (a && b) {
-            let equal = equals(x[p], y[p])
+            let equal = equals(x[p], y[p]);
             if (!equal) {
                 return equal
             }
-        } else if (x[p] != y[p]) {
+        } else if (x[p] !== y[p]) {
             return false;
         }
     }
@@ -480,20 +481,20 @@ function GetInfoFromTable(tableObj) { // class ClipboardTableProxy; .tableDom �
     };
 }
 
-function pasteType(type, ds, dei) {
-    if (type === 1) {
-
-    } else if (type === 2) {
-        xy2expr(ds[0] + dei, ds[1], 2);
-    }
-}
+// function pasteType(type, ds, dei) {
+//     if (type === 1) {
+//
+//     } else if (type === 2) {
+//         xy2expr(ds[0] + dei, ds[1], 2);
+//     }
+// }
 
 export {
     mountPaste,
     hideDirectionArr,
     deleteImg,
-    moveArr,
-    deleteAllImg,
+    // moveArr,
+    // deleteAllImg,
     GetInfoFromTable,
 }
 

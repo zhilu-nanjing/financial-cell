@@ -26,13 +26,13 @@ class Filter {
         return false;
     }
 
-    vlength() {
-        const {operator, value} = this;
-        if (operator === 'in') {
-            return value.length;
-        }
-        return 0;
-    }
+    // vlength() {
+    //     const {operator, value} = this;
+    //     if (operator === 'in') {
+    //         return value.length;
+    //     }
+    //     return 0;
+    // }
 
     getData() {
 
@@ -109,13 +109,13 @@ export default class AutoFilter {
 
     getSet(exceptRowSet, rir) {
         for (let ix = 0; ix < this.flex.length; ix++) {
-            let {ri, ci, set_total, state} = this.flex[ix]
+            let {ri,   set_total, state} = this.flex[ix];
             for (let i = ri; i < set_total + ri; i++) {
-                console.log(state, "114", rir, ri, state)
-                if (state === false && rir == ri) {
+                console.log(state, "114", rir, ri, state);
+                if (state === false && rir === ri) {
                     exceptRowSet.add(i + 1);
                     this.flex[ix].state = true;
-                } else if (state === true && rir == ri) {
+                } else if (state === true && rir === ri) {
                     exceptRowSet.delete(i + 1);
                     this.flex[ix].state = false;
                 }
@@ -126,11 +126,11 @@ export default class AutoFilter {
     }
 
     includes2(rir, cic) {
-        let b = false
+        let b = false;
 
         for (let i = 0; i < this.flex.length; i++) {
             let {ri, ci} = this.flex[i];
-            if (rir == ri && cic == ci) {
+            if (rir === ri && cic === ci) {
                 b = true;
             }
         }
@@ -190,8 +190,7 @@ export default class AutoFilter {
                 const cell = getCell(ri, ci);
                 if (cell !== null && !/^\s*$/.test(cell.text)) {
                     const key = cell.text;
-                    const cnt = (m[key] || 0) + 1;
-                    m[key] = cnt;
+                    m[key] = (m[key] || 0) + 1;
                 } else {
                     m[''] = (m[''] || 0) + 1;
                 }
@@ -206,7 +205,6 @@ export default class AutoFilter {
 
     hrange() {
         const r = this.range();
-        console.log(this.range(), "171")
         r.eri = r.sri;
         return r;
     }

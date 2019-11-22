@@ -35,7 +35,7 @@ export default class PasteProxy {
         let {sri, dsri, deri, eri} = this.use();
 
         let isLeftRight = false; // 识别方向  上下false、左右true
-        if (sri == dsri && deri == eri) {
+        if (sri === dsri && deri === eri) {
             isLeftRight = true;
         }
 
@@ -89,18 +89,18 @@ export default class PasteProxy {
     }
 
     // todo 什么意思
-    isCopy(sarr, i) {
-        let {sri, sci, eri} = this.use();
-        let isCopy = false;
-        if (sarr.length > 1) {
-            isCopy = true;
-        }
-        if (sri == eri && sci + i == sci + i) {
-            isCopy = true;
-        }
-
-        return isCopy;
-    }
+    // isCopy(sarr, i) {
+    //     let {sri, sci, eri} = this.use();
+    //     let isCopy = false;
+    //     if (sarr.length > 1) {
+    //         isCopy = true;
+    //     }
+    //     if (sri === eri && sci + i === sci + i) {
+    //         isCopy = true;
+    //     }
+    //
+    //     return isCopy;
+    // }
 
     calcDiff(sarr, isAdd) {
         let diffValue = 1;

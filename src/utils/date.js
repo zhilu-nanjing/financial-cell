@@ -8,7 +8,7 @@ export function formatDate(diff) {
     if(!isHave(diff) || !isNumber(diff)) {
         return {
             "state": false,
-            "date": date,
+            // "date": date,
             "date_formula": "",
             "minute": false
         }
@@ -37,7 +37,7 @@ export function formatDate(diff) {
 
         let formula = beginDate2.add(diff, 'day').subtract(2, 'day').format('YYYY-MM-DD  h:mm:ss');
         return {
-            "state": date === 'Invalid Date' ? false : true,
+            "state": date !== 'Invalid Date',
             "date": date,
             "date_formula": formula,
             "minute": true
@@ -45,7 +45,7 @@ export function formatDate(diff) {
     } else {
         date = beginDate.add(diff, 'day').subtract(2, 'day').format('YYYY-MM-DD');
         return {
-            "state": date === 'Invalid Date' ? false : true,
+            "state": date !== 'Invalid Date',
             "date": date,
             "date_formula": "",
             "minute": false
@@ -68,14 +68,13 @@ export function calcDecimals(diff, cb = () => {
     for (let i = 0; i < fix.length; i++) {
         newData = newData * 0.1;
     }
-    let str = cb(newData);
 
-    return str;
+    return cb(newData);
 }
 
-export function cellDate() {
-
-}
+// export function cellDate() {
+//
+// }
 
 // 已写test
 export function dateDiff(date) {

@@ -8,7 +8,7 @@ import {isHave} from "../../src/core/helper";
 import {copyPasteTemplate} from "../util/templates";
 import {formatNumberRender} from "../../src/core/format";
 import FormatProxy from "../../src/core/format_proxy";
-import {multipleCellsRender, specialWebsiteValue} from "../../src/component/special_formula_process";
+import {multipleCellsRender, specialWebsiteValue} from "../../src/core/special_formula_process";
 import CellRange from "../../src/core/cell_range";
 import PaintFormat from "../../src/model/paint_format";
 

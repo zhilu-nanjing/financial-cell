@@ -26,7 +26,7 @@ import CellRange from "../core/cell_range";
 import {isHave, isOusideViewRange} from "../core/helper";
 import {expr2xy} from "../core/alphabet";
 import ErrorPopUp from "./error_pop_up";
-import RectProxy from "./rect_proxy";
+import RectProxy from "../core/rect_proxy";
 import {testValid} from "../utils/test";
 import Timer from "../model/Timer";
 import PreAction from "../model/pre_action";

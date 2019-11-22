@@ -6,6 +6,11 @@ import {lockCells} from "./formula_editor";
 import {CellRange} from "../core/cell_range";
 import {mouseMoveUp} from "./event";
 
+function find(str, cha) {
+
+    return str.lastIndexOf(cha);
+}
+
 export default class SelectorMove {
     constructor(boxinner, data, sheet, selector) {
         this.l = h('div', `${cssPrefix}-selector-box-l-move-l`);
@@ -27,14 +32,6 @@ export default class SelectorMove {
             this.t,
             this.b,
         );
-    }
-
-    find(str, cha, num) {
-        let x = str.lastIndexOf(cha);
-        // for (let i = 0; i < num; i++) {
-        //     x = str.indexOf(cha, x + 1);
-        // }
-        return x;
     }
 
     event(target, dict) {
@@ -60,13 +57,12 @@ export default class SelectorMove {
                     }
 
                     let {ri, ci} = data.getCellRectByXY(e.layerX, e.layerY);
-                    if (ri != -1 && ci != -1) {
-                        let {  pos} = this.sheet.editor;
+                    if (ri !== -1 && ci !== -1) {
+                        let {pos} = this.sheet.editor;
                         let inputText = this.sheet.editor.editorText.getText();
                         let _erpx = cuttingByPos(inputText, pos - 1, true);
                         if (inputText.length > pos - 1) {
-                            let c = cuttingByPosEnd(inputText, pos - 1);
-                            _erpx += c;
+                            _erpx += cuttingByPosEnd(inputText, pos - 1);
                         }
                         for (let i = 0; i < selectors.length; i++) {
                             let selector = selectors[i];
@@ -74,7 +70,7 @@ export default class SelectorMove {
 
                             if (erpx === _erpx && className === _selector.className + " clear_selector") {
                                 _move_selectors = _move_selectors ? _move_selectors : selector;
-                                if (erpx.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) != -1) {
+                                if (erpx.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) !== -1) {
                                     let arr = erpx.split(":");
                                     let e1 = expr2xy(arr[0]);
                                     let e2 = expr2xy(arr[1]);
@@ -88,11 +84,11 @@ export default class SelectorMove {
                                 }
                                 break;
                             } else if (erpx !== _erpx && className === _selector.className + " clear_selector") {
-                                p = p != -1 ? p : this.find(inputText, selector.erpx, selector.index);
+                                p = p !== -1 ? p : find(inputText, selector.erpx);
                                 this.sheet.editor.setCursorPos(p + selector.erpx.length);
                                 _move_selectors = _move_selectors ? _move_selectors : selector;
 
-                                if (selector.erpx.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) != -1) {
+                                if (selector.erpx.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) !== -1) {
                                     let arr = erpx.split(":");
                                     let e1 = expr2xy(arr[0]);
                                     let e2 = expr2xy(arr[1]);
@@ -170,7 +166,7 @@ export default class SelectorMove {
                         meci = cellRange.eci;
                     }
                 }, 6);
-            }, (e) => {
+            }, () => {
                 clearTimeout(timer);
                 let {selectors} = this.sheet;
                 sheet.container.css('pointer-events', 'auto');
@@ -180,7 +176,7 @@ export default class SelectorMove {
                 }
                 p = -1;
                 if (_move_selectors && _move_selectors.selector)
-                    _move_selectors.selector.setCss(_move_selectors.color, true)
+                    _move_selectors.selector.setCss(_move_selectors.color, true);
                 _move_selectors = null;
             })
         });

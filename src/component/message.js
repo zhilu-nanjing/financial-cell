@@ -29,4 +29,3 @@ export function xtoast(title, content) {
   });
 }
 
-export default {};

@@ -1,3 +1,4 @@
+/* global describe, it */
 import Dropdown from './dropdown';
 import Icon from './icon';
 import ColorPalette from './color_palette';

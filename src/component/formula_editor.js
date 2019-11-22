@@ -20,7 +20,7 @@ function lockCells(evt, _selector, isAb = false, p = -1) {
     const cellRect = data.getCellRectByXY(offsetX, offsetY);
     const {ri, ci} = cellRect;
 
-    let { pos} = editor;
+    let {pos} = editor;
     let inputText = editor.editorText.getText();
     let input = '';
 
@@ -34,20 +34,20 @@ function lockCells(evt, _selector, isAb = false, p = -1) {
 
             const s1 = xy2expr(sci, sri);
             const s2 = xy2expr(eci, eri);
-            let text = s1 == s2 ? s1 : `${s1}:${s2}`;
+            let text = s1 === s2 ? s1 : `${s1}:${s2}`;
 
-            if (isAb == 2) {
+            if (isAb === 2) {
                 const es1 = value2absolute(s1);
                 const es2 = value2absolute(s2);
-                text = es1.s1 == es2.s1 ? es1.s1 : `${es1.s1}:${es2.s1}`;
-            } else if (isAb == 1) {
+                text = es1.s1 === es2.s1 ? es1.s1 : `${es1.s1}:${es2.s1}`;
+            } else if (isAb === 1) {
                 const es1 = value2absolute(s1);
                 const es2 = value2absolute(s2);
-                text = es1.s2 == es2.s2 ? es1.s2 : `${es1.s2}:${es2.s2}`;
-            } else if (isAb == 3) {
+                text = es1.s2 === es2.s2 ? es1.s2 : `${es1.s2}:${es2.s2}`;
+            } else if (isAb === 3) {
                 const es1 = value2absolute(s1);
                 const es2 = value2absolute(s2);
-                text = es1.s3 == es2.s3 ? es1.s3 : `${es1.s3}:${es2.s3}`;
+                text = es1.s3 === es2.s3 ? es1.s3 : `${es1.s3}:${es2.s3}`;
             }
             _selector.erpx = text;
             let {isCors} = editor;
@@ -55,14 +55,14 @@ function lockCells(evt, _selector, isAb = false, p = -1) {
                 pos = 1;
             }
 
-            let sp = p != -1 ? p : pos - cuttingByPos(inputText, pos).length;
+            let sp = p !== -1 ? p : pos - cuttingByPos(inputText, pos).length;
             input = inputText.substring(0, sp) + text + inputText.substring(pos, inputText.length);
             editor.setText(input);
             editor.setCursorPos(inputText.substring(0, sp).length + text.length);
         } else {
             // 此情况是例如: =A1  -> 这时再点A2  则变成: =A2
             let enter = 0;
-            for (let i = 0; i < this.selectors.length && enter == 0; i++) {
+            for (let i = 0; i < this.selectors.length && enter === 0; i++) {
                 const selector = this.selectors[i];
                 const {erpx} = selector;
                 if (erpx === cuttingByPos(inputText, pos)) {
@@ -110,13 +110,13 @@ function lockCells(evt, _selector, isAb = false, p = -1) {
 
         input = input.replace(number, '');
         editor.setText(input);
-        const content = suggestContent.call(this, pos - 1, cutting(inputText), inputText);
+        // const content = suggestContent.call(this, pos - 1, cutting(inputText), inputText);
         editor.setCursorPos(mousedownIndex[0].length + xy2expr(ci, ri).length);
     } else {
         const {pos} = editor;
 
         const args = _selector || makeSelector.call(this, ri, ci);
-        if (pos != -1) {
+        if (pos !== -1) {
             let str = '';
             let enter = false;
             let step = pos;
@@ -124,12 +124,12 @@ function lockCells(evt, _selector, isAb = false, p = -1) {
             for (let i = pos; i < inputText.length; i++) first += inputText[i];
             let len = cutFirst(first).length;
             for (let i = 0; i < inputText.length; i++) {
-                if (pos == i) {
+                if (pos === i) {
                     enter = true;
                     str += xy2expr(ci, ri);
                 }
 
-                if (step == i && len > 0) {
+                if (step === i && len > 0) {
                     step += 1;
                     len -= 1;
                 } else {
@@ -145,11 +145,10 @@ function lockCells(evt, _selector, isAb = false, p = -1) {
                 const s2 = xy2expr(eci, eri);
 
                 input = s1 === s2 ? s1 : `${s1}:${s2}`;
-                str = !enter ? str += input : str;
+                str = !enter ? str + input : str;
             } else {
-                console.log('121push');
                 this.selectors.push(args);
-                str = !enter ? str += xy2expr(ci, ri) : str;
+                str = !enter ? str + xy2expr(ci, ri) : str;
             }
             editor.setText(str);
             editor.setCursorPos(str.length);
@@ -171,7 +170,7 @@ function lockCells(evt, _selector, isAb = false, p = -1) {
             let m = merges._[i];
             const cut = cutStr(it, true);
             for (let i = 0; i < cut.length; i++) {
-                if (cut[i].indexOf(":") != -1) {
+                if (cut[i].indexOf(":") !== -1) {
                     let a1 = cut[i].split(":")[0];
                     let a2 = cut[i].split(":")[1];
                     let e1 = expr2xy(a1);
@@ -188,7 +187,7 @@ function lockCells(evt, _selector, isAb = false, p = -1) {
 
         // clearSelectors.call(this);
         // console.log(it);
-        div2span.call(this, cutting(it), cutting2(it, this.selectors));
+        div2span.call(this, cutting(it), cutting2(it));
         if (enter) {
             setTimeout(() => {
                 editor.setCursorPos(it.length);
@@ -213,7 +212,7 @@ function filterSelectors(cut) {
             }
         }
 
-        if (enter == 0) {
+        if (enter === 0) {
             selectors_delete.push(selector.selector.el);
         }
     });
@@ -232,7 +231,7 @@ function makeSelector(ri, ci, selectors = this.selectors, multiple = false, _sel
     if (_selector) {
         selector = _selector;
     } else {
-        const className = `selector${parseInt(Math.random() * 999999)}`;
+        const className = `selector${Math.random() * 999999}`;
         selector = new SelectorCopy(data, this, className);
         selector.el.attr('class', `${className} clear_selector`);
         selector.setCss(color);
@@ -257,7 +256,7 @@ function makeSelector(ri, ci, selectors = this.selectors, multiple = false, _sel
         let m = merges._[i];
         const cut = cutStr(it, true);
         for (let i = 0; i < cut.length; i++) {
-            if (cut[i].indexOf(":") != -1) {
+            if (cut[i].indexOf(":") !== -1) {
                 let a1 = cut[i].split(":")[0];
                 let a2 = cut[i].split(":")[1];
                 let e1 = expr2xy(a1);
@@ -336,20 +335,20 @@ function editingSelectors(text = '') {
         if (isAbsoluteValue(cut[i])) {
             const notTrueValue = cut[i].replace(/\$/g, '');
             arr = expr2xy(notTrueValue);
-        } else if (sc.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) != -1) {
+        } else if (sc.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) !== -1) {
             enterCode = 2;
         } else {
             arr = expr2xy(cut[i]);
         }
 
-        if (enterCode == 1) {
+        if (enterCode === 1) {
             const ri = arr[1];
             const
                 ci = arr[0];
             const args = makeSelector.call(this, ri, ci, selectors_valid);
             args.erpx = cut[i];
             selectors_valid.push(args);
-        } else if (enterCode == 2) {
+        } else if (enterCode === 2) {
             const prx = cut[i].replace(/\$/g, '').split(':')[0];
             const lax = cut[i].replace(/\$/g, '').split(':')[1];
 
@@ -363,8 +362,8 @@ function editingSelectors(text = '') {
     });
     this.selectors = selectors_valid;
 
-    if (this.selectors.length > 0 || text[0] == '=') {
-        div2span.call(this, cutting(text), cutting2(text, this.selectors));
+    if (this.selectors.length > 0 || text[0] === '=') {
+        div2span.call(this, cutting(text), cutting2(text));
     }
 }
 
@@ -374,17 +373,17 @@ function findBracketLeft(cut, i) {
     let has = 0;
     let stop = false;
 
-    for (let j = i - 1; j > 0 && stop == false; j--) {
-        if (cut[j] == '(') {
+    for (let j = i - 1; j > 0 && stop === false; j--) {
+        if (cut[j] === '(') {
             stop = true;
         }
-        if (cut[j] == ')') {
+        if (cut[j] === ')') {
             has++;
         }
     }
 
-    for (let j = i; j > 0 && begin == -1; j--) {
-        if (cut[j] == '(') {
+    for (let j = i; j > 0 && begin === -1; j--) {
+        if (cut[j] === '(') {
             if (has === 0) {
                 begin = j;
             }
@@ -404,7 +403,7 @@ function findBracket(pos, cut, text) {
     const right = pos;
     const left = findBracketLeft.call(this, cut, right);
 
-    if (left != -1 && right != -1) {
+    if (left !== -1 && right !== -1) {
         args = {left, right, exist: true};
     }
     return args;
@@ -417,17 +416,17 @@ function findBracketRight(cut, i) {
     let has = 0;
     let stop = false;
 
-    for (let j = i + 1; j < cut.length && stop == false; j++) {
-        if (cut[j] == ')') {
+    for (let j = i + 1; j < cut.length && stop === false; j++) {
+        if (cut[j] === ')') {
             stop = true;
         }
-        if (cut[j] == '(') {
+        if (cut[j] === '(') {
             has++;
         }
     }
 
-    for (let j = i; j < cut.length && begin == -1; j++) {
-        if (cut[j] == ')') {
+    for (let j = i; j < cut.length && begin === -1; j++) {
+        if (cut[j] === ')') {
             if (has === 0) {
                 begin = j;
             }
@@ -449,13 +448,13 @@ function suggestContent(pos, cut, inputText) {
     const left = findBracketLeft.call(this, cut, begin);
     const right = findBracketRight.call(this, cut, left);
 
-    if (left <= begin && left != -1 && (right >= begin || right == -1)) {
+    if (left <= begin && left !== -1 && (right >= begin || right === -1)) {
         content.suggestContent = true;
         content.cut = cuttingByPos(inputText, left);
     }
 
     for (let i = left; i < begin + 1; i++) {
-        if (inputText[i] == ',') {
+        if (inputText[i] === ',') {
             content.pos += 2;
         }
     }
@@ -472,8 +471,8 @@ function div2span(cut, cutcolor) {
 
     Object.keys(cut).forEach((i) => {
         const spanEl = h('span', `formula_span${i}`);
-        Object.keys(cutcolor).forEach((i2) => {
-            if (cutcolor[i] && cutcolor[i].code !== -1 && cutcolor[i].data == cut[i]) {
+        Object.keys(cutcolor).forEach(() => {
+            if (cutcolor[i] && cutcolor[i].code !== -1 && cutcolor[i].data === cut[i]) {
                 const {color} = selectorColor(cutcolor[i].code);
                 spanEl.css('color', color);
             }
@@ -481,7 +480,7 @@ function div2span(cut, cutcolor) {
         spanEl.css('display', 'inline-block');
         spanEl.css('cursor', 'text');
 
-        if (cut[i] == ' ') {
+        if (cut[i] === ' ') {
             spanEl.html('&emsp;');
         } else {
             spanEl.html(cut[i]);
@@ -494,7 +493,7 @@ function div2span(cut, cutcolor) {
     const {pos} = editor;
     let inputText = editor.editorText.getText();
     let content = {suggestContent: false, cut: ''};
-    if (inputText[pos - 1] == ')') {
+    if (inputText[pos - 1] === ')') {
         begin = pos - 1;
         end = findBracketLeft.call(this, cut, begin);
     } else {
@@ -502,7 +501,7 @@ function div2span(cut, cutcolor) {
     }
 
 
-    if (inputText != '' && spanArr.length <= 0) {
+    if (inputText !== '' && spanArr.length <= 0) {
         const spanEl = h('span', 'formula_span');
         spanArr.push(spanEl);
     }

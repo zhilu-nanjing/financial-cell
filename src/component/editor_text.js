@@ -25,10 +25,10 @@ export default class EditorText {
         return this.getOldCell();
     }
 
-    setRICI(ri, ci) {
-       this.ri = ri;
-        this.ci = ci;
-    }
+    // setRICI(ri, ci) {
+    //    this.ri = ri;
+    //     this.ci = ci;
+    // }
 
     getOldCell() {
         return this.oldCell;
@@ -49,10 +49,8 @@ export default class EditorText {
 
     isFormula() {
         let inputText = this.getText();
-        if (inputText.lastIndexOf("=") == 0) {
-            return true;
-        }
-        return false;
+
+        return inputText.lastIndexOf("=") === 0;
     }
 
     f4ShortcutKey(pos) {
@@ -62,8 +60,7 @@ export default class EditorText {
         console.log(value2);
         let type = isAbsoluteValue(value, 5);
         let d = "";
-        let n = "";
-        n = value.split(":")[1];
+        let n = value.split(":")[1];
         if (n) {
             type = isAbsoluteValue(n, 5);
             type = type === 3 ? 6 : type;
@@ -73,7 +70,7 @@ export default class EditorText {
             console.log(type);
         }
 
-        if (type != false) {
+        if (type !== false) {
             switch (type) {
                 case 13:
                     n = value.split(":")[1];
