@@ -23,6 +23,7 @@ class Spreadsheet {
 
         this.sheet = new Sheet(rootEl, this.data);
         this.data.sheet = this.sheet;
+        // this.plugIn = new PlugIn(rootEl, this.sheet, this.data);
     }
 
     setDataSettings(value) {
