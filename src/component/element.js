@@ -276,8 +276,8 @@ class Element {
     }
 }
 
-const h = (tag, className = '') => new Element(tag, className);//用箭头函数将返回的值赋给h
-
+const h = (tag, className = '') => new Element(tag, className);//用箭头函数将返回的实例赋给h。创建一个新实例，tag,className是两个初始化参数
+// h是一个函数（函数本身可以看做是个常量，但是函数调用的过程不是），可以这样使用h("div","aa")来创建一个dom
 export {
     Element,
     h,
