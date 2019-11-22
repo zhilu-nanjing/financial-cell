@@ -141,7 +141,7 @@ export default class Toolbar {
             buildButton(`${t('toolbar.undo')}`).child(this.undoEl.el),
             buildButton(`${t('toolbar.redo')}`).child(this.redoEl.el),
             this.paintformatEl = buildButtonWithIcon(`${t('toolbar.paintformat')}`, 'paintformat', () => toggleChange.call(this, 'paintformat')),
-            this.clearformatEl = buildButtonWithIcon(`${t('toolbar.clearformat')}`, 'clearformat', () => this.change('clearformat')),
+            // this.clearformatEl = buildButtonWithIcon(`${t('toolbar.clearformat')}`, 'clearformat', () => this.change('clearformat')),
             buildDivider(),
             buildButton(`${t('toolbar.format')}`).child(this.ddFormat.el),
             buildDivider(),
