@@ -18,7 +18,7 @@ import {h} from "../component/element";
 import {mountImg} from "../event/paste";
 import {parseCell2} from "../component/table";
 import {isLegal} from "./operator";
-import Recast from "../utils/reg_pattern.jscast";
+import Recast from "./recast";
 import {changeFormat, dateDiff, formatDate} from '../utils/date';
 import {formatNumberRender} from "./format";
 import MultiPreAction from "../core/multi_pre_action";

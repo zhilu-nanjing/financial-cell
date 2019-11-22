@@ -4,7 +4,7 @@ import {changeFormula, cutStr, isAbsoluteValue, value2absolute} from "../core/op
 import {expr2xy} from "../core/alphabet";
 import dayjs from 'dayjs'
 import {deepCopy, distinct, isSheetVale, splitStr} from "./operator";
-import Recast from "../utils/reg_pattern.jscast";
+import Recast from "./recast";
 import PasteProxy from "./paste_proxy";
 import CellProxy from "./cell_proxy";
 import CellRange from "./cell_range";
@@ -1016,13 +1016,13 @@ class Rows {
         const {pasteProxy} = this;
         pasteProxy.setSrcAndDstCellRange(srcCellRange, dstCellRange);
         let {rn, cn} = pasteProxy.use();
-        let isLeftRight = pasteProxy.autoFilterDirection();
+        let isLeftRight = pasteProxy.autoFilterDirection(); // todo: upOrDownOrLeftOrRight = pateProxy.getUpDownLeftRight() 去掉482
 
         let len = isLeftRight ? rn : cn;
         for (let i = 0; i < len; i++) {
             let isDown = pasteProxy.upOrDown();
             let {srcOneDRange, dstOneDRange} = pasteProxy.getOneDRangeObj(isLeftRight, i);
-            let {isNumber, isDate, sarr} = this.getAllDataType(srcOneDRange);
+            let {isNumber, isDate, sarr} = this.getAllDataType(srcOneDRange); // todo: 改成与Excel一样的逻辑 let {isNumber, isDate, sarr} = this.getRangeDataType(srcOneDRange);
             // let isCopy = pasteProxy.isCopy(sarr, i);
 
             let darr = dstOneDRange.getLocationArray(sarr); //let dstOneDLocationAarray = dstOneDRange.getLocationArray()

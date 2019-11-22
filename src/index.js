@@ -6,7 +6,6 @@ import {cssPrefix} from './config';//颜色是紫色，这是一个对象变量�
 import {locale} from './locale/locale';
 import './index.less';
 import zhCN from './locale/zh-cn';
-import PlugIn from "./plug-in/plug_in";
 import {bugout} from "./log/log_proxy";
 import Drag from "./external/drag";
 class Spreadsheet {
@@ -24,7 +23,6 @@ class Spreadsheet {
 
         this.sheet = new Sheet(rootEl, this.data);
         this.data.sheet = this.sheet;
-        this.plugIn = new PlugIn(rootEl, this.sheet, this.data);
     }
 
     setDataSettings(value) {
