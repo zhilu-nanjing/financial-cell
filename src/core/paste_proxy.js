@@ -1,7 +1,7 @@
 import CellRange from "./cell_range";
 
 export default class PasteProxy {
-    constructor(srcCellRange, dstCellRange, rows) {
+    constructor() {
         this.srcCellRange = "";
         this.dstCellRange = "";
         this.srcOneDRange = "";
