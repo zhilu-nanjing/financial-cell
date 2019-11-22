@@ -357,7 +357,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
             {
 
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -366,7 +366,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -375,7 +375,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -417,22 +417,22 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             }
         ],
         "content": {
-            "摘要": "股市查询。",
-            "数值1": "第一个参数。",
-            "数值2": "第二个参数。",
-            "数值3": "第三个参数。",
+            "abstract": "股市查询。",
+            "value1": "第一个参数。",
+            "value2": "第二个参数。",
+            "value3": "第三个参数。",
         }
     },
     "ADD": {    // 函数名称， 必须要大写， 是一个对象
         "title": [    // 是一个数组， 需要把 （）内的解析出来
-            //  ADD(数值1, 数值2)  就被解析成如下所示
+            //  ADD(value1, value2)  就被解析成如下所示
             {
                 "name": "ADD(",
                 "editor": false    // 下面有介绍该字段
             },
             {
 
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -441,7 +441,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -474,9 +474,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             }
         ],
         "content": {             // 这部分是内容说明。
-            "摘要": "返回两个数值之和。相当于 + 运算符。",
-            "数值1": "第一个加数。",
-            "数值2": "第二个加数。",
+            "abstract": "返回两个数值之和。相当于 + 运算符。",
+            "value1": "第一个加数。",
+            "value2": "第二个加数。",
         }
     },
     "IRR": {
@@ -539,7 +539,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -548,8 +548,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2, ...]",
-                "editor": true,                 // 像这种情况 [数值2, ...]，
+                "name": "[value2, ...]",
+                "editor": true,                 // 像这种情况 [value2, ...]，
                 //        editor就是true,   index 为3 是 因为从( 索引为3
                 "index": 3
             },
@@ -583,9 +583,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             }
         ],
         "content": {
-            "摘要": "返回一组数值和/或单元格的总和。",
-            "数值1": "要相加的第一个数值或范围。",
-            "数值2… - [可选] 可重复": "要与“数值1”相加的其他数值或范围。",
+            "abstract": "返回一组数值和/或单元格的总和。",
+            "value1": "要相加的第一个数值或范围。",
+            "value2": "要与“value1”相加的其他数值或范围。",
         }
     },
     "ABS": {
@@ -596,7 +596,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
             {
 
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -619,8 +619,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             }
         ],
         "content": {             // 这部分是内容说明。
-            "摘要": "返回数字的绝对值。绝对值没有符号。",
-            "数值": "需要计算其绝对值的实数。",
+            "abstract": "返回数字的绝对值。绝对值没有符号。",
+            "value": "需要计算其绝对值的实数。",
         }
     },
     "SQRT": {
@@ -631,7 +631,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
             {
 
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -654,268 +654,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             }
         ],
         "content": {             // 这部分是内容说明。
-            "摘要": "返回正平方根。",
-            "数值": "要计算平方根的数。",
-        }
-    },
-    "MAX": {
-        "title": [
-            {
-                "name": "MAX(",
-                "editor": false
-            },
-            {
-                "name": "数值1",
-                "editor": false
-            },
-            {
-
-                "name": "，",
-                "editor": false
-            },
-            {
-                "name": "[数值2, ...]",
-                "editor": true,                 // 像这种情况 [数值2, ...]，
-                //        editor就是true,   index 为3 是 因为从( 索引为3
-                "index": 3
-            },
-            {
-                "name": ")",
-                "editor": false
-            }
-        ],
-        "example": [
-            {
-                "name": "MAX(",
-                "editor": false
-            },
-            {
-                "name": "A2:A100",
-                "editor": false
-            },
-            {
-                "name": "，",
-                "editor": false
-            },
-            {
-                "name": "101",
-                "editor": true,
-                "index": 3
-            },
-            {
-                "name": ")",
-                "editor": false
-            }
-        ],
-        "content": {
-            "摘要": "返回一组值中的最大值。",
-            "数值1": "待比较的一组值的第一个数值或范围。",
-            "数值2… - [可选] 可重复": "要与“数值1”比较的其他数值或范围。",
-        }
-    },
-    "MIN": {
-        "title": [
-            {
-                "name": "MIN(",
-                "editor": false
-            },
-            {
-                "name": "数值1",
-                "editor": false
-            },
-            {
-
-                "name": "，",
-                "editor": false
-            },
-            {
-                "name": "[数值2, ...]",
-                "editor": true,                 // 像这种情况 [数值2, ...]，
-                //        editor就是true,   index 为3 是 因为从( 索引为3
-                "index": 3
-            },
-            {
-                "name": ")",
-                "editor": false
-            }
-        ],
-        "example": [
-            {
-                "name": "MIN(",
-                "editor": false
-            },
-            {
-                "name": "A2:A100",
-                "editor": false
-            },
-            {
-                "name": "，",
-                "editor": false
-            },
-            {
-                "name": "101",
-                "editor": true,
-                "index": 3
-            },
-            {
-                "name": ")",
-                "editor": false
-            }
-        ],
-        "content": {
-            "摘要": "返回一组值中的最小值。",
-            "数值1": "待比较的一组值的第一个数值或范围。",
-            "数值2… - [可选] 可重复": "要与“数值1”比较的其他数值或范围。",
-        }
-    },
-    "VLOOKUP": {
-        "title": [
-            {
-                "name": "VLOOKUP(",
-                "editor": false    // 下面有介绍该字段
-            },
-            {
-
-                "name": "A2",
-                "editor": false
-            },
-            {
-
-                "name": ",",
-                "editor": false
-            },
-            {
-
-                "name": "A2:B10",
-                "editor": false
-            },
-            {
-
-                "name": ",",
-                "editor": false
-            },
-            {
-
-                "name": "2",
-                "editor": false
-            },
-            {
-
-                "name": ",",
-                "editor": false
-            },
-            {
-
-                "name": "False",
-                "editor": false
-            },
-            {
-                "name": ")",
-                "editor": false
-            }
-        ],
-        "example": [               // 同title
-            {
-                "name": "VLOOKUP(",
-                "editor": false    // 下面有介绍该字段
-            },
-            {
-
-                "name": "lookup_value",
-                "editor": false
-            },
-            {
-
-                "name": ",",
-                "editor": false
-            },
-            {
-
-                "name": "table_array",
-                "editor": false
-            },
-            {
-
-                "name": ",",
-                "editor": false
-            },
-            {
-
-                "name": "col_index_num",
-                "editor": false
-            },
-            {
-
-                "name": ",",
-                "editor": false
-            },
-            {
-
-                "name": "range_lookup",
-                "editor": false
-            },
-            {
-                "name": ")",
-                "editor": false
-            }
-        ],
-        "content": {             // 这部分是内容说明。
-            "摘要": "在表格数组的首列查找指定的值，并由此返回表格数组当前行中其他列的值。",
-            "lookup_value": "需要在表格数组第一列中查找的数值。可以为数值或引用。",
-            "table_array": "两列以上数据。待查找的数据区域。",
-            "col_index_num": "为 table_array 中待返回的匹配值的列序号。Col_index_num 为 1 时，返回 table_array 第一列中的数值；col_index_num 为 2，返回 table_array 第二列中的数值，以此类推。",
-            "range_lookup": "逻辑值，如果是True，则结果匹配近似值,False则匹配精确值。默认为True。",
-        }
-    },
-    "FLOOR": {
-        "title": [
-            {
-                "name": "FLOOR(",
-                "editor": false
-            },
-            {
-                "name": "number",
-                "editor": false
-            },
-            {
-                "name": ",",
-                "editor": false
-            },
-            {
-                "name": "significance",
-                "editor": false
-            },
-            {
-                "name": ")",
-                "editor": false
-            }
-        ],
-        "example": [
-            {
-                "name": "FLOOR(",
-                "editor": false
-            },
-            {
-                "name": "10.4",
-                "editor": false
-            },
-            {
-                "name": ",",
-                "editor": false
-            },
-            {
-                "name": "1",
-                "editor": false
-            },
-            {
-                "name": ")",
-                "editor": false
-            }
-        ],
-        "content": {             // 这部分是内容说明。
-            "摘要": "将 number 向下舍入（向零的方向）到最接近的 significance 的倍数。",
-            "number": "所要四舍五入的数值。",
-            "significance": "用以进行舍入计算的倍数。",
+            "abstract": "返回正平方根。",
+            "value": "要计算平方根的数。",
         }
     },
     "CEILING": {
@@ -964,7 +704,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             }
         ],
         "content": {             // 这部分是内容说明。
-            "摘要": "将参数 Number 向上舍入（沿绝对值增大的方向）为最接近的 significance 的倍数。",
+            "abstract": "将参数 Number 向上舍入（沿绝对值增大的方向）为最接近的 significance 的倍数。",
             "number": "所要四舍五入的数值。",
             "significance": "用以进行舍入计算的倍数。",
         }
@@ -986,7 +726,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
             {
                 "name": "[text2, ...]",
-                "editor": true,                 // 像这种情况 [数值2, ...]，
+                "editor": true,                 // 像这种情况 [value2, ...]，
                 //        editor就是true,   index 为3 是 因为从( 索引为3
                 "index": 3
             },
@@ -1019,77 +759,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             }
         ],
         "content": {
-            "摘要": "将两个或多个文本字符串合并为一个文本字符串。",
+            "abstract": "将两个或多个文本字符串合并为一个文本字符串。",
             "text1": "待合并文本字符串",
-            "text2… - [可选] 可重复": "要与“text1”合并的其他待合并文本字符串。",
-        }
-    },
-    "IF": {
-        "title": [
-            {
-                "name": "IF(",
-                "editor": false
-            },
-            {
-                "name": "logical_test",
-                "editor": false
-            },
-            {
-                "name": ",",
-                "editor": false
-            },
-            {
-                "name": "value_if_true",
-                "editor": false
-            },
-            {
-                "name": ",",
-                "editor": false
-            },
-            {
-                "name": "value_if_false",
-                "editor": false
-            },
-            {
-                "name": ")",
-                "editor": false
-            }
-        ],
-        "example": [
-            {
-                "name": "IF(",
-                "editor": false
-            },
-            {
-                "name": "A1>A2",
-                "editor": false
-            },
-            {
-                "name": ",",
-                "editor": false
-            },
-            {
-                "name": "A1",
-                "editor": false
-            },
-            {
-                "name": ",",
-                "editor": false
-            },
-            {
-                "name": "A2",
-                "editor": false
-            },
-            {
-                "name": ")",
-                "editor": false
-            }
-        ],
-        "content": {             // 这部分是内容说明。
-            "摘要": "根据对指定的条件计算结果为 TRUE 或 FALSE，返回不同的结果。",
-            "logical_test": "逻辑表达式或者逻辑值",
-            "value_if_true": "logical_test为True时显示的结果",
-            "value_if_false": "logical_test为False时显示的结果",
+            "text2": "要与“text1”合并的其他待合并文本字符串。",
         }
     },
     "PMT": {
@@ -1186,7 +858,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             }
         ],
         "content": {             // 这部分是内容说明。
-            "摘要": "基于固定利率及等额分期付款方式，返回贷款的每期付款额。",
+            "abstract": "基于固定利率及等额分期付款方式，返回贷款的每期付款额。",
             "rate": "贷款利率。",
             "nper": "该项贷款的付款期数。",
             "pv": "现值，或一系列未来付款的当前值的累积和，也称为本金。",
@@ -1244,77 +916,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             }
         ],
         "content": {
-            "摘要": "返回参数列表中非空值的单元格个数。",
+            "abstract": "返回参数列表中非空值的单元格个数。",
             "value1": "要计数的单元格",
-            "value2… - [可选] 可重复": "要计数的单元格",
-        }
-    },
-    "NORM.INV": {
-        "title": [
-            {
-                "name": "NORMINV(",
-                "editor": false
-            },
-            {
-                "name": "数值1",
-                "editor": false
-            },
-            {
-                "name": ",",
-                "editor": false
-            },
-            {
-                "name": "数值2",
-                "editor": false
-            },
-            {
-                "name": ",",
-                "editor": false
-            },
-            {
-                "name": "数值3",
-                "editor": false
-            },
-            {
-                "name": ")",
-                "editor": false
-            }
-        ],
-        "example": [
-            {
-                "name": "NORMINV(",
-                "editor": false
-            },
-            {
-                "name": "0.908789",
-                "editor": false
-            },
-            {
-                "name": ",",
-                "editor": false
-            },
-            {
-                "name": "40",
-                "editor": false
-            },
-            {
-                "name": ",",
-                "editor": false
-            },
-            {
-                "name": "1.5",
-                "editor": false
-            },
-            {
-                "name": ")",
-                "editor": false
-            }
-        ],
-        "content": {
-            "摘要": "返回指定平均值和标准偏差的正态累积分布函数的反函数值",
-            "数值1": "正态分布的概率",
-            "数值2": "分布的算术平均值",
-            "数值3": "分布的标准偏差"
+            "value2": "要计数的单元格",
         }
     },
     "STDEV": {
@@ -1324,7 +928,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -1332,7 +936,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -1355,7 +959,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor":false
             // },
             // {
-            //     "name":"[数值2,...]",
+            //     "name":"[value2,...]",
             //     "editor":true,
             //     "index":3
             // },
@@ -1365,9 +969,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "估算基于样本的标准偏差",
-            "数值1": "对应于总体样本的第一个数值参数",
-            "[数值2,...] - 可选": "对应于总体样本的 2 到 255 个数值参数。也可以用单一数组或对某个数组的引用来代替用逗号分隔的参数"
+            "abstract": "估算基于样本的标准偏差",
+            "value1": "对应于总体样本的第一个数值参数",
+            "value2": "对应于总体样本的 2 到 255 个数值参数。也可以用单一数组或对某个数组的引用来代替用逗号分隔的参数"
         }
     },
     "AVERAGE": {
@@ -1377,7 +981,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -1385,7 +989,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             }
@@ -1408,9 +1012,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "index": 3
             }],
         "content": {
-            "摘要": "返回参数的平均值 (算术平均值)",
-            "数值1": "要计算平均值的第一个数字、单元格引用或单元格区域",
-            "[数值2,...] - 可选": "要计算平均值的其他数字、单元格引用或单元格区域，最多可包含 255 个"
+            "abstract": "返回参数的平均值 (算术平均值)",
+            "value1": "要计算平均值的第一个数字、单元格引用或单元格区域",
+            "value2": "要计算平均值的其他数字、单元格引用或单元格区域，最多可包含 255 个"
         }
     },
     "EXP": {
@@ -1420,7 +1024,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -1443,8 +1047,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             }
         ],
         "content": {
-            "摘要": "返回 e 的 n 次幂",
-            "数值1": "底数 e 的指数"
+            "abstract": "返回 e 的 n 次幂",
+            "value1": "底数 e 的指数"
         }
     },
     "LN": {
@@ -1454,7 +1058,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -1477,112 +1081,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             }
         ],
         "content": {
-            "摘要": "返回一个数的自然对数",
-            "数值1": "想要计算其自然对数的正实数"
-        }
-    },
-    "VAR.P": {
-        "title": [
-            {
-                "name": "VAR.P(",
-                "editor": false
-            },
-            {
-                "name": "数值1",
-                "editor": false
-            },
-            {
-                "name": ",",
-                "editor": false
-            },
-            {
-                "name": "[数值2,...]",
-                "editor": true,
-                "index": 3
-            },
-            {
-                "name": ")",
-                "editor": false
-            }
-        ],
-        "example": [
-            {
-                "name": "VAR.P(",
-                "editor": false
-            },
-            {
-                "name": "A2:A11",
-                "editor": false
-            },
-            // {
-            //     "name":",",
-            //     "editor":false
-            // },
-            // {
-            //     "name":"[数值2,...]",
-            //     "editor":true,
-            //     "index":3
-            // },
-            {
-                "name": ")",
-                "editor": false
-            }
-        ],
-        "content": {
-            "摘要": "计算基于整个样本总体的方差（忽略样本总体中的逻辑值和文本)。",
-            "数值1": "对应于样本总体的第一个数值参数",
-            "[数值2,...] - 可选": "对应于样本总体的 2 到 254 个数值参数"
-        }
-    },
-    "COVARIANCE.P": {
-        "title": [
-            {
-                "name": "COVARIANCE.P(",
-                "editor": false
-            },
-            {
-                "name": "数组1",
-                "editor": false
-            },
-            {
-                "name": ",",
-                "editor": false
-            },
-            {
-                "name": "数组2",
-                "editor": false
-            },
-            {
-                "name": ")",
-                "editor": false
-            }
-        ],
-        "example": [
-            {
-                "name": "COVARIANCE.P(",
-                "editor": false
-            },
-            {
-                "name": "A2:A6",
-                "editor": false
-            },
-            {
-                "name": ",",
-                "editor": false
-            },
-            {
-                "name": "B2:B6",
-                "editor": false
-            },
-            {
-                "name": ")",
-                "editor": false
-            }
-        ],
-        "content": {
-            "摘要": "返回总体协方差，即两个数据集中每对数据点的偏差乘积的平均数",
-            "数组1": "第一个所含数据为整数的单元格区域",
-            "数组2": "第二个所含数据为整数的单元格区域"
+            "abstract": "返回一个数的自然对数",
+            "value1": "想要计算其自然对数的正实数"
         }
     },
     "TRIM": {
@@ -1592,7 +1092,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -1616,8 +1116,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "除了单词之间的单个空格外，清除文本中所有的空格",
-            "文本": "需要删除其中空格的文本"
+            "abstract": "除了单词之间的单个空格外，清除文本中所有的空格",
+            "text": "需要删除其中空格的文本"
         }
     },
     "HYPERLINK": {
@@ -1666,9 +1166,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "在单元格内创建一个超链接。",
-            "网址": "以引号括住的链接位置的完整网址，或对包含这种网址的单元格的引用。",
-            "链接标签": "用引号括住的要在单元格中作为链接显示的文字，或对包含此类标签的单元格的引用。"
+            "abstract": "在单元格内创建一个超链接。",
+            "url": "以引号括住的链接位置的完整网址，或对包含这种网址的单元格的引用。",
+            "linktag": "用引号括住的要在单元格中作为链接显示的文字，或对包含此类标签的单元格的引用。"
         }
     },
     "LEN": {
@@ -1678,7 +1178,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -1701,8 +1201,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回文本字符串中的字符数",
-            "文本": "要查找其长度的文本,也可为单元格引用。空格将作为字符进行计数"
+            "abstract": "返回文本字符串中的字符数",
+            "text": "要查找其长度的文本,也可为单元格引用。空格将作为字符进行计数"
         }
     },
     "ISBLANK": {
@@ -1712,7 +1212,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -1735,8 +1235,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "检验指定值并根据参数取值返回 TRUE 或 FALSE",
-            "数值1": "要检验的值。参数 value 可以是空白（空单元格）、错误值、逻辑值、文本、数字、引用值，或者引用要检验的以上任意值的名称"
+            "abstract": "检验指定值并根据参数取值返回 TRUE 或 FALSE",
+            "value1": "要检验的值。参数 value 可以是空白（空单元格）、错误值、逻辑值、文本、数字、引用值，或者引用要检验的以上任意值的名称"
         }
     },
     "ACCRINT": {
@@ -1849,13 +1349,13 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回定期付息证券的应计利息",
-            "日期1": "证券的发行日",
-            "日期2": "证券的首次计息日",
-            "日期3": "证券的结算日。证券结算日是在发行日期之后，证券卖给购买者的日期",
-            "利率": "证券的年息票利率",
-            "票面值": "证券的票面值。如果省略此参数，则 ACCRINT 使用 ￥1,000",
-            "年付息次数": "年付息次数。如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4"
+            "abstract": "返回定期付息证券的应计利息",
+            "date1": "证券的发行日",
+            "date2": "证券的首次计息日",
+            "date3": "证券的结算日。证券结算日是在发行日期之后，证券卖给购买者的日期",
+            "rate": "证券的年息票利率",
+            "price": "证券的票面值。如果省略此参数，则 ACCRINT 使用 ￥1,000",
+            "frequency": "年付息次数。如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4"
         }
     },
     "ACCRINTM": {
@@ -1936,11 +1436,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回到期一次性付息有价证券的应计利息",
-            "日期1": "证券的发行日",
-            "日期2": "证券的到期日",
-            "利率": "证券的年息票利率",
-            "票面值": "证券的票面值。如果省略此参数，则 ACCRINTM 使用 ￥1,000"
+            "abstract": "返回到期一次性付息有价证券的应计利息",
+            "date1": "证券的发行日",
+            "date2": "证券的到期日",
+            "rate": "证券的年息票利率",
+            "price": "证券的票面值。如果省略此参数，则 ACCRINTM 使用 ￥1,000"
         }
     },
     "ACOS": {
@@ -1950,7 +1450,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -1973,8 +1473,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数字的反余弦值",
-            "数值1": "所需的角度余弦值，必须介于 -1 到 1 之间"
+            "abstract": "返回数字的反余弦值",
+            "value1": "所需的角度余弦值，必须介于 -1 到 1 之间"
         }
     },
     "ACOSH": {
@@ -1984,7 +1484,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -1998,7 +1498,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -2007,8 +1507,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 数值1 参数的反双曲余弦值",
-            "数值1": "大于等于 1 的任意实数"
+            "abstract": "返回 value1 参数的反双曲余弦值",
+            "value1": "大于等于 1 的任意实数"
         }
     },
     "ACOT": {
@@ -2018,7 +1518,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -2041,8 +1541,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数字的反余切值的主值",
-            "数值1": "数值1 为所需角度的余切值。 此值必须是实数"
+            "abstract": "返回数字的反余切值的主值",
+            "value1": "value1 为所需角度的余切值。 此值必须是实数"
         }
     },
     "ACOTH": {
@@ -2052,7 +1552,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -2075,8 +1575,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数字的反双曲余切值",
-            "数值1": "数值1 的绝对值必须大于 1"
+            "abstract": "返回数字的反双曲余切值",
+            "value1": "value1 的绝对值必须大于 1"
         }
     },
     "AMORDEGRC": {
@@ -2086,7 +1586,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -2110,7 +1610,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -2118,7 +1618,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -2189,13 +1689,13 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回每个结算期间的折旧值",
-            "数值1": "资产原值",
-            "日期1": "购入资产的日期",
-            "日期2": "第一个期间结束时的日期",
-            "数值2": "资产在使用寿命结束时的残值",
-            "数值3": "期间",
-            "折旧率": "折旧率"
+            "abstract": "返回每个结算期间的折旧值",
+            "value1": "资产原值",
+            "date1": "购入资产的日期",
+            "date2": "第一个期间结束时的日期",
+            "value2": "资产在使用寿命结束时的残值",
+            "value3": "期间",
+            "depreciationrate": "折旧率"
         }
     },
     "AMORLINC": {
@@ -2205,7 +1705,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -2229,7 +1729,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -2259,7 +1759,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -2283,7 +1783,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -2308,13 +1808,13 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回每个结算期间的折旧值，该函数为法国会计系统提供。如果某项资产是在结算期间的中期购入的，则按线性折旧法计算",
-            "数值1": "资产原值",
-            "日期1": "购入资产的日期",
-            "日期2": "第一个期间结束时的日期",
-            "数值2": "资产在使用寿命结束时的残值",
-            "期间": "期间",
-            "折旧率": "折旧率"
+            "abstract": "返回每个结算期间的折旧值，该函数为法国会计系统提供。如果某项资产是在结算期间的中期购入的，则按线性折旧法计算",
+            "value1": "资产原值",
+            "date1": "购入资产的日期",
+            "date2": "第一个期间结束时的日期",
+            "value2": "资产在使用寿命结束时的残值",
+            "period": "期间",
+            "depreciationrate": "折旧率"
         }
     },
     "AND": {
@@ -2357,9 +1857,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "所有参数的计算结果为 TRUE 时，AND 函数返回 TRUE；只要有一个参数的计算结果为 FALSE，即返回 FALSE",
-            "逻辑值1": "第一个想要测试且计算结果可为 TRUE 或 FALSE 的条件",
-            "[逻辑值2,...] - 可选": "其他想要测试且计算结果可为 TRUE 或 FALSE 的条件（最多 255 个条件）"
+            "abstract": "所有参数的计算结果为 TRUE 时，AND 函数返回 TRUE；只要有一个参数的计算结果为 FALSE，即返回 FALSE",
+            "logic1": "第一个想要测试且计算结果可为 TRUE 或 FALSE 的条件",
+            "logic2": "其他想要测试且计算结果可为 TRUE 或 FALSE 的条件（最多 255 个条件）"
         }
     },
     "ARABIC": {
@@ -2369,7 +1869,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -2392,8 +1892,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将罗马数字转换为阿拉伯数字",
-            "文本": "用引号引起的字符串、空字符串 ('') 或对包含文本的单元格的引用"
+            "abstract": "将罗马数字转换为阿拉伯数字",
+            "text": "用引号引起的字符串、空字符串 ('') 或对包含文本的单元格的引用"
         }
     },
     "ASC": {
@@ -2403,7 +1903,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -2426,8 +1926,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "对于双字节字符集 (DBCS) 语言，将全角（双字节）字符更改为半角（单字节）字符",
-            "文本": "文本或对包含要更改的文本的单元格的引用。如果文本中不包含任何全角字母，则文本不会更改"
+            "abstract": "对于双字节字符集 (DBCS) 语言，将全角（双字节）字符更改为半角（单字节）字符",
+            "text": "文本或对包含要更改的文本的单元格的引用。如果文本中不包含任何全角字母，则文本不会更改"
         }
     },
     "ASIN": {
@@ -2437,7 +1937,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -2460,8 +1960,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回参数的反正弦值",
-            "数值": "所需的角度正弦值，必须介于 -1 到 1 之间"
+            "abstract": "返回参数的反正弦值",
+            "value": "所需的角度正弦值，必须介于 -1 到 1 之间"
         }
     },
     "ASINH": {
@@ -2471,7 +1971,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -2494,8 +1994,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回参数的反双曲正弦值",
-            "数值": "任意实数"
+            "abstract": "返回参数的反双曲正弦值",
+            "value": "任意实数"
         }
     },
     "ATAN": {
@@ -2505,7 +2005,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -2528,8 +2028,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回反正切值",
-            "数值": "所需的角度正切值"
+            "abstract": "返回反正切值",
+            "value": "所需的角度正切值"
         }
     },
     "ATAN2": {
@@ -2539,7 +2039,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -2547,7 +2047,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -2578,9 +2078,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回给定的 X 及 Y 坐标值的反正切值",
-            "数值1": "点的 x 坐标",
-            "数值2": "点的 y 坐标"
+            "abstract": "返回给定的 X 及 Y 坐标值的反正切值",
+            "value1": "点的 x 坐标",
+            "value2": "点的 y 坐标"
         }
     },
     "ATANH": {
@@ -2590,7 +2090,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -2613,8 +2113,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回参数的反双曲正切值，参数必须介于 -1 到 1 之间（除去 -1 和 1）",
-            "数值": "-1 到 1 之间的任意实数"
+            "abstract": "返回参数的反双曲正切值，参数必须介于 -1 到 1 之间（除去 -1 和 1）",
+            "value": "-1 到 1 之间的任意实数"
         }
     },
     "AVEDEV": {
@@ -2624,7 +2124,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -2632,7 +2132,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -2655,7 +2155,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -2665,9 +2165,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一组数据与其均值的绝对偏差的平均值，AVEDEV 用于评测这组数据的离散度",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "用于计算绝对偏差平均值的一组参数，参数的个数可以为 1 到 255 个"
+            "abstract": "返回一组数据与其均值的绝对偏差的平均值，AVEDEV 用于评测这组数据的离散度",
+            "value1": "任意实数",
+            "value2": "用于计算绝对偏差平均值的一组参数，参数的个数可以为 1 到 255 个"
         }
     },
     "AVERAGEA": {
@@ -2677,7 +2177,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -2685,7 +2185,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -2708,7 +2208,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -2718,9 +2218,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "计算参数列表中数值的平均值",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "需要计算平均值的 1 到 255 个单元格、单元格区域或值"
+            "abstract": "计算参数列表中数值的平均值",
+            "value1": "任意实数",
+            "value2": "需要计算平均值的 1 到 255 个单元格、单元格区域或值"
         }
     },
     "AVERAGEIF": {
@@ -2770,9 +2270,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回某个区域内满足给定条件的所有单元格的平均值（算术平均值）",
-            "引用范围": "要计算平均值的一个或多个单元格，其中包括数字或包含数字的名称、数组或引用",
-            "标准条件": "数字、表达式、单元格引用或文本形式的条件，用于定义要对哪些单元格计算平均值"
+            "abstract": "返回某个区域内满足给定条件的所有单元格的平均值（算术平均值）",
+            "referencearea": "要计算平均值的一个或多个单元格，其中包括数字或包含数字的名称、数组或引用",
+            "standardcondition": "数字、表达式、单元格引用或文本形式的条件，用于定义要对哪些单元格计算平均值"
         }
 
     },
@@ -2879,11 +2379,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回满足多重条件的所有单元格的平均值（算术平均值）",
-            "引用范围": "要计算平均值的一个或多个单元格，其中包括数字或包含数字的名称、数组或引用",
-            "标准条件_适用范围1": "要计算平均值的实际单元格集",
-            "标准条件1": "定义要对适用范围1中的哪些单元格计算平均值",
-            "[标准条件_适用范围2,标准条件2,...] - 可选": "适用范围及其对应的标准条件"
+            "abstract": "返回满足多重条件的所有单元格的平均值（算术平均值）",
+            "referencearea": "要计算平均值的一个或多个单元格，其中包括数字或包含数字的名称、数组或引用",
+            "standardcondition_area1": "要计算平均值的实际单元格集",
+            "standardcondition1": "定义要对适用范围1中的哪些单元格计算平均值",
+            "standardcondition_area2": "适用范围及其对应的标准条件"
         }
     },
     "BAHTTEXT": {
@@ -2893,7 +2393,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -2916,8 +2416,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将数字转换为泰语文本并添加后缀“泰铢”",
-            "数值": "要转换成文本的数字、对包含数字的单元格的引用或结果为数字的公式"
+            "abstract": "将数字转换为泰语文本并添加后缀“泰铢”",
+            "value": "要转换成文本的数字、对包含数字的单元格的引用或结果为数字的公式"
         }
     },
     "BASE": {
@@ -2927,7 +2427,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -2984,10 +2484,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将数字转换为具备给定基数的文本表示",
-            "数值": "要转换的数字。 必须是大于或等于0且小于 2 ^ 53 的整数",
-            "基": "要将数字转换为的基础基数。 必须是大于或等于2且小于或等于36的整数",
-            "[最小长度] - 可选": "返回的字符串的最小长度。 必须是大于或等于0的整数"
+            "abstract": "将数字转换为具备给定基数的文本表示",
+            "value": "要转换的数字。 必须是大于或等于0且小于 2 ^ 53 的整数",
+            "basic": "要将数字转换为的基础基数。 必须是大于或等于2且小于或等于36的整数",
+            "minlength": "返回的字符串的最小长度。 必须是大于或等于0的整数"
         }
     },
     "BESSELI": {
@@ -2997,7 +2497,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -3005,7 +2505,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -3036,9 +2536,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回修正 Bessel 函数值，它与用纯虚数参数运算时的 Bessel 函数值相等",
-            "数值1": "用来进行函数计算的数值",
-            "数值2": "Bessel 函数的阶数。如果 n 不是整数，则截尾取整"
+            "abstract": "返回修正 Bessel 函数值，它与用纯虚数参数运算时的 Bessel 函数值相等",
+            "value1": "用来进行函数计算的数值",
+            "value2": "Bessel 函数的阶数。如果 n 不是整数，则截尾取整"
         }
     },
     "BESSELJ": {
@@ -3048,7 +2548,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -3056,7 +2556,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -3087,9 +2587,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 Bessel 函数值",
-            "数值1": "用来进行函数计算的数值",
-            "数值2": "Bessel 函数的阶数。如果 n 不是整数，则截尾取整"
+            "abstract": "返回 Bessel 函数值",
+            "value1": "用来进行函数计算的数值",
+            "value2": "Bessel 函数的阶数。如果 n 不是整数，则截尾取整"
         }
     },
     "BESSELK": {
@@ -3099,7 +2599,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -3107,7 +2607,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -3138,9 +2638,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回修正 Bessel 函数值，它与用纯虚数参数运算时的 Bessel 函数值相等",
-            "数值1": "用来进行函数计算的数值",
-            "数值2": "Bessel 函数的阶数。如果 n 不是整数，则截尾取整"
+            "abstract": "返回修正 Bessel 函数值，它与用纯虚数参数运算时的 Bessel 函数值相等",
+            "value1": "用来进行函数计算的数值",
+            "value2": "Bessel 函数的阶数。如果 n 不是整数，则截尾取整"
         }
     },
     "BESSELY": {
@@ -3150,7 +2650,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -3158,7 +2658,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -3189,9 +2689,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 Bessel 函数值，也称为 Weber 函数或 Neumann 函数",
-            "数值1": "用来进行函数计算的数值",
-            "数值2": "Bessel 函数的阶数。如果 n 不是整数，则截尾取整"
+            "abstract": "返回 Bessel 函数值，也称为 Weber 函数或 Neumann 函数",
+            "value1": "用来进行函数计算的数值",
+            "value2": "Bessel 函数的阶数。如果 n 不是整数，则截尾取整"
         }
     },
     "BETA.DIST": {
@@ -3201,7 +2701,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -3209,7 +2709,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -3217,7 +2717,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -3308,13 +2808,13 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 Beta 分布",
-            "数值1": "介于 A 和 B 之间用来进行函数计算的值",
-            "数值2": "分布参数",
-            "数值3": "分布参数",
-            "逻辑值": "决定函数形式的逻辑值。如果 cumulative 为 TRUE，BETA.DIST 返回累积分布函数；如果为 FALSE，则返回概率密度函数",
-            "[下界] - 可选": "数值1所属区间的下界",
-            "[上界] - 可选": "数值1所属区间的上界"
+            "abstract": "返回 Beta 分布",
+            "value1": "介于 A 和 B 之间用来进行函数计算的值",
+            "value2": "分布参数",
+            "value3": "分布参数",
+            "logic": "决定函数形式的逻辑值。如果 cumulative 为 TRUE，BETA.DIST 返回累积分布函数；如果为 FALSE，则返回概率密度函数",
+            "lowbound": "value1所属区间的下界",
+            "upbound": "value1所属区间的上界"
         }
     },
     "BETA.INV": {
@@ -3324,7 +2824,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -3332,7 +2832,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -3340,7 +2840,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -3415,12 +2915,12 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 Beta 累积概率密度函数 (BETA.DIST) 的反函数",
-            "数值1": "与 beta 分布相关的概率",
-            "数值2": "分布参数",
-            "数值3": "分布参数",
-            "[下界] - 可选": "数值1所属区域的下界",
-            "[上界] - 可选": "数值1所属区域的上界"
+            "abstract": "返回 Beta 累积概率密度函数 (BETA.DIST) 的反函数",
+            "value1": "与 beta 分布相关的概率",
+            "value2": "分布参数",
+            "value3": "分布参数",
+            "lowbound": "value1所属区域的下界",
+            "upbound": "value1所属区域的上界"
         }
     },
     "BIN2DEC": {
@@ -3430,7 +2930,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -3453,8 +2953,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将二进制数转换为十进制数",
-            "数值": "希望转换的二进制数"
+            "abstract": "将二进制数转换为十进制数",
+            "value": "希望转换的二进制数"
         }
     },
     "BIN2HEX": {
@@ -3464,7 +2964,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -3472,7 +2972,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": false
             },
             {
@@ -3503,9 +3003,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将二进制数转换为十六进制数",
-            "数值1": "希望转换的二进制数",
-            "[数值2] - 可选": "要使用的字符数"
+            "abstract": "将二进制数转换为十六进制数",
+            "value1": "希望转换的二进制数",
+            "value2": "要使用的字符数"
         }
     },
     "BIN2OCT": {
@@ -3515,7 +3015,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -3523,7 +3023,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": false
             },
             {
@@ -3554,9 +3054,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将二进制数转换为八进制数",
-            "数值1": "希望转换的二进制数",
-            "[数值2] - 可选": "要使用的字符数"
+            "abstract": "将二进制数转换为八进制数",
+            "value1": "希望转换的二进制数",
+            "value2": "要使用的字符数"
         }
     },
     "BINOM.DIST": {
@@ -3566,7 +3066,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -3574,7 +3074,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -3582,7 +3082,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -3590,7 +3090,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -3637,11 +3137,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回二项式分布的概率",
-            "数值1": "试验成功的次数",
-            "数值2": "独立试验的次数",
-            "数值3": "每次试验中成功的概率",
-            "数值4": "决定函数形式的逻辑值"
+            "abstract": "返回二项式分布的概率",
+            "value1": "试验成功的次数",
+            "value2": "独立试验的次数",
+            "value3": "每次试验中成功的概率",
+            "value4": "决定函数形式的逻辑值"
         }
     },
     "BINOM.INV": {
@@ -3651,7 +3151,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -3659,7 +3159,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -3667,7 +3167,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -3706,10 +3206,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回使累积二项式分布大于等于临界值的最小值",
-            "数值1": "伯努利试验次数",
-            "数值2": "每次试验中成功的概率",
-            "数值3": "临界值"
+            "abstract": "返回使累积二项式分布大于等于临界值的最小值",
+            "value1": "伯努利试验次数",
+            "value2": "每次试验中成功的概率",
+            "value3": "临界值"
         }
     },
     "BITAND": {
@@ -3719,7 +3219,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -3727,7 +3227,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -3758,9 +3258,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回两个数的按位“与”",
-            "数值1": "必须为十进制格式且大于等于 0",
-            "数值2": "必须为十进制格式且大于等于 0"
+            "abstract": "返回两个数的按位“与”",
+            "value1": "必须为十进制格式且大于等于 0",
+            "value2": "必须为十进制格式且大于等于 0"
         }
     },
     "BITLSHIFT": {
@@ -3770,7 +3270,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -3778,7 +3278,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -3809,9 +3309,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回向左移动指定位数后的数值",
-            "数值1": "必须是大于或等于0的整数",
-            "数值2": "必须是整数"
+            "abstract": "返回向左移动指定位数后的数值",
+            "value1": "必须是大于或等于0的整数",
+            "value2": "必须是整数"
         }
     },
     "BITOR": {
@@ -3821,7 +3321,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -3829,7 +3329,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -3860,9 +3360,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回两个数的按位“或”",
-            "数值1": "必须为十进制格式且大于等于 0",
-            "数值2": "必须为十进制格式且大于等于 0"
+            "abstract": "返回两个数的按位“或”",
+            "value1": "必须为十进制格式且大于等于 0",
+            "value2": "必须为十进制格式且大于等于 0"
         }
     },
     "BITRSHIFT": {
@@ -3872,7 +3372,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -3880,7 +3380,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -3911,9 +3411,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回向右移动指定位数后的数值",
-            "数值1": "必须是大于或等于0的整数",
-            "数值2": "必须是整数"
+            "abstract": "返回向右移动指定位数后的数值",
+            "value1": "必须是大于或等于0的整数",
+            "value2": "必须是整数"
         }
     },
     "BITXOR": {
@@ -3923,7 +3423,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -3931,7 +3431,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -3962,9 +3462,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回两个数值的按位“异或”结果",
-            "数值1": "必须大于或等于 0",
-            "数值2": "必须大于或等于 0"
+            "abstract": "返回两个数值的按位“异或”结果",
+            "value1": "必须大于或等于 0",
+            "value2": "必须大于或等于 0"
         }
     },
     "CEILING.MATH": {
@@ -3974,7 +3474,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -3982,7 +3482,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -3991,7 +3491,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值3]",
+                "name": "[value3]",
                 "editor": true,
                 "index": 5
             },
@@ -4033,10 +3533,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将数字向上舍入为最接近的整数或最接近的指定基数的倍数",
-            "数值1": "必须小于 9.99 E + 307 且大于-2.229 E-308",
-            "[数值2] - 可选": "要将数字舍入到的倍数",
-            "[数值3] - 可选": "对于负数, 控制数字是舍入还是远离零"
+            "abstract": "将数字向上舍入为最接近的整数或最接近的指定基数的倍数",
+            "value1": "必须小于 9.99 E + 307 且大于-2.229 E-308",
+            "value2": "要将数字舍入到的倍数",
+            "value3": "对于负数, 控制数字是舍入还是远离零"
         }
     },
     "CEILING.PRECISE": {
@@ -4046,7 +3546,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -4054,7 +3554,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -4087,9 +3587,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一个数字，该数字向上舍入为最接近的整数或最接近的有效位的倍数",
-            "数值1": "要进行舍入的值",
-            "[数值2] - 可选": "要将数字舍入的倍数,如果省略，则其默认值为 1"
+            "abstract": "返回一个数字，该数字向上舍入为最接近的整数或最接近的有效位的倍数",
+            "value1": "要进行舍入的值",
+            "value2": "要将数字舍入的倍数,如果省略，则其默认值为 1"
         }
     },
     "CELL": {
@@ -4099,7 +3599,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -4107,7 +3607,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": false
             },
             {
@@ -4138,9 +3638,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回有关单元格的格式、位置或内容的信息",
-            "数值1": "一个文本值，指定要返回的单元格信息的类型",
-            "[数值2] - 可选": "需要其相关信息的单元格。如果省略，则将 数值1 参数中指定的信息返回给最后更改的单元格。如果参数 数值2 是某一单元格区域，则函数只将该信息返回给该区域左上角的单元格"
+            "abstract": "返回有关单元格的格式、位置或内容的信息",
+            "value1": "一个文本值，指定要返回的单元格信息的类型",
+            "value2": "需要其相关信息的单元格。如果省略，则将 value1 参数中指定的信息返回给最后更改的单元格。如果参数 value2 是某一单元格区域，则函数只将该信息返回给该区域左上角的单元格"
         }
     },
     "CHAR": {
@@ -4150,7 +3650,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -4173,8 +3673,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回对应于数字代码的字符",
-            "数值": "介于 1 到 255 之间用于指定所需字符的数字"
+            "abstract": "返回对应于数字代码的字符",
+            "value": "介于 1 到 255 之间用于指定所需字符的数字"
         }
     },
     "CHIDIST": {
@@ -4184,7 +3684,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -4192,7 +3692,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -4223,9 +3723,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 χ2 分布的右尾概率",
-            "数值1": "用来计算分布的值",
-            "数值2": "自由度的数值"
+            "abstract": "返回 χ2 分布的右尾概率",
+            "value1": "用来计算分布的值",
+            "value2": "自由度的数值"
         }
     },
     "CHIINV": {
@@ -4235,7 +3735,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -4243,7 +3743,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -4274,9 +3774,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 χ2 分布的右尾概率的反函数",
-            "数值1": "与 χ2 分布相关的概率",
-            "数值2": "自由度的数值"
+            "abstract": "返回 χ2 分布的右尾概率的反函数",
+            "value1": "与 χ2 分布相关的概率",
+            "value2": "自由度的数值"
         }
     },
     "CHISQ.DIST": {
@@ -4286,7 +3786,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -4294,7 +3794,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -4302,7 +3802,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -4341,10 +3841,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 χ2 分布",
-            "数值1": "用来计算分布的值",
-            "数值2": "自由度数",
-            "数值3": "决定函数形式的逻辑值。如果为 TRUE，则返回累积分布函数；如果为 FALSE，则返回概率密度函数"
+            "abstract": "返回 χ2 分布",
+            "value1": "用来计算分布的值",
+            "value2": "自由度数",
+            "value3": "决定函数形式的逻辑值。如果为 TRUE，则返回累积分布函数；如果为 FALSE，则返回概率密度函数"
         }
     },
     "CHISQ.INV": {
@@ -4354,7 +3854,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -4362,7 +3862,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -4393,9 +3893,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 χ2 分布的左尾概率的反函数",
-            "数值1": "与 χ2 分布相关联的概率",
-            "数值2": "自由度数"
+            "abstract": "返回 χ2 分布的左尾概率的反函数",
+            "value1": "与 χ2 分布相关联的概率",
+            "value2": "自由度数"
         }
     },
     "CHISQ.TEST": {
@@ -4444,9 +3944,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回独立性检验值",
-            "区域1": "包含观察值的数据区域，用于检验预期值",
-            "区域2": "包含行列汇总的乘积与总计值之比率的数据区域"
+            "abstract": "返回独立性检验值",
+            "area1": "包含观察值的数据区域，用于检验预期值",
+            "area2": "包含行列汇总的乘积与总计值之比率的数据区域"
         }
     },
     "CHOOSE": {
@@ -4456,7 +3956,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -4464,7 +3964,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -4472,7 +3972,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值3,...]",
+                "name": "[value3,...]",
                 "editor": true,
                 "index": 5
             },
@@ -4503,7 +4003,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值3,...]",
+            //     "name": "[value3,...]",
             //     "editor": true,
             //     "index":5
             // },
@@ -4513,10 +4013,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "使用 数值1 返回数值参数列表中的数值",
-            "数值1": "指定所选定的值参数。数值1 必须为 1 到 254 之间的数字，或者为公式或对包含 1 到 254 之间某个数字的单元格的引用",
-            "数值2": "数值2 是必需的，后续值是可选的。可以为数字、单元格引用、已定义名称、公式、函数或文本",
-            "[数值3,...] - 可选": "可以为数字、单元格引用、已定义名称、公式、函数或文本"
+            "abstract": "使用 value1 返回数值参数列表中的数值",
+            "value1": "指定所选定的值参数。value1 必须为 1 到 254 之间的数字，或者为公式或对包含 1 到 254 之间某个数字的单元格的引用",
+            "value2": "value2 是必需的，后续值是可选的。可以为数字、单元格引用、已定义名称、公式、函数或文本",
+            "value3": "可以为数字、单元格引用、已定义名称、公式、函数或文本"
         }
     },
     "CLEAN": {
@@ -4526,7 +4026,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -4549,8 +4049,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "删除文本中不能打印的字符",
-            "文本": "要从中删除非打印字符的任何工作表信息"
+            "abstract": "删除文本中不能打印的字符",
+            "text": "要从中删除非打印字符的任何工作表信息"
         }
     },
     "CODE": {
@@ -4560,7 +4060,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -4583,8 +4083,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回文本字符串中第一个字符的数字代码",
-            "文本": "需要得到其第一个字符代码的文本"
+            "abstract": "返回文本字符串中第一个字符的数字代码",
+            "text": "需要得到其第一个字符代码的文本"
         }
     },
     "COLUMN": {
@@ -4619,8 +4119,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回指定单元格引用的列号",
-            "[数值] - 可选": "要返回其列号的单元格或单元格区域"
+            "abstract": "返回指定单元格引用的列号",
+            "value": "要返回其列号的单元格或单元格区域"
         }
     },
     "COLUMNS": {
@@ -4630,7 +4130,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -4644,7 +4144,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -4653,8 +4153,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数组或引用的列数",
-            "数组": "需要得到其列数的数组、数组公式或对单元格区域的引用"
+            "abstract": "返回数组或引用的列数",
+            "array": "需要得到其列数的数组、数组公式或对单元格区域的引用"
         }
     },
     "COMBIN": {
@@ -4664,7 +4164,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -4672,7 +4172,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -4703,9 +4203,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "计算从给定数目的对象集合中提取若干对象的组合数",
-            "数值1": "项目的数量",
-            "数值2": "每一组合中项目的数量"
+            "abstract": "计算从给定数目的对象集合中提取若干对象的组合数",
+            "value1": "项目的数量",
+            "value2": "每一组合中项目的数量"
         }
 
     },
@@ -4716,7 +4216,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -4724,7 +4224,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -4755,9 +4255,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回给定数目的项的组合数（包含重复）",
-            "数值1": "必须大于或等于 0 并大于或等于 Number_chosen。 非整数值将被截尾取整",
-            "数值2": "必须大于或等于 0。 非整数值将被截尾取整"
+            "abstract": "返回给定数目的项的组合数（包含重复）",
+            "value1": "必须大于或等于 0 并大于或等于 Number_chosen。 非整数值将被截尾取整",
+            "value2": "必须大于或等于 0。 非整数值将被截尾取整"
         }
 
     },
@@ -4768,7 +4268,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -4776,7 +4276,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -4825,10 +4325,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将实系数及虚系数转换为 x+yi 或 x+yj 形式的复数",
-            "数值1": "复数的实部",
-            "数值2": "复数的虚部",
-            "[后缀] - 可选": "复数中虚部的后缀，如果省略，则认为它为 i"
+            "abstract": "将实系数及虚系数转换为 x+yi 或 x+yj 形式的复数",
+            "value1": "复数的实部",
+            "value2": "复数的虚部",
+            "suffix": "复数中虚部的后缀，如果省略，则认为它为 i"
         }
     },
     "CONFIDENCE": {
@@ -4838,7 +4338,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -4846,7 +4346,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -4854,7 +4354,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -4893,10 +4393,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "使用正态分布返回总体平均值的置信区间",
-            "数值1": "用于计算置信度的显著水平参数",
-            "数值2": "数据区域的总体标准偏差,假设为已知",
-            "数值3": "样本容量"
+            "abstract": "使用正态分布返回总体平均值的置信区间",
+            "value1": "用于计算置信度的显著水平参数",
+            "value2": "数据区域的总体标准偏差,假设为已知",
+            "value3": "样本容量"
         }
     },
     "CONVERT": {
@@ -4906,7 +4406,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -4961,10 +4461,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将数字从一个度量系统转换到另一个度量系统中",
-            "数值": "以单位1为单位的需要进行转换的数值",
-            "单位1": "数值的单位",
-            "单位2": "结果的单位"
+            "abstract": "将数字从一个度量系统转换到另一个度量系统中",
+            "value": "以单位1为单位的需要进行转换的数值",
+            "unit1": "数值的单位",
+            "unit2": "结果的单位"
         }
     },
     "CORREL": {
@@ -4974,7 +4474,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组1",
+                "name": "array1",
                 "editor": false
             },
             {
@@ -4982,7 +4482,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组2",
+                "name": "array2",
                 "editor": false
             },
             {
@@ -5013,9 +4513,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回单元格区域 数组1 和 数组2 之间的相关系数",
-            "数组1": "第一组数值单元格区域",
-            "数组2": "第二组数值单元格区域"
+            "abstract": "返回单元格区域 array1 和 array2 之间的相关系数",
+            "array1": "第一组数值单元格区域",
+            "array2": "第二组数值单元格区域"
         }
     },
     "COS": {
@@ -5025,7 +4525,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -5048,8 +4548,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回给定角度的余弦值",
-            "数值": "想要求余弦的角度，以弧度表示"
+            "abstract": "返回给定角度的余弦值",
+            "value": "想要求余弦的角度，以弧度表示"
         }
     },
     "COTH": {
@@ -5059,7 +4559,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -5083,8 +4583,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一个双曲角度的双曲余切值",
-            "数值": "想要求双曲余弦值的角度值"
+            "abstract": "返回一个双曲角度的双曲余切值",
+            "value": "想要求双曲余弦值的角度值"
         }
     },
     "COUNT": {
@@ -5094,7 +4594,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -5102,7 +4602,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -5125,7 +4625,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -5135,9 +4635,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "计算包含数字的单元格以及参数列表中数字的个数",
-            "数值1": "要计算其中数字的个数的第一个项、单元格引用或区域",
-            "[数值2,...] - 可选": "要计算其中数字的个数的其他项、单元格引用或区域，最多可包含 255 个"
+            "abstract": "计算包含数字的单元格以及参数列表中数字的个数",
+            "value1": "要计算其中数字的个数的第一个项、单元格引用或区域",
+            "value2": "要计算其中数字的个数的其他项、单元格引用或区域，最多可包含 255 个"
         }
     },
     "COUNTBLANK": {
@@ -5170,8 +4670,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "计算指定单元格区域中空白单元格的个数",
-            "区域": "需要计算其中空白单元格个数的区域"
+            "abstract": "计算指定单元格区域中空白单元格的个数",
+            "area": "需要计算其中空白单元格个数的区域"
         }
     },
     "COUNTIF": {
@@ -5220,9 +4720,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "对区域中满足单个指定条件的单元格进行计数",
-            "区域": "要对其进行计数的一个或多个单元格，其中包括数字或名称、数组或包含数字的引用。空值和文本值将被忽略",
-            "标准条件": "用于定义将对哪些单元格进行计数的数字、表达式、单元格引用或文本字符串"
+            "abstract": "对区域中满足单个指定条件的单元格进行计数",
+            "area": "要对其进行计数的一个或多个单元格，其中包括数字或名称、数组或包含数字的引用。空值和文本值将被忽略",
+            "standardcondition": "用于定义将对哪些单元格进行计数的数字、表达式、单元格引用或文本字符串"
         }
     },
     "COUNTIFS": {
@@ -5289,10 +4789,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将条件应用于跨多个区域的单元格，并计算符合所有条件的次数",
-            "区域1": "在其中计算关联条件的第一个区域",
-            "标准条件1": "条件的形式为数字、表达式、单元格引用或文本，可用来定义将对哪些单元格进行计数",
-            "[区域2,标准条件2,...] - 可选": "附加的区域及其关联条件。最多允许 127 个区域/条件对"
+            "abstract": "将条件应用于跨多个区域的单元格，并计算符合所有条件的次数",
+            "area1": "在其中计算关联条件的第一个区域",
+            "standardcondition1": "条件的形式为数字、表达式、单元格引用或文本，可用来定义将对哪些单元格进行计数",
+            "standardcondition2": "附加的区域及其关联条件。最多允许 127 个区域/条件对"
         }
     },
     "COUPDAYBS": {
@@ -5318,7 +4818,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -5357,10 +4857,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回从付息期开始到结算日的天数",
-            "日期1": "证券的结算日",
-            "日期2": "证券的到期日",
-            "数值": "年付息次数。如果按年支付，数值 = 1；按半年期支付，数值 = 2；按季支付，数值 = 4"
+            "abstract": "返回从付息期开始到结算日的天数",
+            "date1": "证券的结算日",
+            "date2": "证券的到期日",
+            "value": "年付息次数。如果按年支付，数值 = 1；按半年期支付，数值 = 2；按季支付，数值 = 4"
         }
     },
     "COUPDAYS": {
@@ -5386,7 +4886,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -5425,10 +4925,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回结算日所在的付息期的天数",
-            "日期1": "证券的结算日",
-            "日期2": "证券的到期日",
-            "数值": "年付息次数。如果按年支付，数值 = 1；按半年期支付，数值 = 2；按季支付，数值 = 4"
+            "abstract": "返回结算日所在的付息期的天数",
+            "date1": "证券的结算日",
+            "date2": "证券的到期日",
+            "value": "年付息次数。如果按年支付，数值 = 1；按半年期支付，数值 = 2；按季支付，数值 = 4"
         }
     },
     "COUPDAYSNC": {
@@ -5454,7 +4954,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -5493,10 +4993,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回从结算日到下一付息日之间的天数",
-            "日期1": "证券的结算日",
-            "日期2": "证券的到期日",
-            "数值": "年付息次数。如果按年支付，数值 = 1；按半年期支付，数值 = 2；按季支付，数值 = 4"
+            "abstract": "返回从结算日到下一付息日之间的天数",
+            "date1": "证券的结算日",
+            "date2": "证券的到期日",
+            "value": "年付息次数。如果按年支付，数值 = 1；按半年期支付，数值 = 2；按季支付，数值 = 4"
         }
     },
     "COUPNCD": {
@@ -5522,7 +5022,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -5561,10 +5061,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一个表示在结算日之后下一个付息日的数字",
-            "日期1": "证券的结算日",
-            "日期2": "证券的到期日",
-            "数值": "年付息次数。如果按年支付，数值 = 1；按半年期支付，数值 = 2；按季支付，数值 = 4"
+            "abstract": "返回一个表示在结算日之后下一个付息日的数字",
+            "date1": "证券的结算日",
+            "date2": "证券的到期日",
+            "value": "年付息次数。如果按年支付，数值 = 1；按半年期支付，数值 = 2；按季支付，数值 = 4"
         }
     },
     "COUPNUM": {
@@ -5590,7 +5090,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -5629,10 +5129,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回在结算日和到期日之间的付息次数，向上舍入到最近的整数",
-            "日期1": "证券的结算日",
-            "日期2": "证券的到期日",
-            "数值": "年付息次数。如果按年支付，数值 = 1；按半年期支付，数值 = 2；按季支付，数值 = 4"
+            "abstract": "返回在结算日和到期日之间的付息次数，向上舍入到最近的整数",
+            "date1": "证券的结算日",
+            "date2": "证券的到期日",
+            "value": "年付息次数。如果按年支付，数值 = 1；按半年期支付，数值 = 2；按季支付，数值 = 4"
         }
     },
     "COUPPCD": {
@@ -5658,7 +5158,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -5697,10 +5197,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回表示结算日之前的上一个付息日的数字",
-            "日期1": "证券的结算日",
-            "日期2": "证券的到期日",
-            "数值": "年付息次数。如果按年支付，数值 = 1；按半年期支付，数值 = 2；按季支付，数值 = 4"
+            "abstract": "返回表示结算日之前的上一个付息日的数字",
+            "date1": "证券的结算日",
+            "date2": "证券的到期日",
+            "value": "年付息次数。如果按年支付，数值 = 1；按半年期支付，数值 = 2；按季支付，数值 = 4"
         }
     },
     "COVAR": {
@@ -5710,7 +5210,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组1",
+                "name": "array1",
                 "editor": false
             },
             {
@@ -5718,7 +5218,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组2",
+                "name": "array2",
                 "editor": false
             },
             {
@@ -5749,9 +5249,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回协方差，即两个数据集中每对数据点的偏差乘积的平均数",
-            "数组1": "第一个所含数据为整数的单元格区域",
-            "数组2": "第二个所含数据为整数的单元格区域"
+            "abstract": "返回协方差，即两个数据集中每对数据点的偏差乘积的平均数",
+            "array1": "第一个所含数据为整数的单元格区域",
+            "array2": "第二个所含数据为整数的单元格区域"
         }
     },
     "COVARIANCE.P": {
@@ -5761,7 +5261,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组1",
+                "name": "array1",
                 "editor": false
             },
             {
@@ -5769,7 +5269,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组2",
+                "name": "array2",
                 "editor": false
             },
             {
@@ -5800,9 +5300,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回总体协方差，即两个数据集中每对数据点的偏差乘积的平均数",
-            "数组1": "第一个所含数据为整数的单元格区域",
-            "数组2": "第二个所含数据为整数的单元格区域"
+            "abstract": "返回总体协方差，即两个数据集中每对数据点的偏差乘积的平均数",
+            "array1": "第一个所含数据为整数的单元格区域",
+            "array2": "第二个所含数据为整数的单元格区域"
         }
     },
     "COVARIANCE.S": {
@@ -5812,7 +5312,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组1",
+                "name": "array1",
                 "editor": false
             },
             {
@@ -5820,7 +5320,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组2",
+                "name": "array2",
                 "editor": false
             },
             {
@@ -5851,9 +5351,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回样本协方差，即两个数据集中每对数据点的偏差乘积的平均值",
-            "数组1": "整数的第一个单元格区域",
-            "数组2": "整数的第二个单元格区域"
+            "abstract": "返回样本协方差，即两个数据集中每对数据点的偏差乘积的平均值",
+            "array1": "整数的第一个单元格区域",
+            "array2": "整数的第二个单元格区域"
         }
     },
     "CSC": {
@@ -5863,7 +5363,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -5886,8 +5386,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回角度的余割值，以弧度表示",
-            "数值": "要求余割值的角度值"
+            "abstract": "返回角度的余割值，以弧度表示",
+            "value": "要求余割值的角度值"
         }
     },
     "CSCH": {
@@ -5897,7 +5397,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -5920,8 +5420,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回角度的双曲余割值，以弧度表示",
-            "数值": "要求双曲余割值的角度值"
+            "abstract": "返回角度的双曲余割值，以弧度表示",
+            "value": "要求双曲余割值的角度值"
         }
     },
     "CUMIPMT": {
@@ -5931,7 +5431,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -5939,7 +5439,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -5947,7 +5447,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -5955,7 +5455,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -5963,7 +5463,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值5",
+                "name": "value5",
                 "editor": false
             },
             {
@@ -5971,7 +5471,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值6",
+                "name": "value6",
                 "editor": false
             },
             {
@@ -6034,13 +5534,13 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一笔贷款在给定的 数值4 到 数值5 期间累计偿还的利息数额",
-            "数值1": "利率",
-            "数值2": "总付款期数",
-            "数值3": "现值",
-            "数值4": "计算中的首期。 付款期数从 1 开始计数",
-            "数值5": "计算中的末期",
-            "数值6": "付款时间类型"
+            "abstract": "返回一笔贷款在给定的 value4 到 value5 期间累计偿还的利息数额",
+            "value1": "利率",
+            "value2": "总付款期数",
+            "value3": "现值",
+            "value4": "计算中的首期。 付款期数从 1 开始计数",
+            "value5": "计算中的末期",
+            "value6": "付款时间类型"
         }
     },
     "CUMPRINC": {
@@ -6050,7 +5550,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -6058,7 +5558,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -6066,7 +5566,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -6074,7 +5574,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -6082,7 +5582,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值5",
+                "name": "value5",
                 "editor": false
             },
             {
@@ -6090,7 +5590,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值6",
+                "name": "value6",
                 "editor": false
             },
             {
@@ -6153,13 +5653,13 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一笔贷款在给定的 start_period 到 end_period 期间累计偿还的本金数额",
-            "数值1": "利率",
-            "数值2": "总付款期数",
-            "数值3": "现值",
-            "数值4": "计算中的首期。 付款期数从 1 开始计数",
-            "数值5": "计算中的末期",
-            "数值6": "付款时间类型"
+            "abstract": "返回一笔贷款在给定的 start_period 到 end_period 期间累计偿还的本金数额",
+            "value1": "利率",
+            "value2": "总付款期数",
+            "value3": "现值",
+            "value4": "计算中的首期。 付款期数从 1 开始计数",
+            "value5": "计算中的末期",
+            "value6": "付款时间类型"
         }
     },
     "DATE": {
@@ -6224,10 +5724,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回表示特定日期的连续序列号",
-            "年": "年",
-            "月": "月",
-            "日": "日"
+            "abstract": "返回表示特定日期的连续序列号",
+            "year": "年",
+            "month": "月",
+            "day": "日"
         }
     },
     "DATEVALUE": {
@@ -6237,7 +5737,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -6260,8 +5760,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "可将存储为文本的日期转换为 Excel 识别为日期的序列号",
-            "文本": "表示 Excel 日期格式的日期的文本，或者是对表示 Excel 日期格式的日期的文本所在单元格的单元格引用"
+            "abstract": "可将存储为文本的日期转换为 Excel 识别为日期的序列号",
+            "text": "表示 Excel 日期格式的日期的文本，或者是对表示 Excel 日期格式的日期的文本所在单元格的单元格引用"
         }
     },
     "DAVERAGE": {
@@ -6326,10 +5826,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "对列表或数据库中满足指定条件的记录字段（列）中的数值求平均值",
-            "区域1": "构成列表或数据库的单元格区域",
-            "函数适用列": "指定函数所使用的列",
-            "区域2": "是包含所指定条件的单元格区域"
+            "abstract": "对列表或数据库中满足指定条件的记录字段（列）中的数值求平均值",
+            "area1": "构成列表或数据库的单元格区域",
+            "funccolumn": "指定函数所使用的列",
+            "area2": "是包含所指定条件的单元格区域"
         }
     },
     "DAY": {
@@ -6362,8 +5862,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以序列号表示的某日期的天数，用整数 1 到 31 表示",
-            "日期": "要查找的那一天的日期"
+            "abstract": "返回以序列号表示的某日期的天数，用整数 1 到 31 表示",
+            "date": "要查找的那一天的日期"
         }
     },
     "DAYS": {
@@ -6412,9 +5912,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回两个日期之间的天数",
-            "日期1": "用于计算期间天数的起始日期",
-            "日期2": "用于计算期间天数的终止日期"
+            "abstract": "返回两个日期之间的天数",
+            "date1": "用于计算期间天数的起始日期",
+            "date2": "用于计算期间天数的终止日期"
         }
     },
     "DAYS360": {
@@ -6463,9 +5963,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "按照一年 360 天的算法（每个月以 30 天计，一年共计 12 个月），返回两日期间相差的天数，这在一些会计计算中将会用到",
-            "日期1": "要计算期间天数的起始日期",
-            "日期2": "要计算期间天数的终止日期"
+            "abstract": "按照一年 360 天的算法（每个月以 30 天计，一年共计 12 个月），返回两日期间相差的天数，这在一些会计计算中将会用到",
+            "date1": "要计算期间天数的起始日期",
+            "date2": "要计算期间天数的终止日期"
         }
     },
     "DB": {
@@ -6475,7 +5975,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -6483,7 +5983,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -6491,7 +5991,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -6499,7 +5999,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -6507,7 +6007,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值5]",
+                "name": "[value5]",
                 "editor": true,
                 "index": 10
             },
@@ -6564,12 +6064,12 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "使用固定余额递减法，计算一笔资产在给定期间内的折旧值",
-            "数值1": "资产原值",
-            "数值2": "资产在折旧期末的价值",
-            "数值3": "资产的折旧期数",
-            "数值4": "需要计算折旧值的期间",
-            "[数值5] - 可选": "第一年的月份数，如省略，则假设为 12"
+            "abstract": "使用固定余额递减法，计算一笔资产在给定期间内的折旧值",
+            "value1": "资产原值",
+            "value2": "资产在折旧期末的价值",
+            "value3": "资产的折旧期数",
+            "value4": "需要计算折旧值的期间",
+            "value5": "第一年的月份数，如省略，则假设为 12"
         }
     },
     "DBCS": {
@@ -6579,7 +6079,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -6602,8 +6102,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将字符串中的半角（单字节）字母转换为全角（双字节）字符",
-            "文本": "文本或包含要转换的文本的单元格的引用"
+            "abstract": "将字符串中的半角（单字节）字母转换为全角（双字节）字符",
+            "text": "文本或包含要转换的文本的单元格的引用"
         }
     },
     "DCOUNT": {
@@ -6668,10 +6168,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回列表或数据库中满足指定条件的记录字段（列）中包含数字的单元格的个数",
-            "区域1": "构成列表或数据库的单元格区域",
-            "函数适用列": "指定函数所使用的列",
-            "区域2": "包含所指定条件的单元格区域"
+            "abstract": "返回列表或数据库中满足指定条件的记录字段（列）中包含数字的单元格的个数",
+            "area1": "构成列表或数据库的单元格区域",
+            "funccolumn": "指定函数所使用的列",
+            "area2": "包含所指定条件的单元格区域"
         }
     },
     "DCOUNTA": {
@@ -6736,10 +6236,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回列表或数据库中满足指定条件的记录字段（列）中的非空单元格的个数",
-            "区域1": "构成列表或数据库的单元格区域",
-            "函数适用列": "指定函数所使用的列",
-            "区域2": "包含所指定条件的单元格区域"
+            "abstract": "返回列表或数据库中满足指定条件的记录字段（列）中的非空单元格的个数",
+            "area1": "构成列表或数据库的单元格区域",
+            "funccolumn": "指定函数所使用的列",
+            "area2": "包含所指定条件的单元格区域"
         }
     },
     "DDB": {
@@ -6749,7 +6249,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -6757,7 +6257,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -6765,7 +6265,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -6773,7 +6273,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -6781,7 +6281,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值5]",
+                "name": "[value5]",
                 "editor": true,
                 "index": 9
             },
@@ -6838,12 +6338,12 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "使用双倍余额递减法或其他指定方法，计算一笔资产在给定期间内的折旧值",
-            "数值1": "资产原值",
-            "数值2": "资产在折旧期末的价值（有时也称为资产残值）。此值可以是 0",
-            "数值3": "资产的折旧期数",
-            "数值4": "需要计算折旧值的期间",
-            "[数值5] - 可选": "余额递减速率"
+            "abstract": "使用双倍余额递减法或其他指定方法，计算一笔资产在给定期间内的折旧值",
+            "value1": "资产原值",
+            "value2": "资产在折旧期末的价值（有时也称为资产残值）。此值可以是 0",
+            "value3": "资产的折旧期数",
+            "value4": "需要计算折旧值的期间",
+            "value5": "余额递减速率"
         }
     },
     "DEC2BIN": {
@@ -6853,7 +6353,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -6861,7 +6361,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -6894,9 +6394,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将十进制数转换为二进制数",
-            "数值1": "待转换的十进制整数",
-            "[数值2] - 可选": "要使用的字符数"
+            "abstract": "将十进制数转换为二进制数",
+            "value1": "待转换的十进制整数",
+            "value2": "要使用的字符数"
         }
     },
     "DEC2HEX": {
@@ -6906,7 +6406,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -6914,7 +6414,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -6947,9 +6447,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将十进制数转换为十六进制数",
-            "数值1": "待转换的十进制整数",
-            "[数值2] - 可选": "要使用的字符数"
+            "abstract": "将十进制数转换为十六进制数",
+            "value1": "待转换的十进制整数",
+            "value2": "要使用的字符数"
         }
     },
     "DEC2OCT": {
@@ -6959,7 +6459,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -6967,7 +6467,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -7000,9 +6500,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将十进制数转换为八进制数",
-            "数值1": "待转换的十进制整数",
-            "[数值2] - 可选": "要使用的字符数"
+            "abstract": "将十进制数转换为八进制数",
+            "value1": "待转换的十进制整数",
+            "value2": "要使用的字符数"
         }
     },
     "DECIMAL": {
@@ -7012,7 +6512,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -7051,9 +6551,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "按给定基数将数字的文本表示形式转换成十进制数",
-            "文本": "所要转换的文本",
-            "数制": "转换所用的数制,必须是整数"
+            "abstract": "按给定基数将数字的文本表示形式转换成十进制数",
+            "text": "所要转换的文本",
+            "numtype": "转换所用的数制,必须是整数"
         }
     },
     "DEGREES": {
@@ -7086,8 +6586,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将弧度转换为度",
-            "弧度角": "待转换的弧度角"
+            "abstract": "将弧度转换为度",
+            "arctangle": "待转换的弧度角"
         }
     },
     "DELTA": {
@@ -7097,7 +6597,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -7105,7 +6605,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -7138,9 +6638,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "测试两个数值是否相等",
-            "数值1": "第一个数字",
-            "[数值2] - 可选": "第二个数字。如果省略，假设 Number2 的值为零"
+            "abstract": "测试两个数值是否相等",
+            "value1": "第一个数字",
+            "value2": "第二个数字。如果省略，假设 Number2 的值为零"
         }
     },
     "DEVSQ": {
@@ -7150,7 +6650,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -7158,7 +6658,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -7181,7 +6681,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -7191,9 +6691,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数据点与各自样本平均值偏差的平方和",
-            "数值1": "必需",
-            "[数值2,...] - 可选": "参数的个数可以为 1 到 255 个"
+            "abstract": "返回数据点与各自样本平均值偏差的平方和",
+            "value1": "必需",
+            "value2": "参数的个数可以为 1 到 255 个"
         }
     },
     "DGET": {
@@ -7258,10 +6758,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "从列表或数据库的列中提取符合指定条件的单个值",
-            "区域1": "构成列表或数据库的单元格区域",
-            "函数适用列": "指定函数所使用的列",
-            "区域2": "包含所指定条件的单元格区域"
+            "abstract": "从列表或数据库的列中提取符合指定条件的单个值",
+            "area1": "构成列表或数据库的单元格区域",
+            "funccolumn": "指定函数所使用的列",
+            "area2": "包含所指定条件的单元格区域"
         }
     },
     "DISC": {
@@ -7287,7 +6787,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -7295,7 +6795,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -7342,11 +6842,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回有价证券的贴现率",
-            "日期1": "有价证券的结算日",
-            "日期2": "有价证券的到期日",
-            "数值1": "有价证券的价格（按面值为 ￥100 计算）",
-            "数值2": "有价证券的兑换值（按面值为 ￥100 计算）"
+            "abstract": "返回有价证券的贴现率",
+            "date1": "有价证券的结算日",
+            "date2": "有价证券的到期日",
+            "value1": "有价证券的价格（按面值为 ￥100 计算）",
+            "value2": "有价证券的兑换值（按面值为 ￥100 计算）"
 
         }
     },
@@ -7412,10 +6912,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回列表或数据库中满足指定条件的记录字段（列）中的最大数字",
-            "区域1": "构成列表或数据库的单元格区域",
-            "函数适用列": "指定函数所使用的列",
-            "区域2": "包含所指定条件的单元格区域"
+            "abstract": "返回列表或数据库中满足指定条件的记录字段（列）中的最大数字",
+            "area1": "构成列表或数据库的单元格区域",
+            "funccolumn": "指定函数所使用的列",
+            "area2": "包含所指定条件的单元格区域"
         }
     },
     "DMIN": {
@@ -7480,10 +6980,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回列表或数据库中满足指定条件的记录字段（列）中的最小数字",
-            "区域1": "构成列表或数据库的单元格区域",
-            "函数适用列": "指定函数所使用的列",
-            "区域2": "包含所指定条件的单元格区域"
+            "abstract": "返回列表或数据库中满足指定条件的记录字段（列）中的最小数字",
+            "area1": "构成列表或数据库的单元格区域",
+            "funccolumn": "指定函数所使用的列",
+            "area2": "包含所指定条件的单元格区域"
         }
     },
     "DOLLAR": {
@@ -7493,7 +6993,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -7501,7 +7001,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -7533,9 +7033,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将数字转换为货币格式使用小数位数舍入到您指定的位数的文本",
-            "数值1": "数字、对包含数字的单元格的引用或是计算结果为数字的公式",
-            "[数值2] - 可选": "数值小数点右边的位数"
+            "abstract": "将数字转换为货币格式使用小数位数舍入到您指定的位数的文本",
+            "value1": "数字、对包含数字的单元格的引用或是计算结果为数字的公式",
+            "value2": "数值小数点右边的位数"
         }
     },
     "DOLLARDE": {
@@ -7545,7 +7045,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -7553,7 +7053,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -7584,9 +7084,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将以整数部分和分数部分表示的价格（例如 1.02）转换为以小数部分表示的价格",
-            "数值1": "以整数部份和分数部分表示的数字，用小数点隔开",
-            "数值2": "用作分数中的分母的整数"
+            "abstract": "将以整数部分和分数部分表示的价格（例如 1.02）转换为以小数部分表示的价格",
+            "value1": "以整数部份和分数部分表示的数字，用小数点隔开",
+            "value2": "用作分数中的分母的整数"
         }
     },
     "DPRODUCT": {
@@ -7651,10 +7151,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回列表或数据库中满足指定条件的记录字段（列）中的数值的乘积",
-            "区域1": "构成列表或数据库的单元格区域",
-            "函数适用列": "指定函数所使用的列",
-            "区域2": "包含所指定条件的单元格区域"
+            "abstract": "返回列表或数据库中满足指定条件的记录字段（列）中的数值的乘积",
+            "area1": "构成列表或数据库的单元格区域",
+            "funccolumn": "指定函数所使用的列",
+            "area2": "包含所指定条件的单元格区域"
         }
     },
     "DSTDEV": {
@@ -7719,10 +7219,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回利用列表或数据库中满足指定条件的记录字段（列）中的数字作为一个样本估算出的总体标准偏差",
-            "区域1": "构成列表或数据库的单元格区域",
-            "函数适用列": "指定函数所使用的列",
-            "区域2": "包含所指定条件的单元格区域"
+            "abstract": "返回利用列表或数据库中满足指定条件的记录字段（列）中的数字作为一个样本估算出的总体标准偏差",
+            "area1": "构成列表或数据库的单元格区域",
+            "funccolumn": "指定函数所使用的列",
+            "area2": "包含所指定条件的单元格区域"
         }
     },
     "DSTDEVP": {
@@ -7787,10 +7287,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回利用列表或数据库中满足指定条件的记录字段（列）中的数字作为样本总体计算出的总体标准偏差",
-            "区域1": "构成列表或数据库的单元格区域",
-            "函数适用列": "指定函数所使用的列",
-            "区域2": "包含所指定条件的单元格区域"
+            "abstract": "返回利用列表或数据库中满足指定条件的记录字段（列）中的数字作为样本总体计算出的总体标准偏差",
+            "area1": "构成列表或数据库的单元格区域",
+            "funccolumn": "指定函数所使用的列",
+            "area2": "包含所指定条件的单元格区域"
         }
     },
     "DSUM": {
@@ -7855,10 +7355,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回列表或数据库中满足指定条件的记录字段（列）中的数字之和",
-            "区域1": "构成列表或数据库的单元格区域",
-            "函数适用列": "指定函数所使用的列",
-            "区域2": "包含所指定条件的单元格区域"
+            "abstract": "返回列表或数据库中满足指定条件的记录字段（列）中的数字之和",
+            "area1": "构成列表或数据库的单元格区域",
+            "funccolumn": "指定函数所使用的列",
+            "area2": "包含所指定条件的单元格区域"
         }
     },
     "DURATION": {
@@ -7884,7 +7384,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -7892,7 +7392,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -7900,7 +7400,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -7955,12 +7455,12 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回假设面值为 ￥ 100 的 Macauley 工期",
-            "日期1": "有价证券的结算日",
-            "日期2": "有价证券的到期日",
-            "数值1": "有价证券的年息票利率",
-            "���值2": "有价证券的年收益率",
-            "数值3": "年付息次数"
+            "abstract": "返回假设面值为 ￥ 100 的 Macauley 工期",
+            "date1": "有价证券的结算日",
+            "date2": "有价证券的到期日",
+            "value1": "有价证券的年息票利率",
+            "returnrate": "有价证券的年收益率",
+            "frequency": "年付息次数"
         }
     },
     "DVAR": {
@@ -8025,10 +7525,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回利用列表或数据库中满足指定条件的记录字段（列）中的数字作为一个样本估算出的总体方差",
-            "区域1": "构成列表或数据库的单元格区域",
-            "函数适用列": "指定函数所使用的列",
-            "区域2": "包含所指定条件的单元格区域"
+            "abstract": "返回利用列表或数据库中满足指定条件的记录字段（列）中的数字作为一个样本估算出的总体方差",
+            "area1": "构成列表或数据库的单元格区域",
+            "funccolumn": "指定函数所使用的列",
+            "area2": "包含所指定条件的单元格区域"
         }
     },
     "DVARP": {
@@ -8093,10 +7593,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "通过使用列表或数据库中满足指定条件的记录字段（列）中的数字计算样本总体的样本总体方差",
-            "区域1": "构成列表或数据库的单元格区域",
-            "函数适用列": "指定函数所使用的列",
-            "区域2": "包含所指定条件的单元格区域"
+            "abstract": "通过使用列表或数据库中满足指定条件的记录字段（列）中的数字计算样本总体的样本总体方差",
+            "area1": "构成列表或数据库的单元格区域",
+            "funccolumn": "指定函数所使用的列",
+            "area2": "包含所指定条件的单元格区域"
         }
     },
     "EDATE": {
@@ -8114,7 +7614,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -8145,9 +7645,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回表示某个日期的序列号，该日期与指定日期 (start_date) 相隔（之前或之后）指示的月份数",
-            "日期": "一个代表开始日期的日期",
-            "数值": "日期之前或之后的月份数"
+            "abstract": "返回表示某个日期的序列号，该日期与指定日期 (start_date) 相隔（之前或之后）指示的月份数",
+            "date": "一个代表开始日期的日期",
+            "value": "日期之前或之后的月份数"
         }
     },
     "EFFECT": {
@@ -8157,7 +7657,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -8165,7 +7665,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -8196,9 +7696,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "利用给定的名义年利率和每年的复利期数，计算有效的年利率",
-            "数值1": "名义利率",
-            "数值2": "每年的复利期数"
+            "abstract": "利用给定的名义年利率和每年的复利期数，计算有效的年利率",
+            "value1": "名义利率",
+            "value2": "每年的复利期数"
         }
     },
     "EOMONTH": {
@@ -8216,7 +7716,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -8247,9 +7747,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回某个月份最后一天的序列号，该月份与 日期 相隔（之后或之后）指示的月份数",
-            "日期": "表示开始日期的日期",
-            "数值": "日期 之前或之后的月份数"
+            "abstract": "返回某个月份最后一天的序列号，该月份与 日期 相隔（之后或之后）指示的月份数",
+            "date": "表示开始日期的日期",
+            "value": "日期 之前或之后的月份数"
         }
     },
     "ERF": {
@@ -8259,7 +7759,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -8267,7 +7767,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -8290,7 +7790,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "数值2",
+            //     "name": "value2",
             //     "editor": false
             // },
             {
@@ -8299,9 +7799,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             }
         ],
         "content": {
-            "摘要": "返回误差函数在上下限之间的积分",
-            "数值1": "函数的积分下限",
-            "[数值2] - 可选": "函数的积分上限。 如果省略，ERF 积分将在零到 lower_limit 之间"
+            "abstract": "返回误差函数在上下限之间的积分",
+            "value1": "函数的积分下限",
+            "value2": "函数的积分上限。 如果省略，ERF 积分将在零到 lower_limit 之间"
         }
     },
     "ERFCPRECISE": {
@@ -8311,7 +7811,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -8334,8 +7834,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回从 数值 到无穷大积分的互补 ERF 函数",
-            "数值": "函数的积分下限"
+            "abstract": "返回从 数值 到无穷大积分的互补 ERF 函数",
+            "value": "函数的积分下限"
         }
     },
     "ERROR.TYPE": {
@@ -8345,7 +7845,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -8368,8 +7868,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回对应于 Microsoft Excel 中的错误值之一的数字或返回“#N/A”错误（如果不存在错误）",
-            "数值": "要查找其标识号的错误值"
+            "abstract": "返回对应于 Microsoft Excel 中的错误值之一的数字或返回“#N/A”错误（如果不存在错误）",
+            "value": "要查找其标识号的错误值"
         }
     },
     "EVEN": {
@@ -8379,7 +7879,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -8402,8 +7902,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数字向上舍入到的最接近的偶数",
-            "数值": "要舍入的值"
+            "abstract": "返回数字向上舍入到的最接近的偶数",
+            "value": "要舍入的值"
         }
     },
     "EXACT": {
@@ -8452,9 +7952,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "比较两个文本字符串，如果它们完全相同，则返回 TRUE，否则返回 FALSE",
-            "文本1": "第一个文本字符串",
-            "文本2": "第二个文本字符串"
+            "abstract": "比较两个文本字符串，如果它们完全相同，则返回 TRUE，否则返回 FALSE",
+            "text1": "第一个文本字符串",
+            "text2": "第二个文本字符串"
         }
     },
     "EXPON.DIST": {
@@ -8464,7 +7964,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -8472,7 +7972,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -8480,7 +7980,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -8519,10 +8019,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回指数分布",
-            "数值1": "函数值",
-            "数值2": "参数值",
-            "数值3": "逻辑值，用于指定指数函数的形式"
+            "abstract": "返回指数分布",
+            "value1": "函数值",
+            "value2": "参数值",
+            "value3": "逻辑值，用于指定指数函数的形式"
         }
     },
     "F.DIST": {
@@ -8532,7 +8032,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -8540,7 +8040,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -8548,7 +8048,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -8556,7 +8056,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -8603,11 +8103,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 F 概率分布函数的函数值",
-            "数值1": "用来计算函数的值",
-            "数值2": "分子自由度",
-            "数值3": "分母自由度",
-            "数值4": "决定函数形式的逻辑值"
+            "abstract": "返回 F 概率分布函数的函数值",
+            "value1": "用来计算函数的值",
+            "value2": "分子自由度",
+            "value3": "分母自由度",
+            "value4": "决定函数形式的逻辑值"
         }
     },
     "F.INV": {
@@ -8617,7 +8117,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -8625,7 +8125,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -8633,7 +8133,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -8672,10 +8172,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 F 概率分布函数的反函数值",
-            "数值1": "F 累积分布的概率值",
-            "数值2": "分子自由度",
-            "数值3": "分母自由度"
+            "abstract": "返回 F 概率分布函数的反函数值",
+            "value1": "F 累积分布的概率值",
+            "value2": "分子自由度",
+            "value3": "分母自由度"
         }
     },
     "F.TEST": {
@@ -8685,7 +8185,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组1",
+                "name": "array1",
                 "editor": false
             },
             {
@@ -8693,7 +8193,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组2",
+                "name": "array2",
                 "editor": false
             },
             {
@@ -8724,9 +8224,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "判断两个样本的方差是否不同",
-            "数组1": "第一个数组或数据区域",
-            "数组2": "第二个数组或数据区域"
+            "abstract": "判断两个样本的方差是否不同",
+            "array1": "第一个数组或数据区域",
+            "array2": "第二个数组或数据区域"
         }
     },
     "FACT": {
@@ -8736,7 +8236,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -8759,8 +8259,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回某数的阶乘",
-            "数值": "要计算其阶乘的非负数"
+            "abstract": "返回某数的阶乘",
+            "value": "要计算其阶乘的非负数"
         }
     },
     "FACTDOUBLE": {
@@ -8770,7 +8270,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -8793,8 +8293,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数字的双倍阶乘",
-            "数值": "要计算其双倍阶乘的数值"
+            "abstract": "返回数字的双倍阶乘",
+            "value": "要计算其双倍阶乘的数值"
         }
     },
     "FALSE": {
@@ -8819,7 +8319,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回逻辑值 FALSE"
+            "abstract": "返回逻辑值 FALSE"
         }
     },
     "F.DIST.RT": {
@@ -8829,7 +8329,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -8837,7 +8337,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -8845,7 +8345,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -8884,10 +8384,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回两个数据集的（右尾）F 概率分布（变化程度）",
-            "数值1": "用来计算函数的值",
-            "数值2": "分子自由度",
-            "数值3": "分母自由度"
+            "abstract": "返回两个数据集的（右尾）F 概率分布（变化程度）",
+            "value1": "用来计算函数的值",
+            "value2": "分子自由度",
+            "value3": "分母自由度"
         }
     },
     "FIND": {
@@ -8954,9 +8454,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "用于在文本2中定位文本1，并返回文本1的起始位置的值，该值从文本2的第一个字符算起",
-            "文本1": "要查找的文本",
-            "文本2": "包含要查找文本的文本"
+            "abstract": "用于在文本2中定位文本1，并返回文本1的起始位置的值，该值从文本2的第一个字符算起",
+            "text1": "要查找的文本",
+            "text2": "包含要查找文本的文本"
         }
     },
     "F.INV.RT": {
@@ -8966,7 +8466,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -8974,7 +8474,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -8982,7 +8482,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -9021,10 +8521,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回（右尾）F 概率分布函数的反函数值",
-            "数值1": "F 累积分布的概率值",
-            "数值2": "分子自由度",
-            "数值3": "分母自由度"
+            "abstract": "返回（右尾）F 概率分布函数的反函数值",
+            "value1": "F 累积分布的概率值",
+            "value2": "分子自由度",
+            "value3": "分母自由度"
         }
     },
     "FISHER": {
@@ -9034,7 +8534,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -9057,8 +8557,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 x 的 Fisher 变换值",
-            "数值": "要对其进行变换的数值"
+            "abstract": "返回 x 的 Fisher 变换值",
+            "value": "要对其进行变换的数值"
         }
     },
     "FISHERINV": {
@@ -9068,7 +8568,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -9091,8 +8591,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 Fisher 逆变换值",
-            "数值": "要对其进行逆变换的数值"
+            "abstract": "返回 Fisher 逆变换值",
+            "value": "要对其进行逆变换的数值"
         }
     },
     "FIXED": {
@@ -9102,7 +8602,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -9110,7 +8610,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -9118,7 +8618,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值3]",
+                "name": "[value3]",
                 "editor": true,
                 "index": 5
             },
@@ -9159,10 +8659,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将数字舍入到指定的小数位数，使用句点和逗号，以十进制数格式对该数进行格式设置，并以文本形式返回结果",
-            "数值1": "要进行舍入并转换为文本的数字",
-            "数值2": "小数点右边的位数",
-            "[数值3] - 可选": "一个逻辑值，如果为 TRUE，则会禁止 FIXED 在返回的文本中包含逗号"
+            "abstract": "将数字舍入到指定的小数位数，使用句点和逗号，以十进制数格式对该数进行格式设置，并以文本形式返回结果",
+            "value1": "要进行舍入并转换为文本的数字",
+            "value2": "小数点右边的位数",
+            "value3": "一个逻辑值，如果为 TRUE，则会禁止 FIXED 在返回的文本中包含逗号"
         }
     },
     "FLOOR": {
@@ -9172,7 +8672,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -9180,7 +8680,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -9211,9 +8711,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将参数 数值1 向下舍入（沿绝对值减小的方向）为最接近的 数值2 的倍数",
-            "数值1": "要舍入的数值",
-            "数值2": "要舍入到的倍数"
+            "abstract": "将参数 value1 向下舍入（沿绝对值减小的方向）为最接近的 value2 的倍数",
+            "value1": "要舍入的数值",
+            "value2": "要舍入到的倍数"
         }
     },
     "FLOOR.MATH": {
@@ -9223,7 +8723,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -9231,7 +8731,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -9240,7 +8740,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值3]",
+                "name": "[value3]",
                 "editor": true,
                 "index": 5
             },
@@ -9281,10 +8781,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将数字向下舍入为最接近的整数或最接近的指定基数的倍数",
-            "数值1": "要向下舍入的数字",
-            "[数值2] - 可选": "要舍入到的倍数",
-            "[数值3] - 可选": "舍入负数的方向（接近或远离 0）"
+            "abstract": "将数字向下舍入为最接近的整数或最接近的指定基数的倍数",
+            "value1": "要向下舍入的数字",
+            "value2": "要舍入到的倍数",
+            "value3": "舍入负数的方向（接近或远离 0）"
         }
     },
     "FLOOR.PRECISE": {
@@ -9294,7 +8794,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -9302,7 +8802,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -9335,9 +8835,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一个数字，该数字向下舍入为最接近的整数或最接近的 数值2 的倍数",
-            "数值1": "要进行舍入的值",
-            "[数值2] - 可选": "要将数字舍入的倍数。如果省略,则其默认值为 1"
+            "abstract": "返回一个数字，该数字向下舍入为最接近的整数或最接近的 value2 的倍数",
+            "value1": "要进行舍入的值",
+            "value2": "要将数字舍入的倍数。如果省略,则其默认值为 1"
         }
     },
     "FORECAST": {
@@ -9347,7 +8847,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -9402,10 +8902,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "根据现有值计算或预测未来值",
-            "数值": "需要进行值预测的数据点",
-            "区域1": "相关数组或数据区域",
-            "区域2": "独立数组或数据区域"
+            "abstract": "根据现有值计算或预测未来值",
+            "value": "需要进行值预测的数据点",
+            "area1": "相关数组或数据区域",
+            "area2": "独立数组或数据区域"
         }
     },
     "FREQUENCY": {
@@ -9415,7 +8915,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组1",
+                "name": "array1",
                 "editor": false
             },
             {
@@ -9423,7 +8923,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组2",
+                "name": "array2",
                 "editor": false
             },
             {
@@ -9454,9 +8954,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "函数计算值在某个范围内出现的频率, 然后返回一个垂直的数字数组",
-            "数组1": " 要对其频率进行计数的一组数值或对这组数值的引用",
-            "数组2": " 要将 数组1 中的值插入到的间隔数组或对间隔的引用"
+            "abstract": "函数计算值在某个范围内出现的频率, 然后返回一个垂直的数字数组",
+            "array1": " 要对其频率进行计数的一组数值或对这组数值的引用",
+            "array2": " 要将 array1 中的值插入到的间隔数组或对间隔的引用"
         }
     },
     "FV": {
@@ -9466,7 +8966,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -9474,7 +8974,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -9482,7 +8982,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -9490,7 +8990,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值4]",
+                "name": "[value4]",
                 "editor": true,
                 "index": 7
             },
@@ -9499,7 +8999,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值5]",
+                "name": "[value5]",
                 "editor": true,
                 "index": 9
             },
@@ -9557,12 +9057,12 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "用于根据固定利率计算投资的未来值",
-            "数值1": "各期利率",
-            "数值2": "年金的付款总期数",
-            "数值3": "各期所应支付的金额，在整个年金期间保持不变",
-            "[数值4] - 可选": " 现值，或一系列未来付款的当前值的累积和。 如果省略 数值4，则假定其值为 0",
-            "[数值5] - 可选": "数字 0 或 1，用以指定各期的付款时间是在期初还是期末。如果省略 数值5，则假定其值为 0"
+            "abstract": "用于根据固定利率计算投资的未来值",
+            "value1": "各期利率",
+            "value2": "年金的付款总期数",
+            "value3": "各期所应支付的金额，在整个年金期间保持不变",
+            "value4": " 现值，或一系列未来付款的当前值的累积和。 如果省略 value4，则假定其值为 0",
+            "value5": "数字 0 或 1，用以指定各期的付款时间是在期初还是期末。如果省略 value5，则假定其值为 0"
         }
     },
     "FVSCHEDULE": {
@@ -9572,7 +9072,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -9580,7 +9080,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -9611,9 +9111,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回应用一系列复利率计算的初始本金的未来值",
-            "数值": "现值",
-            "数组": "要应用的利率数组"
+            "abstract": "返回应用一系列复利率计算的初始本金的未来值",
+            "value": "现值",
+            "array": "要应用的利率数组"
         }
     },
     "GAMMA": {
@@ -9623,7 +9123,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -9646,8 +9146,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 gamma 函数值",
-            "数值": "返回一个数字"
+            "abstract": "返回 gamma 函数值",
+            "value": "返回一个数字"
         }
     },
     "GAMMA.DIST": {
@@ -9657,7 +9157,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -9665,7 +9165,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -9673,7 +9173,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -9681,7 +9181,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -9728,11 +9228,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回伽玛分布函数的函数值",
-            "数值1": "用来计算分布的数值",
-            "数值2": "分布参数",
-            "数值3": "分布参数",
-            "数值4": "决定函数形式的逻辑值"
+            "abstract": "返回伽玛分布函数的函数值",
+            "value1": "用来计算分布的数值",
+            "value2": "分布参数",
+            "value3": "分布参数",
+            "value4": "决定函数形式的逻辑值"
         }
     },
     "GAMMA.INV": {
@@ -9742,7 +9242,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -9750,7 +9250,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -9758,7 +9258,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -9797,10 +9297,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回伽玛累积分布函数的反函数值",
-            "数值1": "伽玛分布相关的概率",
-            "数值2": "分布参数",
-            "数值3": "分布参数"
+            "abstract": "返回伽玛累积分布函数的反函数值",
+            "value1": "伽玛分布相关的概率",
+            "value2": "分布参数",
+            "value3": "分布参数"
         }
     },
     "GAMMALN": {
@@ -9810,7 +9310,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -9833,8 +9333,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回伽玛函数的自然对数",
-            "数值": "要计算其 GAMMALN 的数值"
+            "abstract": "返回伽玛函数的自然对数",
+            "value": "要计算其 GAMMALN 的数值"
         }
     },
     "GAMMALN.PRECISE": {
@@ -9844,7 +9344,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -9867,8 +9367,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回伽玛函数的自然对数",
-            "数值": "要计算其 GAMMALN.PRECISE 的数值"
+            "abstract": "返回伽玛函数的自然对数",
+            "value": "要计算其 GAMMALN.PRECISE 的数值"
         }
     },
     "GAUSS": {
@@ -9878,7 +9378,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -9901,8 +9401,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "计算标准正态总体的成员处于平均值与平均值的 z 倍标准偏差之间的概率",
-            "数值": "返回一个数字"
+            "abstract": "计算标准正态总体的成员处于平均值与平均值的 z 倍标准偏差之间的概率",
+            "value": "返回一个数字"
         }
     },
     "GCD": {
@@ -9912,7 +9412,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -9920,7 +9420,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -9953,9 +9453,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回两个或多个整数的最大公约数",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "任意实数,个数介于 1 和 255 之间"
+            "abstract": "返回两个或多个整数的最大公约数",
+            "value1": "任意实数",
+            "value2": "任意实数,个数介于 1 和 255 之间"
         }
     },
     "GEOMEAN": {
@@ -9965,7 +9465,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -9973,7 +9473,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -9996,7 +9496,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -10006,9 +9506,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一组正数数据或正数数据区域的几何平均值",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "任意实数,个数介于1到255之间"
+            "abstract": "返回一组正数数据或正数数据区域的几何平均值",
+            "value1": "任意实数",
+            "value2": "任意实数,个数介于1到255之间"
         }
     },
     "GESTEP": {
@@ -10018,7 +9518,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -10026,7 +9526,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -10059,9 +9559,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "可以使用此函数来筛选一组值",
-            "数值1": "要针对步骤进行测试的值",
-            "[数值2] - 可选": "如果省略，则 GESTEP 使用零"
+            "abstract": "可以使用此函数来筛选一组值",
+            "value1": "要针对步骤进行测试的值",
+            "value2": "如果省略，则 GESTEP 使用零"
         }
     },
     "GROWTH": {
@@ -10088,7 +9588,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值1]",
+                "name": "[value1]",
                 "editor": true,
                 "index": 5
             },
@@ -10097,7 +9597,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 7
             },
@@ -10129,7 +9629,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值1]",
+            //     "name": "[value1]",
             //     "editor": true,
             //     "index":5
             // },
@@ -10138,7 +9638,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2]",
+            //     "name": "[value2]",
             //     "editor": true,
             //     "index":7
             // },
@@ -10148,11 +9648,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "使用现有数据计算预测的指数等比",
-            "集合1": "关系表达式 y = b*m^x 中已知的 y 值集合",
-            "[集合] - 可选2": "关系表达式 y=b*m^x 中已知的 x 值集合",
-            "[数值1] - 可选": " 需要 GROWTH 返回对应 y 值的新 x 值",
-            "[数值2] - 可选": " 一个逻辑值，用于指定是否将常量 b 强制设为 1"
+            "abstract": "使用现有数据计算预测的指数等比",
+            "set1": "关系表达式 y = b*m^x 中已知的 y 值集合",
+            "set2": "关系表达式 y=b*m^x 中已知的 x 值集合",
+            "value1": " 需要 GROWTH 返回对应 y 值的新 x 值",
+            "value2": " 一个逻辑值，用于指定是否将常量 b 强制设为 1"
         }
     },
     "HARMEAN": {
@@ -10162,7 +9662,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -10170,7 +9670,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -10193,7 +9693,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -10203,9 +9703,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一组数据的调和平均值",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "任意实数,个数介于1到255之间"
+            "abstract": "返回一组数据的调和平均值",
+            "value1": "任意实数",
+            "value2": "任意实数,个数介于1到255之间"
         }
     },
     "HEX2BIN": {
@@ -10215,7 +9715,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -10223,7 +9723,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -10256,9 +9756,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将十六进制数转换为二进制数",
-            "数值1": "要转换的十六进制数",
-            "[数值2] - 可选": "要使用的字符数"
+            "abstract": "将十六进制数转换为二进制数",
+            "value1": "要转换的十六进制数",
+            "value2": "要使用的字符数"
         }
     },
     "HEX2DEC": {
@@ -10268,7 +9768,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -10291,8 +9791,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将十六进制数转换为十进制数",
-            "数值": "要转换的十六进制数",
+            "abstract": "将十六进制数转换为十进制数",
+            "value": "要转换的十六进制数",
         }
     },
     "HEX2OCT": {
@@ -10302,7 +9802,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -10310,7 +9810,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -10343,9 +9843,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将十六进制数转换为八进制数",
-            "数值1": "要转换的十六进制数",
-            "[数值2] - 可选": "要使用的字符数"
+            "abstract": "将十六进制数转换为八进制数",
+            "value1": "要转换的十六进制数",
+            "value2": "要使用的字符数"
         }
     },
     "HLOOKUP": {
@@ -10355,7 +9855,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -10363,7 +9863,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组1",
+                "name": "array1",
                 "editor": false
             },
             {
@@ -10371,7 +9871,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -10379,7 +9879,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值3]",
+                "name": "[value3]",
                 "editor": true,
                 "index": 7
             },
@@ -10428,11 +9928,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "在表格的首行或数值数组中搜索值，然后返回表格或数组中指定行的所在列中的值",
-            "数值1": "要在表格的第一行中查找的值",
-            "数组1": "在其中查找数据的信息表",
-            "数值2": "数组1 中将返回匹配值的行号",
-            "[数值3] - 可选": "一个逻辑值，指定希望 HLOOKUP 查找精确匹配值还是近似匹配值"
+            "abstract": "在表格的首行或数值数组中搜索值，然后返回表格或数组中指定行的所在列中的值",
+            "value1": "要在表格的第一行中查找的值",
+            "array1": "在其中查找数据的信息表",
+            "value2": "array1 中将返回匹配值的行号",
+            "value3": "一个逻辑值，指定希望 HLOOKUP 查找精确匹配值还是近似匹配值"
         }
     },
     "HOUR": {
@@ -10465,8 +9965,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回时间值的小时数",
-            "时间": "时间值，其中包含要查找的小时数"
+            "abstract": "返回时间值的小时数",
+            "time": "时间值，其中包含要查找的小时数"
         }
     },
     "HYPGEOM.DIST": {
@@ -10476,7 +9976,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -10484,7 +9984,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -10492,7 +9992,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -10500,7 +10000,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值5",
+                "name": "value5",
                 "editor": false
             },
             {
@@ -10547,12 +10047,12 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回超几何分布",
-            "数值1": "样本中成功的次数",
-            "数值2": "样本量",
-            "数值3": "总体中成功的次数",
-            "数值4": "总体大小",
-            "数值5": "决定函数形式的逻辑值"
+            "abstract": "返回超几何分布",
+            "value1": "样本中成功的次数",
+            "value2": "样本量",
+            "value3": "总体中成功的次数",
+            "value4": "总体大小",
+            "value5": "决定函数形式的逻辑值"
         }
     },
     "IF": {
@@ -10570,7 +10070,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -10578,7 +10078,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 5
             },
@@ -10619,10 +10119,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "如果条件为真，该函数将返回一个值；如果条件为假，函数将返回另一个值",
-            "条件": "要测试的条件",
-            "值1": "条件的结果为 TRUE 时，您希望返回的值",
-            "[值2] - 可选": "条件的结果为 FALSE 时，您希望返回的值"
+            "abstract": "如果条件为真，该函数将返回一个值；如果条件为假，函数将返回另一个值",
+            "conditon": "要测试的条件",
+            "value1": "条件的结果为 TRUE 时，您希望返回的值",
+            "value2": "条件的结果为 FALSE 时，您希望返回的值"
         }
     },
     "IFERROR": {
@@ -10671,9 +10171,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "可以使用 IFERROR 函数捕获和处理公式中的错误",
-            "值1": "检查是否存在错误的参数",
-            "值2": "公式计算错误时返回的值"
+            "abstract": "可以使用 IFERROR 函数捕获和处理公式中的错误",
+            "value1": "检查是否存在错误的参数",
+            "value2": "公式计算错误时返回的值"
         }
     },
     "IFNA": {
@@ -10691,7 +10191,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -10722,9 +10222,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "如果公式返回错误值 #N/A，则结果返回您指定的值；否则返回公式的结果",
-            "参数": "用于检查错误值 #N/A 的参数",
-            "数值": "公式计算结果为错误值 #N/A 时要返回的值"
+            "abstract": "如果公式返回错误值 #N/A，则结果返回您指定的值；否则返回公式的结果",
+            "param": "用于检查错误值 #N/A 的参数",
+            "value": "公式计算结果为错误值 #N/A 时要返回的值"
         }
     },
     "IFS": {
@@ -10791,10 +10291,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "函数检查是否满足一个或多个条件，且返回符合第一个 TRUE 条件的值",
-            "条件1": "计算结果为 TRUE 或 FALSE 的条件",
-            "值": "当 条件1 的计算结果为 TRUE 时要返回结果。 可以为空。",
-            "[条件2,值2,...] - 可选": "其他参数对"
+            "abstract": "函数检查是否满足一个或多个条件，且返回符合第一个 TRUE 条件的值",
+            "condition1": "计算结果为 TRUE 或 FALSE 的条件",
+            "value": "当 条件1 的计算结果为 TRUE 时要返回结果。 可以为空。",
+            "condition2": "其他参数对"
         }
     },
     "IMABS": {
@@ -10804,7 +10304,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -10827,8 +10327,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的绝对值",
-            "数值": "需要计算其绝对值的复数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的绝对值",
+            "value": "需要计算其绝对值的复数"
         }
     },
     "IMAGINARY": {
@@ -10838,7 +10338,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -10861,8 +10361,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的虚系数",
-            "数值": "需要计算其虚系数的复数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的虚系数",
+            "value": "需要计算其虚系数的复数"
         }
     },
     "IMARGUMENT": {
@@ -10872,7 +10372,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -10895,8 +10395,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回参数  θ (theta)，即以弧度表示的角",
-            "数值": "需要计算其参数  θ 的复数"
+            "abstract": "返回参数  θ (theta)，即以弧度表示的角",
+            "value": "需要计算其参数  θ 的复数"
         }
     },
     "IMCONJUGATE": {
@@ -10906,7 +10406,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -10929,8 +10429,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的共轭复数",
-            "数值": "需要计算其共轭数的复数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的共轭复数",
+            "value": "需要计算其共轭数的复数"
         }
     },
     "IMCOS": {
@@ -10940,7 +10440,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -10963,8 +10463,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的余弦",
-            "数值": "需要计算其余弦的复数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的余弦",
+            "value": "需要计算其余弦的复数"
         }
     },
     "IMCOSH": {
@@ -10974,7 +10474,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -10997,8 +10497,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的双曲余弦值",
-            "数值": "需要计算其双曲余弦值的复数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的双曲余弦值",
+            "value": "需要计算其双曲余弦值的复数"
         }
     },
     "IMCOT": {
@@ -11008,7 +10508,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -11031,8 +10531,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的余切值",
-            "数值": "要对其余切值的复数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的余切值",
+            "value": "要对其余切值的复数"
         }
     },
     "IMCSC": {
@@ -11042,7 +10542,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -11065,8 +10565,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的余割值",
-            "数值": "要对其余割值的复数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的余割值",
+            "value": "要对其余割值的复数"
         }
     },
     "IMCSCH": {
@@ -11076,7 +10576,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -11099,8 +10599,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的双曲余割值",
-            "数值": "需要计算其双曲余割值的复数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的双曲余割值",
+            "value": "需要计算其双曲余割值的复数"
         }
     },
     "IMDIV": {
@@ -11110,7 +10610,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -11118,7 +10618,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -11149,9 +10649,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的两个复数的商",
-            "数值1": "复数分子或被除数",
-            "数值2": "复数分母或除数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的两个复数的商",
+            "value1": "复数分子或被除数",
+            "value2": "复数分母或除数"
         }
     },
     "IMEXP": {
@@ -11161,7 +10661,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -11184,8 +10684,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的指数",
-            "数值": "需要计算其指数的复数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的指数",
+            "value": "需要计算其指数的复数"
         }
     },
     "IMLN": {
@@ -11195,7 +10695,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -11218,8 +10718,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的自然对数",
-            "数值": "需要计算其自然对数的复数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的自然对数",
+            "value": "需要计算其自然对数的复数"
         }
     },
     "IMLOG2": {
@@ -11229,7 +10729,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -11252,8 +10752,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返返回以 x+yi 或 x+yj 文本格式表示的复数的以 2 为底数的对数",
-            "数值": "需要计算以 2 为底数的对数的复数"
+            "abstract": "返返回以 x+yi 或 x+yj 文本格式表示的复数的以 2 为底数的对数",
+            "value": "需要计算以 2 为底数的对数的复数"
         }
     },
     "IMLOG10": {
@@ -11263,7 +10763,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -11286,8 +10786,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x + yi 或 x + yj 文本格式表示的复数的常用对数（以 10 为底数）",
-            "数值": "需要计算其常用对数的复数"
+            "abstract": "返回以 x + yi 或 x + yj 文本格式表示的复数的常用对数（以 10 为底数）",
+            "value": "需要计算其常用对数的复数"
         }
     },
     "IMPOWER": {
@@ -11297,7 +10797,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -11305,7 +10805,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -11336,9 +10836,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的 n 次幂",
-            "数值1": "需要计算其幂值的复数",
-            "数值2": "需要对复数应用的幂次"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的 n 次幂",
+            "value1": "需要计算其幂值的复数",
+            "value2": "需要对复数应用的幂次"
         }
     },
     "IMPRODUCT": {
@@ -11348,7 +10848,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -11356,7 +10856,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -11389,9 +10889,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的 1 至 255 个复数的乘积",
-            "数值1": "任意复数",
-            "数值2": "任意复数,个数介于1到255之间"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的 1 至 255 个复数的乘积",
+            "value1": "任意复数",
+            "value2": "任意复数,个数介于1到255之间"
         }
     },
     "IMREAL": {
@@ -11401,7 +10901,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -11424,8 +10924,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的实系数",
-            "数值": "需要计算其实系数的复数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的实系数",
+            "value": "需要计算其实系数的复数"
         }
     },
     "IMSEC": {
@@ -11435,7 +10935,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -11458,8 +10958,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的正割值",
-            "数值": "需要计算其正割值的复数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的正割值",
+            "value": "需要计算其正割值的复数"
         }
     },
     "IMSECH": {
@@ -11469,7 +10969,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -11492,8 +10992,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的双曲正割值",
-            "数值": "需要计算其双曲正割值的复数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的双曲正割值",
+            "value": "需要计算其双曲正割值的复数"
         }
     },
     "IMSIN": {
@@ -11503,7 +11003,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -11526,8 +11026,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的正弦值",
-            "数值": "需要计算其正弦的复数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的正弦值",
+            "value": "需要计算其正弦的复数"
         }
     },
     "IMSINH": {
@@ -11537,7 +11037,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -11560,8 +11060,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x + yi 或 x + yj 文本格式的复数的双曲正弦值",
-            "数值": "要对其双曲正弦值的复数"
+            "abstract": "返回以 x + yi 或 x + yj 文本格式的复数的双曲正弦值",
+            "value": "要对其双曲正弦值的复数"
         }
     },
     "IMSQRT": {
@@ -11571,7 +11071,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -11594,8 +11094,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的平方根",
-            "数值": "需要计算其平方根的复数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的平方根",
+            "value": "需要计算其平方根的复数"
         }
     },
     "IMSUB": {
@@ -11605,7 +11105,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -11613,7 +11113,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -11644,9 +11144,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的两个复数的差",
-            "数值1": "从（复）数中减去 数值2",
-            "数值2": "从 数值1 中减（复）数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的两个复数的差",
+            "value1": "从（复）数中减去 value2",
+            "value2": "从 value1 中减（复）数"
         }
     },
     "IMSUM": {
@@ -11656,7 +11156,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -11664,7 +11164,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -11697,9 +11197,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的两个或多个复数的和",
-            "数值1": "任意复数",
-            "[数值2,...] - 可选": "任意复数,个数介于1到255之间"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的两个或多个复数的和",
+            "value1": "任意复数",
+            "value2": "任意复数,个数介于1到255之间"
         }
     },
     "IMTAN": {
@@ -11709,7 +11209,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -11732,8 +11232,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回以 x+yi 或 x+yj 文本格式表示的复数的正切值",
-            "数值": "要对其进行切线的复数"
+            "abstract": "返回以 x+yi 或 x+yj 文本格式表示的复数的正切值",
+            "value": "要对其进行切线的复数"
         }
     },
     "INDEX": {
@@ -11743,7 +11243,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -11800,10 +11300,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "函数返回表格或区域中的值或值的引用",
-            "数组": "单元格区域或数组常量",
-            "函数适用行": "选择数组中的某行，函数从该行返回数值",
-            "[函数适用列] - 可选": "选择数组中的某列，函数从该列返回数值"
+            "abstract": "函数返回表格或区域中的值或值的引用",
+            "array": "单元格区域或数组常量",
+            "funcrow": "选择数组中的某行，函数从该行返回数值",
+            "funccolum": "选择数组中的某列，函数从该列返回数值"
         }
     },
     "INFO": {
@@ -11813,7 +11313,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -11836,8 +11336,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回有关当前操作环境的信息",
-            "文本": "用于指定要返回的信息类型的文本"
+            "abstract": "返回有关当前操作环境的信息",
+            "text": "用于指定要返回的信息类型的文本"
         }
     },
     "INT": {
@@ -11847,7 +11347,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -11870,8 +11370,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将数字向下舍入到最接近的整数",
-            "数值": "需要进行向下舍入取整的实数"
+            "abstract": "将数字向下舍入到最接近的整数",
+            "value": "需要进行向下舍入取整的实数"
         }
     },
     "INTERCEPT": {
@@ -11920,9 +11420,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "利用已知的 x 值与 y 值计算直线与 y 轴交叉点",
-            "集合1": "因变的观察值或数据的集合",
-            "集合2": "自变的观察值或数据的集合"
+            "abstract": "利用已知的 x 值与 y 值计算直线与 y 轴交叉点",
+            "set1": "因变的观察值或数据的集合",
+            "set2": "自变的观察值或数据的集合"
         }
     },
     "INTRATE": {
@@ -11948,7 +11448,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -11956,7 +11456,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -12003,11 +11503,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回完全投资型证券的利率",
-            "日期1": "有价证券的结算日",
-            "日期2": "有价证券的到期日",
-            "数值1": "有价证券的投资额",
-            "数值2": "有价证券到期时的兑换值"
+            "abstract": "返回完全投资型证券的利率",
+            "date1": "有价证券的结算日",
+            "date2": "有价证券的到期日",
+            "value1": "有价证券的投资额",
+            "value2": "有价证券到期时的兑换值"
         }
     },
     "IPMT": {
@@ -12017,7 +11517,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -12025,7 +11525,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -12033,7 +11533,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -12041,7 +11541,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -12049,7 +11549,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值5]",
+                "name": "[value5]",
                 "editor": true,
                 "index": 9
             },
@@ -12058,7 +11558,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值6]",
+                "name": "[value6]",
                 "editor": true,
                 "index": 11
             },
@@ -12105,7 +11605,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值5]",
+            //     "name": "[value5]",
             //     "editor": true,
             //     "index":9
             // },
@@ -12114,7 +11614,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值6]",
+            //     "name": "[value6]",
             //     "editor": true,
             //     "index":11
             // },
@@ -12124,13 +11624,13 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "基于固定利率及等额分期付款方式，返回给定期数内对投资的利息偿还额",
-            "数值1": "各期利率",
-            "数值2": "用于计算其利息数额的期数，必须在 1 到 数值3 之间",
-            "数值3": "年金的付款总期数",
-            "数值4": "现值，或一系列未来付款的当前值的累积和",
-            "[数值5] - 可选": "未来值，或在最后一次付款后希望得到的现金余额",
-            "[数值6] - 可选": "数字 0 或 1，用以指定各期的付款时间是在期初还是期末。 如果省略 数值6，则假定其值为 0"
+            "abstract": "基于固定利率及等额分期付款方式，返回给定期数内对投资的利息偿还额",
+            "value1": "各期利率",
+            "value2": "用于计算其利息数额的期数，必须在 1 到 value3 之间",
+            "value3": "年金的付款总期数",
+            "value4": "现值，或一系列未来付款的当前值的累积和",
+            "value5": "未来值，或在最后一次付款后希望得到的现金余额",
+            "value6": "数字 0 或 1，用以指定各期的付款时间是在期初还是期末。 如果省略 value6，则假定其值为 0"
         }
     },
     "ISERR": {
@@ -12163,8 +11663,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "检验是否存在错误情形",
-            "值": "值为任意错误值（除去 #N/A）,则返回TRUE"
+            "abstract": "检验是否存在错误情形",
+            "value": "值为任意错误值（除去 #N/A）,则返回TRUE"
         }
     },
     "ISERROR": {
@@ -12197,8 +11697,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "检验是否存在错误情形",
-            "值": "值为任意错误值,则返回TRUE"
+            "abstract": "检验是否存在错误情形",
+            "value": "值为任意错误值,则返回TRUE"
         }
     },
     "ISEVEN": {
@@ -12208,7 +11708,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -12231,8 +11731,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "如果参数 数值 为偶数，返回 TRUE，否则返回 FALSE",
-            "数值": "要测试的值"
+            "abstract": "如果参数 数值 为偶数，返回 TRUE，否则返回 FALSE",
+            "value": "要测试的值"
         }
     },
     "ISFORMULA": {
@@ -12265,8 +11765,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "检查是否存在包含公式的单元格引用，然后返回 TRUE 或 FALSE",
-            "引用": "引用是对要测试单元格的引用"
+            "abstract": "检查是否存在包含公式的单元格引用，然后返回 TRUE 或 FALSE",
+            "reference": "引用是对要测试单元格的引用"
         }
     },
     "ISLOGICAL": {
@@ -12299,8 +11799,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "判断是否为逻辑值",
-            "值": "如果为逻辑值返回TRUE,否则返回FALSE"
+            "abstract": "判断是否为逻辑值",
+            "value": "如果为逻辑值返回TRUE,否则返回FALSE"
         }
     },
     "ISNA": {
@@ -12333,8 +11833,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "判断是否为#N/A",
-            "值": "如果为#N/A返回TRUE,否则返回FALSE"
+            "abstract": "判断是否为#N/A",
+            "value": "如果为#N/A返回TRUE,否则返回FALSE"
         }
     },
     "ISNONTEXT": {
@@ -12367,8 +11867,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "判断是否为非文本的任意项",
-            "值": "如果为非文本的任意项返回TRUE,否则返回FALSE"
+            "abstract": "判断是否为非文本的任意项",
+            "value": "如果为非文本的任意项返回TRUE,否则返回FALSE"
         }
     },
     "ISNUMBER": {
@@ -12401,8 +11901,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "判断是否为数字",
-            "值": "如果为数字返回TRUE,否则返回FALSE"
+            "abstract": "判断是否为数字",
+            "value": "如果为数字返回TRUE,否则返回FALSE"
         }
     },
     "ISO.CEILING": {
@@ -12412,7 +11912,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -12420,7 +11920,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -12453,9 +11953,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一个数字，该数字向上舍入为最接近的整数或最接近的有效位的倍数",
-            "数值1": "要进行舍入的值",
-            "[数值2] - 可选": "要将数字舍入的可选倍数。如果省略，则其默认值为 1"
+            "abstract": "返回一个数字，该数字向上舍入为最接近的整数或最接近的有效位的倍数",
+            "value1": "要进行舍入的值",
+            "value2": "要将数字舍入的可选倍数。如果省略，则其默认值为 1"
         }
     },
     "ISODD": {
@@ -12488,8 +11988,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "判断是否为奇数",
-            "值": "如果为奇数返回TRUE,否则返回FALSE"
+            "abstract": "判断是否为奇数",
+            "value": "如果为奇数返回TRUE,否则返回FALSE"
         }
     },
     "ISOWEEKNUM": {
@@ -12522,8 +12022,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回给定日期在全年中的 ISO 周数",
-            "日期": "日期是 Excel 用于日期和时间计算的日期-时间代码"
+            "abstract": "返回给定日期在全年中的 ISO 周数",
+            "date": "日期是 Excel 用于日期和时间计算的日期-时间代码"
         }
     },
     "ISPMT": {
@@ -12533,7 +12033,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -12541,7 +12041,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -12549,7 +12049,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -12557,7 +12057,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -12604,11 +12104,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "计算付薪 (或投资) 指定期间内 (甚至本金付款) 支付的利息 (或接收)",
-            "数值1": "投资的利率",
-            "数值2": "要查找其利息的期间, 并且必须介于1和 数值3 之间",
-            "数值3": "投资的总支付期数",
-            "数值4": "投资的现值"
+            "abstract": "计算付薪 (或投资) 指定期间内 (甚至本金付款) 支付的利息 (或接收)",
+            "value1": "投资的利率",
+            "value2": "要查找其利息的期间, 并且必须介于1和 value3 之间",
+            "value3": "投资的总支付期数",
+            "value4": "投资的现值"
         }
     },
     "ISREF": {
@@ -12641,8 +12141,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "判断是否为引用",
-            "值": "如果为引用返回TRUE,否则返回FALSE"
+            "abstract": "判断是否为引用",
+            "value": "如果为引用返回TRUE,否则返回FALSE"
         }
     },
     "KURT": {
@@ -12652,7 +12152,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -12660,7 +12160,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -12683,7 +12183,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -12693,9 +12193,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一组数据的峰值",
-            "数值1": "任意值",
-            "[数值2,...] - 可选": "任意值,个数介于1到255之间"
+            "abstract": "返回一组数据的峰值",
+            "value1": "任意值",
+            "value2": "任意值,个数介于1到255之间"
         }
     },
     "LARGE": {
@@ -12713,7 +12213,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -12744,9 +12244,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数据集中第 k 个最大值",
-            "区域": "需要确定第 数值 个最大值的数组或数据区域",
-            "数值": "返回值在数组或数据单元格区域中的位置（从大到小排）"
+            "abstract": "返回数据集中第 k 个最大值",
+            "area": "需要确定第 数值 个最大值的数组或数据区域",
+            "value": "返回值在数组或数据单元格区域中的位置（从大到小排）"
         }
     },
     "LCM": {
@@ -12756,7 +12256,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -12764,7 +12264,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -12787,7 +12287,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -12797,9 +12297,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回整数的最小公倍数",
-            "数值1": "任意整数",
-            "[数值2,...] - 可选": "任意整数,个数介于1到255之间"
+            "abstract": "返回整数的最小公倍数",
+            "value1": "任意整数",
+            "value2": "任意整数,个数介于1到255之间"
         }
     },
     "LEFT": {
@@ -12809,7 +12309,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -12817,7 +12317,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值1]",
+                "name": "[value1]",
                 "editor": true,
                 "index": 3
             },
@@ -12826,7 +12326,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 5
             },
@@ -12858,7 +12358,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2]",
+            //     "name": "[value2]",
             //     "editor": true,
             //     "index":5
             // },
@@ -12868,10 +12368,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "从文本字符串的第一个字符开始返回指定个数的字符",
-            "文本": "包含要提取的字符的文本字符串",
-            "[数值1] - 可选": "指定要由 LEFT 提取的字符的数量",
-            "[数值2] - 可选": "按字节指定要由 LEFTB 提取的字符的数量"
+            "abstract": "从文本字符串的第一个字符开始返回指定个数的字符",
+            "text": "包含要提取的字符的文本字符串",
+            "value1": "指定要由 LEFT 提取的字符的数量",
+            "value2": "按字节指定要由 LEFTB 提取的字符的数量"
         }
     },
     "LINEST": {
@@ -12898,7 +12398,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值1]",
+                "name": "[value1]",
                 "editor": true,
                 "index": 5
             },
@@ -12907,7 +12407,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 7
             },
@@ -12948,7 +12448,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2]",
+            //     "name": "[value2]",
             //     "editor": true,
             //     "index":7
             // },
@@ -12958,11 +12458,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "使用最小二乘法计算与现有数据最佳拟合的直线，来计算某直线的统计值，然后返回描述此直线的数组",
-            "集合1": "关系表达式 y = mx + b 中已知的 y 值集合",
-            "[集合2] - 可选": "关系表达式 y = mx + b 中已知的 x 值集合",
-            "[数值1] - 可选": "一个逻辑值，用于指定是否将常量 b 强制设为 0",
-            "[数值2] - 可选": "一个逻辑值，用于指定是否返回附加回归统计值"
+            "abstract": "使用最小二乘法计算与现有数据最佳拟合的直线，来计算某直线的统计值，然后返回描述此直线的数组",
+            "set1": "关系表达式 y = mx + b 中已知的 y 值集合",
+            "set2": "关系表达式 y = mx + b 中已知的 x 值集合",
+            "value1": "一个逻辑值，用于指定是否将常量 b 强制设为 0",
+            "value2": "一个逻辑值，用于指定是否返回附加回归统计值"
         }
     },
     "LOG": {
@@ -12972,7 +12472,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -12980,7 +12480,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -13013,9 +12513,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "根据指定底数返回数字的对数",
-            "数值1": "想要计算其对数的正实数",
-            "[数值2] - 可选": "对数的底数。 如果省略，则假定其值为 10"
+            "abstract": "根据指定底数返回数字的对数",
+            "value1": "想要计算其对数的正实数",
+            "value2": "对数的底数。 如果省略，则假定其值为 10"
         }
     },
     "LOG10": {
@@ -13025,7 +12525,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -13048,8 +12548,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数字以 10 为底的对数",
-            "数值": "想要计算其以 10 为底的对数的正实数"
+            "abstract": "返回数字以 10 为底的对数",
+            "value": "想要计算其以 10 为底的对数的正实数"
         }
     },
     "LOGEST": {
@@ -13076,7 +12576,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值1]",
+                "name": "[value1]",
                 "editor": true,
                 "index": 5
             },
@@ -13085,7 +12585,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 7
             },
@@ -13136,11 +12636,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "计算适合您的数据的指数曲线, 并返回描述该曲线的值数组",
-            "集合1": "关系表达式 y = b*m^x 中已知的 y 值集合",
-            "[集合2] - 可选": "关系表达式 y=b*m^x 中已知的 x 值集合",
-            "[数值1] - 可选": "一个逻辑值，用于指定是否将常量 b 强制设为 1",
-            "[数值2] - 可选": "一个逻辑值，用于指定是否返回附加回归统计值"
+            "abstract": "计算适合您的数据的指数曲线, 并返回描述该曲线的值数组",
+            "set1": "关系表达式 y = b*m^x 中已知的 y 值集合",
+            "set2": "关系表达式 y=b*m^x 中已知的 x 值集合",
+            "value1": "一个逻辑值，用于指定是否将常量 b 强制设为 1",
+            "value2": "一个逻辑值，用于指定是否返回附加回归统计值"
         }
     },
     "LOGINV": {
@@ -13150,7 +12650,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -13158,7 +12658,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -13166,7 +12666,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -13205,10 +12705,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 x 的对数累积分布函数的反函数值，此处的 ln(x) 是服从 数值2 和 数值3 的正态分布",
-            "数值1": "与对数分布相关的概率",
-            "数值2": "ln(x) 的平均值",
-            "数值3": "ln(x) 的标准偏差"
+            "abstract": "返回 x 的对数累积分布函数的反函数值，此处的 ln(x) 是服从 value2 和 value3 的正态分布",
+            "value1": "与对数分布相关的概率",
+            "value2": "ln(x) 的平均值",
+            "value3": "ln(x) 的标准偏差"
         }
     },
     "LOGNORM.DIST": {
@@ -13218,7 +12718,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -13226,7 +12726,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -13234,7 +12734,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -13242,7 +12742,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -13289,11 +12789,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 x 的对数分布函数，此处的 ln(x) 是含有 数值2 与 数值3 参数的正态分布",
-            "数值1": "用来计算函数的值",
-            "数值2": "ln(x) 的平均值",
-            "数值3": "ln(x) 的标准偏差",
-            "数值4": "决定函数形式的逻辑值"
+            "abstract": "返回 x 的对数分布函数，此处的 ln(x) 是含有 value2 与 value3 参数的正态分布",
+            "value1": "用来计算函数的值",
+            "value2": "ln(x) 的平均值",
+            "value3": "ln(x) 的标准偏差",
+            "value4": "决定函数形式的逻辑值"
         }
     },
     "LOGNORM.INV": {
@@ -13303,7 +12803,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -13311,7 +12811,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -13319,7 +12819,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -13358,10 +12858,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 x 的对数累积分布函数的反函数值，此处的 ln(x) 是服从参数 数值2 和 数值3 的正态分布",
-            "数值1": "与对数分布相关的概率",
-            "数值2": "ln(x) 的平均值",
-            "数值3": "ln(x) 的标准偏差"
+            "abstract": "返回 x 的对数累积分布函数的反函数值，此处的 ln(x) 是服从参数 value2 和 value3 的正态分布",
+            "value1": "与对数分布相关的概率",
+            "value2": "ln(x) 的平均值",
+            "value3": "ln(x) 的标准偏差"
         }
     },
     "LOWER": {
@@ -13371,7 +12871,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -13394,8 +12894,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将一个文本字符串中的所有大写字母转换为小写字母",
-            "文本": "要转换为小写字母的文本"
+            "abstract": "将一个文本字符串中的所有大写字母转换为小写字母",
+            "text": "要转换为小写字母的文本"
         }
     },
     "MATCH": {
@@ -13405,7 +12905,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -13421,7 +12921,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 5
             },
@@ -13462,10 +12962,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "在 范围 单元格中搜索特定的项，然后返回该项在此区域中的相对位置",
-            "数值1": "要在 区域 中匹配的值",
-            "区域": "要搜索的单元格区域",
-            "[数值2] - 可选": "数字 -1、0 或 1"
+            "abstract": "在 范围 单元格中搜索特定的项，然后返回该项在此区域中的相对位置",
+            "value1": "要在 区域 中匹配的值",
+            "area": "要搜索的单元格区域",
+            "value2": "数字 -1、0 或 1"
         }
     },
     "MAX": {
@@ -13475,7 +12975,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -13483,7 +12983,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -13506,7 +13006,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -13516,9 +13016,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一组值中的最大值",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "任意实数,个数介于1到255之间"
+            "abstract": "返回一组值中的最大值",
+            "value1": "任意实数",
+            "value2": "任意实数,个数介于1到255之间"
         }
     },
     "MDETERM": {
@@ -13528,7 +13028,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -13551,8 +13051,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一个数组的矩阵行列式的值",
-            "数组": "行数和列数相等的数值数组"
+            "abstract": "返回一个数组的矩阵行列式的值",
+            "array": "行数和列数相等的数值数组"
         }
     },
     "MDURATION": {
@@ -13578,7 +13078,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -13586,7 +13086,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -13594,7 +13094,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -13624,7 +13124,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -13632,7 +13132,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -13640,7 +13140,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -13649,12 +13149,12 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回假设面值 ￥100 的有价证券的 Macauley 修正期限",
-            "日期1": "有价证券的结算日",
-            "日期2": "有价证券的到期日",
-            "数值1": "有价证券的年息票利率",
-            "数值2": "有价证券的年收益率",
-            "数值3": "年付息次数"
+            "abstract": "返回假设面值 ￥100 的有价证券的 Macauley 修正期限",
+            "date1": "有价证券的结算日",
+            "date2": "有价证券的到期日",
+            "value1": "有价证券的年息票利率",
+            "value2": "有价证券的年收益率",
+            "value3": "年付息次数"
         }
     },
     "MEDIAN": {
@@ -13664,7 +13164,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -13672,7 +13172,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -13695,7 +13195,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -13705,9 +13205,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一组已知数字的中值",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "任意实数,个数介于1到255之间"
+            "abstract": "返回一组已知数字的中值",
+            "value1": "任意实数",
+            "value2": "任意实数,个数介于1到255之间"
         }
     },
     "MID": {
@@ -13717,7 +13217,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -13725,7 +13225,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -13733,7 +13233,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -13741,7 +13241,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -13779,7 +13279,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -13788,10 +13288,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回文本字符串中从指定位置开始的特定数目的字符，该数目由用户指定",
-            "文本": "包含要提取字符的文本字符串",
-            "数值1": "文本中要提取的第一个字符的位置",
-            "数值2": "指定希望 MID 从文本中返回字符的个数"
+            "abstract": "返回文本字符串中从指定位置开始的特定数目的字符，该数目由用户指定",
+            "text": "包含要提取字符的文本字符串",
+            "value1": "文本中要提取的第一个字符的位置",
+            "value2": "指定希望 MID 从文本中返回字符的个数"
         }
     },
     "MIN": {
@@ -13801,7 +13301,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -13809,7 +13309,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -13832,7 +13332,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -13842,9 +13342,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一组值中的最小值",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "任意实数,个数介于1到255之间"
+            "abstract": "返回一组值中的最小值",
+            "value1": "任意实数",
+            "value2": "任意实数,个数介于1到255之间"
         }
     },
     "MINA": {
@@ -13895,9 +13395,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回参数列表中的最小值",
-            "值1": "任意值",
-            "[值2,...] - 可选": "任意值,个数介于1到255之间"
+            "abstract": "返回参数列表中的最小值",
+            "value1": "任意值",
+            "value2": "任意值,个数介于1到255之间"
         }
     },
     "MINUTE": {
@@ -13930,8 +13430,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回时间值中的分钟。 分钟是一个介于 0 到 59 之间的整数",
-            "时间": "一个时间值，其中包含要查找的分钟"
+            "abstract": "返回时间值中的分钟。 分钟是一个介于 0 到 59 之间的整数",
+            "time": "一个时间值，其中包含要查找的分钟"
         }
     },
     "MINVERSE": {
@@ -13941,7 +13441,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -13964,8 +13464,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数组中存储的矩阵的逆矩阵",
-            "数组": "行数和列数相等的数值数组"
+            "abstract": "返回数组中存储的矩阵的逆矩阵",
+            "array": "行数和列数相等的数值数组"
         }
     },
     "MIRR": {
@@ -13975,7 +13475,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -13983,7 +13483,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -13991,7 +13491,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -14030,10 +13530,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一系列定期现金流的已修改内部收益率",
-            "数组": "数组或对包含数字的单元格的引用",
-            "数值1": "现金流中使用的资金支付的利率",
-            "数值2": "将现金流再投资的收益率"
+            "abstract": "返回一系列定期现金流的已修改内部收益率",
+            "array": "数组或对包含数字的单元格的引用",
+            "value1": "现金流中使用的资金支付的利率",
+            "value2": "将现金流再投资的收益率"
         }
     },
     "MMULT": {
@@ -14043,7 +13543,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组1",
+                "name": "array1",
                 "editor": false
             },
             {
@@ -14051,7 +13551,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组2",
+                "name": "array2",
                 "editor": false
             },
             {
@@ -14082,9 +13582,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回两个数组的矩阵乘积",
-            "数组1": "要进行矩阵乘法运算的第一个数组",
-            "数组2": "要进行矩阵乘法运算的第二个数组"
+            "abstract": "返回两个数组的矩阵乘积",
+            "array1": "要进行矩阵乘法运算的第一个数组",
+            "array2": "要进行矩阵乘法运算的第二个数组"
         }
     },
     "MOD": {
@@ -14094,7 +13594,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -14102,7 +13602,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -14133,9 +13633,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回两数相除的余数",
-            "数值1": "要计算余数的被除数",
-            "数值2": "除数"
+            "abstract": "返回两数相除的余数",
+            "value1": "要计算余数的被除数",
+            "value2": "除数"
         }
     },
     "MODE": {
@@ -14145,7 +13645,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -14153,7 +13653,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -14176,7 +13676,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -14186,9 +13686,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "回的数组或数据区域中出现频率最高或重复出现",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "任意实数,个数介于1到255之间"
+            "abstract": "回的数组或数据区域中出现频率最高或重复出现",
+            "value1": "任意实数",
+            "value2": "任意实数,个数介于1到255之间"
         }
     },
     "MODE.MULT": {
@@ -14198,7 +13698,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -14206,7 +13706,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -14229,7 +13729,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -14239,9 +13739,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一组数据或数据区域中出现频率最高或重复出现的数值的垂直数组",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "任意实数,个数介于1到255之间"
+            "abstract": "返回一组数据或数据区域中出现频率最高或重复出现的数值的垂直数组",
+            "value1": "任意实数",
+            "value2": "任意实数,个数介于1到255之间"
         }
     },
     "MODE.SNGL": {
@@ -14251,7 +13751,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -14259,7 +13759,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -14282,7 +13782,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -14292,9 +13792,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一组数据或数据区域中出现频率最高或重复出现的数值的垂直数组",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "任意实数,个数介于1到255之间"
+            "abstract": "返回一组数据或数据区域中出现频率最高或重复出现的数值的垂直数组",
+            "value1": "任意实数",
+            "value2": "任意实数,个数介于1到255之间"
         }
     },
     "MONTH": {
@@ -14327,8 +13827,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回日期（以序列数表示）中的月份。 月份是介于 1（一月）到 12（十二月）之间的整数",
-            "日期": "您尝试查找的月份的日期"
+            "abstract": "返回日期（以序列数表示）中的月份。 月份是介于 1（一月）到 12（十二月）之间的整数",
+            "date": "您尝试查找的月份的日期"
         }
     },
     "MROUND": {
@@ -14338,7 +13838,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -14346,7 +13846,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -14377,9 +13877,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回舍入到所需倍数的数字",
-            "数值1": "要舍入的值",
-            "数值2": "要舍入到的倍数"
+            "abstract": "返回舍入到所需倍数的数字",
+            "value1": "要舍入的值",
+            "value2": "要舍入到的倍数"
         }
     },
     "MULTINOMIAL": {
@@ -14389,7 +13889,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -14397,7 +13897,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -14431,9 +13931,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回参数和的阶乘与各参数阶乘乘积的比值",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "任意实数,个数介于1到255之间"
+            "abstract": "返回参数和的阶乘与各参数阶乘乘积的比值",
+            "value1": "任意实数",
+            "value2": "任意实数,个数介于1到255之间"
         }
     },
     "MUNIT": {
@@ -14443,7 +13943,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -14466,8 +13966,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回指定维度的单位矩阵",
-            "数值": "指定要返回的单位矩阵的维度"
+            "abstract": "返回指定维度的单位矩阵",
+            "value": "指定要返回的单位矩阵的维度"
         }
     },
     "N": {
@@ -14500,8 +14000,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回转化为数值后的值",
-            "值": "要转换的值"
+            "abstract": "返回转化为数值后的值",
+            "value": "要转换的值"
         }
     },
     "NA": {
@@ -14526,7 +14026,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 #N/A. 的错误值",
+            "abstract": "返回 #N/A. 的错误值",
         }
     },
     "NEGBINOM.DIST": {
@@ -14536,7 +14036,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -14544,7 +14044,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -14552,7 +14052,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -14560,7 +14060,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -14607,11 +14107,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回负二项式分布",
-            "数值1": "失败的次数",
-            "数值2": "成功次数的阈值",
-            "数值3": "成功的概率",
-            "数值4": "决定函数形式的逻辑值"
+            "abstract": "返回负二项式分布",
+            "value1": "失败的次数",
+            "value2": "成功次数的阈值",
+            "value3": "成功的概率",
+            "value4": "决定函数形式的逻辑值"
         }
     },
     "NETWORKDAYS": {
@@ -14621,7 +14121,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -14629,7 +14129,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -14637,7 +14137,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值3]",
+                "name": "[value3]",
                 "editor": true,
                 "index": 5
             },
@@ -14678,10 +14178,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回参数 数值1 和 数值2 之间完整的工作日数值",
-            "数值1": " 一个代表开始日期的日期",
-            "数值2": " 一个代表终止日期的日期",
-            "[数值3] - 可选": "不在工作日历中的一个或多个日期所构成的可选区域"
+            "abstract": "返回参数 value1 和 value2 之间完整的工作日数值",
+            "value1": " 一个代表开始日期的日期",
+            "value2": " 一个代表终止日期的日期",
+            "value3": "不在工作日历中的一个或多个日期所构成的可选区域"
         }
     },
     "NETWORKDAYS.INTL": {
@@ -14748,10 +14248,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回两个日期之间的所有工作日数，使用参数指示哪些天是周末，以及有多少天是周末",
-            "日期1": "一个代表开始日期的日期",
-            "日期2": "一个代表终止日期的日期",
-            "[数值] - 可选": "表示介于 日期1 和 日期2 之间但又不包括在所有工作日数中的周末日"
+            "abstract": "返回两个日期之间的所有工作日数，使用参数指示哪些天是周末，以及有多少天是周末",
+            "date1": "一个代表开始日期的日期",
+            "date2": "一个代表终止日期的日期",
+            "value": "表示介于 日期1 和 日期2 之间但又不包括在所有工作日数中的周末日"
         }
     },
     "NOMINAL": {
@@ -14761,7 +14261,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -14769,7 +14269,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -14800,9 +14300,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "基于给定的实际利率和年复利期数，返回名义年利率",
-            "数值1": "实际利率",
-            "数值2": "每年的复利期数"
+            "abstract": "基于给定的实际利率和年复利期数，返回名义年利率",
+            "value1": "实际利率",
+            "value2": "每年的复利期数"
         }
     },
     "NORM.DIST": {
@@ -14812,7 +14312,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -14820,7 +14320,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -14828,7 +14328,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -14836,7 +14336,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -14883,11 +14383,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回指定平均值和标准偏差的正态分布函数",
-            "数值1": "需要计算其分布的数值",
-            "数值2": "分布的算术平均值",
-            "数值3": "分布的标准偏差",
-            "数值4": "确定函数形式的逻辑值"
+            "abstract": "返回指定平均值和标准偏差的正态分布函数",
+            "value1": "需要计算其分布的数值",
+            "value2": "分布的算术平均值",
+            "value3": "分布的标准偏差",
+            "value4": "确定函数形式的逻辑值"
         }
     },
     "NORM.INV": {
@@ -14897,7 +14397,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -14905,7 +14405,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -14913,7 +14413,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -14952,10 +14452,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回指定平均值和标准偏差的正态累积分布函数的反函数值",
-            "数值1": "对应于正态分布的概率",
-            "数值2": "分布的算术平均值",
-            "数值3": "分布的标准偏差"
+            "abstract": "返回指定平均值和标准偏差的正态累积分布函数的反函数值",
+            "value1": "对应于正态分布的概率",
+            "value2": "分布的算术平均值",
+            "value3": "分布的标准偏差"
         }
     },
     "NORM.S.DIST": {
@@ -14965,7 +14465,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -14973,7 +14473,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -15004,9 +14504,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回标准正态分布函数",
-            "数值1": "需要计算其分布的数值",
-            "数值2": "决定函数形式的逻辑值"
+            "abstract": "返回标准正态分布函数",
+            "value1": "需要计算其分布的数值",
+            "value2": "决定函数形式的逻辑值"
         }
     },
     "NOT": {
@@ -15039,8 +14539,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "函数会对其参数的值进行求反",
-            "逻辑函数": "计算结果为 TRUE 或 FALSE 的任何值或表达式"
+            "abstract": "函数会对其参数的值进行求反",
+            "logicfunc": "计算结果为 TRUE 或 FALSE 的任何值或表达式"
         }
     },
     "NOW": {
@@ -15065,7 +14565,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回当前日期和时间的序列号",
+            "abstract": "返回当前日期和时间的序列号",
         }
     },
     "NPER": {
@@ -15075,7 +14575,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -15083,7 +14583,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -15091,7 +14591,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -15099,7 +14599,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值4]",
+                "name": "[value4]",
                 "editor": true,
                 "index": 7
             },
@@ -15108,7 +14608,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值5]",
+                "name": "[value5]",
                 "editor": true,
                 "index": 9
             },
@@ -15166,12 +14666,12 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "基于固定利率及等额分期付款方式，返回某项投资的总期数",
-            "数值1": "各期利率",
-            "数值2": "各期所应支付的金额，在整个年金期间保持不变",
-            "数值3": "现值，或一系列未来付款的当前值的累积和",
-            "[数值4] - 可选": "未来值，或在最后一次付款后希望得到的现金余额",
-            "[数值5] - 可选": "数字 0 或 1，用以指定各期的付款时间是在期初还是期末"
+            "abstract": "基于固定利率及等额分期付款方式，返回某项投资的总期数",
+            "value1": "各期利率",
+            "value2": "各期所应支付的金额，在整个年金期间保持不变",
+            "value3": "现值，或一系列未来付款的当前值的累积和",
+            "value4": "未来值，或在最后一次付款后希望得到的现金余额",
+            "value5": "数字 0 或 1，用以指定各期的付款时间是在期初还是期末"
         }
     },
     "NPV": {
@@ -15181,7 +14681,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -15238,10 +14738,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "使用贴现率和一系列未来支出（负值）和收益（正值）来计算一项投资的净现值",
-            "数值": "某一期间的贴现率",
-            "值1": "任意实数",
-            "[值2,...] - 可选": "任意实数,个数介于1到255之间"
+            "abstract": "使用贴现率和一系列未来支出（负值）和收益（正值）来计算一项投资的净现值",
+            "value": "某一期间的贴现率",
+            "value1": "任意实数",
+            "value2": "任意实数,个数介于1到255之间"
         }
     },
     "NUMBERVALUE": {
@@ -15251,7 +14751,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -15310,10 +14810,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "以与区域设置无关的方式将文本转换为数字",
-            "文本": "要转换为数字的文本",
-            "[字符1] - 可选": "用于分隔结果的整数和小数部分的字符",
-            "[字符2] - 可选": " 用于分隔数字分组的字符"
+            "abstract": "以与区域设置无关的方式将文本转换为数字",
+            "text": "要转换为数字的文本",
+            "character1": "用于分隔结果的整数和小数部分的字符",
+            "character2": " 用于分隔数字分组的字符"
         }
     },
     "OCT2DEC": {
@@ -15323,7 +14823,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -15346,8 +14846,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将八进制数转换为十进制数",
-            "数值": "要转换的八进制数"
+            "abstract": "将八进制数转换为十进制数",
+            "value": "要转换的八进制数"
         }
     },
     "OCT2BIN": {
@@ -15357,7 +14857,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -15365,7 +14865,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -15398,9 +14898,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将八进制数转换为二进制数",
-            "数值1": "要转换的八进制数",
-            "[数值2] - 可选": "要使用的字符数"
+            "abstract": "将八进制数转换为二进制数",
+            "value1": "要转换的八进制数",
+            "value2": "要使用的字符数"
         }
     },
     "OCT2HEX": {
@@ -15410,7 +14910,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -15418,7 +14918,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -15451,9 +14951,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将八进制数转换为十六进制数",
-            "数值1": "要转换的八进制数",
-            "[数值2] - 可选": "要使用的字符数"
+            "abstract": "将八进制数转换为十六进制数",
+            "value1": "要转换的八进制数",
+            "value2": "要使用的字符数"
         }
     },
     "ODD": {
@@ -15463,7 +14963,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -15486,8 +14986,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数字向上舍入到的最接近的奇数",
-            "数值": "要舍入的值"
+            "abstract": "返回数字向上舍入到的最接近的奇数",
+            "value": "要舍入的值"
         }
     },
     "ODDFPRICE": {
@@ -15525,7 +15025,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -15533,7 +15033,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -15541,7 +15041,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -15549,7 +15049,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -15624,15 +15124,15 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回首期付息日不固定（长期或短期）的面值 ￥100 的有价证券价格",
-            "日期1": "有价证券的结算日",
-            "日期2": "有价证券的到期日",
-            "日期3": "有价证券的发行日",
-            "日期4": "有价证券的首期付息日",
-            "数值1": "有价证券的利率",
-            "数值2": "有价证券的年收益率",
-            "数值3": "面值 ￥100 的有价证券的清偿价值",
-            "数值4": "年付息次数"
+            "abstract": "返回首期付息日不固定（长期或短期）的面值 ￥100 的有价证券价格",
+            "date1": "有价证券的结算日",
+            "date2": "有价证券的到期日",
+            "date3": "有价证券的发行日",
+            "date4": "有价证券的首期付息日",
+            "value1": "有价证券的利率",
+            "value2": "有价证券的年收益率",
+            "value3": "面值 ￥100 的有价证券的清偿价值",
+            "value4": "年付息次数"
         }
     },
     "ODDFYIELD": {
@@ -15670,7 +15170,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -15678,7 +15178,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -15686,7 +15186,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -15694,7 +15194,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -15769,15 +15269,15 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回首期付息日不固定（长期或短期）的面值 ￥100 的有价证券价格",
-            "日期1": "有价证券的结算日",
-            "日期2": "有价证券的到期日",
-            "日期3": "有价证券的发行日",
-            "日期4": "有价证券的首期付息日",
-            "数值1": "有价证券的利率",
-            "数值2": "有价证券的价格",
-            "数值3": "面值 ￥100 的有价证券的清偿价值",
-            "数值4": "年付息次数"
+            "abstract": "返回首期付息日不固定（长期或短期）的面值 ￥100 的有价证券价格",
+            "date1": "有价证券的结算日",
+            "date2": "有价证券的到期日",
+            "date3": "有价证券的发行日",
+            "date4": "有价证券的首期付息日",
+            "value1": "有价证券的利率",
+            "value2": "有价证券的价格",
+            "value3": "面值 ￥100 的有价证券的清偿价值",
+            "value4": "年付息次数"
         }
     },
     "ODDLPRICE": {
@@ -15811,7 +15311,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -15819,7 +15319,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -15827,7 +15327,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -15835,7 +15335,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -15906,14 +15406,14 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回末期付息日不固定的面值 ￥100 的有价证券（长期或短期）的价格",
-            "日期1": "有价证券的结算日",
-            "日期2": "有价证券的到期日",
-            "日期3": "有价证券的末期付息日",
-            "数值1": "有价证券的利率",
-            "数值2": "有价证券的年收益率",
-            "数值3": "面值 ￥100 的有价证券的清偿价值",
-            "数值4": "年付息次数"
+            "abstract": "返回末期付息日不固定的面值 ￥100 的有价证券（长期或短期）的价格",
+            "date1": "有价证券的结算日",
+            "date2": "有价证券的到期日",
+            "date3": "有价证券的末期付息日",
+            "value1": "有价证券的利率",
+            "value2": "有价证券的年收益率",
+            "value3": "面值 ￥100 的有价证券的清偿价值",
+            "value4": "年付息次数"
         }
     },
     "ODDLYIELD": {
@@ -15947,7 +15447,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -15955,7 +15455,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -15963,7 +15463,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -15971,7 +15471,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -16042,14 +15542,14 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回末期付息日不固定的面值 ￥100 的有价证券（长期或短期）的价格",
-            "日期1": "有价证券的结算日",
-            "日期2": "有价证券的到期日",
-            "日期3": "有价证券的末期付息日",
-            "数值1": "有价证券的利率",
-            "数值2": "有价证券的价格",
-            "数值3": "面值 ￥100 的有价证券的清偿价值",
-            "数值4": "年付息次数"
+            "abstract": "返回末期付息日不固定的面值 ￥100 的有价证券（长期或短期）的价格",
+            "date1": "有价证券的结算日",
+            "date2": "有价证券的到期日",
+            "date3": "有价证券的末期付息日",
+            "value1": "有价证券的利率",
+            "value2": "有价证券的价格",
+            "value3": "面值 ￥100 的有价证券的清偿价值",
+            "value4": "年付息次数"
         }
     },
     "OR": {
@@ -16100,9 +15600,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "函数的任意参数计算为 TRUE，则其返回 TRUE；如果其所有参数均计算机为 FALSE，则返回 FALSE",
-            "条件1": "第一个想要测试且计算结果可为 TRUE 或 FALSE 的条件",
-            "[条件2,...] - 可选": "其他想要测试且计算结果可为 TRUE 或 FALSE 的条件（最多 255 个条件）"
+            "abstract": "函数的任意参数计算为 TRUE，则其返回 TRUE；如果其所有参数均计算机为 FALSE，则返回 FALSE",
+            "condition1": "第一个想要测试且计算结果可为 TRUE 或 FALSE 的条件",
+            "condition2": "其他想要测试且计算结果可为 TRUE 或 FALSE 的条件（最多 255 个条件）"
         }
     },
     "PDURATION": {
@@ -16112,7 +15612,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -16120,7 +15620,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -16128,7 +15628,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -16167,10 +15667,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回投资到达指定值所需的期数",
-            "数值1": "费率是指每期的利率",
-            "数值2": "投资的现值",
-            "数值3": "所需投资的未来值"
+            "abstract": "返回投资到达指定值所需的期数",
+            "value1": "费率是指每期的利率",
+            "value2": "投资的现值",
+            "value3": "所需投资的未来值"
         }
     },
     "PEARSON": {
@@ -16180,7 +15680,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组1",
+                "name": "array1",
                 "editor": false
             },
             {
@@ -16188,7 +15688,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组2",
+                "name": "array2",
                 "editor": false
             },
             {
@@ -16219,9 +15719,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回皮尔生(Pearson)乘积矩相关系数 r，这是一个范围在 -1.0 到 1.0 之间（包括 -1.0 和 1.0 在内）的无量纲指数，反映了两个数据集合之间的线性相关程度",
-            "数组": "自变量集合",
-            "数组2": "因变量集合"
+            "abstract": "返回皮尔生(Pearson)乘积矩相关系数 r，这是一个范围在 -1.0 到 1.0 之间（包括 -1.0 和 1.0 在内）的无量纲指数，反映了两个数据集合之间的线性相关程度",
+            "array": "自变量集合",
+            "array2": "因变量集合"
         }
     },
     "PERCENTILE": {
@@ -16231,7 +15731,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -16239,7 +15739,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -16270,9 +15770,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回区域中数值的第 k 个百分点的值",
-            "数组": "定义相对位置的数组或数据区域",
-            "数值": "0 到 1 之间的百分点值，包含 0 和 1"
+            "abstract": "返回区域中数值的第 k 个百分点的值",
+            "array": "定义相对位置的数组或数据区域",
+            "value": "0 到 1 之间的百分点值，包含 0 和 1"
         }
     },
     "PERCENTILE.EXC": {
@@ -16282,7 +15782,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -16290,7 +15790,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -16321,9 +15821,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回区域中数值的第 K 个百分点的值，其中 k 为 0 到 1 之间的值，不包含 0 和 1",
-            "数组": "定义相对位置的数组或数据区域",
-            "数值": "0 到 1 之间的百分点值，包含 0 和 1"
+            "abstract": "返回区域中数值的第 K 个百分点的值，其中 k 为 0 到 1 之间的值，不包含 0 和 1",
+            "array": "定义相对位置的数组或数据区域",
+            "value": "0 到 1 之间的百分点值，包含 0 和 1"
         }
     },
     "PERCENTILE.INC": {
@@ -16333,7 +15833,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -16341,7 +15841,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -16372,9 +15872,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回区域中数值的第 K 个百分点的值，K 为 0 到 1 之间的百分点值，包含 0 和 1",
-            "数组": "定义相对位置的数组或数据区域",
-            "数值": "0 到 1 之间的百分点值，包含 0 和 1"
+            "abstract": "返回区域中数值的第 K 个百分点的值，K 为 0 到 1 之间的百分点值，包含 0 和 1",
+            "array": "定义相对位置的数组或数据区域",
+            "value": "0 到 1 之间的百分点值，包含 0 和 1"
         }
     },
     "PERCENTRANK": {
@@ -16384,7 +15884,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -16392,7 +15892,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -16400,7 +15900,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 5
             },
@@ -16431,7 +15931,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2]",
+            //     "name": "[value2]",
             //     "editor": true,
             //     "index":5
             // },
@@ -16441,10 +15941,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将某个数值在数据集中的排位作为数据集的百分比值返回，此处的百分比值的范围为 0 到 1",
-            "数组": "定义相对位置的数值数组或数值数据区域",
-            "数值1": "需要得到其排位的值",
-            "[数值2] - 可选": "用于标识返回的百分比值的有效位数的值"
+            "abstract": "将某个数值在数据集中的排位作为数据集的百分比值返回，此处的百分比值的范围为 0 到 1",
+            "array": "定义相对位置的数值数组或数值数据区域",
+            "value1": "需要得到其排位的值",
+            "value2": "用于标识返回的百分比值的有效位数的值"
         }
     },
     "PERCENTRANK.EXC": {
@@ -16454,7 +15954,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -16462,7 +15962,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -16470,7 +15970,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 5
             },
@@ -16501,7 +16001,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2]",
+            //     "name": "[value2]",
             //     "editor": true,
             //     "index":5
             // },
@@ -16511,10 +16011,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回某个数值在一个数据集中的百分比（0 到 1，不包括 0 和 1）排位",
-            "数组": "定义相对位置的数值数组或数值数据区域",
-            "数值1": "需要得到其排位的值",
-            "[数值2] - 可选": "用于标识返回的百分比值的有效位数的值"
+            "abstract": "返回某个数值在一个数据集中的百分比（0 到 1，不包括 0 和 1）排位",
+            "array": "定义相对位置的数值数组或数值数据区域",
+            "value1": "需要得到其排位的值",
+            "value2": "用于标识返回的百分比值的有效位数的值"
         }
     },
     "PERCENTRANK.INC": {
@@ -16524,7 +16024,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -16532,7 +16032,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -16540,7 +16040,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 5
             },
@@ -16571,7 +16071,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2]",
+            //     "name": "[value2]",
             //     "editor": true,
             //     "index":5
             // },
@@ -16581,10 +16081,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将某个数值在数据集中的排位作为数据集的百分比值返回，此处的百分比值的范围为 0 到 1（含 0 和 1）",
-            "数组": "定义相对位置的数值数组或数值数据区域",
-            "数值1": "需要得到其排位的值",
-            "[数值2] - 可选": "用于标识返回的百分比值的有效位数的值"
+            "abstract": "将某个数值在数据集中的排位作为数据集的百分比值返回，此处的百分比值的范围为 0 到 1（含 0 和 1）",
+            "array": "定义相对位置的数值数组或数值数据区域",
+            "value1": "需要得到其排位的值",
+            "value2": "用于标识返回的百分比值的有效位数的值"
         }
     },
     "PERMUT": {
@@ -16594,7 +16094,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -16602,7 +16102,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -16633,9 +16133,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回可从数字对象中选择的给定数目对象的排列数",
-            "数值1": "表示对象个数的整数",
-            "数值2": "表示每个排列中对象个数的整数"
+            "abstract": "返回可从数字对象中选择的给定数目对象的排列数",
+            "value1": "表示对象个数的整数",
+            "value2": "表示每个排列中对象个数的整数"
         }
     },
     "PERMUTATIONA": {
@@ -16645,7 +16145,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -16653,7 +16153,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -16684,9 +16184,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回可从对象总数中选择的给定数目对象（含重复）的排列数",
-            "数值1": "表示对象总数的整数",
-            "数值2": "表示每个排列中对象数目的整数"
+            "abstract": "返回可从对象总数中选择的给定数目对象（含重复）的排列数",
+            "value1": "表示对象总数的整数",
+            "value2": "表示每个排列中对象数目的整数"
         }
     },
     "PHI": {
@@ -16696,7 +16196,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -16719,8 +16219,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回标准正态分布的密度函数值",
-            "数值": "所需的标准正态分布密度值"
+            "abstract": "返回标准正态分布的密度函数值",
+            "value": "所需的标准正态分布密度值"
         }
     },
     "PI": {
@@ -16745,7 +16245,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数字 3.14159265358979（数学常量 pi），精确到 15 个数字",
+            "abstract": "返回数字 3.14159265358979（数学常量 pi），精确到 15 个数字",
         }
     },
     "POISSON": {
@@ -16755,7 +16255,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -16763,7 +16263,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -16771,7 +16271,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -16810,10 +16310,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回泊松分布",
-            "数值1": "事件数",
-            "数值2": "期望值",
-            "数值3": "一逻辑值，确定所返回的概率分布的形式"
+            "abstract": "返回泊松分布",
+            "value1": "事件数",
+            "value2": "期望值",
+            "value3": "一逻辑值，确定所返回的概率分布的形式"
         }
     },
     "POISSON.DIST": {
@@ -16823,7 +16323,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -16831,7 +16331,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -16839,7 +16339,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -16878,10 +16378,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回泊松分布",
-            "数值1": "事件数",
-            "数值2": "期望值",
-            "数值3": "一逻辑值，确定所返回的概率分布的形式"
+            "abstract": "返回泊松分布",
+            "value1": "事件数",
+            "value2": "期望值",
+            "value3": "一逻辑值，确定所返回的概率分布的形式"
         }
     },
     "POWER": {
@@ -16891,7 +16391,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -16899,7 +16399,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -16930,9 +16430,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数字乘幂的结果",
-            "数值1": "基数。 可为任意实数",
-            "数值2": "基数乘幂运算的指数"
+            "abstract": "返回数字乘幂的结果",
+            "value1": "基数。 可为任意实数",
+            "value2": "基数乘幂运算的指数"
         }
     },
     "PPMT": {
@@ -16942,7 +16442,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -16950,14 +16450,14 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
                 "name": ",",
                 "editor": false
             }, {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -16965,7 +16465,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -16973,7 +16473,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值5]",
+                "name": "[value5]",
                 "editor": true,
                 "index": 9
             },
@@ -17019,7 +16519,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值5]",
+            //     "name": "[value5]",
             //     "editor": true,
             //     "index":9
             // },
@@ -17029,12 +16529,12 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回根据定期固定付款和固定利率而定的投资在已知期间内的本金偿付额",
-            "数值1": "各期利率",
-            "数值2": "指定期数，该值必须在 1 到 数值3 范围内",
-            "数值3": "年金的付款总期数",
-            "数值4": "现值即一系列未来付款当前值的总和",
-            "[数值5] - 可选": "数字 0 或 1，用以指定各期的付款时间是在期初还是期末"
+            "abstract": "返回根据定期固定付款和固定利率而定的投资在已知期间内的本金偿付额",
+            "value1": "各期利率",
+            "value2": "指定期数，该值必须在 1 到 value3 范围内",
+            "value3": "年金的付款总期数",
+            "value4": "现值即一系列未来付款当前值的总和",
+            "value5": "数字 0 或 1，用以指定各期的付款时间是在期初还是期末"
         }
     },
     "PRICE": {
@@ -17060,7 +16560,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -17068,7 +16568,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -17076,7 +16576,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -17084,7 +16584,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -17147,13 +16647,13 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回定期付息的面值 ￥100 的有价证券的价格",
-            "日期1": "有价证券的结算日",
-            "日期2": "有价证券的到期日",
-            "数值1": "有价证券的年息票利率",
-            "数值2": "有价证券的年收益率",
-            "数值3": "面值 ￥100 的有价证券的清偿价值",
-            "数值4": "年付息次数"
+            "abstract": "返回定期付息的面值 ￥100 的有价证券的价格",
+            "date1": "有价证券的结算日",
+            "date2": "有价证券的到期日",
+            "value1": "有价证券的年息票利率",
+            "value2": "有价证券的年收益率",
+            "value3": "面值 ￥100 的有价证券的清偿价值",
+            "value4": "年付息次数"
         }
     },
     "PRICEDISC": {
@@ -17179,7 +16679,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -17187,7 +16687,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -17234,11 +16734,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回折价发行的面值 ￥100 的有价证券的价格",
-            "日期1": "有价证券的结算日",
-            "日期2": "有价证券的到期日",
-            "数值1": "有价证券的贴现率",
-            "数值2": "面值 ￥100 的有价证券的清偿价值"
+            "abstract": "返回折价发行的面值 ￥100 的有价证券的价格",
+            "date1": "有价证券的结算日",
+            "date2": "有价证券的到期日",
+            "value1": "有价证券的贴现率",
+            "value2": "面值 ￥100 的有价证券的清偿价值"
         }
     },
     "PRICEMAT": {
@@ -17272,7 +16772,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -17280,7 +16780,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -17288,7 +16788,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -17351,12 +16851,12 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回到期付息的面值 ￥100 的有价证券的价格",
-            "日期1": "有价证券的结算日",
-            "日期2": "有价证券的到期日",
-            "日期3": "有价证券的发行日，以时间序列号表示",
-            "数值1": "有价证券在发行日的利率",
-            "数值2": "有价证券的年收益率",
+            "abstract": "返回到期付息的面值 ￥100 的有价证券的价格",
+            "date1": "有价证券的结算日",
+            "date2": "有价证券的到期日",
+            "date3": "有价证券的发行日，以时间序列号表示",
+            "value1": "有价证券在发行日的利率",
+            "value2": "有价证券的年收益率",
         }
     },
     "PROB": {
@@ -17374,7 +16874,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -17382,7 +16882,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值1]",
+                "name": "[value1]",
                 "editor": true,
                 "index": 5
             },
@@ -17391,7 +16891,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 7
             },
@@ -17431,7 +16931,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值3]",
+                "name": "[value3]",
                 "editor": true,
                 "index": 7
             },
@@ -17441,11 +16941,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回区域中的数值落在指定区间内的概率",
-            "区域": "具有各自相应概率值的 x 数值区域",
-            "数组": "与 区域 中的值相关联的一组概率值",
-            "数值1": "要计算其概率的数值下界",
-            "数值2": "要计算其概率的可选数值上界"
+            "abstract": "返回区域中的数值落在指定区间内的概率",
+            "area": "具有各自相应概率值的 x 数值区域",
+            "array": "与 区域 中的值相关联的一组概率值",
+            "value1": "要计算其概率的数值下界",
+            "value2": "要计算其概率的可选数值上界"
         }
     },
     "PRODUCT": {
@@ -17455,7 +16955,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -17463,7 +16963,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -17486,7 +16986,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -17496,9 +16996,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "函数将以参数形式给出的所有数字相乘, 并返回该产品",
-            "数值1": "要相乘的第一个数字或范围",
-            "[数值2,...] - 可选": "要相乘的其他数字或单元格区域，最多可以使用 255 个参数"
+            "abstract": "函数将以参数形式给出的所有数字相乘, 并返回该产品",
+            "value1": "要相乘的第一个数字或范围",
+            "value2": "要相乘的其他数字或单元格区域，最多可以使用 255 个参数"
         }
     },
     "PROPER": {
@@ -17508,7 +17008,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -17531,8 +17031,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将文本字符串的首字母以及文字中任何非字母字符之后的任何其他字母转换成大写",
-            "文本": "用引号括起来的文本、返回文本值的公式，或者对包含要进行部分大写转换文本的单元格的引用"
+            "abstract": "将文本字符串的首字母以及文字中任何非字母字符之后的任何其他字母转换成大写",
+            "text": "用引号括起来的文本、返回文本值的公式，或者对包含要进行部分大写转换文本的单元格的引用"
         }
     },
     "PV": {
@@ -17542,7 +17042,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -17550,7 +17050,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -17558,7 +17058,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -17566,7 +17066,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值4]",
+                "name": "[value4]",
                 "editor": true,
                 "index": 7
             },
@@ -17575,7 +17075,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值5]",
+                "name": "[value5]",
                 "editor": true,
                 "index": 9
             },
@@ -17614,7 +17114,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             // {
-            //     "name": "[数值4]",
+            //     "name": "[value4]",
             //     "editor": true,
             //     "index":7
             // },
@@ -17633,12 +17133,12 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "用于根据固定利率计算贷款或投资的现值",
-            "数值1": "各期利率",
-            "数值2": "年金的付款总期数",
-            "数值3": "每期的付款金额，在年金周期内不能更改",
-            "[数值4] - 可选": "未来值，或在最后一次付款后希望得到的现金余额",
-            "[数值5] - 可选": "数字 0 或 1，用以指定各期的付款时间是在期初还是期末"
+            "abstract": "用于根据固定利率计算贷款或投资的现值",
+            "value1": "各期利率",
+            "value2": "年金的付款总期数",
+            "value3": "每期的付款金额，在年金周期内不能更改",
+            "value4": "未来值，或在最后一次付款后希望得到的现金余额",
+            "value5": "数字 0 或 1，用以指定各期的付款时间是在期初还是期末"
         }
     },
     "QUARTILE": {
@@ -17648,7 +17148,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -17656,7 +17156,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -17687,9 +17187,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一组数据的四分位点",
-            "数组": "要求得四分位数值的数组或数字型单元格区域",
-            "数值": "指定返回哪一个值"
+            "abstract": "返回一组数据的四分位点",
+            "array": "要求得四分位数值的数组或数字型单元格区域",
+            "value": "指定返回哪一个值"
         }
     },
     "QUARTILE.EXC": {
@@ -17699,7 +17199,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -17707,7 +17207,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -17738,9 +17238,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "基于 0 到 1 之间（不包括 0 和 1）的百分点值返回数据集的四分位数",
-            "数组": "要求得四分位数值的数组或数字型单元格区域",
-            "数值": "指定返回哪一个值"
+            "abstract": "基于 0 到 1 之间（不包括 0 和 1）的百分点值返回数据集的四分位数",
+            "array": "要求得四分位数值的数组或数字型单元格区域",
+            "value": "指定返回哪一个值"
         }
     },
     "QUARTILE.INC": {
@@ -17750,7 +17250,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -17758,7 +17258,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -17789,9 +17289,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "根据 0 到 1 之间的百分点值（包含 0 和 1）返回数据集的四分位数",
-            "数组": "要求得四分位数值的数组或数字型单元格区域",
-            "数值": "指定返回哪一个值"
+            "abstract": "根据 0 到 1 之间的百分点值（包含 0 和 1）返回数据集的四分位数",
+            "array": "要求得四分位数值的数组或数字型单元格区域",
+            "value": "指定返回哪一个值"
         }
     },
     "QUOTIENT": {
@@ -17801,7 +17301,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -17809,7 +17309,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -17840,9 +17340,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回除法的整数部分",
-            "数值1": "被除数",
-            "数值2": "除数"
+            "abstract": "返回除法的整数部分",
+            "value1": "被除数",
+            "value2": "除数"
         }
     },
     "RADIANS": {
@@ -17875,8 +17375,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将度数转换为弧度",
-            "角度": "要转换的以度数表示的角度"
+            "abstract": "将度数转换为弧度",
+            "tangle": "要转换的以度数表示的角度"
         }
     },
     "RAND": {
@@ -17901,7 +17401,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回了一个大于等于 0 且小于 1 的平均分布的随机实数",
+            "abstract": "返回了一个大于等于 0 且小于 1 的平均分布的随机实数",
         }
     },
     "RANDBETWEEN": {
@@ -17911,7 +17411,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -17919,7 +17419,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -17950,9 +17450,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回位于两个指定数之间的一个随机整数。 每次计算工作表时都将返回一个新的随机整数",
-            "数值1": "将返回的最小整数",
-            "数值2": "将返回的最大整数"
+            "abstract": "返回位于两个指定数之间的一个随机整数。 每次计算工作表时都将返回一个新的随机整数",
+            "value1": "将返回的最小整数",
+            "value2": "将返回的最大整数"
         }
     },
     "RANK": {
@@ -17962,7 +17462,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -17970,7 +17470,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -17978,7 +17478,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 5
             },
@@ -18019,10 +17519,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一列数字的数字排位。 数字的排位是其相对于列表中其他值的大小",
-            "数值1": "要找到其排位的数字",
-            "数组": "数字列表的数组，对数字列表的引用",
-            "[数值2] - 可选": "一个指定数字排位方式的数字"
+            "abstract": "返回一列数字的数字排位。 数字的排位是其相对于列表中其他值的大小",
+            "value1": "要找到其排位的数字",
+            "array": "数字列表的数组，对数字列表的引用",
+            "value2": "一个指定数字排位方式的数字"
         }
     },
     "RANK.AVG": {
@@ -18032,7 +17532,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -18040,7 +17540,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -18048,7 +17548,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 5
             },
@@ -18089,10 +17589,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一列数字的数字排位：数字的排位是其大小与列表中其他值的比值；如果多个值具有相同的排位，则将返回平均排位",
-            "数值1": "要找到其排位的数字",
-            "数组": "数字列表的数组，对数字列表的引用",
-            "[数值2] - 可选": "一个指定数字排位方式的数字"
+            "abstract": "返回一列数字的数字排位：数字的排位是其大小与列表中其他值的比值；如果多个值具有相同的排位，则将返回平均排位",
+            "value1": "要找到其排位的数字",
+            "array": "数字列表的数组，对数字列表的引用",
+            "value2": "一个指定数字排位方式的数字"
         }
     },
     "RANK.EQ": {
@@ -18102,7 +17602,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -18110,7 +17610,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -18118,7 +17618,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 5
             },
@@ -18159,10 +17659,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一列数字的数字排位。 其大小与列表中其他值相关；如果多个值具有相同的排位，则返回该组值的最高排位",
-            "数值1": "要找到其排位的数字",
-            "数组": "数字列表的数组，对数字列表的引用",
-            "[数值2] - 可选": "一个指定数字排位方式的数字"
+            "abstract": "返回一列数字的数字排位。 其大小与列表中其他值相关；如果多个值具有相同的排位，则返回该组值的最高排位",
+            "value1": "要找到其排位的数字",
+            "array": "数字列表的数组，对数字列表的引用",
+            "value2": "一个指定数字排位方式的数字"
         }
     },
     "RATE": {
@@ -18172,7 +17672,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -18180,7 +17680,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -18188,7 +17688,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -18196,7 +17696,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值4]",
+                "name": "[value4]",
                 "editor": true,
                 "index": 7
             },
@@ -18205,7 +17705,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值5]",
+                "name": "[value5]",
                 "editor": true,
                 "index": 9
             },
@@ -18244,7 +17744,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值4]",
+            //     "name": "[value4]",
             //     "editor": true,
             //     "index":7
             // },
@@ -18253,7 +17753,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值5]",
+            //     "name": "[value5]",
             //     "editor": true,
             //     "index":9
             // },
@@ -18263,12 +17763,12 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回每期年金的利率",
-            "数值1": "年金的付款总期数",
-            "数值2": "每期的付款金额，在年金周期内不能更改",
-            "数值3": "现值即一系列未来付款当前值的总和",
-            "[数值4] - 可选": "未来值，或在最后一次付款后希望得到的现金余额",
-            "[数值5] - 可选": "数字 0 或 1，用以指定各期的付款时间是在期初还是期末"
+            "abstract": "返回每期年金的利率",
+            "value1": "年金的付款总期数",
+            "value2": "每期的付款金额，在年金周期内不能更改",
+            "value3": "现值即一系列未来付款当前值的总和",
+            "value4": "未来值，或在最后一次付款后希望得到的现金余额",
+            "value5": "数字 0 或 1，用以指定各期的付款时间是在期初还是期末"
         }
     },
     "RECEIVED": {
@@ -18294,7 +17794,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -18302,7 +17802,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -18349,11 +17849,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一次性付息的有价证券到期收回的金额",
-            "日期1": "有价证券的结算日",
-            "日期2": "有价证券的到期日",
-            "数值1": "有价证券的投资额",
-            "数值2": "有价证券的贴现率"
+            "abstract": "返回一次性付息的有价证券到期收回的金额",
+            "date1": "有价证券的结算日",
+            "date2": "有价证券的到期日",
+            "value1": "有价证券的投资额",
+            "value2": "有价证券的贴现率"
         }
     },
     "REPLACE": {
@@ -18371,7 +17871,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -18379,7 +17879,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -18434,11 +17934,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "根据指定的字符数，REPLACE 将部分文本字符串替换为不同的文本字符串",
-            "文本1": "要替换其部分字符的文本",
-            "数值1": "文本1中要替换为 文本2 的字符位置",
-            "数值2": "文本1 中希望 REPLACE 使用 文本2 来进行替换的字符数",
-            "文本2": "将替换 文本1 中字符的文本"
+            "abstract": "根据指定的字符数，REPLACE 将部分文本字符串替换为不同的文本字符串",
+            "text1": "要替换其部分字符的文本",
+            "value1": "文本1中要替换为 文本2 的字符位置",
+            "value2": "文本1 中希望 REPLACE 使用 文本2 来进行替换的字符数",
+            "text2": "将替换 文本1 中字符的文本"
         }
     },
     "REPT": {
@@ -18448,7 +17948,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -18456,7 +17956,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -18487,9 +17987,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将文本重复一定次数",
-            "文本": "需要重复显示的文本",
-            "数值": "用于指定文本重复次数的正数"
+            "abstract": "将文本重复一定次数",
+            "text": "需要重复显示的文本",
+            "value": "用于指定文本重复次数的正数"
         }
     },
     "RIGHT": {
@@ -18499,7 +17999,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -18540,9 +18040,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "根据所指定的字符数返回文本字符串中最后一个或多个字符",
-            "文本": "包含要提取字符的文本字符串",
-            "数值": "指定希望 RIGHT 提取的字符数"
+            "abstract": "根据所指定的字符数返回文本字符串中最后一个或多个字符",
+            "text": "包含要提取字符的文本字符串",
+            "value": "指定希望 RIGHT 提取的字符数"
         }
     },
     "ROMAN": {
@@ -18552,7 +18052,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -18560,7 +18060,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -18593,9 +18093,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将阿拉伯数字转换为文字形式的罗马数字",
-            "数值1": "需要转换的阿拉伯数字",
-            "[数值2] - 可选": "一个数字, 指定所需的罗马数字类型"
+            "abstract": "将阿拉伯数字转换为文字形式的罗马数字",
+            "value1": "需要转换的阿拉伯数字",
+            "value2": "一个数字, 指定所需的罗马数字类型"
         }
     },
     "ROUND": {
@@ -18605,7 +18105,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -18613,7 +18113,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -18644,9 +18144,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "函数将数字四舍五入到指定的位数",
-            "数值1": "要四舍五入的数字",
-            "数值2": "要进行四舍五入运算的位数"
+            "abstract": "函数将数字四舍五入到指定的位数",
+            "value1": "要四舍五入的数字",
+            "value2": "要进行四舍五入运算的位数"
         }
     },
     "ROUNDDOWN": {
@@ -18656,7 +18156,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -18664,7 +18164,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -18695,9 +18195,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "朝着零的方向将数字进行向下舍入",
-            "数值1": "要四舍五入的数字",
-            "数值2": "要进行四舍五入运算的位数"
+            "abstract": "朝着零的方向将数字进行向下舍入",
+            "value1": "要四舍五入的数字",
+            "value2": "要进行四舍五入运算的位数"
         }
     },
     "ROUNDUP": {
@@ -18707,7 +18207,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -18715,7 +18215,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -18746,9 +18246,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "朝着远离 0（零）的方向将数字进行向上舍入",
-            "数值1": "要四舍五入的数字",
-            "数值2": "要进行四舍五入运算的位数"
+            "abstract": "朝着远离 0（零）的方向将数字进行向上舍入",
+            "value1": "要四舍五入的数字",
+            "value2": "要进行四舍五入运算的位数"
         }
     },
     "ROW": {
@@ -18781,8 +18281,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回引用的行号",
-            "区域": "需要得到其行号的单元格或单元格区域"
+            "abstract": "返回引用的行号",
+            "area": "需要得到其行号的单元格或单元格区域"
         }
     },
     "ROWS": {
@@ -18792,7 +18292,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -18815,8 +18315,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回引用或数组的行数",
-            "区域": "需要得到其行数的数组、数组公式或对单元格区域的引用"
+            "abstract": "返回引用或数组的行数",
+            "area": "需要得到其行数的数组、数组公式或对单元格区域的引用"
         }
     },
     "RRI": {
@@ -18826,7 +18326,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -18834,7 +18334,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -18842,7 +18342,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -18881,10 +18381,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回投资增长的等效利率",
-            "数值1": "投资的总期数",
-            "数值2": "投资的现值",
-            "数值3": "投资的未来值"
+            "abstract": "返回投资增长的等效利率",
+            "value1": "投资的总期数",
+            "value2": "投资的现值",
+            "value3": "投资的未来值"
         }
     },
     "RSQ": {
@@ -18933,9 +18433,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "通过 known_y's 和 known_x's 中的数据点返回皮尔生乘积矩相关系数的平方",
-            "区域1": "数组或数据点区域",
-            "区域2": "数组或数据点区域"
+            "abstract": "通过 known_y's 和 known_x's 中的数据点返回皮尔生乘积矩相关系数的平方",
+            "area1": "数组或数据点区域",
+            "area2": "数组或数据点区域"
         }
     },
     "SEARCH": {
@@ -19002,10 +18502,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "可在第二个文本字符串中查找第一个文本字符串，并返回第一个文本字符串的起始位置的编号，该编号从第二个文本字符串的第一个字符算起",
-            "文本1": "要查找的文本",
-            "文本2": "要在其中搜索 文本1 参数的值的文本",
-            "[数值] - 可选": "文本2 参数中从之开始搜索的字符编号"
+            "abstract": "可在第二个文本字符串中查找第一个文本字符串，并返回第一个文本字符串的起始位置的编号，该编号从第二个文本字符串的第一个字符算起",
+            "text1": "要查找的文本",
+            "text2": "要在其中搜索 文本1 参数的值的文本",
+            "value": "文本2 参数中从之开始搜索的字符编号"
         }
     },
     "SEC": {
@@ -19015,7 +18515,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -19038,8 +18538,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回角度的正割值",
-            "数值": "需要对其进行正割的角度 "
+            "abstract": "返回角度的正割值",
+            "value": "需要对其进行正割的角度 "
         }
     },
     "SECH": {
@@ -19049,7 +18549,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -19072,8 +18572,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回角度的双曲正割值",
-            "数值": "对应所需双曲正割值的角度，以弧度表示"
+            "abstract": "返回角度的双曲正割值",
+            "value": "对应所需双曲正割值的角度，以弧度表示"
         }
     },
     "SECOND": {
@@ -19106,8 +18606,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回时间值的秒数。 秒数是 0（零）到 59 范围内的整数",
-            "时间": "一个时间值，其中包含要查找的秒数"
+            "abstract": "返回时间值的秒数。 秒数是 0（零）到 59 范围内的整数",
+            "time": "一个时间值，其中包含要查找的秒数"
         }
     },
     "SERIESSUM": {
@@ -19117,7 +18617,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -19125,7 +18625,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -19133,7 +18633,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -19141,7 +18641,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -19188,11 +18688,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回基于SERIES公式的幂级数之和",
-            "数值1": "幂级数的输入值",
-            "数值2": "数值1 的首项乘幂",
-            "数值3": "级数中每一项的乘幂 n 的步长增加值",
-            "数组": "与 数值1 的每个连续乘幂相乘的一组系数"
+            "abstract": "返回基于SERIES公式的幂级数之和",
+            "value1": "幂级数的输入值",
+            "value2": "value1 的首项乘幂",
+            "value3": "级数中每一项的乘幂 n 的步长增加值",
+            "array": "与 value1 的每个连续乘幂相乘的一组系数"
         }
     },
     "SHEET": {
@@ -19224,8 +18724,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },],
         "content": {
-            "摘要": "返回引用工作表的工作表编号",
-            "[值] - 可选": "需要工作表编号的工作表或引用的名称"
+            "abstract": "返回引用工作表的工作表编号",
+            "value": "需要工作表编号的工作表或引用的名称"
         }
     },
     "SHEETS": {
@@ -19255,8 +18755,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回引用中的工作表数",
-            "[引用]": "引用是要了解其包含的工作表数的引用"
+            "abstract": "返回引用中的工作表数",
+            "reference": "引用是要了解其包含的工作表数的引用"
         }
     },
     "SIGN": {
@@ -19266,7 +18766,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -19289,8 +18789,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "确定数字的符号",
-            "数值": "任意实数"
+            "abstract": "确定数字的符号",
+            "value": "任意实数"
         }
     },
     "SIN": {
@@ -19300,7 +18800,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -19323,8 +18823,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回已知角度的正弦",
-            "数值": "需要求正弦的角度，以弧度表示"
+            "abstract": "返回已知角度的正弦",
+            "value": "需要求正弦的角度，以弧度表示"
         }
     },
     "SINH": {
@@ -19334,7 +18834,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -19357,8 +18857,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数字的双曲正弦",
-            "数值": "任意实数"
+            "abstract": "返回数字的双曲正弦",
+            "value": "任意实数"
         }
     },
     "SKEW": {
@@ -19368,7 +18868,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -19376,7 +18876,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -19399,7 +18899,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -19409,9 +18909,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回分布的偏斜度",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "任意实数,个数介于1到255之间"
+            "abstract": "返回分布的偏斜度",
+            "value1": "任意实数",
+            "value2": "任意实数,个数介于1到255之间"
         }
     },
     "SKEW.P": {
@@ -19421,7 +18921,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -19429,7 +18929,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -19452,7 +18952,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -19462,9 +18962,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回基于样本总体的分布不对称度：表明分布相对于平均值的不对称程度",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "任意实数,个数介于1到255之间"
+            "abstract": "返回基于样本总体的分布不对称度：表明分布相对于平均值的不对称程度",
+            "value1": "任意实数",
+            "value2": "任意实数,个数介于1到255之间"
         }
     },
     "SLN": {
@@ -19474,7 +18974,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -19482,7 +18982,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -19490,7 +18990,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -19529,10 +19029,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一个期间内的资产的直线折旧",
-            "数值1": "资产原值",
-            "数值2": "折旧末尾时的值",
-            "数值3": "资产的折旧期数"
+            "abstract": "返回一个期间内的资产的直线折旧",
+            "value1": "资产原值",
+            "value2": "折旧末尾时的值",
+            "value3": "资产的折旧期数"
         }
     },
     "SLOPE": {
@@ -19581,9 +19081,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回通过 集合1 和 集合2 中数据点的线性回归线的斜率",
-            "集合1": "数字型因变量数据点数组或单元格区域",
-            "集合2": "自变量数据点集合"
+            "abstract": "返回通过 集合1 和 集合2 中数据点的线性回归线的斜率",
+            "set1": "数字型因变量数据点数组或单元格区域",
+            "set2": "自变量数据点集合"
         }
     },
     "SMALL": {
@@ -19601,7 +19101,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -19632,43 +19132,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数据集中的第 k 个最小值",
-            "区域": "需要找到第 k 个最小值的数组或数值数据区域",
-            "数值": "要返回的数据在数组或数据区域里的位置"
-        }
-    },
-    "SQRT": {
-        "title": [
-            {
-                "name": "SQRT(",
-                "editor": false
-            },
-            {
-                "name": "数值",
-                "editor": false
-            },
-            {
-                "name": ")",
-                "editor": false
-            },
-        ],
-        "example": [
-            {
-                "name": "SQRT(",
-                "editor": false
-            },
-            {
-                "name": "16",
-                "editor": false
-            },
-            {
-                "name": ")",
-                "editor": false
-            },
-        ],
-        "content": {
-            "摘要": "返回正的平方根",
-            "数值": "要计算其平方根的数字"
+            "abstract": "返回数据集中的第 k 个最小值",
+            "area": "需要找到第 k 个最小值的数组或数值数据区域",
+            "value": "要返回的数据在数组或数据区域里的位置"
         }
     },
     "SQRTPI": {
@@ -19678,7 +19144,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -19701,8 +19167,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回某数与 pi 的乘积的平方根",
-            "数值": "与 pi 相乘的数"
+            "abstract": "返回某数与 pi 的乘积的平方根",
+            "value": "与 pi 相乘的数"
         }
     },
     "STANDARDIZE": {
@@ -19712,7 +19178,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -19720,7 +19186,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -19728,7 +19194,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -19767,10 +19233,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回由 数值2 和 数值3 表示的分布的规范化值",
-            "数值1": "需要进行正态化的数值",
-            "数值2": "分布的算术平均值",
-            "数值3": "分布的标准偏差"
+            "abstract": "返回由 value2 和 value3 表示的分布的规范化值",
+            "value1": "需要进行正态化的数值",
+            "value2": "分布的算术平均值",
+            "value3": "分布的标准偏差"
         }
     },
     "STDEVA": {
@@ -19780,7 +19246,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -19788,7 +19254,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -19821,9 +19287,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "根据样本估计标准偏差",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "任意实数,个数介于1到255之间"
+            "abstract": "根据样本估计标准偏差",
+            "value1": "任意实数",
+            "value2": "任意实数,个数介于1到255之间"
         }
     },
     "STDEVP": {
@@ -19833,7 +19299,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -19841,7 +19307,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -19874,9 +19340,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "根据作为参数给定的整个总体计算标准偏差",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "任意实数,个数介于1到255之间"
+            "abstract": "根据作为参数给定的整个总体计算标准偏差",
+            "value1": "任意实数",
+            "value2": "任意实数,个数介于1到255之间"
         }
     },
     "STDEVPA": {
@@ -19927,9 +19393,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "根据作为参数（包括文字和逻辑值）给定的整个总体计算标准偏差",
-            "值1": "任意值",
-            "[值2,...] - 可选": "任意值,个数介于1到255之间"
+            "abstract": "根据作为参数（包括文字和逻辑值）给定的整个总体计算标准偏差",
+            "value1": "任意值",
+            "value2": "任意值,个数介于1到255之间"
         }
     },
     "STEYX": {
@@ -19978,9 +19444,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回通过线性回归法预测每个 x 的 y 值时所产生的标准误差",
-            "区域1": "因变量数据点数组或区域",
-            "区域2": "自变量数据点数组或区域"
+            "abstract": "返回通过线性回归法预测每个 x 的 y 值时所产生的标准误差",
+            "area1": "因变量数据点数组或区域",
+            "area2": "自变量数据点数组或区域"
         }
     },
     "SUBSTITUTE": {
@@ -20063,11 +19529,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "在文本字符串中用 文本3 替换 文本2",
-            "文本1": "需要替换其中字符的文本，或对含有文本（需要替换其中字符）的单元格的引用",
-            "文本2": "需要替换的文本",
-            "文本3": "用于替换 文本2 的文本",
-            "[事件] - 可选": "指定要用 文本3 替换 文本2 的事件"
+            "abstract": "在文本字符串中用 文本3 替换 文本2",
+            "text1": "需要替换其中字符的文本，或对含有文本（需要替换其中字符）的单元格的引用",
+            "text2": "需要替换的文本",
+            "text3": "用于替换 文本2 的文本",
+            "event": "指定要用 文本3 替换 文本2 的事件"
         }
     },
     "SUBTOTAL": {
@@ -20077,7 +19543,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -20134,63 +19600,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回列表或数据库中的分类汇总",
-            "数值": "数字 1-11 或 101-111，用于指定要为分类汇总使用的函数",
-            "区域1": "要对其进行分类汇总计算的第一个命名区域或引用",
-            "[区域2] - 可选": "要对其进行分类汇总计算的第 2 个至第 254 个命名区域或引用"
-        }
-    },
-    "SUM": {
-        "title": [
-            {
-                "name": "SUM(",
-                "editor": false
-            },
-            {
-                "name": "数值1",
-                "editor": false
-            },
-            {
-                "name": ",",
-                "editor": false
-            },
-            {
-                "name": "[数值2,...]",
-                "editor": true,
-                "index": 3
-            },
-            {
-                "name": ")",
-                "editor": false
-            },
-        ],
-        "example": [
-            {
-                "name": "SUM(",
-                "editor": false
-            },
-            {
-                "name": "A2:A10",
-                "editor": false
-            },
-            // {
-            //     "name": ",",
-            //     "editor": false
-            // },
-            // {
-            //     "name": "[数值2,...]",
-            //     "editor": true,
-            //     "index":3
-            // },
-            {
-                "name": ")",
-                "editor": false
-            },
-        ],
-        "content": {
-            "摘要": "将值相加",
-            "数值1": "任意实数",
-            "[数值2,...]": "任意实数,个数介于1到255之间"
+            "abstract": "返回列表或数据库中的分类汇总",
+            "value": "数字 1-11 或 101-111，用于指定要为分类汇总使用的函数",
+            "area1": "要对其进行分类汇总计算的第一个命名区域或引用",
+            "area2": "要对其进行分类汇总计算的第 2 个至第 254 个命名区域或引用"
         }
     },
     "SUMIF": {
@@ -20257,10 +19670,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "对 范围 中符合指定条件的值求和",
-            "区域1": "要按条件计算的单元格区域",
-            "条件": "定义哪些单元格将被添加的数字、表达式、单元格引用、文本或函数形式的条件",
-            "[区域2] - 可选": "要添加的实际单元格 (如果要添加的单元格不在range参数中指定的单元格)"
+            "abstract": "对 范围 中符合指定条件的值求和",
+            "area1": "要按条件计算的单元格区域",
+            "condition": "定义哪些单元格将被添加的数字、表达式、单元格引用、文本或函数形式的条件",
+            "area2": "要添加的实际单元格 (如果要添加的单元格不在range参数中指定的单元格)"
         }
     },
     "SUMIFS": {
@@ -20327,10 +19740,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "对 范围 中符合指定条件的值求和",
-            "区域1": "要按条件计算的单元格区域",
-            "条件1": "定义哪些单元格将被添加的数字、表达式、单元格引用、文本或函数形式的条件",
-            "[区域2,条件2,] - 可选": "其他的区域,条件对"
+            "abstract": "对 范围 中符合指定条件的值求和",
+            "area1": "要按条件计算的单元格区域",
+            "condition1": "定义哪些单元格将被添加的数字、表达式、单元格引用、文本或函数形式的条件",
+            "condition2": "其他的区域,条件对"
         }
     },
     "SUMPRODUCT": {
@@ -20340,7 +19753,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组1",
+                "name": "array1",
                 "editor": false
             },
             {
@@ -20348,7 +19761,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数组2,...]",
+                "name": "[array2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -20381,9 +19794,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "对给定数组中的相应组件执行简单的算术运算, 并返回这些计算的和",
-            "数组1": "其相应元素需要进行相乘并求和的第一个数组参数",
-            "[数组2,...] - 可选": " 2 到 255 个数组参数，其相应元素需要进行相乘并求和"
+            "abstract": "对给定数组中的相应组件执行简单的算术运算, 并返回这些计算的和",
+            "array1": "其相应元素需要进行相乘并求和的第一个数组参数",
+            "array2": " 2 到 255 个数组参数，其相应元素需要进行相乘并求和"
         }
     },
     "SUMSQ": {
@@ -20393,7 +19806,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -20401,7 +19814,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -20434,9 +19847,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回参数的平方和",
-            "数值1": "任意实数",
-            "[数值2,...] - 可选": "任意实数,个数介于1到255之间"
+            "abstract": "返回参数的平方和",
+            "value1": "任意实数",
+            "value2": "任意实数,个数介于1到255之间"
         }
     },
     "SUMX2MY2": {
@@ -20485,9 +19898,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回两数组中对应数值的平方差之和",
-            "区域1": " 第一个数组或数值区域",
-            "区域2": " 第而个数组或数值区域"
+            "abstract": "返回两数组中对应数值的平方差之和",
+            "area1": " 第一个数组或数值区域",
+            "area2": " 第而个数组或数值区域"
         }
     },
     "SUMX2PY2": {
@@ -20536,9 +19949,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回两数组中对应值的平方和之和",
-            "区域1": " 第一个数组或数值区域",
-            "区域2": " 第而个数组或数值区域"
+            "abstract": "返回两数组中对应值的平方和之和",
+            "area1": " 第一个数组或数值区域",
+            "area2": " 第而个数组或数值区域"
         }
     },
     "SUMXMY2": {
@@ -20587,9 +20000,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回两数组中对应数值之差的平方和",
-            "区域1": " 第一个数组或数值区域",
-            "区域2": " 第而个数组或数值区域"
+            "abstract": "返回两数组中对应数值之差的平方和",
+            "area1": " 第一个数组或数值区域",
+            "area2": " 第而个数组或数值区域"
         }
     },
     "SWITCH": {
@@ -20672,11 +20085,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "函数根据值列表计算一个值（称为表达式），并返回与第一个匹配值对应的结果",
-            "表达式": "用来比较的值",
-            "值1": "任意值",
-            "结果1": "值1 与 表达式 匹配后返回的值",
-            "[值2,结果2,...] - 可选": "其他值与结果对,最多125个"
+            "abstract": "函数根据值列表计算一个值（称为表达式），并返回与第一个匹配值对应的结果",
+            "formula": "用来比较的值",
+            "value1": "任意值",
+            "result1": "值1 与 表达式 匹配后返回的值",
+            "result2": "其他值与结果对,最多125个"
         }
     },
     "SYD": {
@@ -20686,7 +20099,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -20694,7 +20107,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -20702,7 +20115,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -20710,7 +20123,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -20757,11 +20170,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回在指定期间内资产按年限总和折旧法计算的折旧",
-            "数值1": "资产原值",
-            "数值2": "折旧末尾时的值",
-            "数值3": "资产的折旧期数",
-            "数值4": "期间，必须与 数值3 使用相同的单位"
+            "abstract": "返回在指定期间内资产按年限总和折旧法计算的折旧",
+            "value1": "资产原值",
+            "value2": "折旧末尾时的值",
+            "value3": "资产的折旧期数",
+            "value4": "期间，必须与 value3 使用相同的单位"
         }
     },
     "T": {
@@ -20794,8 +20207,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回值引用的文字",
-            "值": "要测试的值"
+            "abstract": "返回值引用的文字",
+            "value": "要测试的值"
         }
     },
     "TAN": {
@@ -20805,7 +20218,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -20828,8 +20241,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回已知角度的正切",
-            "数值": "要求正切的角度，以弧度表示"
+            "abstract": "返回已知角度的正切",
+            "value": "要求正切的角度，以弧度表示"
         }
     },
     "TANH": {
@@ -20839,7 +20252,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -20862,8 +20275,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数字的双曲正切",
-            "数值": "任意实数"
+            "abstract": "返回数字的双曲正切",
+            "value": "任意实数"
         }
     },
     "TBILLEQ": {
@@ -20889,7 +20302,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -20928,10 +20341,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回国库券的等效收益率",
-            "日期1": "国库券的结算日",
-            "日期2": "国库券的到期日",
-            "数值": "国库券的贴现率"
+            "abstract": "返回国库券的等效收益率",
+            "date1": "国库券的结算日",
+            "date2": "国库券的到期日",
+            "value": "国库券的贴现率"
         }
     },
     "TBILLPRICE": {
@@ -20957,7 +20370,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -20996,10 +20409,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回面值 ￥100 的国库券的价格",
-            "日期1": "国库券的结算日",
-            "日期2": "国库券的到期日",
-            "数值": "国库券的贴现率"
+            "abstract": "返回面值 ￥100 的国库券的价格",
+            "date1": "国库券的结算日",
+            "date2": "国库券的到期日",
+            "value": "国库券的贴现率"
         }
     },
     "TBILLYIELD": {
@@ -21025,7 +20438,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -21064,10 +20477,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回国库券的收益率",
-            "日期1": "国库券的结算日",
-            "日期2": "国库券的到期日",
-            "数值": "面值 ￥100 的国库券的价格"
+            "abstract": "返回国库券的收益率",
+            "date1": "国库券的结算日",
+            "date2": "国库券的到期日",
+            "value": "面值 ￥100 的国库券的价格"
         }
     },
     "T.DIST": {
@@ -21077,7 +20490,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -21085,7 +20498,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -21093,7 +20506,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -21132,10 +20545,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回学生的左尾 t 分布。 t 分布用于小型样本数据集的假设检验",
-            "数值1": "需要计算分布的数值",
-            "数值2": "一个表示自由度数的整数",
-            "数值3": "决定函数形式的逻辑值"
+            "abstract": "返回学生的左尾 t 分布。 t 分布用于小型样本数据集的假设检验",
+            "value1": "需要计算分布的数值",
+            "value2": "一个表示自由度数的整数",
+            "value3": "决定函数形式的逻辑值"
         }
     },
     "T.DIST.RT": {
@@ -21145,7 +20558,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -21153,7 +20566,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -21184,9 +20597,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "t 分布用于小型样本数据集的假设检验",
-            "数值1": "需要计算分布的数值",
-            "数值2": "一个表示自由度数的整数"
+            "abstract": "t 分布用于小型样本数据集的假设检验",
+            "value1": "需要计算分布的数值",
+            "value2": "一个表示自由度数的整数"
         }
     },
     "TEXT": {
@@ -21196,7 +20609,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -21204,7 +20617,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -21233,9 +20646,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },],
         "content": {
-            "摘要": "函数可通过格式代码向数字应用格式，进而更改数字的显示方式",
-            "数值": "要转换为文本的数值",
-            "文本": "一个文本字符串，定义要应用于所提供值的格式"
+            "abstract": "函数可通过格式代码向数字应用格式，进而更改数字的显示方式",
+            "value": "要转换为文本的数值",
+            "text": "一个文本字符串，定义要应用于所提供值的格式"
         }
     },
     "TIME": {
@@ -21300,10 +20713,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回特定时间的十进制数字",
-            "时": "0（零）到 32767 之间的数字，代表小时",
-            "分": " 0 到 32767 之间的数字，代表分钟",
-            "秒": "0 到 32767 之间的数字，代表秒"
+            "abstract": "返回特定时间的十进制数字",
+            "hour": "0（零）到 32767 之间的数字，代表小时",
+            "minute": " 0 到 32767 之间的数字，代表分钟",
+            "second": "0 到 32767 之间的数字，代表秒"
         }
     },
     "TIMEVALUE": {
@@ -21313,7 +20726,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -21336,8 +20749,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回由文本字符串表示的时间的十进制数字",
-            "文本": "一个文本字符串，代表以任一 Microsoft Excel 时间格式表示的时间"
+            "abstract": "返回由文本字符串表示的时间的十进制数字",
+            "text": "一个文本字符串，代表以任一 Microsoft Excel 时间格式表示的时间"
         }
     },
     "T.INV": {
@@ -21347,7 +20760,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -21355,7 +20768,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -21386,9 +20799,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回学生的 t 分布的左尾反函数",
-            "数值1": "与学生的 t 分布相关的概率",
-            "数值2": "与学生的 t 分布相关的概率"
+            "abstract": "返回学生的 t 分布的左尾反函数",
+            "value1": "与学生的 t 分布相关的概率",
+            "value2": "与学生的 t 分布相关的概率"
         }
     },
     "TODAY": {
@@ -21413,7 +20826,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回当前日期的序列号",
+            "abstract": "返回当前日期的序列号",
         }
     },
     "TRANSPOSE": {
@@ -21423,7 +20836,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -21446,8 +20859,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "可返回转置单元格区域，即将行单元格区域转置成列单元格区域，反之亦然",
-            "数组": "要转置的工作表上的数组或单元格区域"
+            "abstract": "可返回转置单元格区域，即将行单元格区域转置成列单元格区域，反之亦然",
+            "array": "要转置的工作表上的数组或单元格区域"
         }
     },
     "TREND": {
@@ -21474,7 +20887,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值1]",
+                "name": "[value1]",
                 "editor": true,
                 "index": 5
             },
@@ -21483,7 +20896,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 7
             },
@@ -21515,7 +20928,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值1]",
+            //     "name": "[value1]",
             //     "editor": true,
             //     "index":5
             // },
@@ -21524,7 +20937,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2]",
+            //     "name": "[value2]",
             //     "editor": true,
             //     "index":7
             // },
@@ -21534,11 +20947,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "函数返回沿线性趋势的值",
-            "集合1": "关系 y = mx + b 中已知道的 y 值集",
-            "[集合2] - 可选": "在关系 y = mx + b 中可能已经知道的一组可选 x 值",
-            "[数值1] - 可选": "要返回其趋势的新 x 值返回对应的 y 值",
-            "[数值2] - 可选": "一个逻辑值, 指定是否强制常量 b 等于0"
+            "abstract": "函数返回沿线性趋势的值",
+            "set1": "关系 y = mx + b 中已知道的 y 值集",
+            "set2": "在关系 y = mx + b 中可能已经知道的一组可选 x 值",
+            "value1": "要返回其趋势的新 x 值返回对应的 y 值",
+            "value2": "一个逻辑值, 指定是否强制常量 b 等于0"
         }
     },
     "TRIMMEAN": {
@@ -21548,7 +20961,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -21556,7 +20969,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -21587,9 +21000,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数据集的内部平均值",
-            "数组": "需要进行整理并求平均值的数组或数值区域",
-            "数值": "从计算中排除数据点的分数"
+            "abstract": "返回数据集的内部平均值",
+            "array": "需要进行整理并求平均值的数组或数值区域",
+            "value": "从计算中排除数据点的分数"
         }
     },
     "TRUE": {
@@ -21614,7 +21027,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回逻辑值 TRUE",
+            "abstract": "返回逻辑值 TRUE",
         }
     },
     "TRUNC": {
@@ -21624,7 +21037,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -21632,7 +21045,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -21655,7 +21068,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2]",
+            //     "name": "[value2]",
             //     "editor": true,
             //     "index":3
             // },
@@ -21665,9 +21078,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将数字的小数部分截去，返回整数",
-            "数值1": "需要截尾取整的数字",
-            "[数值2] - 可选": "用于指定取整精度的数字,默认为零"
+            "abstract": "将数字的小数部分截去，返回整数",
+            "value1": "需要截尾取整的数字",
+            "value2": "用于指定取整精度的数字,默认为零"
         }
     },
     "T.TEST": {
@@ -21693,7 +21106,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -21701,7 +21114,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -21748,11 +21161,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回与学生 t-检验相关的概率",
-            "数据集1": "第一个数据集",
-            "数据集2": "第二个数据集",
-            "数值1": "指定分布尾数",
-            "数值2": "要执行的 t 检验的类型"
+            "abstract": "返回与学生 t-检验相关的概率",
+            "dataset1": "第一个数据集",
+            "dataset2": "第二个数据集",
+            "value1": "指定分布尾数",
+            "value2": "要执行的 t 检验的类型"
         }
     },
     "TYPE": {
@@ -21785,8 +21198,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回数值的类型",
-            "值": "需要返回值类型的值"
+            "abstract": "返回数值的类型",
+            "value": "需要返回值类型的值"
         }
     },
     "UNICHAR": {
@@ -21796,7 +21209,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -21819,8 +21232,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回给定数值引用的 Unicode 字符",
-            "数值": "代表字符的 Unicode 数字"
+            "abstract": "返回给定数值引用的 Unicode 字符",
+            "value": "代表字符的 Unicode 数字"
         }
     },
     "UNICODE": {
@@ -21830,7 +21243,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -21853,8 +21266,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回对应于文本的第一个字符的数字（代码点）",
-            "文本": "要获得其 Unicode 值的字符"
+            "abstract": "返回对应于文本的第一个字符的数字（代码点）",
+            "text": "要获得其 Unicode 值的字符"
         }
     },
     "UNIQUE": {
@@ -21864,7 +21277,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组",
+                "name": "array",
                 "editor": false
             },
             {
@@ -21872,7 +21285,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值1]",
+                "name": "[value1]",
                 "editor": true,
                 "index": 3
             },
@@ -21881,7 +21294,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 5
             },
@@ -21904,7 +21317,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值1]",
+            //     "name": "[value1]",
             //     "editor": true,
             //     "index":3
             // },
@@ -21913,7 +21326,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2]",
+            //     "name": "[value2]",
             //     "editor": true,
             //     "index":5
             // },
@@ -21923,10 +21336,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "函数返回列表或范围中的一系列唯一值",
-            "数组": "要从其中返回唯一值的范围或数组",
-            "[数值1] - 可选": "为逻辑值，用于指示比较方式；By row = FALSE 或省略；By column = TRUE",
-            "[数值2] - 可选": "为逻辑值：仅返回出现一次的唯一值 = TRUE；包含所有唯一值 = FALSE 或省略"
+            "abstract": "函数返回列表或范围中的一系列唯一值",
+            "array": "要从其中返回唯一值的范围或数组",
+            "value1": "为逻辑值，用于指示比较方式；By row = FALSE 或省略；By column = TRUE",
+            "value2": "为逻辑值：仅返回出现一次的唯一值 = TRUE；包含所有唯一值 = FALSE 或省略"
         }
     },
     "UPPER": {
@@ -21936,7 +21349,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -21959,8 +21372,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将文本转换为大写字母",
-            "文本": "要转换为大写字母的文本。 文本可以是引用或文本字符串"
+            "abstract": "将文本转换为大写字母",
+            "text": "要转换为大写字母的文本。 文本可以是引用或文本字符串"
         }
     },
     "VALUE": {
@@ -21970,7 +21383,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "文本",
+                "name": "text",
                 "editor": false
             },
             {
@@ -21993,8 +21406,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "将表示数字的文本字符串转换为数字",
-            "文本": "用引号括起来的文本或包含要转换文本的单元格的引用"
+            "abstract": "将表示数字的文本字符串转换为数字",
+            "text": "用引号括起来的文本或包含要转换文本的单元格的引用"
         }
     },
     "VAR": {
@@ -22004,7 +21417,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -22012,7 +21425,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -22035,7 +21448,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -22045,9 +21458,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "计算基于给定样本的方差",
-            "数值1": "对应于总体样本的第一个数值参数",
-            "[数值2,...] - 可选": "对应于总体样本的 2 到 255 个数值参数"
+            "abstract": "计算基于给定样本的方差",
+            "value1": "对应于总体样本的第一个数值参数",
+            "value2": "对应于总体样本的 2 到 255 个数值参数"
         }
     },
     "VAR.P": {
@@ -22057,7 +21470,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -22065,7 +21478,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -22088,7 +21501,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -22098,9 +21511,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "计算基于整个样本总体的方差（忽略样本总体中的逻辑值和文本）",
-            "数值1": "对应于总体样本的第一个数值参数",
-            "[数值2,...] - 可选": "对应于总体样本的 2 到 255 个数值参数"
+            "abstract": "计算基于整个样本总体的方差（忽略样本总体中的逻辑值和文本）",
+            "value1": "对应于总体样本的第一个数值参数",
+            "value2": "对应于总体样本的 2 到 255 个数值参数"
         }
     },
     "VARA": {
@@ -22110,7 +21523,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -22118,7 +21531,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -22141,7 +21554,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -22151,9 +21564,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "计算基于给定样本的方差",
-            "数值1": "对应于总体样本的第一个数值参数",
-            "[数值2,...] - 可选": "对应于总体样本的 2 到 255 个数值参数"
+            "abstract": "计算基于给定样本的方差",
+            "value1": "对应于总体样本的第一个数值参数",
+            "value2": "对应于总体样本的 2 到 255 个数值参数"
         }
     },
     "VAR.S": {
@@ -22163,7 +21576,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -22171,7 +21584,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2,...]",
+                "name": "[value2,...]",
                 "editor": true,
                 "index": 3
             },
@@ -22194,7 +21607,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2,...]",
+            //     "name": "[value2,...]",
             //     "editor": true,
             //     "index":3
             // },
@@ -22204,9 +21617,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "估算基于样本的方差",
-            "数值1": "对应于总体样本的第一个数值参数",
-            "[数值2,...] - 可选": "对应于总体样本的 2 到 255 个数值参数"
+            "abstract": "估算基于样本的方差",
+            "value1": "对应于总体样本的第一个数值参数",
+            "value2": "对应于总体样本的 2 到 255 个数值参数"
         }
     },
     "VDB": {
@@ -22216,7 +21629,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -22224,7 +21637,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -22232,7 +21645,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -22256,7 +21669,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值4]",
+                "name": "[value4]",
                 "editor": true,
                 "index": 11
             },
@@ -22265,7 +21678,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值5]",
+                "name": "[value5]",
                 "editor": true,
                 "index": 13
             },
@@ -22329,7 +21742,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             //     "editor": false
             // },
             // {
-            //     "name": "[数值2]",
+            //     "name": "[value2]",
             //     "editor": true,
             //     "index":13
             // },
@@ -22339,14 +21752,14 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "使用双倍余额递减法或其他指定方法，返回一笔资产在给定期间（包括部分期间）内的折旧值",
-            "数值1": "资产原值",
-            "数值2": "折旧末尾时的值",
-            "数值3": "资产的折旧期数",
-            "日期1": "您要计算折旧的起始时期",
-            "日期2": "您要计算折旧的终止时期",
-            "[数值4] - 可选": "余额递减速率",
-            "[数值5] - 可选": "逻辑值，指定当折旧值大于余额递减计算值时，是否转用直线折旧法"
+            "abstract": "使用双倍余额递减法或其他指定方法，返回一笔资产在给定期间（包括部分期间）内的折旧值",
+            "value1": "资产原值",
+            "value2": "折旧末尾时的值",
+            "value3": "资产的折旧期数",
+            "date1": "您要计算折旧的起始时期",
+            "date2": "您要计算折旧的终止时期",
+            "value4": "余额递减速率",
+            "value5": "逻辑值，指定当折旧值大于余额递减计算值时，是否转用直线折旧法"
         }
     },
     "VLOOKUP": {
@@ -22356,7 +21769,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -22372,7 +21785,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -22380,7 +21793,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值3]",
+                "name": "[value3]",
                 "editor": true,
                 "index": 7
             },
@@ -22429,11 +21842,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "在表格或区域中按行查找项目",
-            "数值1": "要查找的值",
-            "区域1": "搜索 数值1 和返回值的单元格区域",
-            "数值2": "包含返回值的列号",
-            "[数值3] - 可选": "一个逻辑值，该值指定希望 VLOOKUP 查找近似匹配还是精确匹配"
+            "abstract": "在表格或区域中按行查找项目",
+            "value1": "要查找的值",
+            "area1": "搜索 value1 和返回值的单元格区域",
+            "value2": "包含返回值的列号",
+            "value3": "一个逻辑值，该值指定希望 VLOOKUP 查找近似匹配还是精确匹配"
         }
     },
     "WEEKDAY": {
@@ -22443,7 +21856,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -22451,7 +21864,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -22484,9 +21897,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回对应于某个日期的一周中的第几天",
-            "数值1": "一个序列号，代表尝试查找的那一天的日期",
-            "[数值2] - 可选": "用于确定返回值类型的数字"
+            "abstract": "返回对应于某个日期的一周中的第几天",
+            "value1": "一个序列号，代表尝试查找的那一天的日期",
+            "value2": "用于确定返回值类型的数字"
         }
     },
     "WEEKNUM": {
@@ -22496,7 +21909,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -22504,7 +21917,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 3
             },
@@ -22537,9 +21950,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回特定日期的周数",
-            "数值1": "代表一周中的日期",
-            "[数值2] - 可选": "一数字，确定星期从哪一天开始"
+            "abstract": "返回特定日期的周数",
+            "value1": "代表一周中的日期",
+            "value2": "一数字，确定星期从哪一天开始"
         }
     },
     "WEIBULL": {
@@ -22549,7 +21962,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -22557,7 +21970,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -22565,7 +21978,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -22573,7 +21986,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -22620,11 +22033,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 Weibull 分布",
-            "数值1": "用来计算函数的值",
-            "数值2": "分布参数",
-            "数值3": "分布参数",
-            "数值4": "确定函数的形式"
+            "abstract": "返回 Weibull 分布",
+            "value1": "用来计算函数的值",
+            "value2": "分布参数",
+            "value3": "分布参数",
+            "value4": "确定函数的形式"
         }
     },
     "WORKDAY": {
@@ -22642,7 +22055,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -22690,10 +22103,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回在某日期（起始日期）之前或之后、与该日期相隔指定工作日的某一日期的日期值",
-            "日期": "一个代表开始日期的日期",
-            "数值": "日期 之前或之后不含周末及节假日的天数",
-            "[数组] - 可选": "一个可选列表，其中包含需要从工作日历中排除的一个或多个日期，例如各种省/市/自治区和国家/地区的法定假日及非法定假日"
+            "abstract": "返回在某日期（起始日期）之前或之后、与该日期相隔指定工作日的某一日期的日期值",
+            "date": "一个代表开始日期的日期",
+            "value": "日期 之前或之后不含周末及节假日的天数",
+            "array": "一个可选列表，其中包含需要从工作日历中排除的一个或多个日期，例如各种省/市/自治区和国家/地区的法定假日及非法定假日"
         }
     },
     "WORKDAY.INTL": {
@@ -22711,7 +22124,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false
             },
             {
@@ -22759,10 +22172,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回指定的若干个工作日之前或之后的日期的序列号（使用自定义周末参数）",
-            "日期": "开始日期",
-            "数值": "日期 之前或之后不含周末及节假日的天数",
-            "[数组] - 可选": "指示一周中属于周末的日子和不作为工作日的日子"
+            "abstract": "返回指定的若干个工作日之前或之后的日期的序列号（使用自定义周末参数）",
+            "date": "开始日期",
+            "value": "日期 之前或之后不含周末及节假日的天数",
+            "array": "指示一周中属于周末的日子和不作为工作日的日子"
         }
     },
     "XIRR": {
@@ -22772,7 +22185,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组1",
+                "name": "array1",
                 "editor": false
             },
             {
@@ -22780,7 +22193,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组2",
+                "name": "array2",
                 "editor": false
             },
             {
@@ -22829,10 +22242,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一组不一定定期发生的现金流的内部收益率",
-            "数组1": "与 数组2 中的支付时间相对应的一系列现金流",
-            "数组2": "与现金流支付相对应的支付日期表",
-            "数值": "对函数 XIRR 计算结果的估计值"
+            "abstract": "返回一组不一定定期发生的现金流的内部收益率",
+            "array1": "与 array2 中的支付时间相对应的一系列现金流",
+            "array2": "与现金流支付相对应的支付日期表",
+            "value": "对函数 XIRR 计算结果的估计值"
         }
     },
     "XNPV": {
@@ -22842,7 +22255,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值",
+                "name": "value",
                 "editor": false,
             },
             {
@@ -22850,7 +22263,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组1",
+                "name": "array1",
                 "editor": false
             },
             {
@@ -22858,7 +22271,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数组2",
+                "name": "array2",
                 "editor": false
             },
             {
@@ -22898,10 +22311,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回一组现金流的净现值，这些现金流不一定定期发生",
-            "数值": "对函数 XIRR 计算结果的估计值",
-            "数组1": "与 数组2 中的支付时间相对应的一系列现金流",
-            "数组2": "与现金流支付相对应的支付日期表",
+            "abstract": "返回一组现金流的净现值，这些现金流不一定定期发生",
+            "value": "对函数 XIRR 计算结果的估计值",
+            "array1": "与 array2 中的支付时间相对应的一系列现金流",
+            "array2": "与现金流支付相对应的支付日期表",
         }
     },
     "XOR": {
@@ -22952,9 +22365,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回所有参数的逻辑异或",
-            "条件1": "计算值为TRUE或FALSE",
-            "[条件2,...] - 可选": "要检验的 1 至 254 个条件，可为 TRUE 或 FALSE，且可为逻辑值、数组或引用"
+            "abstract": "返回所有参数的逻辑异或",
+            "condition1": "计算值为TRUE或FALSE",
+            "condition2": "要检验的 1 至 254 个条件，可为 TRUE 或 FALSE，且可为逻辑值、数组或引用"
         }
     },
     "YEAR": {
@@ -22987,8 +22400,8 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回对应于某个日期的年份",
-            "日期": "要查找的年份的日期"
+            "abstract": "返回对应于某个日期的年份",
+            "date": "要查找的年份的日期"
         }
     },
     "YEARFRAC": {
@@ -23037,9 +22450,9 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "可计算两个日期（日期1 和 日期2）之间的天数",
-            "日期1": "一个代表开始日期的日期",
-            "日期2": "一个代表终止日期的日期"
+            "abstract": "可计算两个日期（日期1 和 日期2）之间的天数",
+            "date1": "一个代表开始日期的日期",
+            "date2": "一个代表终止日期的日期"
         }
     },
     "YIELD": {
@@ -23065,7 +22478,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -23073,7 +22486,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -23081,7 +22494,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值3",
+                "name": "value3",
                 "editor": false
             },
             {
@@ -23089,7 +22502,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值4",
+                "name": "value4",
                 "editor": false
             },
             {
@@ -23152,13 +22565,13 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回定期支付利息的债券的收益",
-            '日期1': "有价证券的结算日",
-            "日期2": "有价证券的到期日",
-            "数值1": "有价证券的年息票利率",
-            "数值2": "有价证券的价格",
-            "数值3": "面值 ￥100 的有价证券的清偿价值",
-            "数值4": "年付息次数"
+            "abstract": "返回定期支付利息的债券的收益",
+            'date1': "有价证券的结算日",
+            "date2": "有价证券的到期日",
+            "value1": "有价证券的年息票利率",
+            "value2": "有价证券的价格",
+            "value3": "面值 ￥100 的有价证券的清偿价值",
+            "value4": "年付息次数"
         }
     },
     "YIELDDISC": {
@@ -23184,7 +22597,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -23192,7 +22605,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -23239,11 +22652,11 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回折价发行的有价证券的年收益率",
-            "日期1": "有价证券的结算日",
-            "日期2": "有价证券的到期日",
-            "数值1": "有价证券的价格（按面值为 ￥100 计算）",
-            "数值2": "面值 ￥100 的有价证券的清偿价值",
+            "abstract": "返回折价发行的有价证券的年收益率",
+            "date1": "有价证券的结算日",
+            "date2": "有价证券的到期日",
+            "value1": "有价证券的价格（按面值为 ￥100 计算）",
+            "value2": "面值 ￥100 的有价证券的清偿价值",
         }
     },
     "YIELDMAT": {
@@ -23277,7 +22690,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -23285,7 +22698,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值2",
+                "name": "value2",
                 "editor": false
             },
             {
@@ -23340,12 +22753,12 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回到期付息的有价证券的年收益率",
-            "日期1": "有价证券的结算日",
-            "日期2": "有价证券的到期日",
-            "日期3": "有价证券的发行日，以时间序列号表示",
-            "数值1": "有价证券在发行日的利率",
-            "数值2": "有价证券的价格"
+            "abstract": "返回到期付息的有价证券的年收益率",
+            "date1": "有价证券的结算日",
+            "date2": "有价证券的到期日",
+            "date3": "有价证券的发行日，以时间序列号表示",
+            "value1": "有价证券在发行日的利率",
+            "value2": "有价证券的价格"
         }
     },
     "Z.TEST": {
@@ -23363,7 +22776,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "数值1",
+                "name": "value1",
                 "editor": false
             },
             {
@@ -23371,7 +22784,7 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
                 "editor": false
             },
             {
-                "name": "[数值2]",
+                "name": "[value2]",
                 "editor": true,
                 "index": 5
             },
@@ -23412,10 +22825,10 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
             },
         ],
         "content": {
-            "摘要": "返回 z 检验的单尾 P 值",
-            "区域": "用来检验 x 的数组或数据区域",
-            "数值1": "要测试的值",
-            "[数值2] - 可选": "总体（已知）标准偏差。 如果省略，则使用样本标准偏差"
+            "abstract": "返回 z 检验的单尾 P 值",
+            "area": "用来检验 x 的数组或数据区域",
+            "value1": "要测试的值",
+            "value2": "总体（已知）标准偏差。 如果省略，则使用样本标准偏差"
         }
     },
 };
