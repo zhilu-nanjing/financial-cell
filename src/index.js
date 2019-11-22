@@ -1,7 +1,7 @@
 /* global window, document */
 import {h} from './component/element';//导入经过命名导出的常量h
-import DataProxy from './core/data_proxy';//从核心模块导入
-import Sheet from './component/sheet';
+import DataProxy from './core/data_proxy';//从核心模块导入类DataProxy
+import Sheet from './component/sheet';//从核心模块导入类Sheet
 import {cssPrefix} from './config';
 import {locale} from './locale/locale';
 import './index.less';
