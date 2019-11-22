@@ -82,7 +82,7 @@ function parseCell() {
     let {data} = this;
 
     let changeDataArgs = getChangeDataToCalc.call(this);
-    // data.calc(data.rows, changeDataArgs.data);
+    data.calc(data.rows, changeDataArgs.data);
 
     if (changeDataArgs.state) {
         data.changeDataForCalc = null;

@@ -724,24 +724,24 @@ export default class Editor {
         this.spanArr = spanArr;
     }
 
-    // handler(text) {
-    //     let {editorText} = this;
-    //     let inputText = editorText.getText();
-    //
-    //     const cursorPos = this.pos;
-    //     if (cursorPos >= inputText) {
-    //         this.setMouseDownIndex([]);
-    //         return;
-    //     }
-    //     const textBegin = text.substring(0, cursorPos);
-    //     const textEnd = text.substring(cursorPos, text.length);
-    //     parse.call(this, textBegin);
-    //     if (textEnd !== '') {
-    //         this.setMouseDownIndex([textBegin, textEnd]);
-    //     } else {
-    //         this.setMouseDownIndex([]);
-    //     }
-    // }
+    handler(text) {
+        let {editorText} = this;
+        let inputText = editorText.getText();
+
+        const cursorPos = this.pos;
+        if (cursorPos >= inputText) {
+            this.setMouseDownIndex([]);
+            return;
+        }
+        const textBegin = text.substring(0, cursorPos);
+        const textEnd = text.substring(cursorPos, text.length);
+        parse.call(this, textBegin);
+        if (textEnd !== '') {
+            this.setMouseDownIndex([textBegin, textEnd]);
+        } else {
+            this.setMouseDownIndex([]);
+        }
+    }
 
     setOffset(offset, suggestPosition = 'top', show = true) {
         const {
