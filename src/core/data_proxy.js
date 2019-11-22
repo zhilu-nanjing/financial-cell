@@ -19,7 +19,7 @@ import {mountImg} from "../event/paste";
 import {parseCell2} from "../component/table";
 import {isLegal} from "./operator";
 import Recast from "../utils/reg_pattern.jscast";
-import {changeFormat, dateDiff, formatDate} from '../component/date';
+import {changeFormat, dateDiff, formatDate} from '../utils/date';
 import {formatNumberRender} from "./format";
 import MultiPreAction from "../core/multi_pre_action";
 import CellProxy from "./cell_proxy";

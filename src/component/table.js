@@ -4,7 +4,6 @@ import _cell from '../core/cell';
 import {formulam} from '../core/formula';
 import {isMinus} from "../utils/number_util";
 import {Draw, DrawBox, npx, thinLineWidth,} from '../canvas/draw';
-import ApplicationFactory from "./application";
 import {look} from "../config";
 import {deepCopy, distinct} from "../core/operator";
 import {testValid} from "../utils/test";
@@ -437,7 +436,7 @@ class Table {
     constructor(el, data, editor) {
         this.el = el;
         this.draw = new Draw(el, data.viewWidth(), data.viewHeight());
-        this.factory = new ApplicationFactory(data.methods, data.name, this);
+        // this.factory = new ApplicationFactory(data.methods, data.name, this);
         this.editor = editor;
         this.data = data;
         this.timer = null;

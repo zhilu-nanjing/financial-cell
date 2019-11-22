@@ -3,9 +3,6 @@ import {datePattern, str2Re} from "../utils/reg_pattern";
 import {formatNumberRender} from "../core/format";
 import {isHave, isNumber} from "../core/helper";
 
-function fract(num) {
-    return num - Math.trunc(num);
-}
 
 export function formatDate(diff) {
     if(!isHave(diff) || !isNumber(diff)) {
