@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import {datePattern, str2Re} from "../core/re";
+import {datePattern, str2Re} from "../utils/reg_pattern";
 import {formatNumberRender} from "../core/format";
 import {isHave, isNumber} from "../core/helper";
 

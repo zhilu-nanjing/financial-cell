@@ -10,7 +10,7 @@ import {
     letterOperatorWithDollorPrex,
     logicOperator,
     str2Re
-} from "./re";
+} from "../utils/reg_pattern.js";
 
 const operator = [
     "+", "-", "*", "/", "&", "^", "(", ",", "=", " ", " ", "，"

@@ -10,6 +10,7 @@ export const letterOperatorWithDollorPrex = "^\\$[A-Z]+\\d+$";
 
 export const datePattern = ["^(\\d{4})[-\/](\\d{1,2})[-\/](\\d{1,2})$", "^(\\d{4})年(\\d{1,2})月(\\d{1,2})日$"];
 
+
 export function str2Re(str) {
     let re = new RegExp(str, 'g');
 

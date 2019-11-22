@@ -48,7 +48,7 @@ export default class MultiPreAction {
             }, this.data);
             operationItem.call(this, preAction);
         }
-
+       
         testValid.call(this);
     }
 
