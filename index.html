@@ -4,11 +4,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>financial-cell</title>
+    <style>
+        .button {
+            background-color: rgb(80, 163, 230);
+            border: none;
+            color: white;
+            padding: 1px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body onload="load()">
 
-<div style="background: rgb(80,145,243);  z-index: 19999;" id="calcHelp">
-    帮我算一算(可移动)
+<div class="button" id="calcHelp">
+    帮我算一算
 </div>
 <div id="financial-cell"></div>
 <script>
@@ -21,7 +35,9 @@
                 state: false,
                 width: 180
             },
-            view: {},
+            view: {
+                height: () => {return document.documentElement.clientHeight - 37;}
+            },
             row: {
                 len: 200,
                 height: 25,
@@ -40,7 +56,7 @@
         let rows1 = {
             0: {
                 'cells': {
-                    0: {'text': 'test', 'formulas': 'test', 'style': 0},
+                    0: {'text': '估值基准日期', 'formulas': '估值基准日期', 'style': 0},
                     1: {'text': '贴现率', 'formulas': '贴现率', 'style': 1},
                     2: {'text': '所得税率', 'formulas': '所得税率', 'style': 2},
                     3: {'text': '', 'formulas': '', 'style': 3},
@@ -1343,17 +1359,9 @@
             });
 
         let calcHelp = document.getElementById("calcHelp");
-        let drag = window.drag;
-        new drag({}, this).register(calcHelp);
-
 
         calcHelp.addEventListener('click', () => {
-            // let event = new KeyboardEvent('keydown', {
-            //     keyCode: 68,
-            //     metaKey: true,
-            //     isTrusted: true, key: "d", code: "KeyD"
-            // });
-            // window.dispatchEvent(event);
+            alert("您好，请使用Ctrl+D进行添加到收藏。");
         });
     }
 </script>
