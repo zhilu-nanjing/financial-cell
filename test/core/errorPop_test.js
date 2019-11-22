@@ -21,7 +21,7 @@ describe('qq', () => {
     describe('  recast test  ', () => {
         it(' ="""  ', function () {
             let {state, msg} = data.selectorCellText(1, 1, '="""', "input");
-            assert.equal(state, false);//true
+            assert.equal(state, true);//true
         });
 
         it(' =""  ', function () {
