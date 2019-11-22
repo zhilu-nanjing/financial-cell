@@ -1,8 +1,8 @@
 /* global window, document */
-import {h} from './component/element';//导入经过命名导出的常量h
-import DataProxy from './core/data_proxy';//从核心模块导入类DataProxy
+import {h} from './component/element';//导入经过命名导出的常量h,h是一个函数，所以颜色是橙色
+import DataProxy from './core/data_proxy';//从核心模块导入类DataProxy，这是一个类，所以颜色是白色
 import Sheet from './component/sheet';//从核心模块导入类Sheet
-import {cssPrefix} from './config';
+import {cssPrefix} from './config';//颜色是紫色，这是一个对象变量，这里是一个字符串
 import {locale} from './locale/locale';
 import './index.less';
 import zhCN from './locale/zh-cn';
