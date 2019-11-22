@@ -64,7 +64,7 @@ export function bindClickoutside2(el, revision) {
         // console.log('evt:', evt);
         if (evt.buttons === 2 || el.contains(evt.target)) return;
         else {
-            // setColor.call(revision);
+            setColor.call(revision);
             el.hide();
             unbindClickoutside(el);
         }
