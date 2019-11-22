@@ -106,7 +106,6 @@ class Merges {
   }
 }
 
-export default {};
 export {
   Merges,
 };

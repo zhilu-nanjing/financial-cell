@@ -47,7 +47,7 @@ class SelectorElement {
                     evt.stopPropagation();
                 }
                 this.moveEvent(3);
-            })
+            });
         this.b = h('div', `${cssPrefix}-selector-box-b`)
             .on('mousedown.stop', evt => {
                 if (evt.detail === 2) {
@@ -55,7 +55,7 @@ class SelectorElement {
                 } else {
                     this.moveEvent(4);
                 }
-            })
+            });
 
 
         this.cornerEl.on('mousedown', evt => {
@@ -122,7 +122,7 @@ class SelectorElement {
                 selectorMoveEl.setMove(rect);
                 selectorMoveEl.el.show();
             }
-        }, (e) => {
+        }, () => {
             // 如果移动的内容被单元格包含，则需要变化
             let {rows} = data;
             let arr = [], arr2 = [], arr3 = [];
@@ -216,9 +216,9 @@ class SelectorElement {
             //     rows.moveChange(arr, arr2, arr3);
             //     sheet.selectorMoveReset();
             // });
-            console.time("move")
+            console.time("move");
             rows.moveChange(arr, arr2, arr3);
-            console.timeEnd("move")
+            console.timeEnd("move");
 
             sheet.selectorMoveReset();
         });
@@ -523,17 +523,6 @@ export default class Selector {
         this.resetOffset();
     }
 
-    isMergeCell(ri, ci) {
-        let {data, state} = this.data.isMergeCell(ri, ci);
-        if (state) {
-            this.selectCell.eri = data.eri;
-            this.selectCell.eci = data.eci;
-        } else {
-            this.selectCell.eri = ri;
-            this.selectCell.eci = ci;
-        }
-    }
-
     set(ri, ci, indexesUpdated = true) {
         const {data} = this;
 
@@ -562,7 +551,7 @@ export default class Selector {
     }
 
     setEnd(ri, ci, moving = true, enter = false) {
-        const {data, lastri, lastci} = this;
+        const {data } = this;
         if (moving) {
             // if (ri === lastri && ci === lastci) return;
             this.lastri = ri;
@@ -608,12 +597,12 @@ export default class Selector {
         const [nri, nci] = [ri, ci];
         // const rn = eri - sri;
         // const cn = eci - sci;
-        const srn = sri - ri;
-        const scn = sci - ci;
-        const ern = eri - ri;
-        const ecn = eci - ci;
+        // const srn = sri - ri;
+        // const scn = sci - ci;
+        // const ern = eri - ri;
+        // const ecn = eci - ci;
         // console.log(srn, scn, ern, ecn, ri, ci);
-        if (pos == 2) {
+        if (pos === 2) {
             drisc = 11;
             // left
             // console.log('left');
@@ -622,7 +611,7 @@ export default class Selector {
             // this.saIndexes = [sri, nci];
             // this.eaIndexes = [eri, sci - 1];
             // data.calRangeIndexes2(
-        } else if (pos == 4) {
+        } else if (pos === 4) {
             drisc = 22;
 
             // top
@@ -631,7 +620,7 @@ export default class Selector {
             this.arange = new CellRange(nri, sci, sri - 1, eci);
             // this.saIndexes = [nri, sci];
             // this.eaIndexes = [sri - 1, eci];
-        } else if (pos == 3) {
+        } else if (pos === 3) {
             drisc = 33;
             // right
             // console.log('right');
@@ -639,7 +628,7 @@ export default class Selector {
             this.arange = new CellRange(sri, eci + 1, eri, nci);
             // this.saIndexes = [sri, eci + 1];
             // this.eaIndexes = [eri, nci];
-        } else if (pos == 1) {
+        } else if (pos === 1) {
             drisc = 44;
             // bottom
             // console.log('bottom');
@@ -684,12 +673,6 @@ export default class Selector {
         });
     }
 
-    showClipboard2(coffset) {
-        setAllClipboardOffset.call(this, coffset);
-        ['br', 'l', 't', 'tl'].forEach((property) => {
-            this[property].showClipboard();
-        });
-    }
 
     hideClipboard() {
         ['br', 'l', 't', 'tl'].forEach((property) => {

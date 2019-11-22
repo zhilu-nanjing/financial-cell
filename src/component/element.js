@@ -259,10 +259,7 @@ class Element {
     }
 
     isShow() {
-        if(this.el.style['display'] === 'block') {
-            return true;
-        }
-        return false;
+        return this.el.style['display'] === 'block';
     }
 
     show(key = 'display', text = 'block') {

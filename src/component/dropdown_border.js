@@ -14,3 +14,4 @@ export default class DropdownBorder extends Dropdown {
     this.borderPalette = borderPalette;
   }
 }
+

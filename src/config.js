@@ -6,10 +6,6 @@ export const filterFormula = ['CITY'];
 export const offsetLeft = 60;
 export const offsetTop = 70;
 
-export const edgeRight = 30;
+// export const edgeRight = 30;
 // export const dpr = window.devicePixelRatio  || 1;
-export const dpr = 1;
-export default {
-    cssPrefix,
-    dpr,
-};
+// export const dpr = 1;

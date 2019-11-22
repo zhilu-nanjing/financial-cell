@@ -6,19 +6,19 @@ function Drag(options, self) {
      */
     this.register = function (el) {
         el.addEventListener('mousedown', function (e) {
-            if (e.button != 0) {
+            if (e.button !== 0) {
                 //屏蔽左键以外的按键
                 return;
             }
 
 
             //获取x坐标和y坐标
-            var x = e.clientX;
-            var y = e.clientY;
+            let x = e.clientX;
+            let y = e.clientY;
 
             //获取左部和顶部的偏移量
-            var l = el.offsetLeft;
-            var t = el.offsetTop;
+            let l = el.offsetLeft;
+            let t = el.offsetTop;
 
             if (options && options.onBegin) {
                 options.onBegin.call(el, {
@@ -29,11 +29,11 @@ function Drag(options, self) {
 
 
             //开关打开
-            var isDown = true;
+            let isDown = true;
             //设置样式
             el.style.cursor = 'move';
 
-            var nl = x, nt = y;
+            let nl = x, nt = y;
 
 
             window.onmousemove = function (e) {
@@ -41,8 +41,8 @@ function Drag(options, self) {
                     return;
                 }
                 //获取x和y
-                var nx = e.clientX;
-                var ny = e.clientY;
+                let nx = e.clientX;
+                let ny = e.clientY;
 
 
                 //计算移动后的左偏移量和顶部的偏移量
@@ -50,20 +50,19 @@ function Drag(options, self) {
                 nt = ny - (y - t);
 
                 // console.log( nl, nt);
-
-                let drag = false;
+                // let drag = false;
                 if (nl > 0) {
-                    drag = false;
+                    // drag = false;
                     el.style.left = nl + 'px';
                 } else {
-                    drag = true;
+                    // drag = true;
                     el.style.left = 0 + 'px';
                 }
                 if (nt > 0) {
-                    drag = false;
+                    // drag = false;
                     el.style.top = nt + 'px';
                 } else {
-                    drag = true;
+                    // drag = true;
                     el.style.top = 0 + 'px';
                 }
                 // el.style.left = nl + 'px';
@@ -83,7 +82,7 @@ function Drag(options, self) {
                 return false;
             };
 
-            window.onmouseup = function (e) {
+            window.onmouseup = function () {
                 //开关关闭
                 isDown = false;
                 el.style.cursor = 'default';
@@ -100,7 +99,7 @@ function Drag(options, self) {
             } else if (e.preventDefault) {
                 e.preventDefault();
             } else {
-                window.event.returnValue == false;
+                // window.event.returnValue === false;
             }
         });
     }

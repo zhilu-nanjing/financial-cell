@@ -1,6 +1,3 @@
-import {filterFormula} from "../config";
-import {expr2xy, xy2expr} from "./alphabet";
-import CellRange from "./cell_range";
 import {
     blankOperator,
     letterAndLetterOperator,
@@ -27,7 +24,7 @@ const operator2 = [
 
 const operation = (s) => {
     for (let i = 0; i < operator.length; i++) {
-        if (operator[i] == s) {
+        if (operator[i] === s) {
             return 1;
         }
     }
@@ -37,7 +34,7 @@ const operation = (s) => {
 // 存在的原因是 不过滤 空格
 const operation3 = (s) => {
     for (let i = 0; i < operator.length; i++) {
-        if (operator3[i] == s) {
+        if (operator3[i] === s) {
             return 1;
         }
     }
@@ -46,7 +43,7 @@ const operation3 = (s) => {
 
 const operation2 = (s) => {
     for (let i = 0; i < operator2.length; i++) {
-        if (operator2[i] == s) {
+        if (operator2[i] === s) {
             return 1;
         }
     }
@@ -57,7 +54,7 @@ const operation2 = (s) => {
 const value2absolute = (str) => {
     let s1 = "", enter = false;
     for (let i = 0; i < str.length; i++) {
-        if (enter == false && str[i] * 1 >= 0 && str[i] * 1 <= 9) {
+        if (enter === false && str[i] * 1 >= 0 && str[i] * 1 <= 9) {
             s1 += "$";
             enter = true;
         }
@@ -89,7 +86,6 @@ const cutStr = (str, filter = false, f = false) => {
     let express = [];
     let index = 0;
     arr.filter(i => {
-        let ri = i.replace(/\$/g, '');
         let enter = true;
         if (arr.length > index + 1) {
             let s2 = arr[index + 1];
@@ -102,18 +98,18 @@ const cutStr = (str, filter = false, f = false) => {
         // if(ri.search(str2Re(letterOperatorIgnoreBracket)) === -1) {
         if (f && enter) {
             i = i.replace(/\$/g, '');
-            if (i.search(str2Re(letterOperator)) != -1
-                || i.search(str2Re(letterAndLetterOperator)) != -1)
-                if (express.indexOf(i) == -1)
+            if (i.search(str2Re(letterOperator)) !== -1
+                || i.search(str2Re(letterAndLetterOperator)) !== -1)
+                if (express.indexOf(i) === -1)
                     express.push(i);
         } else if (enter) {
-            if (i.search(str2Re(letterOperator)) != -1 || i.search(str2Re(letterOperatorWithDollor)) != -1
-                || i.search(str2Re(letterOperatorWithDollorEnd)) != -1 || i.search(str2Re(letterOperatorWithDollorPrex)) != -1) {
-                if (express.indexOf(i) == -1 || filter == true)
+            if (i.search(str2Re(letterOperator)) !== -1 || i.search(str2Re(letterOperatorWithDollor)) !== -1
+                || i.search(str2Re(letterOperatorWithDollorEnd)) !== -1 || i.search(str2Re(letterOperatorWithDollorPrex)) !== -1) {
+                if (express.indexOf(i) === -1 || filter === true)
                     express.push(i);
             } else {
                 let is = i.replace(/\$/g, "");
-                if (is.search(str2Re(letterAndLetterOperator)) != -1) {
+                if (is.search(str2Re(letterAndLetterOperator)) !== -1) {
                     express.push(i);
                 }
             }
@@ -129,7 +125,7 @@ const cutStr = (str, filter = false, f = false) => {
 function changeFormula(cut) {
     for (let i = 0; i < cut.length; i++) {
         let c = cut[i];
-        if (c.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) == -1) {
+        if (c.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) === -1) {
             cut[i] = `${c}:${c}`;
         }
     }
@@ -149,18 +145,14 @@ export function isLegal(str) {
         } else {
             return other;
         }
-    }
+    };
     //判断左右括号是否匹配
     let matches = function (char1, char2) {
-        if ((char1 === "(" && char2 === ")")
+        return (char1 === "(" && char2 === ")")
             || (char1 === "{" && char2 === "}")
             || (char1 === "[" && char2 === "]")
-            || (char1 === "/*" && char2 === "*/")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+            || (char1 === "/*" && char2 === "*/");
+    };
     //入口
     let leftStack = [];
     if (str !== null || str !== "" || str !== undefined) {
@@ -178,40 +170,10 @@ export function isLegal(str) {
             }
         }
         //循环结束，如果左括号栈还有括号，也是匹配失败
-        if (leftStack.length !== 0) {
-            return false;
-        }
-        return true;
+
+        return leftStack.length === 0;
     }
 }
-
-const haveManyFunc = (str) => {
-    let corss = 0;
-    for (let i = 0; i < str.length; i++) {
-        let b = str[i];
-        if (b === "(") {
-            let em = false;
-            for (let j = i + 1; j < str.length && em == false; j++) {
-                let b2 = str[j];
-                if (b2 === "(") {
-                    corss = corss + 1;
-                }
-
-                if (b2 === ")" && corss === 0) {
-                    em = true;
-                } else if (b2 === ")" && corss > 0) {
-                    corss = corss - 1;
-                }
-            }
-
-            if (em === false) {
-                str += ")";
-            }
-        }
-    }
-
-    return str;
-};
 
 const cutFirst = (str) => {
     let s = "";
@@ -224,21 +186,17 @@ const cutFirst = (str) => {
     return s;
 };
 
-const findErpx = (str, pos, erpx) => {
-    str = str.substring(0, pos);
-    return str.lastIndexOf(erpx) + erpx.length;
-};
 
 const cuttingByPos = (str, pos, space = true) => {
     let value = "";
     let end = false;
-    for (let i = pos - 1; i > 0 && end == false; i--) {
-        if (space == false) {
-            end = operation3(str[i]) ? true : false;
+    for (let i = pos - 1; i > 0 && end === false; i--) {
+        if (space === false) {
+            end = operation3(str[i]) === 1;
         } else {
-            end = operation(str[i]) ? true : false;
+            end = operation(str[i]) === 1;
         }
-        if (end == false) {
+        if (end === false) {
             value += str[i];
         }
     }
@@ -251,13 +209,13 @@ const cuttingByPos = (str, pos, space = true) => {
 const cuttingByPos2 = (str, pos, space = true) => {
     let value = "";
     let end = false;
-    for (let i = pos - 1; i > 0 && end == false; i--) {
-        if (space == false) {
-            end = operation3(str[i]) ? true : false;
+    for (let i = pos - 1; i > 0 && end === false; i--) {
+        if (space === false) {
+            end = operation3(str[i]) === 1;
         } else {
-            end = operation(str[i]) ? true : false;
+            end = operation(str[i]) === 1;
         }
-        if (end == false) {
+        if (end === false) {
             value += str[i];
         }
     }
@@ -271,9 +229,9 @@ const cuttingByPos2 = (str, pos, space = true) => {
 const cuttingByPosEnd = (str, pos) => {
     let value = "";
     let end = false;
-    for (let i = pos - 1; i < str.length && end == false; i++) {
-        end = operation(str[i]) ? true : false;
-        if (end == false && str[i] != ')') {
+    for (let i = pos - 1; i < str.length && end === false; i++) {
+        end = operation(str[i]) === 1;
+        if (end === false && str[i] !== ')') {
             value += str[i];
         }
     }
@@ -291,51 +249,6 @@ const cuttingByPosEnd2 = (str, pos) => {
 export function distinct(arr) {
     return [...new Set(arr)];
 }
-
-const division = (str, ff = filterFormula, other = true, other2 = false) => {
-    str = str + "";
-    str = str.toUpperCase();
-
-    // 加filterFormula的原因: 因为加了也没用，也不可能再去请求后端了
-    if (str[0] !== "=") {
-        return [];
-    }
-    for (let i = 0; i < ff.length; i++) {
-        if (str.indexOf(ff[i]) !== -1) {
-            return [];
-        }
-    }
-
-    let arr = str.split(/([(-\/,+*，><=^&])/);
-    let na = [];
-    // // 去除字符串两端的空格
-    for (let i = 0; i < arr.length; i++) {
-        arr[i] = arr[i].replace(/(^\s*)|(\s*$)/g, "");
-        if (other) {
-            let enter = true;
-            if (isSheetVale(arr[i])) {
-                arr[i] = arr[i].split("!")[1];
-                enter = other2 == false ? false : true;
-            }
-            if (enter && isAbsoluteValue(arr[i].replace(/\$/g, ''), 4)) {
-                let value = arr[i].replace(/\$/g, '').split(":");
-                let a1 = expr2xy(value[0]);
-                let a2 = expr2xy(value[1]);
-                let cell = new CellRange(a1[0], a1[1], a2[0], a2[1]);
-                cell.each((i, j) => {
-                    na.push(xy2expr(i, j));
-                });
-            }
-        } else if (!other && isSheetVale(arr[i])) {
-            arr[i] = "";
-        }
-        // let value = arr[i].replace(/(^\s*)|(\s*$)/g, "");
-    }
-    arr.push(...na);
-    arr = [...new Set(arr)];
-
-    return arr;
-};
 
 const cutting = (str) => {
     let express = [];
@@ -22836,39 +22749,17 @@ const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formu
 
 const isSheetVale = (str) => {
     str = str.toUpperCase();
-    if (str.search(/[\u4E00-\u9FA50-9a-zA-Z]+![A-Za-z]+\$\d+/) != -1)
+    if (str.search(/[\u4E00-\u9FA50-9a-zA-Z]+![A-Za-z]+\$\d+/) !== -1)
         return true;
-    if (str.search(/[\u4E00-\u9FA50-9a-zA-Z]+!\$[A-Za-z]+\d+/) != -1)
+    if (str.search(/[\u4E00-\u9FA50-9a-zA-Z]+!\$[A-Za-z]+\d+/) !== -1)
         return true;
-    if (str.search(/[\u4E00-\u9FA50-9a-zA-Z]+!\$[A-Za-z]+\$\d+/) != -1)
+    if (str.search(/[\u4E00-\u9FA50-9a-zA-Z]+!\$[A-Za-z]+\$\d+/) !== -1)
         return true;
-    if (str.search(/[\u4E00-\u9FA50-9a-zA-Z]+![A-Za-z]+\d+/) != -1)
-        return true;
-    return false;
-}
-
-const getSheetVale = (str) => {
-    let arr = [];
-
-    let v = /[\u4E00-\u9FA50-9a-zA-Z]+![A-Za-z]+\d+/.exec(str.replace(/\$/g, ''));
-    let v2 = /[\u4E00-\u9FA50-9a-zA-Z]+![A-Za-z]+\d+:[A-Za-z]+\d+/.exec(str.replace(/\$/g, ''));
-
-
-    if (v) {
-        for (let i = 0; i < v.length; i++) {
-            arr.push(v[i]);
-        }
-    }
-
-    if (v2) {
-        for (let i = 0; i < v2.length; i++) {
-            arr.push(v2[i]);
-        }
-    }
-
-
-    return arr;
+    // if (str.search(/[\u4E00-\u9FA50-9a-zA-Z]+![A-Za-z]+\d+/) !== -1)
+    //     return true;
+    return str.search(/[\u4E00-\u9FA50-9a-zA-Z]+![A-Za-z]+\d+/) !== -1;
 };
+
 
 function angleFunc(start, end) {
     let diff_x = end.x - start.x,
@@ -22890,16 +22781,16 @@ const positionAngle = (x1, x2, y1, y2) => {
         angle = 4;
     }
 
-    if (angle == 1 && af < 45) {
+    if (angle === 1 && af < 45) {
         angle = 3;
         return angle;
-    } else if (angle == 2 && af > 30) {
+    } else if (angle === 2 && af > 30) {
         angle = 1;
         return angle;
-    } else if (angle == 3 && af > 30) {
+    } else if (angle === 3 && af > 30) {
         angle = 4;
         return angle;
-    } else if (angle == 4 && af < 45) {
+    } else if (angle === 4 && af < 45) {
         angle = 2;
         return angle;
     }
@@ -22914,95 +22805,73 @@ const positionAngle = (x1, x2, y1, y2) => {
     return angle;
 };
 
-
 const isAbsoluteValue = (str, rule = 1) => {
     str = str.toUpperCase();
-    if (rule == 1) {
-        if (str.search(/^\$[A-Z]+\$\d+$/) != -1)
+    if (rule === 1) {
+        if (str.search(/^\$[A-Z]+\$\d+$/) !== -1)
             return 3;
-        if (str.search(/^\$[A-Z]+\d+$/) != -1)
+        if (str.search(/^\$[A-Z]+\d+$/) !== -1)
             return 1;
-        if (str.search(/^[A-Z]+\$\d+$/) != -1)
+        if (str.search(/^[A-Z]+\$\d+$/) !== -1)
             return 2;
         return false;
-    } else if (rule == 3) {
-        if (str.search(/^\$[A-Z]+\$\d+$/) != -1)
+    } else if (rule === 3) {
+        if (str.search(/^\$[A-Z]+\$\d+$/) !== -1)
             return true;
-        if (str.search(/^[A-Z]+\d+$/) != -1)
+        if (str.search(/^[A-Z]+\d+$/) !== -1)
             return true;
-        if (str.search(/^\$[A-Z]+\d+$/) != -1)
+        if (str.search(/^\$[A-Z]+\d+$/) !== -1)
             return true;
-        if (str.search(/^[A-Z]+\$\d+$/) != -1)
+
+        return str.search(/^[A-Z]+\$\d+$/) !== -1;
+    } else if (rule === 4) {
+        if (str.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) !== -1)
             return true;
-        return false;
-    } else if (rule == 4) {
-        if (str.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) != -1)
-            return true;
-    } else if (rule == 5) {
-        if (str.search(/^[A-Z]+\d+:\$[A-Z]+\d+$/) != -1) {
+    } else if (rule === 5) {
+        if (str.search(/^[A-Z]+\d+:\$[A-Z]+\d+$/) !== -1) {
             return 8;
         }
-        if (str.search(/^[A-Z]+\d+:[A-Z]+\$\d+$/) != -1) {
+        if (str.search(/^[A-Z]+\d+:[A-Z]+\$\d+$/) !== -1) {
             return 9;
         }
-        if (str.search(/^[A-Z]+\$\d+:[A-Z]+\d+$/) != -1) {
+        if (str.search(/^[A-Z]+\$\d+:[A-Z]+\d+$/) !== -1) {
             return 10;
         }
-        if (str.search(/^\$[A-Z]+\d+:[A-Z]+\d+$/) != -1) {
+        if (str.search(/^\$[A-Z]+\d+:[A-Z]+\d+$/) !== -1) {
             return 11;
         }
-        if (str.search(/^\$[A-Z]+\$\d+$/) != -1)
+        if (str.search(/^\$[A-Z]+\$\d+$/) !== -1)
             return 3;
-        if (str.search(/^[A-Z]+\d+$/) != -1)
+        if (str.search(/^[A-Z]+\d+$/) !== -1)
             return 12;
-        if (str.search(/^[A-Z]+\d+:[A-Z]+\d+$/) != -1)
+        if (str.search(/^[A-Z]+\d+:[A-Z]+\d+$/) !== -1)
             return 13;
-        if (str.search(/^\$[A-Z]+\d+$/) != -1)
+        if (str.search(/^\$[A-Z]+\d+$/) !== -1)
             return 1;
-        if (str.search(/^[A-Z]+\$\d+$/) != -1)
+        if (str.search(/^[A-Z]+\$\d+$/) !== -1)
             return 2;
-        if (str.search(/^[A-Z]+\$\d+:[A-Z]+\$\d+$/) != -1) {
+        if (str.search(/^[A-Z]+\$\d+:[A-Z]+\$\d+$/) !== -1) {
             return 4;
         }
-        if (str.search(/^[A-Z]+\$\d+:\$[A-Z]+\d+$/) != -1) {
+        if (str.search(/^[A-Z]+\$\d+:\$[A-Z]+\d+$/) !== -1) {
             return 5;
         }
-        if (str.search(/^\$[A-Z]+\d+:[A-Z]+\$\d+$/) != -1) {
+        if (str.search(/^\$[A-Z]+\d+:[A-Z]+\$\d+$/) !== -1) {
             return 6;
         }
-        if (str.search(/^\$[A-Z]+\d+:\$[A-Z]+\d+$/) != -1) {
+        if (str.search(/^\$[A-Z]+\d+:\$[A-Z]+\d+$/) !== -1) {
             return 7;
         }
         return false
-    } else if (rule == 6) {
+    } else if (rule === 6) {
         str = str.replace(/\$/g, '');
-        if (str.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) != -1)
-            return true;
-
-        return false;
+        return str.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) !== -1;
     } else {
-        if (str.search(/^[A-Za-z]+\d+$/) != -1)
+        if (str.search(/^[A-Za-z]+\d+$/) !== -1)
             return true;
-        if (str.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) != -1)
-            return true;
-        return false;
+
+        return str.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) !== -1;
     }
-};
-
-const absoluteType = (str) => {
-    if (str.search(/^\$[A-Z]+\d+$/) != -1)
-        return 1;
-    if (str.search(/^[A-Z]+\$\d+$/) != -1)
-        return 2;
-
-    return -1;
-};
-
-const contain = (c, d) => {
-    if (c.indexOf(d) !== -1) {
-        return true;
-    }
-    return false;
 };
 
 const splitStr = (str) => {
@@ -23032,7 +22901,7 @@ const splitStr = (str) => {
     return arr2;
 };
 
-const cutting2 = (str, s) => {
+const cutting2 = (str) => {
     let arr = str.split(/([(-\/,+，*\s=^&])/);
 
     let color = 0;
@@ -23054,10 +22923,10 @@ const cutting2 = (str, s) => {
             }
         }
 
-        if ((s.search(/^[A-Z]+\d+$/) != -1
-                || s.search(/^\$[A-Z]+\$\d+$/) != -1
-                || s.search(/^[A-Z]+\$\d+$/) != -1 || s.search(/^\$[A-Z]+\d+$/) != -1
-                || s.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) != -1) && enter) {
+        if ((s.search(/^[A-Z]+\d+$/) !== -1
+                || s.search(/^\$[A-Z]+\$\d+$/) !== -1
+                || s.search(/^[A-Z]+\$\d+$/) !== -1 || s.search(/^\$[A-Z]+\d+$/) !== -1
+                || s.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) !== -1) && enter) {
             for (let i2 = 0; i2 < express[i].length; i2++)
                 colors.push({
                     "code": color,
@@ -23066,7 +22935,7 @@ const cutting2 = (str, s) => {
             color = color + 1;
         } else {
             let sc = s.replace(/\$/g, "");
-            if (sc.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) != -1 && enter) {
+            if (sc.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) !== -1 && enter) {
                 for (let i2 = 0; i2 < express[i].length; i2++)
                     colors.push({
                         "code": color,
@@ -23100,7 +22969,7 @@ function deepCopy(obj) {
         }
     }
     return result;
-};
+}
 
 export {
     operator,
@@ -23112,19 +22981,14 @@ export {
     cuttingByPos,
     helpFormula,
     cutFirst,
-    absoluteType,
     operation3,
     cuttingByPosEnd,
     changeFormula,
     value2absolute,
     splitStr,
     isSheetVale,
-    getSheetVale,
     cuttingByPosEnd2,
     cuttingByPos2,
-    contain,
-    division,
-    haveManyFunc,
     positionAngle,
     deepCopy,
 }

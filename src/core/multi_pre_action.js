@@ -52,7 +52,8 @@ export default class MultiPreAction {
         testValid.call(this);
     }
 
-    getStepType(type, {ri, ci, expr, text, range, cellRange, property, value, merges}) {
+    // 删掉了一个merges
+    getStepType(type, {ri, ci, expr, text, range, cellRange, property, value}) {
         let str = "";
         let {rows, cols} = this.data;
 
@@ -176,9 +177,8 @@ export default class MultiPreAction {
 
     eachRange(range) {
         let {rows} = this.data;
-        let cells = rows.eachRange(range);
 
-        return cells;
+        return rows.eachRange(range);
     }
 
     does(actionItems, actionType) {

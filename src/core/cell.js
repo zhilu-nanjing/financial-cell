@@ -147,7 +147,7 @@ const evalSuffixExpr = (srcStack, formulaMap, cellRender, cellList) => {
                 return 0;
             }
             cellList.push(srcStack[i]);
-            let s = evalSubExpr(srcStack[i], cellRender)
+            let s = evalSubExpr(srcStack[i], cellRender);
             stack.push(evalSubExpr(srcStack[i], cellRender));
         }
         // console.log('stack:', stack);
@@ -159,10 +159,10 @@ function evalFormula(text, rule) {
     if (typeof text !== 'string') {
         return false;
     }
-    if (text.toUpperCase().indexOf(rule.toUpperCase()) == -1) {
-        return false;
-    }
-    return true;
+    // if (text.toUpperCase().indexOf(rule.toUpperCase()) === -1) {
+    //     return false;
+    // }
+    return text.toUpperCase().indexOf(rule.toUpperCase()) !== -1;
 }
 
 const cellRender = (data, sheetbook, y, x, src, formulaMap, getCellText, cellList = []) => {
@@ -170,7 +170,7 @@ const cellRender = (data, sheetbook, y, x, src, formulaMap, getCellText, cellLis
         return "";
     }
 
-    if (typeof src === 'string' && look.indexOf(src.split("!")[0]) != -1) {
+    if (typeof src === 'string' && look.indexOf(src.split("!")[0]) !== -1) {
         let len = src.length;
         if(src.split(" ")[0]) {
             len = src.split(" ")[0].length;
@@ -207,7 +207,7 @@ const cellRender = (data, sheetbook, y, x, src, formulaMap, getCellText, cellLis
             // XLSX_CALC.import_functions(formulajs);
             // XLSX_CALC(sheetbook);
 
-            if ((sheetbook.Sheets[data.name][xy2expr(x, y)].f && sheetbook.Sheets[data.name][xy2expr(x, y)].f.search(/\((\+|\-|\*|\/)/) != -1) || sheetbook.Sheets[data.name][xy2expr(x, y)].v == undefined || sheetbook.Sheets[data.name][xy2expr(x, y)].v === "") {
+            if ((sheetbook.Sheets[data.name][xy2expr(x, y)].f && sheetbook.Sheets[data.name][xy2expr(x, y)].f.search(/\((\+|\-|\*|\/)/) !== -1) || sheetbook.Sheets[data.name][xy2expr(x, y)].v === undefined || sheetbook.Sheets[data.name][xy2expr(x, y)].v === "") {
                 return "#ERROR!";
             }
             sheetbook.Sheets[data.name][xy2expr(x, y)].v = sheetbook.Sheets[data.name][xy2expr(x, y)].v + "";

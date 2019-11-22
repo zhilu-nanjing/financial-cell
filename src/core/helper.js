@@ -4,20 +4,18 @@ function cloneDeep(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
 
-export function isEqual(v1, v2) {
-    v1 = v1 + "";
-    v2 = v2 + "";
-    v1 = v1.toUpperCase();
-    v2 = v2.toUpperCase();
-    if (v1 === v2) {
-        return true;
-    }
-    return false;
-}
+// export function isEqual(v1, v2) {
+//     v1 = v1 + "";
+//     v2 = v2 + "";
+//     v1 = v1.toUpperCase();
+//     v2 = v2.toUpperCase();
+//
+//     return v1 === v2;
+// }
 
 const mergeDeep = (object = {}, ...sources) => {
     sources.forEach((source) => {
-        if (source != null && source != undefined) {
+        if (source != null && source !== undefined) {
             Object.keys(source).forEach((key) => {
                 const v = source[key];
                 // console.log('k:', key, ', v:', source[key], typeof v, v instanceof Object);
@@ -38,7 +36,7 @@ const mergeDeep = (object = {}, ...sources) => {
 
 function find(arr, str) {
     for (let i = 0; i < arr.length; i++) {
-        if (str.indexOf(arr[i]) != -1) {
+        if (str.indexOf(arr[i]) !== -1) {
             return true;
         }
     }
@@ -47,13 +45,13 @@ function find(arr, str) {
 
 
 function isOusideViewRange(y, x, dy, dx, orien) {
-    if (orien == 44 && dy - y + 100 > 0) {
+    if (orien === 44 && dy - y + 100 > 0) {
         return true;
-    } else if (orien == 11 && dx - 100 < 0) {
+    } else if (orien === 11 && dx - 100 < 0) {
         return true;
-    } else if (orien == 33 && dx - x + 100 > 0) {
+    } else if (orien === 33 && dx - x + 100 > 0) {
         return true;
-    } else if (orien == 22 && dy - 100 < 0) {
+    } else if (orien === 22 && dy - 100 < 0) {
         return true;
     }
     return false;
@@ -86,11 +84,11 @@ function isHave(param) {
         return false;
     }
 
-    if (param === null) {
-        return false;
-    }
+    // if (param === null) {
+    //     return false;
+    // }
 
-    return true;
+    return param !== null;
 }
 
 /*
@@ -107,11 +105,11 @@ const sum = (objOrAry, cb = value => value) => {
     return [total, size];
 };
 
-function deleteProperty(obj, property) {
-    const oldv = obj[`${property}`];
-    delete obj[`${property}`];
-    return oldv;
-}
+// function deleteProperty(obj, property) {
+//     const oldv = obj[`${property}`];
+//     delete obj[`${property}`];
+//     return oldv;
+// }
 
 function rangeReduceIf(min, max, inits, initv, ifv, getv) {
     let s = inits;
@@ -134,18 +132,19 @@ function rangeSum(min, max, getv) {
 }
 
 function isNumber(inputData) {
-    if (parseFloat(inputData).toString() == "NaN") {
-        return false;
-    } else {
-        return true;
-    }
+    // if (parseFloat(inputData).toString() === "NaN") {
+    //     return false;
+    // } else {
+    //     return parseFloat(inputData).toString() === "NaN";
+    // }
+    return parseFloat(inputData).toString() !== "NaN";
 }
 
-function rangeEach(min, max, cb) {
-    for (let i = min; i < max; i += 1) {
-        cb(i);
-    }
-}
+// function rangeEach(min, max, cb) {
+//     for (let i = min; i < max; i += 1) {
+//         cb(i);
+//     }
+// }
 
 function arrayEquals(a1, a2) {
     if (a1.length === a2.length) {
@@ -162,10 +161,9 @@ export default {
     equals,
     arrayEquals,
     sum,
-    rangeEach,
-    rangeSum,
+     rangeSum,
     rangeReduceIf,
-    deleteProperty,
+
 };
 
 export {

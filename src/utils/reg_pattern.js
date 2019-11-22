@@ -14,7 +14,6 @@ export const datePattern2 = "((^((1[8-9]\\d{2})|([2-9]\\d{3}))([-\\/\\._])(10|12
 export const calendarPattern = "^\\d{4}-\\d{1,2}-\\d{1,2}$";
 
 export function str2Re(str) {
-    let re = new RegExp(str, 'g');
 
-    return re;
+    return new RegExp(str, 'g');
 }

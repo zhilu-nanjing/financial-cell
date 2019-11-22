@@ -21,19 +21,17 @@ export default class Advice {
         );
         this.data = data;
         this.sheet = sheet;
-        this.old_rows = '';
-        this.new_rows = '';
         this.left = 0;
         this.top = 0;
 
-        this.save.on('mousedown.stop', (evt) => {
+        this.save.on('mousedown.stop', () => {
             this.saveCheck.show('visibility', 'initial');
             this.textCheck.hide('visibility', 'hidden');
             this.sheet.setCellRange(this.reference, this.tableProxy, true);
             sheetReset.call(this.sheet);
         });
 
-        this.text.on('mousedown.stop', (evt) => {
+        this.text.on('mousedown.stop', () => {
             this.sheet.setCellRange(this.reference, this.tableProxy, false);
             this.saveCheck.show('visibility', 'hidden');
             this.textCheck.hide('visibility', 'initial');
@@ -44,7 +42,7 @@ export default class Advice {
     show(left, top, type = 1, reference, tableProxy ) {
         this.el.css('left', `${left}px`);
         this.el.css('top', `${top}px`);
-        if (type == 1) {
+        if (type === 1) {
             this.saveCheck.show('visibility', 'initial');
             this.textCheck.hide('visibility', 'hidden');
         }

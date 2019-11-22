@@ -93,12 +93,12 @@ export default class ModalValidation extends Modal {
     this.change = () => {};
   }
 
-  showVf(it) {
-    const hint = it === 'date' ? '2018-11-12' : '10';
-    const { vf } = this;
-    vf.input.hint(hint);
-    vf.show();
-  }
+  // showVf(it) {
+  //   const hint = it === 'date' ? '2018-11-12' : '10';
+  //   const { vf } = this;
+  //   vf.input.hint(hint);
+  //   vf.show();
+  // }
 
   criteriaSelected(it) {
     const {
