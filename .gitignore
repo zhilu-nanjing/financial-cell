@@ -27,7 +27,7 @@ eggs/
 lib64/
 test/test.js
 test/helper_test.js
-
+src/plug-in
 parts/
 
 var/

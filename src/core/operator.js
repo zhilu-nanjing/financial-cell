@@ -349,7 +349,7 @@ const cutting = (str) => {
 
 
 const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formula.js文件里面把
-    "MD.RTD": { // jobs: todo: MD.RTD函数还在维护么？有用么？
+    "MD.RTD": { // jobs: todo: MD.RTD函数还在维护么？有用么？  (好像没用了)
         "title": [
             {
                 "name": "MD.RTD(",
