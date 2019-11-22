@@ -12,7 +12,7 @@ class Spreadsheet {
     constructor(selectors, options = {}, methods = {}, alias = 'sheet1') {
         let targetEl = selectors;
           if (typeof selectors === 'string') {
-            targetEl = document.querySelector(selectors);
+            targetEl = document.querySelector(selectors);//文档对象模型Document引用的querySelector()方法返回文档中与指定选择器或选择器组匹配的第一个 html元素Element。 如果找不到匹配项，则返回null。
         }
         this.locale('zh-cn', zhCN);
         this.data = new DataProxy(alias, options, methods);
@@ -30,7 +30,7 @@ class Spreadsheet {
     }
 
     loadData(data) {
-        this.sheet.loadData(data);
+        this.sheet.loadData(data);//这里是Sheet的实例。调用了Sheet下面的一个方法：loadData
         return this;
     }
 
@@ -113,7 +113,7 @@ const spreadsheet = (el, options = {}) => new Spreadsheet(el, options);
 if (window) {
     window.jsSpreadsheet = require('js-spreadsheet');
     window.drag = Drag;
-    window.x = window.x || {};
+    window.x = window.x || {};//todo:这是一个逻辑值？
     window.bugout = bugout;
     window.x.spreadsheet = spreadsheet;
     window.x.spreadsheet.locale = (lang, message) => locale(lang, message);
@@ -123,3 +123,5 @@ export default Spreadsheet;
 export {
     spreadsheet,
 };
+
+
