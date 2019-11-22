@@ -13,6 +13,11 @@ import {expr2xy, xy2expr} from '../core/alphabet';
 import {selectorColor} from './color_palette';
 import {h} from './element';
 
+/**
+ * 这个文件是sheet.js的衍生文件
+ */
+
+
 function lockCells(evt, _selector, isAb = false, p = -1) {
     const {data, editor} = this;
     const {offsetX, offsetY} = evt;
