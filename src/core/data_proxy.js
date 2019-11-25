@@ -219,6 +219,11 @@ function selectorCellText(ri, ci, text, event_type) {
     };
 }
 
+/**
+ * 弹出错误
+ * @param text
+ * @returns {{msg: *, state: boolean}}
+ */
 function errorPop(text) {
     let enter = false;
     let msg = "";
@@ -681,12 +686,23 @@ function getType(ri, ci, cell) {
     };
 }
 
-
+// 1.export与export default均可用于导出常量、函数、文件、模块等
+// 2.在一个文件或模块中，export、import可以有多个，export default仅有一个，export 和export default可以同时出现
+// 3.通过export方式导出，在导入时要加{ }，export default则不需要，并可以起任意名称(即import的时候导入的变量名字可以不是export时的名字）
+// 4.(1) 输出单个值，使用export default
+//   (2) 输出多个值，使用export
+//   (3) export default与普通的export不要同时使用
 export default class DataProxy {
+    /**
+     * 初始化，完成Merges Rows Cols的实例化
+     * @param name
+     * @param settings
+     * @param methods
+     */
     constructor(name, settings, methods) {
-        this.settings = helper.merge(defaultSettings, settings || {});
+        this.settings = helper.merge(defaultSettings, settings || {});//将默认设置和输入设置合并
         // save data begin
-        this.name = name || 'sheet';
+        this.name = name || 'sheet';//name默认为sheet
         this.methods = methods;
         this.freeze = [0, 0];
         this.styles = []; // Array<Style>
