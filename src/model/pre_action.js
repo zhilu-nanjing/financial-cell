@@ -21,6 +21,7 @@ function getCellDepend(cells) {
     return arr;
 }
 
+
 export default class PreAction {
     constructor({type = -1, action = "",  ri = -1, ci = -1, oldData = "", newData = "", expr = "", oldStep = "", cellRange = "", cells = {}, height = -1, width = -1, oldCell = {}, newCell = {}, newMergesData = "", oldMergesData = "", property = "", value = ""}, data) {
         this.type = type;
