@@ -73,7 +73,7 @@ export default class TableProxy {
         let styles = data.styles;
 
         this.each(tableDom, (i, j, cell) => {
-            let computedStyle = document.defaultView.getComputedStyle(cell, false);
+            let computedStyle = document.defaultView.getComputedStyle(cell, null);
             let args = this.getComputedStyle(computedStyle);
             let index = isHaveStyle(styles, args);
             if (index === -1) {

@@ -50,7 +50,7 @@ function scrollbarMove() {
         }
     }
     // console.log('top:', top, ', height:', height, ', tof.height:', tableOffset.height);
-    if (Math.abs(top) + height > tableOffset.height) {
+    if (Math.abs(top * 1) + height > tableOffset.height) {
         verticalScrollbar.move({top: t + height - tableOffset.height - 1});
     } else {
         const fsh = data.freezeTotalHeight();

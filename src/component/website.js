@@ -1,7 +1,6 @@
 import {h} from "../component/element";
 import {cssPrefix, look} from "../config";
 import CellRange from "../core/cell_range";
-import {bind} from "./event";
 import {  isSpecialWebsite} from "../core/special_formula_process";
 
 export default class Website {
@@ -16,18 +15,18 @@ export default class Website {
         this.tableEl.attr('tabindex', 0);
         this.tableEl.css('overflow-y', 'auto');
         this.tableEl.css('max-height', '400px');
-        bind(this.tableEl.el, 'paste', evt => {
-            evt.stopPropagation();
-        });
-        bind(this.tableEl.el, 'copy', evt => {
-            evt.stopPropagation();
-        });
-        bind(this.tableEl.el, 'keydown', evt => {
-            evt.stopPropagation();
-        });
-        bind(this.tableEl.el, 'keyup', evt => {
-            evt.stopPropagation();
-        });
+        // bind(this.tableEl.el, 'paste', evt => {
+        //     evt.stopPropagation();
+        // });
+        // bind(this.tableEl.el, 'copy', evt => {
+        //     evt.stopPropagation();
+        // });
+        // bind(this.tableEl.el, 'keydown', evt => {
+        //     evt.stopPropagation();
+        // });
+        // bind(this.tableEl.el, 'keyup', evt => {
+        //     evt.stopPropagation();
+        // });
         this.timer = null;
         this.timer2 = null;
     }
