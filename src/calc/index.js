@@ -7,9 +7,11 @@ const find_all_need_calc_cell = require('./find_all_cells_with_formulas.js');
 const Calculator = require('./Calculator.js');
 const CalcCell = require('./CalcCell.js');
 const checker = require('./formula_check.js');
-const helper = require("../core/helper")
+const helper = require("../core/helper");
 const CalcWorkBook = require('./CalcWorkBook')
+const es6 = require('./es6');
 var mymodule = function(rows, tileArr) {
+    console.log(es6);
     if (helper.isHave(tileArr)){
         var Calc_WorkBook = new CalcWorkBook(rows, tileArr)
         var workbook = rows.workbook
