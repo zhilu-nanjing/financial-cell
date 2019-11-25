@@ -1,5 +1,6 @@
 "use strict";
 
+const s = require('./es6');
 const int_2_col_str = require('./int_2_col_str.js');
 const col_str_2_int = require('./col_str_2_int.js');
 const exec_formula = require('./exec_formula.js');
@@ -7,9 +8,14 @@ const find_all_need_calc_cell = require('./find_all_cells_with_formulas.js');
 const Calculator = require('./Calculator.js');
 const CalcCell = require('./CalcCell.js');
 const checker = require('./formula_check.js');
-const helper = require("../core/helper")
+const helper = require("../core/helper");
 const CalcWorkBook = require('./CalcWorkBook')
 var mymodule = function(rows, tileArr) {
+    var a = new s({
+        type: 999,
+        action: "重新计算", ri: -1, ci: -1, oldCell: {},
+    }, rows.data);
+    console.log(a);
     if (helper.isHave(tileArr)){
         var Calc_WorkBook = new CalcWorkBook(rows, tileArr)
         var workbook = rows.workbook

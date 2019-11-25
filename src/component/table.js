@@ -82,7 +82,11 @@ function parseCell() {
     let {data} = this;
 
     let changeDataArgs = getChangeDataToCalc.call(this);
-    data.calc(data.rows, changeDataArgs.data);
+    try {
+        data.calc(data.rows, changeDataArgs.data);
+    } catch(e) {
+        console.error("公式模块报错：" + e);
+    }
 
     if (changeDataArgs.state) {
         data.changeDataForCalc = null;
