@@ -159,7 +159,7 @@ module.exports = function Exp(formula) {
         //XW：end
         exec_minus(args);
         exec('^', args, function(a, b) {
-            return Math.pow(+a, +b);
+            return Math.pow(a, b);
         });
         exec('/', args, function(a, b) {
             if (b == 0) {

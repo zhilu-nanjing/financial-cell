@@ -1,4 +1,12 @@
-var helper = require("../core/helper")
+function isHave(param) {
+  if (typeof param === "undefined") {
+    return false;
+  }
+  if (param === null) {
+    return false;
+  }
+  return true;
+}
 //XW: end
 //XW:大括号参数判断,有大括号参数用''包起来作为一个参数
 exports.trans_params = function (cell) {
@@ -27,7 +35,7 @@ exports.trans_sheet = function (sheet) {
 exports.recover_sheet = function (sheet) {
   Object.keys(sheet).forEach(i => {
     if (sheet[i].v === 'default_0'){
-      if (!helper.isHave(sheet[i].f)) {
+      if (!isHave(sheet[i].f)) {
         sheet[i].f = ""
       }
       sheet[i].v = 0
