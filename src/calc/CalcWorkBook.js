@@ -193,7 +193,7 @@ class CalcWorkBook { // 对workbook处理的类
           }
         } else {
           var source = this.rows.getCell( cell_y + j,  cell_x + i);
-          if ((!isHave(source) || !isHave(source.text) || (isHave(source.text) && (isEqual(source.text, v) || source.text === ""))) && (!this.al_have_muti(wb[c], source, multivalueRefsCell) || wb[c].v==="" && wb[c].f==="")) {
+          if ((!isHave(source) || !isHave(source.text) || (isHave(source.text) && (isEqual(source.text, v) || source.text === ""))) && (!this.al_have_muti(wb[c], source, multivalueRefsCell))) {
             wb[c] = {
               "v": cell_v[i][j],
               "f": cell_v[i][j],

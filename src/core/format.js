@@ -104,13 +104,13 @@ function isInteger(obj) {
 }
 
 
-function add(a, b, digits) {
-    return operation(a, b, digits, 'add');
-}
-
-function subtract(a, b, digits) {
-    return operation(a, b, digits, 'subtract');
-}
+// function add(a, b, digits) {
+//     return operation(a, b, digits, 'add');
+// }
+//
+// function subtract(a, b, digits) {
+//     return operation(a, b, digits, 'subtract');
+// }
 
 export function multiply(a, b, digits) {
     return operation(a, b, digits, 'multiply');
@@ -195,7 +195,6 @@ baseFormats.forEach((f) => {
     formatm[f.key] = f;
 });
 
-export default {};
 export {
     formatm,
     baseFormats,

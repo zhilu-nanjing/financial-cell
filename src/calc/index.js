@@ -6,16 +6,16 @@ const exec_formula = require('./exec_formula.js');
 const finder = require('./finder.js');
 const CalcCell = require('./CalcCell.js');
 const checker = require('./formula_check.js');
-const utils = require("./utils")
+const helper = require("../core/helper");
 const CalcWorkBook = require('./CalcWorkBook')
-// const PreAction = require('../model/pre_action')
-// const range = require('../core/cell_range')
+const es6 = require('./es6');
 var mymodule = function(rows, tileArr) {
-    // let a = new PreAction({
-    //     type: 999,
-    //     action: "重新计算", ri: -1, ci: -1, oldCell: {}, newCell: rows.eachRange(new range.CellRange(0, 0,0, 0))
-    // }, rows.data);
-    if (utils.isHave(tileArr)){
+    // console.log(es6);
+    // var a = new es6.PreAction({
+    //   type: 999,
+    //   action: "重新计算", ri: -1, ci: -1, oldCell: {}, newCell: data.rows.eachRange(new CellRange(0, 0, mri, mci))
+    // }, this.data);
+    if (helper.isHave(tileArr)){
         var Calc_WorkBook = new CalcWorkBook(rows, tileArr)
         var workbook = rows.workbook
         workbook = Calc_WorkBook.get_workbook(workbook)

@@ -29,7 +29,7 @@ function resetTextareaSize() {
     const tlineWidth = textlineEl.offset().width + 9 + 15;
     const maxWidth = this.viewFn().width - areaOffset.left - 9;
     // console.log('tlineWidth:', tlineWidth, ':', maxWidth);
-    if (tlineWidth > areaOffset.width && areaOffset.width != 0) {
+    if (tlineWidth > areaOffset.width && areaOffset.width !== 0) {
         let twidth = tlineWidth;
         if (tlineWidth > maxWidth) {
             twidth = maxWidth - 15;
@@ -44,30 +44,30 @@ function resetTextareaSize() {
     }
 }
 
-function textFormat (e) {
+function textFormat(e) {
     e.preventDefault();
-    var text
-    var clp = (e.originalEvent || e).clipboardData
+    let text = "";
+    let clp = (e.originalEvent || e).clipboardData;
     if (clp === undefined || clp === null) {
-        text = window.clipboardData.getData('text') || ''
+        text = window.clipboardData.getData('text') || '';
         if (text !== '') {
             if (window.getSelection) {
-                var newNode = document.createElement('span')
-                newNode.innerHTML = text
+                let newNode = document.createElement('span');
+                newNode.innerHTML = text;
                 window.getSelection().getRangeAt(0).insertNode(newNode)
             } else {
                 document.selection.createRange().pasteHTML(text)
             }
         }
     } else {
-        text = clp.getData('text/plain') || ''
+        text = clp.getData('text/plain') || '';
         if (text !== '') {
             document.execCommand('insertText', false, text)
         }
     }
 }
 
-const getCursortPosition = function (containerEl) {
+const getCursortPosition = function () {
     let selection = window.getSelection();
     if (selection.rangeCount <= 0) {
         return 0;
@@ -121,7 +121,7 @@ function set_focus(el) {
         stop = false;
 
     while (!stop && (node = nodeStack.pop())) {
-        if (node.nodeType == 3) {
+        if (node.nodeType === 3) {
             const nextCharIndex = charIndex + node.length;
             if (!foundStart && savedSel.start >= charIndex && savedSel.start <= nextCharIndex) {
                 range.setStart(node, savedSel.start - charIndex);
@@ -145,20 +145,20 @@ function set_focus(el) {
     sel.addRange(range);
 }
 
-const setCursorPosition = (elem, index) => {
-    const val = elem.value || elem.textContent;
-    const len = val.length;
+// const setCursorPosition = (elem, index) => {
+//     const val = elem.value || elem.textContent;
+//     const len = val.length;
+//
+//     // 超过文本长度直接返回
+//     if (len < index) return;
+//     set_focus.call(this, elem);
+// };
 
-    // 超过文本长度直接返回
-    if (len < index) return;
-    set_focus.call(this, elem);
-};
-
-function mouseDownEventHandler(evt) {
+function mouseDownEventHandler() {
     let {editorText} = this;
     let inputText = editorText.getText();
 
-    this.pos = getCursortPosition.call(this, evt);
+    this.pos = getCursortPosition.call(this);
     parse2.call(this, inputText, this.pos);
 }
 
@@ -178,7 +178,7 @@ function inputEventHandler(evt, txt = '', formulas = '', state = "input") {
             inputType,
         } = evt;
 
-        if (inputType === 'insertFromPaste' && this.textEl.el.style['caret-color'] != 'black') {
+        if (inputType === 'insertFromPaste' && this.textEl.el.style['caret-color'] !== 'black') {
             this.copy = true;
             return;
         }
@@ -190,7 +190,7 @@ function inputEventHandler(evt, txt = '', formulas = '', state = "input") {
 
 
     let {editorText} = this;
-    let inputText = editorText.getText();
+    // let inputText = editorText.getText();
 
     // if (inputText === '') {
     //     const {data} = this;
@@ -199,7 +199,7 @@ function inputEventHandler(evt, txt = '', formulas = '', state = "input") {
     // }
 
     setTimeout(() => {
-        if (this.chinese == false) return;
+        if (this.chinese === false) return;
         let v = '';
         if (this.data.settings.showEditor) {
             this.sheet.selector.hide();
@@ -207,7 +207,7 @@ function inputEventHandler(evt, txt = '', formulas = '', state = "input") {
             return;
         }
 
-        if (txt == '' && evt && evt.target && evt.target.childNodes) {
+        if (txt === '' && evt && evt.target && evt.target.childNodes) {
             let t1 = '';
             for (let i = 0, len = evt.target.childNodes.length; i < len; i++) {
                 if (evt.target.childNodes[i].nodeType === 1) {
@@ -217,9 +217,9 @@ function inputEventHandler(evt, txt = '', formulas = '', state = "input") {
                 }
             }
             v = t1 !== '' ? t1 : v;
-        } else if(txt == '' && evt && isHave(evt.data)) {
+        } else if (txt === '' && evt && isHave(evt.data)) {
             v = evt.data !== '' ? evt.data : v;
-        } else{
+        } else {
             v = txt;
         }
 
@@ -232,13 +232,13 @@ function inputEventHandler(evt, txt = '', formulas = '', state = "input") {
         }
         this.changed = true;
         const {
-            suggest, textlineEl, validator, textEl, save,
+            suggest, textlineEl, validator, textEl,
         } = this;
         editorText.setText(`${v}`);
         // inputText = `${v}`;
         editorText.changeText(1);
         // inputText = inputText.replace(/，/g, ',');
-        this.pos = getCursortPosition.call(this, evt);
+        this.pos = getCursortPosition.call(this);
 
         if (validator) {
             if (validator.type === 'list') {
@@ -249,22 +249,21 @@ function inputEventHandler(evt, txt = '', formulas = '', state = "input") {
         } else {
             v = v + "";
             const start = v.lastIndexOf('=');
-            if (this.pos != -1) {
+            if (this.pos !== -1) {
                 parse2.call(this, v, this.pos);
             } else parse.call(this, v);
             let show = false;
             let cutValue = cuttingByPos2(v, this.pos, true);
             if (v.length >= this.pos) {
                 const isNumber = `${v[this.pos]}`;
-                if (isNumber.search(/^[0-9]+.?[0-9]*$/) != -1) {
+                if (isNumber.search(/^[0-9]+.?[0-9]*$/) !== -1) {
                     show = true;
                 } else if (isNumber) {
-                    const c = cuttingByPosEnd(v, this.pos + 1);
-                    cutValue += c;
+                    cutValue += cuttingByPosEnd(v, this.pos + 1);
                 }
             }
 
-            if (start === 0 && v.length > 1 && cutValue != '' && !show && cutValue.trim().length > 0) {
+            if (start === 0 && v.length > 1 && cutValue !== '' && !show && cutValue.trim().length > 0) {
                 suggest.search(cutValue);
             } else {
                 suggest.hide();
@@ -284,7 +283,7 @@ function inputEventHandler(evt, txt = '', formulas = '', state = "input") {
             v = formulas;
         }
         this.change(state, v);
-        testValid.call(this, this.valid2);
+        // testValid.call(this);
         setTimeout(() => {
             this.show();
         });
@@ -293,7 +292,7 @@ function inputEventHandler(evt, txt = '', formulas = '', state = "input") {
 }
 
 function keyDownEventHandler(evt) {
-    this.pos = getCursortPosition.call(this, evt);
+    this.pos = getCursortPosition.call(this);
     if (evt.code === 'ArrowRight') {
         this.pos = this.pos + 1;
     } else if (evt.code === 'ArrowLeft') {
@@ -302,9 +301,9 @@ function keyDownEventHandler(evt) {
 
     const keyCode = evt.keyCode || evt.which;
     // this.textEl.el.style['caret-color'] != 'black' 加这个主要防止用户在没有输入的情况下按下esc
-    if (keyCode == 27 && this.textEl.el.style['caret-color'] == 'black' && this.textEl.el.style.opacity == '1') {
+    if (keyCode === 27 && this.textEl.el.style['caret-color'] === 'black' && this.textEl.el.style.opacity === '1') {
         this.change('input', '@~esc');
-    } else if (keyCode == 37 || keyCode == 38 || keyCode == 39 || keyCode == 40) {
+    } else if (keyCode === 37 || keyCode === 38 || keyCode === 39 || keyCode === 40) {
     }
 }
 
@@ -321,7 +320,7 @@ function parse(v) {
 
     if (start !== 0) {
         this.setLock(false);
-    } else if (start === 0 && v.length == 1) {
+    } else if (start === 0 && v.length === 1) {
         this.setLock(true);
     }
 
@@ -346,7 +345,7 @@ function parse2(v, pos) {
 
     if (start !== 0) {
         this.setLock(false);
-    } else if (start === 0 && v.length == 1) {
+    } else if (start === 0 && v.length === 1) {
         this.setLock(true);
     }
 
@@ -359,7 +358,7 @@ function parse2(v, pos) {
     }
 }
 
-function setTextareaRange(position) {
+function setTextareaRange() {
     const {el} = this.textEl;
     setTimeout(() => {
         // el.focus();
@@ -368,24 +367,22 @@ function setTextareaRange(position) {
     }, 0);
 }
 
-function setText(text, position) {
+function setText(text) {
     const {textEl, textlineEl, tmp} = this;
     // firefox bug
     textEl.el.blur();
     tmp.html(text);
     textlineEl.html(text);
-    setTextareaRange.call(this, position);
+    setTextareaRange.call(this);
 }
 
 
 function suggestItemClick(it) {
     const {validator, editorText} = this;
     let inputText = editorText.getText();
-    let position = 0;
     if (validator && validator.type === 'list') {
         // this.inputText = it;
         inputText = editorText.setText(it);
-        position = inputText.length;
     } else {
         this.pos = getCursortPosition.call(this);
         const begin = this.pos - cuttingByPos(inputText, this.pos).length;
@@ -433,9 +430,10 @@ function dateFormat(d) {
 }
 
 function isDisplay() {
-    if (this.textEl.el.style['caret-color'] == 'black'
-        && this.textEl.el.style.opacity == '1') return true;
-    return false;
+    // if (this.textEl.el.style['caret-color'] === 'black'
+    //     && this.textEl.el.style.opacity === '1') return true;
+    return this.textEl.el.style['caret-color'] === 'black'
+        && this.textEl.el.style.opacity === '1';
 }
 
 export default class Editor {
@@ -471,10 +469,10 @@ export default class Editor {
             .children(
                 this.textEl = h('div', `${cssPrefix}-editor-textEl`)
                     .on('input', evt => inputEventHandler.call(this, evt))
-                    .on('click', evt => mouseDownEventHandler.call(this, evt))
+                    .on('click', () => mouseDownEventHandler.call(this,))
                     .on('keyup', evt => keyDownEventHandler.call(this, evt))
                     .on('mousedown', (evt) => {
-                        if (evt.detail == 2) {
+                        if (evt.detail === 2) {
                             if (isDisplay.call(this)) {
                                 return;
                             }
@@ -486,20 +484,20 @@ export default class Editor {
                             });
                         }
                     })
-                    .on('compositionstart', (evt) => {
+                    .on('compositionstart', () => {
                         this.chinese = false;
                     })
-                    .on('compositionend', (evt) => {
+                    .on('compositionend', ( ) => {
                         this.chinese = true;
                     })
                     .on('paste', (evt) => {
-                        if (this.textEl.el.style['caret-color'] == 'black') {
+                        if (this.textEl.el.style['caret-color'] === 'black') {
                             // createEvent.call(this, 67, true, "paste");
                             evt.stopPropagation();
                         }
                     })
                     .on('copy', (evt) => {
-                        if (this.textEl.el.style['caret-color'] == 'black') {
+                        if (this.textEl.el.style['caret-color'] === 'black') {
                             // createEvent.call(this, 86, true, "sheetCopy");
                             evt.stopPropagation();
                         }
@@ -521,7 +519,7 @@ export default class Editor {
                             });
                             return;
                         }
-                        if (this.textEl.el.style['caret-color'] == 'black') return;
+                        if (this.textEl.el.style['caret-color'] === 'black') return;
                         const {
                             ctrlKey, metaKey,
                         } = evt;
@@ -602,9 +600,9 @@ export default class Editor {
     setRiCi(ri, ci) {
         this.ri = ri;
         this.ci = ci;
-        if (this.ri === -1 || this.ci === -1) {
-            return;
-        }
+        // if (this.ri === -1 || this.ci === -1) {
+        //     return false;
+        // }
         // const cell = this.data.rows.getCell(ri, ci);
         //
         // this.editorText.setOldCell(deepCopy(cell));
@@ -643,7 +641,7 @@ export default class Editor {
     parse(pos = -1) {
         let {editorText} = this;
         let inputText = editorText.getText();
-        if (pos != -1) {
+        if (pos !== -1) {
             this.pos = getCursortPosition.call(this);
             parse2.call(this, inputText, this.pos);
         } else {
@@ -670,7 +668,7 @@ export default class Editor {
         this.changed = false;
         this.cell = null;
         this.areaOffset = null;
-        inputText = editorText.setText('');
+        editorText.setText('');
         // this.inputText = '';
         this.show(false);
         this.copy = false;
@@ -709,7 +707,7 @@ export default class Editor {
         Object.keys(spanArr).forEach((i) => {
             spanArr[i].css('background-color', 'rgba(255,255,255,0.1)');
         });
-        if (pos !== '-1' && begin != -1 && spanArr[pos]) {
+        if (pos !== '-1' && begin !== -1 && spanArr[pos]) {
             spanArr[pos].css('background-color', '#e5e5e5');
             spanArr[begin].css('background-color', '#e5e5e5');
         }
@@ -784,18 +782,23 @@ export default class Editor {
 
     setCellEnd(cell) {
         let text = '';
-        if(isHave(cell) && isHave(cell.text)) {
+        let formulas = (cell && cell.formulas) || '';
+        if (isHave(cell) && isHave(cell.text)) {
             text = cell.text;
         }
 
-        if(isHave(cell) && isHave(cell.formulas)) {
+        if (isHave(cell) && isHave(cell.formulas)) {
             text = cell.formulas;
         }
 
         let {data} = this;
-        const style = data.getCellStyleOrDefault( this.ri, this.ci);
+        let {rows} = data;
+        const style = data.getCellStyleOrDefault(this.ri, this.ci);
         let args = data.renderFormat(style, cell, this.ri, this.ci, true);
-        text = args.state ? args.cellText : text;
+        if(args.state) {
+            text = args.cellText;
+            formulas = args.cellText;
+        }
 
         this.textEl.child(text + "");
         this.pos = text.length;
@@ -807,10 +810,10 @@ export default class Editor {
         }, {ri: this.ri, ci: this.ci});
 
         testValid.call(this);
-        inputEventHandler.call(this, null,  text, (cell && cell.formulas) || '', "end");
+        inputEventHandler.call(this, null, text, formulas, "end");
 
         setTimeout(() => {
-            this.pos = data.rows.toString(text).length;
+            this.pos = rows.toString(text).length;
             set_focus.call(this, this.textEl.el, -1);
         }, 20)
     }
@@ -820,7 +823,7 @@ export default class Editor {
         this.show();
 
         let text = (cell && cell.formulas) || '';
-        text = text == '' ? (cell && cell.text) || '' : text;
+        text = text === '' ? (cell && cell.text) || '' : text;
 
         this.editorText.setOldCell({
             text: (cell && cell.text) || '',
@@ -849,11 +852,11 @@ export default class Editor {
             }
         }
 
-        if (type == 2 && text != '' && text[0] == '=') {
+        if (type === 2 && text !== '' && text[0] === '=') {
             inputEventHandler.call(this, null, text);
             this.pos = text.length;
             set_focus.call(this, this.textEl.el, text.length);
-        } else if (type == 2 && text[0] != '=') {
+        } else if (type === 2 && text[0] !== '=') {
             this.textEl.child(text);
         }
         setTimeout(() => {
@@ -862,31 +865,24 @@ export default class Editor {
         });
     }
 
-    inputEventHandler(text = '', pos = 1, hide = false) {
-        if (hide) {
-            this.areaEl.hide();
-            this.sheet.selector.hide();
-            this.isCors = true;
-        }
-        this.setCursorPos(pos);
-        inputEventHandler.call(this, null, text);
-    }
+    // inputEventHandler(text = '', pos = 1, hide = false) {
+    //     if (hide) {
+    //         this.areaEl.hide();
+    //         this.sheet.selector.hide();
+    //         this.isCors = true;
+    //     }
+    //     this.setCursorPos(pos);
+    //     inputEventHandler.call(this, null, text);
+    // }
 
-    isDisplay() {
-        let {editorText} = this;
-        let inputText = editorText.getText();
-
-        if (isDisplay.call(this) && editorText.isFormula())
-            return true;
-        else
-            return false
-    }
+    // isDisplay() {
+    //     let {editorText} = this;
+    //
+    //     return isDisplay.call(this) && editorText.isFormula();
+    // }
 
     isDisplay2() {
-        if (isDisplay.call(this))
-            return true;
-        else
-            return false
+        return isDisplay.call(this)
     }
 
     setCursorPos(pos) {
@@ -898,7 +894,7 @@ export default class Editor {
         let {editorText} = this;
         editorText.setText(text);
         // this.inputText = text;
-        setText.call(this, text, text.length);
+        setText.call(this, text);
         resetTextareaSize.call(this);
         this.textEl.child(this.tmp);
     }

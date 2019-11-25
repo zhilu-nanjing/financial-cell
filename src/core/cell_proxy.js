@@ -65,8 +65,8 @@ export default class CellProxy {
         value = value.replace(/,/g, "");        // =123 不要把=扔掉
         let ns = value * 1;
 
-        if ((ns || ns == 0) && typeof ns === 'number' && !isNaN(ns) && /^\d+$/.test(value) === true) {
-            if(isNumber == true) {
+        if ((ns || ns === 0) && typeof ns === 'number' && !isNaN(ns) && /^\d+$/.test(value) === true) {
+            if(isNumber === true) {
                 isNumber = true;
                 nA = false;
                 isDate = false;
@@ -76,13 +76,13 @@ export default class CellProxy {
                 isDate = false;
             }
             ncell.type = 'number';
-        } else if (value && nA == true && isFormula(value)) {
+        } else if (value && nA === true && isFormula(value)) {
             nA = true;
             isNumber = false;
             isDate = false;
             ncell.type = 'na';
-        } else if (value && value.search(str2Re(datePattern2), '') != -1) {
-            if( isDate == true) { // jobs: todo: 正则表达式应该集中管理。而且这个正则表达式太复杂了，应该能简化。
+        } else if (value && value.search(str2Re(datePattern2), '') !== -1) {
+            if( isDate === true) { // jobs: todo: 正则表达式应该集中管理。而且这个正则表达式太复杂了，应该能简化。
                 nA = false;
                 isNumber = false;
                 isDate = true;

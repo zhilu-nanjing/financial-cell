@@ -192,7 +192,7 @@ function setStyleBorder(ri, ci, bss) {
 }
 
 function selectorCellText(ri, ci, text, event_type) {
-    if (ri == -1 || ci == -1) {
+    if (ri === -1 || ci === -1) {
         return {
             "state": true,
             "msg": "单元格坐标有误"
@@ -230,8 +230,8 @@ function errorPop(text) {
         enter = true;
     }
 
-    if (enter == true) {
-        if (isLegal(text) == false) {
+    if (enter === true) {
+        if (isLegal(text) === false) {
             msg = '缺少左括号或右括号';
             enter = true;
         }
@@ -251,7 +251,7 @@ function errorPop(text) {
 }
 
 function processPasteDirectionsArr(pasteDirectionsArr, type = 'to', sheet) {
-    if (type == 'to') {
+    if (type === 'to') {
         let arr = [];
         for (let i = 0; i < pasteDirectionsArr.length; i++) {
             let item = pasteDirectionsArr[i];
@@ -276,7 +276,7 @@ function processPasteDirectionsArr(pasteDirectionsArr, type = 'to', sheet) {
         }
 
         return arr;
-    } else if (type == 'from') {
+    } else if (type === 'from') {
         if (typeof sheet === 'string') {
             return;
         }
@@ -419,51 +419,51 @@ function setStyleBorders({mode, style, color}) {
     }
 }
 
-function getCellRowByAbsX(scrollOffsetx) {
-    let x = scrollOffsetx;
-    const {cols} = this;
-    const fsw = this.freezeTotalWidth();
-    let inits = cols.indexWidth;
-    if (fsw + cols.indexWidth <= x) inits -= scrollOffsetx;
-    const [ci, left, width] = helper.rangeReduceIf(
-        0,
-        cols.len,
-        inits,
-        cols.indexWidth,
-        x,
-        i => cols.getWidth(i),
-    );
-    if (left <= 0) {
-        return {ci: 0, left: 0, width: cols.indexWidth};
-    }
-    return {ci: ci - 1, left, width};
-}
+// function getCellRowByAbsX(scrollOffsetx) {
+//     let x = scrollOffsetx;
+//     const {cols} = this;
+//     const fsw = this.freezeTotalWidth();
+//     let inits = cols.indexWidth;
+//     if (fsw + cols.indexWidth <= x) inits -= scrollOffsetx;
+//     const [ci, left, width] = helper.rangeReduceIf(
+//         0,
+//         cols.len,
+//         inits,
+//         cols.indexWidth,
+//         x,
+//         i => cols.getWidth(i),
+//     );
+//     if (left <= 0) {
+//         return {ci: 0, left: 0, width: cols.indexWidth};
+//     }
+//     return {ci: ci - 1, left, width};
+// }
 
-function getCellRowByAbsY(scrollOffsety) {
-    let y = scrollOffsety;
-    let {rows} = this;
-    let ri = 0;
-    let top = rows.height;
-    const frset = this.exceptRowSet;
-    let {height} = rows;
-
-    for (; ri < rows.len; ri += 1) {
-        if (top > y) break;
-        if (!frset.has(ri)) {
-            height = rows.getHeight(ri);
-            top += height;
-        }
-    }
-
-    if (ri <= 0) {
-        ri = 0;
-    }
-    if (height <= 0) {
-        height = 0;
-    }
-
-    return {ri: ri, top, height};
-}
+// function getCellRowByAbsY(scrollOffsety) {
+//     let y = scrollOffsety;
+//     let {rows} = this;
+//     let ri = 0;
+//     let top = rows.height;
+//     const frset = this.exceptRowSet;
+//     let {height} = rows;
+//
+//     for (; ri < rows.len; ri += 1) {
+//         if (top > y) break;
+//         if (!frset.has(ri)) {
+//             height = rows.getHeight(ri);
+//             top += height;
+//         }
+//     }
+//
+//     if (ri <= 0) {
+//         ri = 0;
+//     }
+//     if (height <= 0) {
+//         height = 0;
+//     }
+//
+//     return {ri: ri, top, height};
+// }
 
 function getCellRowByY(y, scrollOffsety) {
     const {rows} = this;
@@ -522,12 +522,12 @@ function makeFormatCell({text, formula}, {symbol, position}, cb) {
     let cText = cb(formatNumberRender(text, -1));
     formula = isFormula(formula) ? formula : cText;
     if (!isNaN(cText)) {
-        let _cell = {
+
+        return {
             "text": position === 'begin' ? symbol + cText : cText + symbol,
             "value": text,
             "formulas": formula,
         };
-        return _cell;
     } else {
         return null;
     }
@@ -578,13 +578,12 @@ function getType(ri, ci, cell) {
             }
         }
     } else if (format === 'date' || format === 'datetime') {
-        let text = cell.text, formula = cell.formulas, minute = false;
-        let _cell = {};
+        let text = cell.text;
 
         if (!isValid) {
             let args = formatDate(text);
-            let {state, date, date_formula} = args;
-            minute = args.minute;
+            let {state, date} = args;
+            // minute = args.minute;
             isValid = state;
             diff = cell.text;
             text = date;
@@ -594,10 +593,7 @@ function getType(ri, ci, cell) {
             if (format === 'datetime') {
                 text = changeFormat(formatDate(dateDiff(text).diff).date);
             }
-            _cell = {
-                "formulas": formula,
-                "text": text,
-            };
+
         }
 
         return {
@@ -778,11 +774,11 @@ export default class DataProxy {
     }
 
 
-    getSelectedValidator() {
-        const {ri, ci} = this.selector;
-        const v = this.validations.get(ri, ci);
-        return v ? v.validator : null;
-    }
+    // getSelectedValidator() {
+    //     const {ri, ci} = this.selector;
+    //     const v = this.validations.get(ri, ci);
+    //     return v ? v.validator : null;
+    // }
 
     getSelectedValidation() {
         const {ri, ci, range} = this.selector;
@@ -804,7 +800,7 @@ export default class DataProxy {
         return this.multiPreAction.getItems(2).length > 0;
     }
 
-    undo(sheet) {
+    undo() {
         this.multiPreAction.undo();
         this.changeDataForCalc = this.getChangeDataToCalc();
         // this.history.undo(this.getData(), (d) => {
@@ -861,7 +857,7 @@ export default class DataProxy {
 
     paintFormatChange(cb) {
         this.changeData(() => {
-            let {clipboard, rows, selector} = this;
+            let {clipboard,   selector} = this;
             let {range} = clipboard;
             let sri = selector.ri;
             let sci = selector.ci;
@@ -987,9 +983,6 @@ export default class DataProxy {
         return cellRange;
     }
 
-    initPercent() {
-
-    }
 
     setSelectedCellAttr(property, value) {
         this.changeData(() => {
@@ -1090,8 +1083,8 @@ export default class DataProxy {
         let expr = xy2expr(ci, ri);
         let step = multiPreAction.getStepType(type, {ri, ci, expr, text: newCell.text});
 
-        let oc = new CellProp(ri, ci, oldCell, expr)
-        let nc = new CellProp(ri, ci, newCell, expr)
+        let oc = new CellProp(ri, ci, oldCell, expr);
+        let nc = new CellProp(ri, ci, newCell, expr);
         multiPreAction.addStep(step, {oldCell: [oc], newCell: [nc]});
         this.changeDataForCalc = this.getChangeDataToCalc();
         return {
@@ -1140,21 +1133,6 @@ export default class DataProxy {
         // console.log('x:', x, ',y:', y, 'left:', left, 'top:', top);
         return x1 > left && x1 < (left + width)
             && y1 > top && y1 < (top + height);
-    }
-
-    isMergeCell(ri, ci) {
-        let state = false;
-        let data = "";
-        this.merges.each((range) => {
-            if (range.includeByRiCi(ri, ci)) {
-                state = true;
-                data = range;
-            }
-        });
-        return {
-            "state": state,
-            "data": data,
-        };
     }
 
     getSelectedRect() {
@@ -1246,7 +1224,7 @@ export default class DataProxy {
 
     getCellRectByXYWithNotTotalResult(x, y) {
         const {
-            scroll, merges, rows, cols,
+            scroll, merges,
         } = this;
 
         let {ri, top, height} = getCellRowByY.call(this, y, scroll.y);
@@ -1304,12 +1282,6 @@ export default class DataProxy {
         return false;
     }
 
-    dateInput(cell, ri, ci, type) {
-        // let cstyle = this.getCellStyle(ri, ci) || {};
-        // cstyle.format = type;
-        // cell.style = this.addStyle(cstyle);
-        // this.rows.setCell(ri, ci, cell, type);
-    }
 
     merge() {
         const {selector, rows} = this;
@@ -1424,21 +1396,12 @@ export default class DataProxy {
 
     // type: row | column
     insert(type, n = 1, begin = -1) {
-        let {
-            mri,
-            mci
-        } = this.getMax();
         const {sri, sci} = this.selector.range;
         const {rows, merges, cols} = this;
-        let dri = 0, dci = 0;
         if (type === 'row') {
-            begin = begin != -1 ? begin : sri;
-            dri = begin;
-            dci = 0;
+            begin = begin !== -1 ? begin : sri;
         } else if ('column') {
-            begin = begin != -1 ? begin : sci;
-            dci = begin;
-            dri = 0;
+            begin = begin !== -1 ? begin : sci;
         }
 
         this.changeData(() => {
@@ -1568,9 +1531,9 @@ export default class DataProxy {
     }
 
 
-    isEmpty(cell) {
-        return this.rows.isEmpty(cell);
-    }
+    // isEmpty(cell) {
+    //     return this.rows.isEmpty(cell);
+    // }
 
     renderFormat(style, cell, nrindex, cindex, filter) {
         let cellProxy = new CellProxy(cell);
@@ -1585,13 +1548,13 @@ export default class DataProxy {
         return this.rows.toString(text);
     }
 
-    isBackEndFunc(text) {
-        return this.rows.isBackEndFunc(text);
-    }
+    // isBackEndFunc(text) {
+    //     return this.rows.isBackEndFunc(text);
+    // }
 
-    isReferOtherSheet(cell) {
-        return this.rows.isReferOtherSheet(cell);
-    }
+    // isReferOtherSheet(cell) {
+    //     return this.rows.isReferOtherSheet(cell);
+    // }
 
     getCellTextOrDefault(ri, ci) {
         const cell = this.getCell(ri, ci);
@@ -1606,14 +1569,14 @@ export default class DataProxy {
         return null;
     }
 
-    getCellStyleHandle(index, type, cell, ri, ci) {
-        let style = this.styles[index];
-
-        if (style && style.format === type) {
-            return true;
-        }
-        return false;
-    }
+    // getCellStyleHandle(index, type, cell, ri, ci) {
+    //     let style = this.styles[index];
+    //
+    //     if (style && style.format === type) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     getCellStyleOrDefault(ri, ci) {
         const {styles, rows} = this;
@@ -1628,14 +1591,14 @@ export default class DataProxy {
     }
 
     getCellByExpr(src, table, name, inputText, pos) {
-        let p1 = inputText.substring(0, pos);
-        let p2 = inputText.substring(pos, inputText.length);
-        inputText = p1 + src + p2;
-        let workbook = parseCell2.call(table, this.viewRange(), true, inputText);
-        return {
-            "text": workbook['Sheets'][name].A1.w ? workbook['Sheets'][name].A1.w : workbook['Sheets'][name].A1.v,
-            "formulas": p1 + `${name}!` + src + p2
-        };
+        // let p1 = inputText.substring(0, pos);
+        // let p2 = inputText.substring(pos, inputText.length);
+        // inputText = p1 + src + p2;
+        // let workbook = parseCell2.call(table, this.viewRange(), true, inputText);
+        // return {
+        //     "text": workbook['Sheets'][name].A1.w ? workbook['Sheets'][name].A1.w : workbook['Sheets'][name].A1.v,
+        //     "formulas": p1 + `${name}!` + src + p2
+        // };
     }
 
     // state: input | finished
@@ -1664,10 +1627,10 @@ export default class DataProxy {
         validations.validate(ri, ci, text);
     }
 
-    setCellWithFormulas(ri, ci, text, formulas, what = 'all') {
-        const {rows} = this;
-        rows.setCellAll(ri, ci, text, formulas, what);
-    }
+    // setCellWithFormulas(ri, ci, text, formulas, what = 'all') {
+    //     const {rows} = this;
+    //     rows.setCellAll(ri, ci, text, formulas, what);
+    // }
 
 
     // state: input | finished
