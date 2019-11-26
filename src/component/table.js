@@ -430,7 +430,9 @@ function renderFreezeHighlightLine(fw, fh, ftw, fth) {
     draw.restore();
 }
 
-/** end */
+/**
+ * 整个画布
+ */
 class Table {
     constructor(el, data, editor) {
         this.el = el;

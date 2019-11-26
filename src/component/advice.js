@@ -2,6 +2,9 @@ import {h} from './element';
 import {cssPrefix} from '../config';
 import {sheetReset} from './sheet';
 
+/**
+ * 复制单元格，然后粘贴到其他位置的时候，右下角会出现提示，提示是否保留文本等。这个提示就是advice
+ */
 export default class Advice {
     constructor(data, sheet) {
         this.el = h('div', `${cssPrefix}-advice`)

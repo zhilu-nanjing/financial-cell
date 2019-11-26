@@ -3,6 +3,9 @@ import {cssPrefix} from "../config";
 import {h} from "./element";
 import {selectorHeightBorderWidth} from "./selector";
 
+/**
+ * 对应当鼠标移动选中多个单元格时最左上角那个单个单元格
+ */
 export default class SelectorCell {
     constructor(data) {
         this.el = h('div', `${cssPrefix}-selector-cell`);

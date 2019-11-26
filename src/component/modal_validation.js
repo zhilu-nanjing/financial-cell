@@ -9,6 +9,9 @@ import { cssPrefix } from '../config';
 
 const fieldLabelWidth = 100;
 
+/**
+ * 鼠标右键后出现的列表最下面的数据验证
+ */
 export default class ModalValidation extends Modal {
   constructor() {
     const mf = new FormField(

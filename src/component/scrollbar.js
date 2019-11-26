@@ -2,6 +2,9 @@ import {h} from './element';
 import {cssPrefix} from '../config';
 // import {moveArr} from "../event/paste";
 
+/**
+ * 滚动条
+ */
 export default class Scrollbar {
     constructor(vertical) {
         this.vertical = vertical;

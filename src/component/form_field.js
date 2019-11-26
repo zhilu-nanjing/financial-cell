@@ -8,6 +8,9 @@ const patterns = {
 };
 
 // rule: { required: false, type, pattern: // }
+/**
+ *对应表单区域
+ */
 export default class FormField {
   constructor(input, rule, label, labelWidth) {
     this.label = '';

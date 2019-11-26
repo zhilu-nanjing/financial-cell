@@ -7,6 +7,9 @@ function buildItemWithIcon(iconName) {
   return h('div', `${cssPrefix}-item`).child(new Icon(iconName));
 }
 
+/**
+ * 对应工具栏的对齐
+ */
 export default class DropdownAlign extends Dropdown {
   constructor(aligns, align) {
     const icon = new Icon(`align-${align}`);

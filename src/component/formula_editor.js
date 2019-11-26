@@ -14,7 +14,7 @@ import {selectorColor} from './color_palette';
 import {h} from './element';
 
 /**
- * 这个文件是sheet.js的衍生文件
+ * 这个文件是sheet.js的衍生文件，里面的内容本来应该包含在sheet.js文件中。但是因为sheet.js文件太大，所以单独抽出了一个文件
  */
 
 

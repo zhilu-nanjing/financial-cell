@@ -436,6 +436,9 @@ function isDisplay() {
         && this.textEl.el.style.opacity === '1';
 }
 
+/**
+ * 对应输入框，即所有单元格部分的区域
+ */
 export default class Editor {
     constructor(formulas, viewFn, rowHeight, rowWidth, data, sheet) {
         this.viewFn = viewFn;

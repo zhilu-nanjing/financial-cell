@@ -1,6 +1,9 @@
 import {h} from "./element";
 import {cssPrefix} from "../config";
 
+/**
+ * 撤销的历史记录
+ */
 export default class HistoryBorder {
     constructor() {
         this.el = h('div', `${cssPrefix}-history-border`);

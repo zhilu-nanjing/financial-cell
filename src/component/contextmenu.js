@@ -39,6 +39,9 @@ function buildMenu() {
   return menuItems.map(it => buildMenuItem.call(this, it));
 }
 
+/**
+ * 对应鼠标右键出现的菜单
+ */
 export default class ContextMenu {
   constructor(viewFn, isHide = false) {
     this.menus = buildMenu.call(this);

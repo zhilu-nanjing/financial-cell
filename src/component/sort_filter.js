@@ -32,6 +32,9 @@ function resetFilterHeader() {
     filterhEl.checked(filterValues.length === values.length);
 }
 
+/**
+ * 自动筛选
+ */
 export default class SortFilter {
     constructor() {
         this.filterbEl = h('div', `${cssPrefix}-body`);

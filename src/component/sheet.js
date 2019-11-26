@@ -1560,6 +1560,9 @@ export {
     selectorSet,
 }
 
+/**
+ * 整个页面的所有dom集合
+ */
 export default class Sheet {
     constructor(targetEl, data) {
         const {view, showToolbar, showContextmenu, showEditor, rowWidth} = data.settings;

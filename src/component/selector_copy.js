@@ -316,6 +316,9 @@ function setAllClipboardOffset(offset) {
     setLClipboardOffset.call(this, offset);
 }
 
+/**
+ * 对应复制
+ */
 export default class SelectorCopy {
     constructor(data, sheet, className) {
         this.data = data;

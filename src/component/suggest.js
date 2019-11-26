@@ -83,6 +83,9 @@ function inputKeydownHandler(evt) {
     }
 }
 
+/**
+ * 函数提示-查看一共都有哪些函数
+ */
 export default class Suggest {
     constructor(items, itemClick, data, editor, width = '200px') {
         this.filterItems = [];

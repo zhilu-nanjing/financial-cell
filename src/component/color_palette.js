@@ -34,6 +34,9 @@ function buildTd(bgcolor) {
     return h('td', '').child(item);
 }
 
+/**
+ * 颜色设置，包括字体颜色、填充颜色、边框颜色
+ */
 export default class ColorPalette {
     constructor() {
         this.el = h('div', `${cssPrefix}-color-palette`);

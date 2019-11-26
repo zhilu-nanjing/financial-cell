@@ -11,6 +11,9 @@ function find(str, cha) {
     return str.lastIndexOf(cha);
 }
 
+/**
+ * 对应剪切
+ */
 export default class SelectorMove {
     constructor(boxinner, data, sheet, selector) {
         this.l = h('div', `${cssPrefix}-selector-box-l-move-l`);

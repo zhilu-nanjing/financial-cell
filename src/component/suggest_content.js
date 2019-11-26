@@ -21,6 +21,9 @@ function variableElement(content, txt, pos, className, s = "", s2 = "") {
     return item;
 }
 
+/**
+ * 函数提示-选中某个函数后，提示这个函数有哪些参数
+ */
 export default class SuggestContent {
     constructor(width = "300px") {
         this.el = h('div', `${cssPrefix}-suggest-content`).css('width', width).css('z-index', "10000").css('position', "absolute").hide();

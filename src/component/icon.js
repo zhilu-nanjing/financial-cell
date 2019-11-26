@@ -1,6 +1,9 @@
 import { Element, h } from './element';
 import { cssPrefix } from '../config';
 
+/**
+ * 所有图标
+ */
 export default class Icon extends Element {
   constructor(name) {
     super('div', `${cssPrefix}-icon`);

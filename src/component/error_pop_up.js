@@ -4,6 +4,9 @@ import Button from "./button";
 import {t} from "../locale/locale";
 import {cssPrefix} from "../config";
 
+/**
+ * 弹出错误
+ */
 export default class ErrorPopUp extends Modal {
     constructor() {
         let tip = h('span', '').html("您输入的公式好像至少缺少一个左括号");

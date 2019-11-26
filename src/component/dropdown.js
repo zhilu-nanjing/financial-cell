@@ -2,6 +2,9 @@ import {Element, h} from './element';
 import {bindClickoutside, unbindClickoutside} from './event';
 import {cssPrefix} from '../config';
 
+/**
+ * 工具栏各种按钮的基类
+ */
 export default class Dropdown extends Element {
     constructor(title, width, showArrow, placement, {type, change, arrowChange, historyBorder}, ...children) {
         super('div', `${cssPrefix}-dropdown ${placement}`);

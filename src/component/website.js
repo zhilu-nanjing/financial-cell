@@ -3,6 +3,9 @@ import {cssPrefix, look} from "../config";
 import CellRange from "../core/cell_range";
 import {  isSpecialWebsite} from "../core/special_formula_process";
 
+/**
+ * 输入网址后提示超链接
+ */
 export default class Website {
     constructor(data, editor) {
         this.data = data;

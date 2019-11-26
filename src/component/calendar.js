@@ -29,6 +29,9 @@ function monthDays(year, month, cdate) {
   return datess;
 }
 
+/**
+ * 对应日期的设置
+ */
 export default class Calendar {
   constructor(value) {
     this.value = value;

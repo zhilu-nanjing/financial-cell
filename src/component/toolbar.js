@@ -115,6 +115,9 @@ function moreResize(widthFn = this.widthFn) {
     }
 }
 
+/**
+ * 工具栏
+ */
 export default class Toolbar {
     constructor(data, widthFn, isHide = false) {
         this.data = data;

@@ -24,6 +24,9 @@ function buildTd(iconName) {
   );
 }
 
+/**
+ * 设置边框。对应工具栏的边框按钮
+ */
 export default class BorderPalette {
   constructor() {
     this.color = '#000';

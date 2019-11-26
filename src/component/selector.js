@@ -398,6 +398,9 @@ function setAllClipboardOffset(offset) {
     setLClipboardOffset.call(this, offset);
 }
 
+/**
+ * 对应当鼠标移动选中的多个单元格
+ */
 export default class Selector {
     constructor(data, sheet, sc = false) {
         this.data = data;
