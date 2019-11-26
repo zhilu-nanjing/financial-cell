@@ -1,14 +1,19 @@
 {
-    "presets": ["@babel/preset-env"],
-    "plugins": [
-      [
-        "transform-runtime",
-        {
-          "helpers": false,
-          "polyfill": false,
-          "regenerator": true,
-          "moduleName": "babel-runtime"
-        }
-       ]
+  "presets": [
+    "@babel/preset-env"
+  ],
+  "plugins": [
+    [
+      "@babel/plugin-transform-modules-commonjs"
+    ],
+    [
+      "transform-runtime",
+      {
+        "helpers": false,
+        "polyfill": false,
+        "regenerator": true,
+        "moduleName": "babel-runtime"
+      }
     ]
+  ]
 }
