@@ -44,7 +44,6 @@ module.exports = merge(common, {
     },
     entry: {
       f: "./src/core/operator.js",
-        vendors: ['esprima', 'moment', 'jstat', 'numeric']
     },
     output: {
         filename: '[name].js',
