@@ -5,12 +5,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const uglify = require('uglifyjs-webpack-plugin');
 
 module.exports = merge(common, {
     mode: 'production',
-    devtool: 'source-map',
+    devtool: 'none',
     plugins: [
-        new BundleAnalyzerPlugin(),
+        new uglify(),
+        new BundleAnalyzerPlugin(),     // 视图
         new CleanWebpackPlugin(['dist']),
         //  you should know that the HtmlWebpackPlugin by default will generate its own index.html
         new HtmlWebpackPlugin({
@@ -41,7 +43,8 @@ module.exports = merge(common, {
         },
     },
     entry: {
-      f: "./src/core/operator.js"
+      f: "./src/core/operator.js",
+        vendors: ['esprima', 'moment', 'jstat', 'numeric']
     },
     output: {
         filename: '[name].js',
