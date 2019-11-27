@@ -28,6 +28,7 @@
     "build": "webpack --config build/webpack.prod.js",
     "build-locale": "webpack --config build/webpack.locale.js",
     "lint": "./node_modules/eslint/bin/eslint.js src",
+    "analyz": "ODE_ENV=production npm_config_report=true npm run build",
     "test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/*",
     "calc_test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/calc_test.js",
     "format_test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/core/format_test.js",
@@ -79,6 +80,8 @@
   },
   "dependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.7.4",
-    "dayjs": "^1.8.16"
+    "dayjs": "^1.8.16",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack-bundle-analyzer": "^3.6.0"
   }
 }
