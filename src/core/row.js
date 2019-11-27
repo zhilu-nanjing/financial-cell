@@ -10,14 +10,14 @@ import CellProxy from "./cell_proxy";
 import CellRange from "./cell_range";
 import CellProp from "../model/cell_prop";
 import Cell from "../model/cell";
-var calcUtils = require('../calc/utils');
+let calcUtils = require('../calc/utils');
 
 export function isFormula(text) {
-    if (text && text[0] === "=") {
-        return true;
-    }
+    // if (text && text[0] === "=") {
+    //     return true;
+    // }
 
-    return false;
+    return text && text[0] === "=";
 }
 
 function isEmpty(text, formulas, formatText) {
@@ -29,11 +29,11 @@ function isEmpty(text, formulas, formatText) {
         return false;
     }
 
-    if(isHave(formatText)) {
-        return false;
-    }
+    // if(isHave(formatText)) {
+    //     return false;
+    // }
 
-    return true;
+    return !isHave(formatText);
 }
 
 function otherAutoFilter(d, darr, direction, isAdd, what, cb, other, dri) {
@@ -41,7 +41,7 @@ function otherAutoFilter(d, darr, direction, isAdd, what, cb, other, dri) {
     let ncell = this.getCellByTopCell(d, direction, isAdd, 'other', dri, 0);
 
     let {text, formulas} = ncell;
-    let iText = formulas != "" ? formulas : text;
+    let iText = formulas !== "" ? formulas : text;
 
     // if (other) {
     //     this.copyRender(darr, d.ri, d.ci, ncell, what, cb);
@@ -67,7 +67,7 @@ function numberAutoFilter(d, darr, direction, isAdd, diffValue, what, cb, isNumb
         ncell = {
             "text": d.v,
             "formulas": d.v,
-        }
+        };
         diffValue = 0;
     } else {
         ncell = this.getCellByTopCell(d, direction, isAdd);
@@ -170,25 +170,20 @@ class Rows {
     }
 
     isBackEndFunc(text) {
-        if (text.indexOf("MD.RTD") != -1) {
-            return true;
-        }
+        // if (text.indexOf("MD.RTD") !== -1) {
+        //     return true;
+        // }
 
-        return false;
+        return text.indexOf("MD.RTD") !== -1;
     }
 
     isReferOtherSheet(cell, state = false) {
-        if (cell.formulas && cell.formulas[0] == "=" && (state || isSheetVale(cell.formulas))) {
-            return true;
-        }
-        return false;
+        return cell.formulas && cell.formulas[0] === "=" && (state || isSheetVale(cell.formulas));
     }
 
     isEmpty(cell) {
-        if (cell && (cell.text || cell.formulas || cell.depend)) {
-            return false;
-        }
-        return true;
+
+        return cell && (cell.text || cell.formulas || cell.depend);
     }
 
     isFormula(text) {
@@ -381,10 +376,10 @@ class Rows {
         this.getDependCell(xy2expr(ci, ri), this.getCell(ri, ci));
     }
 
-    setCellAll(ri, ci, text, formulas = "", what = '') {
+    setCellAll(ri, ci, text, formulas = "") {
         const cell = this.getCellOrNew(ri, ci);
         let _cell = new Cell();
-        _cell.formulas = formulas == "" ? cell.formulas : formulas;
+        _cell.formulas = formulas === "" ? cell.formulas : formulas;
         _cell.text = text;
 
         this.setCell(ri, ci, _cell, 'formulas');
@@ -393,7 +388,7 @@ class Rows {
     }
 
     moveChange(arr, arr2, arr3) {
-        if (arr.length != arr2.length && arr3.length != arr2.length) {
+        if (arr.length !== arr2.length && arr3.length !== arr2.length) {
             return;
         }
 
@@ -411,23 +406,23 @@ class Rows {
 
                 let formulas = changeFormula(cutStr(cell.formulas));
 
-                if (formulas.indexOf(s1) != -1) {
+                if (formulas.indexOf(s1) !== -1) {
                     let ca = arr3[i].expr.replace(/\$/g, "\\$");
 
                     this.setCellAll(ri, ci, cell.text.replace(new RegExp(ca, 'g'), arr2[i].expr), cell.formulas.replace(ca, arr2[i].expr));
                 } else {
                     let s = value2absolute(s1);
                     let es = value2absolute(arr2[i].expr);
-                    if (formulas.indexOf(s.s3) != -1) {
+                    if (formulas.indexOf(s.s3) !== -1) {
                         s = value2absolute(arr3[i].expr);
 
                         s.s3 = s.s3.replace(/\$/g, "\\$");
                         this.setCellAll(ri, ci, cell.text.replace(new RegExp(s.s3, 'g'), es.s3), cell.formulas.replace(new RegExp(s.s3, 'g'), es.s3));
-                    } else if (formulas.indexOf(s.s2) != -1) {
+                    } else if (formulas.indexOf(s.s2) !== -1) {
                         s = value2absolute(arr3[i].expr);
                         s.s2 = s.s2.replace(/\$/g, "\\$");
                         this.setCellAll(ri, ci, cell.text.replace(new RegExp(s.s2, 'g'), es.s2), cell.formulas.replace(new RegExp(s.s2, 'g'), es.s2));
-                    } else if (formulas.indexOf(s.s1) != -1) {
+                    } else if (formulas.indexOf(s.s1) !== -1) {
                         s = value2absolute(arr3[i].expr);
                         s.s1 = s.s1.replace(/\$/g, "\\$");
 
@@ -441,7 +436,7 @@ class Rows {
     formatMoney(s, type) {
         if (/[^0-9\.]/.test(s))
             return "0";
-        if (s == null || s == "")
+        if (s == null || s === "")
             return "0";
         s = s.toString().replace(/^(\d*)$/, "$1.");
         s = (s + "00").replace(/(\d*\.\d\d)\d*/, "$1");
@@ -450,9 +445,9 @@ class Rows {
         while (re.test(s))
             s = s.replace(re, "$1,$2");
         s = s.replace(/,(\d\d)$/, ".$1");
-        if (type == 0) {
+        if (type === 0) {
             let a = s.split(".");
-            if (a[1] == "00") {
+            if (a[1] === "00") {
                 s = a[0];
             }
         }
@@ -534,7 +529,7 @@ class Rows {
             if (typeof arr[i] === 'string') {
                 arr[i] = arr[i].toUpperCase();
             }
-            if (arr[i].search(/^[A-Z]+\d+$/) != -1) {
+            if (arr[i].search(/^[A-Z]+\d+$/) !== -1) {
                 let ds = expr2xy(arr[i]);
                 if (ds[0] + dei < 0 || ds[1] + dci < 0) {
                     bad = true;
@@ -547,7 +542,7 @@ class Rows {
                     arr[i] = xy2expr(ds[0] + dei, ds[1] + dci);
                 }
                 enter = true;
-            } else if (arr[i].search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) != -1) {
+            } else if (arr[i].search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) !== -1) {
                 let a1 = arr[i].split(":")[0];
                 let a2 = arr[i].split(":")[1];
                 let ds1 = expr2xy(a1);
@@ -565,7 +560,7 @@ class Rows {
                 let args = this.getCellTextIsAdd(isInsert, sri, ds1, isAdd, dei, dci, 0, isRows);
                 if (args.enter) {
                     s = args.data + ":";
-                } else if (isInsert == false) {
+                } else if (isInsert === false) {
                     s = xy2expr(ds1[0] + dei, ds1[1] + dci) + ":";
                 } else {
                     s = a1 + ":";
@@ -574,7 +569,7 @@ class Rows {
                 args = this.getCellTextIsAdd(isInsert, sri, ds2, isAdd, dei, dci, 0, isRows);
                 if (args.enter) {
                     s += args.data;
-                } else if (isInsert == false) {
+                } else if (isInsert === false) {
                     s += xy2expr(ds2[0] + dei, ds2[1] + dci);
                 } else {
                     s += a2;
@@ -827,7 +822,6 @@ class Rows {
 
     // getAllDataType(cellRange)
     getAllDataType(cellRange) {
-        const {pasteProxy} = this;
         let isNumber = true, isDate = true, sarr = [];
 
         cellRange.each((i, j) => {
@@ -874,7 +868,7 @@ class Rows {
             };
         } else if (text !== '') {
             let last1 = text * 1;
-            if (text.indexOf(",") != -1) {
+            if (text.indexOf(",") !== -1) {
                 last1 = last1.replace(/,/g, '');
                 let value = parseFloat(last1) + diffValue;
                 last1 = this.formatMoney(value, 0);
@@ -938,7 +932,7 @@ class Rows {
     }
 
     calcDateCellByTopCell(ncell, darr, d, isAdd, what, cb, diff) {
-        if (ncell.text != '') {
+        if (ncell.text !== '') {
             let last1 = ncell.text;
 
             let value = "";
@@ -1001,8 +995,8 @@ class Rows {
             _cell.text = "#REF!";
             _cell.formulas = "#REF!";
         } else {
-            _cell.text = result != "" ? result : innerText;
-            _cell.formulas = result != "" ? result : innerText;
+            _cell.text = result !== "" ? result : '';
+            _cell.formulas = result !== "" ? result : '';
         }
         // rows.setCellText(ri, ci, {text, style}, proxy, this.name, 'style');
         this.setCell(ri, ci, _cell, 'all');
@@ -1011,18 +1005,18 @@ class Rows {
 
     // what: all | format | text
     // 填充
-    copyPaste(srcCellRange, dstCellRange, what, autofill = false, cb = () => { // todo 用面向对象的思想来重构
+    copyPaste(srcCellRange, dstCellRange, what, autofill = false, cb = () => {
     }) {
         const {pasteProxy} = this;
         pasteProxy.setSrcAndDstCellRange(srcCellRange, dstCellRange);
         let {rn, cn} = pasteProxy.use();
-        let isLeftRight = pasteProxy.autoFilterDirection(); // todo: upOrDownOrLeftOrRight = pateProxy.getUpDownLeftRight() 去掉482
+        let isLeftRight = pasteProxy.autoFilterDirection();
 
         let len = isLeftRight ? rn : cn;
         for (let i = 0; i < len; i++) {
             let isDown = pasteProxy.upOrDown();
             let {srcOneDRange, dstOneDRange} = pasteProxy.getOneDRangeObj(isLeftRight, i);
-            let {isNumber, isDate, sarr} = this.getAllDataType(srcOneDRange); // todo: 改成与Excel一样的逻辑 let {isNumber, isDate, sarr} = this.getRangeDataType(srcOneDRange);
+            let {isNumber, isDate, sarr} = this.getAllDataType(srcOneDRange);
             // let isCopy = pasteProxy.isCopy(sarr, i);
 
             let darr = dstOneDRange.getLocationArray(sarr); //let dstOneDLocationAarray = dstOneDRange.getLocationArray()
@@ -1067,8 +1061,8 @@ class Rows {
 
     copyRender(darr, nri, nci, ncell, what, cb) {
         let as = false;
-        for (let k = 0; as == false && k < darr.length; k++) {
-            if (darr[k].ri == nri && darr[k].ci == nci) {
+        for (let k = 0; as === false && k < darr.length; k++) {
+            if (darr[k].ri === nri && darr[k].ci === nci) {
                 as = true;
             }
         }
@@ -1092,7 +1086,7 @@ class Rows {
 
                 if (ri * 1 !== nri || ci * 1 !== nci) {
                     // ncellmm[nri] = ncellmm[nri] || {cells: {}};
-                    if (this._[ri].cells[ci].text != '' && this._[ri].cells[ci].formulas != '') {
+                    if (this._[ri].cells[ci].text !== '' && this._[ri].cells[ci].formulas !== '') {
                         srcCell.push({
                             nri: nri,
                             nci: nci,
@@ -1110,7 +1104,7 @@ class Rows {
             });
         });
         for (let i = 0; i < srcCell.length; i++) {
-            let {ri, ci, cell} = srcCell[i];
+            let {ri, ci} = srcCell[i];
             this.setCell(ri, ci, {}, 'all');
         }
 
@@ -1281,8 +1275,8 @@ class Rows {
     }
 
     init() {
-        this.each((ri, row) => {
-            this.eachCells(ri, (ci, cell) => {
+        this.each((ri) => {
+            this.eachCells(ri, (ci) => {
                 this.getDependCell(xy2expr(ci, ri), this.getCell(ri, ci));
             });
         });
@@ -1300,13 +1294,13 @@ class Rows {
             if (out) {
 
             } else if (sheet !== '') {
-                console.time("setData")
+                console.time("setData");
                 if (rowsInit) {
                     this.init();
-                    this.workbook = calcUtils.Rows2Workbook(this);
+                    this.workbook = calcUtils.Rows2Workbook(this, true); // jobs： 存放作为全局变量
                     sheet.toolbar.change('close', '');
                 }
-                console.timeEnd("setData")
+                console.timeEnd("setData");
 
             }
         } catch (e) {
@@ -1320,7 +1314,6 @@ class Rows {
     }
 }
 
-export default {};
 export {
     Rows,
 };

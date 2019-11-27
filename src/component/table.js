@@ -1,12 +1,11 @@
-import {expr2xy, stringAt, xy2expr} from '../core/alphabet';
+import { stringAt} from '../core/alphabet';
 import {getFontSizePxByPt} from '../core/font';
 import _cell from '../core/cell';
 import {formulam} from '../core/formula';
 import {isMinus} from "../utils/number_util";
 import {Draw, DrawBox, npx, thinLineWidth,} from '../canvas/draw';
-import ApplicationFactory from "./application";
 import {look} from "../config";
-import {deepCopy, distinct} from "../core/operator";
+// import {deepCopy, distinct} from "../core/operator";
 import {testValid} from "../utils/test";
 import {isHave} from "../core/helper";
 // import Worker from 'worker-loader!../external/Worker2.js';
@@ -38,26 +37,24 @@ function getDrawBox(rindex, cindex) {
     return new DrawBox(left, top, width, height, cellPaddingWidth);
 }
 
-function getAutoDrawBox(rindex, cindex, width) {
-    const {data} = this;
-    const {
-        left, top, height
-    } = data.cellRect(rindex, cindex);
-    return new DrawBox(left, top, width, height, cellPaddingWidth);
-}
+// function getAutoDrawBox(rindex, cindex, width) {
+//     const {data} = this;
+//     const {
+//         left, top, height
+//     } = data.cellRect(rindex, cindex);
+//     return new DrawBox(left, top, width, height, cellPaddingWidth);
+// }
 
-function getCellTextStyle(rindex, cindex) {
-    const {data} = this;
-    const {sortedRowMap} = data;
-    let nrindex = rindex;
-    if (sortedRowMap.has(rindex)) {
-        nrindex = sortedRowMap.get(rindex);
-    }
-
-    const style = data.getCellStyleOrDefault(nrindex, cindex);
-
-    return style;
-}
+// function getCellTextStyle(rindex, cindex) {
+//     const {data} = this;
+//     const {sortedRowMap} = data;
+//     let nrindex = rindex;
+//     if (sortedRowMap.has(rindex)) {
+//         nrindex = sortedRowMap.get(rindex);
+//     }
+//
+//     return data.getCellStyleOrDefault(nrindex, cindex);
+// }
 
 export function toUpperCase(text) {
     text = text.toString().toUpperCase();
@@ -85,68 +82,70 @@ function parseCell() {
     let {data} = this;
 
     let changeDataArgs = getChangeDataToCalc.call(this);
-    data.calc(data.rows, changeDataArgs.data);
+    try {
+        data.calc(data.rows, changeDataArgs.data);
+    } catch(e) {
+        console.error("公式模块报错：" + e);
+    }
 
     if (changeDataArgs.state) {
         data.changeDataForCalc = null;
     }
 }
 
-export function parseCell2(viewRange, state = false, src = '') {
-    let {data} = this;
-    let {calc, rows} = data;
-    let workbook = [];
-    workbook.Sheets = {};
-    workbook.Sheets[data.name] = {};
-
-    viewRange.each2((ri, ci) => {
-        let cell = data.getCell(ri, ci);
-        let expr = xy2expr(ci, ri);
-        if (cell && cell.text) {
-            cell.text = cell.text + "";
-            if (cell.text.indexOf("MD.RTD") != -1) {
-                workbook.Sheets[data.name][expr] = {v: "", f: ""};
-            } else {
-                if (cell.text && cell.text.lastIndexOf("=") === 0) {
-                    workbook.Sheets[data.name][expr] = {
-                        v: '',
-                        f: cell.text.replace(/ /g, '').replace(/\"/g, "\"").replace(/\"\"\"\"&/g, "\"'\"&")
-                    };
-                } else {
-                    workbook.Sheets[data.name][expr] = {
-                        v: cell.text.replace(/ /g, '').toUpperCase().replace(/\"/g, "\""),
-                        f: ''
-                    };
-                }
-            }
-        }
-        else {
-            workbook.Sheets[data.name][expr] = {v: 0, f: 0};
-        }
-    });
-
-
-    if (state) {
-        workbook.Sheets[data.name]['A1'] = {v: '', f: `${src}`};
-    }
-
-    try {
-        calc(workbook);
-    } catch (e) {
-        console.error(e);
-    }
-    return workbook;
-}
+// export function parseCell2(viewRange, state = false, src = '') {
+//     let {data} = this;
+//     let {calc, rows} = data;
+//     let workbook = [];
+//     workbook.Sheets = {};
+//     workbook.Sheets[data.name] = {};
+//
+//     viewRange.each2((ri, ci) => {
+//         let cell = data.getCell(ri, ci);
+//         let expr = xy2expr(ci, ri);
+//         if (cell && cell.text) {
+//             cell.text = cell.text + "";
+//             if (cell.text.indexOf("MD.RTD") !== -1) {
+//                 workbook.Sheets[data.name][expr] = {v: "", f: ""};
+//             } else {
+//                 if (cell.text && cell.text.lastIndexOf("=") === 0) {
+//                     workbook.Sheets[data.name][expr] = {
+//                         v: '',
+//                         f: cell.text.replace(/ /g, '').replace(/\"/g, "\"").replace(/\"\"\"\"&/g, "\"'\"&")
+//                     };
+//                 } else {
+//                     workbook.Sheets[data.name][expr] = {
+//                         v: cell.text.replace(/ /g, '').toUpperCase().replace(/\"/g, "\""),
+//                         f: ''
+//                     };
+//                 }
+//             }
+//         }
+//         else {
+//             workbook.Sheets[data.name][expr] = {v: 0, f: 0};
+//         }
+//     });
+//
+//
+//     if (state) {
+//         workbook.Sheets[data.name]['A1'] = {v: '', f: `${src}`};
+//     }
+//
+//     try {
+//         calc(workbook);
+//     } catch (e) {
+//         console.error(e);
+//     }
+//     return workbook;
+// }
 
 function specialStyle(text) {
     text = text + "";
     if (!text) {
         return false;
     }
-    if (look.indexOf(text.split("!")[0]) === 1) {
-        return true;
-    }
-    return false;
+
+    return look.indexOf(text.split("!")[0]) === 1;
 }
 
 function renderCell(rindex, cindex) {
@@ -190,13 +189,13 @@ function renderCell(rindex, cindex) {
         let {ignore, minus} = data.settings;
         let color = style.color;
         // console.log('style:', cellText);
-        if (minus == true && isMinus(cellText)) {
+        if (minus === true && isMinus(cellText)) {
             color = 'red'
         }
         let underline = style.underline;
         let regex = /^http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?$/;
         cellText = cellText + "";
-        let text = cellText.substr(0, 3).toLowerCase() == "www" ? "http://" + cellText : cellText;
+        let text = cellText.substr(0, 3).toLowerCase() === "www" ? "http://" + cellText : cellText;
         if (regex.test(text) || specialStyle(cell.text)) {
             color = "#4b89ff";
             underline = true;
@@ -217,7 +216,7 @@ function renderCell(rindex, cindex) {
         if (error) {
             draw.error(dbox);
         }
-    }, style.textwrap, cellText);
+    });
 }
 
 function renderFlexible() {
@@ -230,17 +229,17 @@ function renderFlexible() {
         let s_t = 0;
         for (let j = 0; j < i; j++) {
             let {set_total, state} = flex[j];
-            if (state == true) {
+            if (state === true) {
                 s_t += set_total;
             }
         }
 
         const dbox = getDrawBox.call(this, ri, ci);
-        draw.dropup(dbox, state, s_t * 25);
+        draw.dropUp(dbox, state, s_t * 25);
     }
 
     // const dbox = getDrawBox.call(this, ri, ci);
-    // draw.dropup(dbox);
+    // draw.dropUp(dbox);
 }
 
 function renderAutofilter(viewRange) {
@@ -254,7 +253,6 @@ function renderAutofilter(viewRange) {
         const afRange = autoFilter.hrange();
         if (viewRange.intersects(afRange)) {
             afRange.each((ri, ci) => {
-                console.log(ri, ci, 108)
                 const dbox = getDrawBox.call(this, ri, ci);
                 draw.dropdown(dbox);
             });
@@ -437,7 +435,7 @@ class Table {
     constructor(el, data, editor) {
         this.el = el;
         this.draw = new Draw(el, data.viewWidth(), data.viewHeight());
-        this.factory = new ApplicationFactory(data.methods, data.name, this);
+        // this.factory = new ApplicationFactory(data.methods, data.name, this);
         this.editor = editor;
         this.data = data;
         this.timer = null;
@@ -458,8 +456,7 @@ class Table {
         if (cell === null) return;
         // console.log("62", cell.adapt);
 
-        let cellText = _cell.render(cell.text || '', formulam, (y, x) => (data.getCellTextOrDefault(x, y)));
-        return cellText;
+        return _cell.render(cell.text || '', formulam, (y, x) => (data.getCellTextOrDefault(x, y)));
     }
 
     getDrawBox(rindex, cindex) {
@@ -478,9 +475,7 @@ class Table {
             nrindex = sortedRowMap.get(rindex);
         }
 
-        const style = data.getCellStyleOrDefault(nrindex, cindex);
-
-        return style;
+        return data.getCellStyleOrDefault(nrindex, cindex);
     }
 
 

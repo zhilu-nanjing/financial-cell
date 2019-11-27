@@ -1,7 +1,6 @@
 import {look} from "../config";
 
 let v1 = "HYPERLINK";
-let v2 = "MULTIPLECELLS";
 
 
 function isSpecialWebsite(text) {
@@ -20,8 +19,6 @@ function isSpecialWebsite(text) {
 function indexOf(text, formula) {
     if (look.indexOf(text.split("!")[0]) === 1 && formula.toUpperCase().indexOf(v1) === -1) {
         return 2;
-    } else if (look.indexOf(text.split("!")[0]) === 2 && formula.toUpperCase().indexOf(v2) === -1) {
-        return 1;
     }
     return 0;
 }
@@ -39,13 +36,6 @@ function multipleCellsRender(cells, mc) {
 function specialWebsiteValue(text, formula) {
     let index = indexOf(text, formula);
 
-    // if (index === 1) {
-    //     return {
-    //         "state": true,
-    //         "type": index,
-    //         "text": JSON.parse(text.split("!")[1])
-    //     };
-    // } else
     if (index === 2) {
         let arr = text.split(" ");
         let s = "";

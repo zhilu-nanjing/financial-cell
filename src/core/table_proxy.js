@@ -1,10 +1,10 @@
-import {isHaveStyle} from "./paste";
+import {isHaveStyle} from "../event/paste";
 import {Rows} from "../core/row";
 import {splitStr} from "../core/operator";
-import {xy2expr} from "../core/alphabet";
+// import {xy2expr} from "../core/alphabet";
 import CellRange from '../core/cell_range';
 import {isHave} from "../core/helper";
-
+// jobs: todo: 为什么TableProxy放在event文件夹里面，似乎应该放到core文件夹？
 export default class TableProxy {
     constructor(data ) {
         this.data = data;
@@ -16,7 +16,8 @@ export default class TableProxy {
         if (computedStyle.fontWeight > 400) {
             bold = true;
         }
-        let args = {
+
+        return {
             color: computedStyle.color,
             bgcolor: computedStyle.background.substring(0,
                 computedStyle.background.indexOf(")") + 1),
@@ -24,8 +25,6 @@ export default class TableProxy {
                 bold: bold,
             },
         };
-
-        return args;
     }
 
     extend(tableDom, {ri, ci}) {
@@ -74,7 +73,7 @@ export default class TableProxy {
         let styles = data.styles;
 
         this.each(tableDom, (i, j, cell) => {
-            let computedStyle = document.defaultView.getComputedStyle(cell, false);
+            let computedStyle = document.defaultView.getComputedStyle(cell, null);
             let args = this.getComputedStyle(computedStyle);
             let index = isHaveStyle(styles, args);
             if (index === -1) {
@@ -86,7 +85,7 @@ export default class TableProxy {
 
     parseTableCellRange(tableDom, {ri, ci}) {
       let maxRi = ri, maxCi = ci;
-      this.each(tableDom, (i, j, cell) => {
+      this.each(tableDom, (i, j) => {
         let rii = ri + i;
         let cij = ci + j;
             if(maxRi < rii) {
@@ -96,8 +95,7 @@ export default class TableProxy {
               maxCi = cij;
             }
         });
-        let cellRange = new CellRange(ri, ci, maxRi, maxCi);
-        return cellRange;
+        return new CellRange(ri, ci, maxRi, maxCi);
     }
 
     dealReference(tableDom, {ri, ci}) {

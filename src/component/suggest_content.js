@@ -1,6 +1,6 @@
 import {cssPrefix} from "../config";
 import {h} from "../component/element";
-import {helpFormula} from "../core/operator";
+import {helpFormula} from "../utils/help_formula";
 import {bind} from "./event";
 
 function variableElement(content, txt, pos, className, s = "", s2 = "") {
@@ -11,7 +11,7 @@ function variableElement(content, txt, pos, className, s = "", s2 = "") {
 
         if (pos === i) {
             item.child(h('span', s).child(name));
-        } else if (editor == true && pos >= index) {
+        } else if (editor === true && pos >= index) {
             item.child(h('span', s).child(name));
         } else {
             item.child(h('span', s2).child(name));
@@ -51,7 +51,7 @@ export default class SuggestContent {
         // cut 找到内容
         let content = {};
         Object.keys(helpFormula).forEach(i => {
-            if (i == cut) {
+            if (i === cut) {
                 content = helpFormula[i];
             }
         });

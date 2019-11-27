@@ -1,4 +1,4 @@
-## 非常感谢您关注到我们的项目。demo如下：
+## 非常感谢您关注到我们的项目。Demo如下：
 https://zhilu-nanjing.github.io/zhilu-demo/dist/index.html
 
 ![估值模型示例](https://github.com/zhilu-nanjing/zhilu-demo/blob/master/img/d306e2504393d69bd9079cb0190c7668.jpg)
@@ -35,9 +35,10 @@ https://zhilu-nanjing.github.io/zhilu-demo/dist/index.html
 
 ## 正在完善的功能点：
 + 多值函数
-+ 插入行列（公式自动调整）
++ 插入与删除行列（公式自动调整）
 
 ## 期盼您可以帮我们完成的功能点
++ 英文版界面
 + 图表（例如柱形图，折现图）
 + 数据透视表
 + 数据透视图
@@ -53,11 +54,11 @@ cd financial-cell
 npm install
 npm run dev
 ```
-技术文档是自动生成的，正在完善中：
+技术文档正在完善中：
 https://zhilu-nanjing.github.io/zhilu-demo/docs/index.html
 
 ## 代码贡献指南
 https://www.notion.so/financial-cell-6ed2e5093897477fbea6088b4dab8122
 
 ## LICENSE
-MIT
+LGPL

@@ -1,6 +1,6 @@
 var mathTrig = require('./math-trig');
 var text = require('./text');
-var jStat = require('jStat').jStat;
+var jStat = require('jstat').jStat;
 var utils = require('./utils');
 var error = require('./error');
 var misc = require('./miscellaneous');

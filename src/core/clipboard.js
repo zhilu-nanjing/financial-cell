@@ -16,13 +16,13 @@ export default class Clipboard {
     return this;
   }
 
-  isCopy() {
-    return this.state === 'copy';
-  }
-
-  isCut() {
-    return this.state === 'cut';
-  }
+  // isCopy() {
+  //   return this.state === 'copy';
+  // }
+  //
+  // isCut() {
+  //   return this.state === 'cut';
+  // }
 
   isClear() {
     return this.state === 'clear';

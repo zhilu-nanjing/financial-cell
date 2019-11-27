@@ -6,9 +6,9 @@ import {cssPrefix} from './config';
 import {locale} from './locale/locale';
 import './index.less';
 import zhCN from './locale/zh-cn';
-import PlugIn from "./plug-in/plug_in";
 import {bugout} from "./log/log_proxy";
 import Drag from "./external/drag";
+
 class Spreadsheet {
     constructor(selectors, options = {}, methods = {}, alias = 'sheet1') {
         let targetEl = selectors;
@@ -24,7 +24,6 @@ class Spreadsheet {
 
         this.sheet = new Sheet(rootEl, this.data);
         this.data.sheet = this.sheet;
-        this.plugIn = new PlugIn(rootEl, this.sheet, this.data);
     }
 
     setDataSettings(value) {
@@ -58,40 +57,40 @@ class Spreadsheet {
         locale(lang, message);
     }
 
-    getEditorStatus() {
-        let {editor} = this.sheet;
-        let { ri, ci, pos} = editor;
-        let inputText = editor.editorText.getText();
-        let args = {
-            "status": editor.isDisplay(),
-            "inputText": inputText,
-            "ri": ri,
-            "ci": ci,
-            "pos": pos,
-        }
-        return args;
-    }
+    // getEditorStatus() {
+    //     let {editor} = this.sheet;
+    //     let { ri, ci, pos} = editor;
+    //     let inputText = editor.editorText.getText();
+    //
+    //     return  {
+    //         "status": editor.isDisplay(),
+    //         "inputText": inputText,
+    //         "ri": ri,
+    //         "ci": ci,
+    //         "pos": pos,
+    //     };
+    // }
 
-    setEditorText(text = '', pos = 1) {
-        let {editor} = this.sheet;
-        text = text != '' ? text : '=';
-        editor.inputEventHandler(text, pos, true);
-    }
-
-    setTextEnd(cell, ri, ci) {
-        let {editor, data} = this.sheet;
-        editor.setCellEnd({
-            text: cell.text,
-            formulas: cell.formulas
-        });
-        data.setCellAll(ri, ci, cell.formulas + "", cell.formulas + "", '');
-
-        this.sheet.selectorEditorReset(ri, ci);
-
-        setTimeout(() => {
-            editor.setCursorPos(cell.formulas.length);
-        }, 100)
-    }
+    // setEditorText(text = '', pos = 1) {
+    //     let {editor} = this.sheet;
+    //     text = text !== '' ? text : '=';
+    //     editor.inputEventHandler(text, pos, true);
+    // }
+    //
+    // setTextEnd(cell, ri, ci) {
+    //     let {editor, data} = this.sheet;
+    //     editor.setCellEnd({
+    //         text: cell.text,
+    //         formulas: cell.formulas
+    //     });
+    //     data.setCellAll(ri, ci, cell.formulas + "", cell.formulas + "", '');
+    //
+    //     this.sheet.selectorEditorReset(ri, ci);
+    //
+    //     setTimeout(() => {
+    //         editor.setCursorPos(cell.formulas.length);
+    //     }, 100)
+    // }
 
     getText(alias, inputText, pos) {
         let {selectors, data, table} = this.sheet;
@@ -100,9 +99,8 @@ class Spreadsheet {
             let {erpx} = selectors[i];
             text += erpx;
         }
-        let t = data.getCellByExpr(text, table, alias, inputText, pos);
 
-        return t;
+        return data.getCellByExpr(text, table, alias, inputText, pos);
     }
 
     removeEvent() {
@@ -121,7 +119,7 @@ if (window) {
     window.x.spreadsheet.locale = (lang, message) => locale(lang, message);
 }
 
-export default Spreadsheet;
+// export default Spreadsheet;
 export {
     spreadsheet,
 };

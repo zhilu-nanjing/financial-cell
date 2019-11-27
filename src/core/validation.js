@@ -133,7 +133,6 @@ class Validations {
   }
 }
 
-export default {};
 export {
   Validations,
 };

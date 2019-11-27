@@ -2,13 +2,13 @@ import {describe, it} from 'mocha';
 import DataProxy from "../../src/core/data_proxy";
 import Recast from "../../src/core/recast";
 import {cutStr, deepCopy, splitStr} from "../../src/core/operator";
-import EditorText from "../../src/component/editor_text";
-import {calcDecimals, changeFormat, dateDiff, formatDate} from '../../src/component/date';
+import EditorText from "../../src/core/editor_text";
+import {calcDecimals, changeFormat, dateDiff, formatDate} from '../../src/utils/date';
 import {isHave} from "../../src/core/helper";
 import {copyPasteTemplate} from "../util/templates";
 import {formatNumberRender} from "../../src/core/format";
 import FormatProxy from "../../src/core/format_proxy";
-import {multipleCellsRender, specialWebsiteValue} from "../../src/component/special_formula_process";
+import {multipleCellsRender, specialWebsiteValue} from "../../src/core/special_formula_process";
 import CellRange from "../../src/core/cell_range";
 import PaintFormat from "../../src/model/paint_format";
 

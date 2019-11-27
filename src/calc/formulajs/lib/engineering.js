@@ -1,5 +1,5 @@
 var error = require('./error');
-var jStat = require('jStat').jStat;
+var jStat = require('jstat').jStat;
 var text = require('./text');
 var utils = require('./utils');
 var bessel = require('bessel');

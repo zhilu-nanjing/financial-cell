@@ -2,7 +2,7 @@
 
 const RawValue = require('./RawValue.js');
 const str_2_val = require('./str_2_val.js');
-const find_all_cells_with_formulas = require('./find_all_cells_with_formulas.js');
+const finder = require('./finder');
 
 class Calculator { // 这个应该是对重对外暴露的类。
 
@@ -11,7 +11,7 @@ class Calculator { // 这个应该是对重对外暴露的类。
         this.expressions = [];
         this.exec_formula = exec_formula;
         this.variables = {};
-        this.formulas = find_all_cells_with_formulas(workbook, exec_formula);
+        this.formulas = finder.find_all_cells_with_formulas(workbook, exec_formula);
         for (let i = this.formulas.length - 1; i >= 0; i--) {
             let exp = exec_formula.build_expression(this.formulas[i]);
             this.expressions.push(exp);

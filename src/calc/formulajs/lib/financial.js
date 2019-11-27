@@ -2,7 +2,8 @@ var error = require('./error');
 var dateTime = require('./date-time');
 var utils = require('./utils');
 
-function validDate(d) {
+// exports.validDate = function (d)
+function validDate(d){
   return d && d.getTime && !isNaN(d.getTime());
 }
 
@@ -113,96 +114,159 @@ exports.AMORDEGRC = function (cost, date_purchased, first_period, salvage, perio
 
 // TODO
 exports.AMORLINC = function() {
- throw new Error('AMORLINC is not implemented');
+  throw new Error('AMORLINC is not implemented');
 };
 
-// TODO
+// exports.get_days = function(settlement,maturity,frequency)测试时使用
+//获取债券结息日(购买日)所在付息期间的起始时间
+function get_days(settlement,maturity,frequency){
+  var settlementDate = utils.parseDate(settlement)
+  var maturityDate = utils.parseDate(maturity)
+  var month_SM=maturityDate.getFullYear()*12+maturityDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth()
+  var times=parseInt(month_SM/(12/frequency))
+  var endday=utils.Copy(maturityDate)
+  endday.setMonth(endday.getMonth()-times*12/frequency)
+  var startday= utils.Copy(endday)
+  startday.setMonth(startday.getMonth()-12/frequency)
+  return {"startday": startday, "endday":endday}
+}
+//TODO  COUP系列函数目前均未考虑参数输入不规范的报错情况
+
+// COUPDAYBS计算的是债券在结算日(即购买日)前最后一次付息日至结算日之间的天数    by旺旺 2019/11/14
 exports.COUPDAYBS = function (settlement, maturity, frequency, basis) {
-  if (!validDate(maturity) || !validDate(settlement)) {
-    return error.value;
-  }
-  // Return error if either rate or par are lower than or equal to zero
-  if (basis < 0 || basis > 4) {
+  // if (!validDate(maturity) || !validDate(settlement)) {
+  //   return error.value;
+  // }
+  if ([0,1,2,3,4].indexOf(basis)===-1) {
     return error.num;
   }
-  if (frequency !=1&&frequency!=2&&frequency!=4){
+  if ([1,2,4].indexOf(frequency)===-1){
     return error.num;
   }
-  // Return error if settlement is before or equal to issue
   if (settlement >= maturity) {
     return error.num;
   }
+  var settlementDate = utils.parseDate(settlement)
+  var result = settlementDate - get_days(settlement, maturity, frequency).startday
+  return result / (1000 * 60 * 60 * 24)
 };
+//原代码
+// var maturityDate = utils.parseDate(maturity)
+// var startday = utils.Copy(maturityDate)
+// startday.setMonth(startday.getMonth()-12/frequency) // todo 余数算法更好
+// while(startday >= settlementDate){
+//   startday.setMonth(startday.getMonth()-12/frequency)
+// }
+// var endday = utils.Copy(startday)
+// endday.setMonth(endday.getMonth()+12/frequency)
 
+//COUPDAYS计算的是是结算日(即购买日)所处的计息周期的天数,如:到期日为2019/11/1,结算日为2019/2/1,那么计算是2019/11/11至2019/5/1的天数.by旺旺 2019/11/15
 exports.COUPDAYS = function (settlement, maturity, frequency, basis) {
-  if (!validDate(maturity) || !validDate(settlement)) {
-    return error.value;
-  }
+  // // if (!validDate(maturity) || !validDate(settlement)) {
+  //   return error.value;
+  // }
   // Return error if either rate or par are lower than or equal to zero
-  if (basis < 0 || basis > 4) {
+  if ([0,1,2,3,4].indexOf(basis)===-1) {
     return error.num;
   }
-  if (frequency !=1&&frequency!=2&&frequency!=4){
+  if ([1,2,4].indexOf(frequency)===-1){
     return error.num;
+  }
+  if (settlement >= maturity) {
+    return error.num;
+  }
+  if ([0,2,4].indexOf(basis)>=0) {
+    var result = 360/frequency
+    return result;
+  }
+  if (basis===3 ) {
+    var result = 365/frequency
+    return result;
+  }
+  if (basis===1) {
+    var result = get_days(settlement, maturity, frequency).endday - get_days(settlement, maturity, frequency).startday
+    return result / (1000 * 60 * 60 * 24)
   }
 };
 
-// TODO
+// COUPDAYSNC计算的是结算日到下一付息日的天数
 exports.COUPDAYSNC = function (settlement, maturity, frequency, basis) {
-  if (!validDate(maturity) || !validDate(settlement)) {
-    return error.value;
-  }
+  // if (!validDate(maturity) || !validDate(settlement)) {
+  //   return error.value;
+  // }
   // Return error if either rate or par are lower than or equal to zero
-  if (basis < 0 || basis > 4) {
+  if ([0,1,2,3,4].indexOf(basis)===-1) {
     return error.num;
   }
-  if (frequency !=1&&frequency!=2&&frequency!=4){
+  if ([1,2,4].indexOf(frequency)===-1){
     return error.num;
   }
+  if (settlement >= maturity) {
+    return error.num;
+  }
+  var settlementDate = utils.parseDate(settlement)
+  var result = get_days(settlement, maturity, frequency).endday - settlementDate
+  return result / (1000 * 60 * 60 * 24)
 };
 
-// TODO
+//COUPNCD计算的是下一付息日,目前结果精确到天 by 旺旺 2019/11/15
 exports.COUPNCD = function (settlement, maturity, frequency, basis) {
-  if (!validDate(maturity) || !validDate(settlement)) {
-    return error.value;
-  }
+  // if (!validDate(maturity) || !validDate(settlement)) {
+  //   return error.value;
+  // }
   // Return error if either rate or par are lower than or equal to zero
-  if (basis < 0 || basis > 4) {
-    return error.numerror.num;
-  }
-  if (frequency !=1&&frequency!=2&&frequency!=4){
+  if ([0,1,2,3,4].indexOf(basis)===-1) {
     return error.num;
   }
+  if ([1,2,4].indexOf(frequency)===-1){
+    return error.num;
+  }
+  if (settlement >= maturity) {
+    return error.num;
+  }
+  return get_days(settlement, maturity, frequency).endday
 };
 
-// TODO
+//COUPNUM计算的是结算日后付息次数
 exports.COUPNUM = function (settlement, maturity, frequency, basis) {
-  if (!validDate(maturity) || !validDate(settlement)) {
-    return error.value;
-  }
+  // if (!validDate(maturity) || !validDate(settlement)) {
+  //   return error.value;
+  // }
   // Return error if either rate or par are lower than or equal to zero
-  if (basis < 0 || basis > 4) {
+  if ([0,1,2,3,4].indexOf(basis)===-1) {
     return error.num;
   }
-  if (frequency !=1&&frequency!=2&&frequency!=4){
+  if ([1,2,4].indexOf(frequency)===-1){
     return error.num;
   }
+  if (settlement >= maturity) {
+    return error.num;
+  }
+  var settlementDate = utils.parseDate(settlement)
+  var maturityDate = utils.parseDate(maturity)
+  var month_SM=maturityDate.getFullYear()*12+maturityDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth()
+  var times=parseInt(month_SM/(12/frequency))
+  return times+1
 };
 
-// TODO
+//COUPPCD计算的是结算日前最后一次付息日,目前结果精确到天 by 旺旺 2019/11/15
 exports.COUPPCD = function (settlement, maturity, frequency, basis) {
-  if (!validDate(maturity) || !validDate(settlement)) {
-    return error.value;
-  }
+  // if (!validDate(maturity) || !validDate(settlement)) {
+  //   return error.value;
+  // }
   // Return error if either rate or par are lower than or equal to zero
-  if (basis < 0 || basis > 4) {
+  if ([0,1,2,3,4].indexOf(basis)===-1) {
     return error.num;
   }
-  if (frequency !=1&&frequency!=2&&frequency!=4){
+  if ([1,2,4].indexOf(frequency)===-1){
     return error.num;
   }
+  if (settlement >= maturity) {
+    return error.num;
+  }
+  return get_days(settlement, maturity, frequency).startday
 };
-//XW：end
+
 
 exports.CUMIPMT = function(rate, periods, value, start, end, type) {
   // Credits: algorithm inspired by Apache OpenOffice
@@ -824,22 +888,22 @@ exports.NPV = function() {
 
 // XW:待实现
 exports.ODDFPRICE = function() {
- throw new Error('ODDFPRICE is not implemented');
+  throw new Error('ODDFPRICE is not implemented');
 };
 
 // TODO
 exports.ODDFYIELD = function() {
- throw new Error('ODDFYIELD is not implemented');
+  throw new Error('ODDFYIELD is not implemented');
 };
 
 // TODO
 exports.ODDLPRICE = function() {
- throw new Error('ODDLPRICE is not implemented');
+  throw new Error('ODDLPRICE is not implemented');
 };
 
 // TODO
 exports.ODDLYIELD = function() {
- throw new Error('ODDLYIELD is not implemented');
+  throw new Error('ODDLYIELD is not implemented');
 };
 //XW：end
 exports.PDURATION = function(rate, present, future) {
@@ -906,19 +970,42 @@ exports.PPMT = function(rate, period, periods, present, future, type) {
 };
 //XW：函数实现
 exports.PRICE = function (settlement, maturity, rate, yld, redemption, frequency, basis) {
-  settlement = utils.parseDate(settlement);
-  maturity = utils.parseDate(maturity);
-  if (utils.anyIsError(settlement, maturity)) {
+  var settlementDate = utils.parseDate(settlement)
+  var maturityDate = utils.parseDate(maturity)
+  if (utils.anyIsError(settlementDate, maturityDate)) {
     return error.value;
   }
   if (basis<0 || basis>4){
     return error.na
   }
-  if(settlement >= maturity){
+  if(settlementDate >= maturityDate){
     return error.na
   }
-  var day = Math.abs(dateTime.DAYS(settlement, maturity, false))
-  return redemption - discount*redemption*day/360
+  var month_SM=maturityDate.getFullYear()*12+maturityDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth()
+  var N =parseInt(month_SM/(12/frequency))
+  var endday=utils.Copy(maturityDate)
+  endday.setMonth(endday.getMonth()-N*12/frequency)
+  var startday= utils.Copy(endday)
+  startday.setMonth(startday.getMonth()-12/frequency)
+  var DSC = (endday-settlementDate)/ (1000 * 60 * 60 * 24)
+  var E = (endday-startday)/ (1000 * 60 * 60 * 24)
+  var A = (settlementDate-startday)/ (1000 * 60 * 60 * 24)
+  if(N > 1){
+    var PPART1=redemption/((1+yld/frequency)^(N-1+DSC/E))-((100*rate*A)/(frequency*E))
+    var PPART2 = (100*rate)/(frequency*((1+yld/frequency)^(DSC/E)))
+    for(var k = 2;k<=N;k++){
+      PPART2 = PPART2+(100*rate)/(frequency*((1+yld/frequency)^(k-1+DSC/E)))
+    }
+    var P = PPART1+PPART2
+    return P
+  }
+  if(N = 1){
+    var T1 = 100*rate/frequency +redemption
+    var T2 = yld*(E-A)/frequency/E+1
+    var T3 = 100*rate*A/frequency/E
+    var P = T1/T2-T3
+    return P
+  }
 };
 
 // TODO
@@ -1188,11 +1275,43 @@ exports.TBILLYIELD = function(settlement, maturity, price) {
   return (100 - price) * 360 / (price * dateTime.DAYS360(settlement, maturity, false));
 };
 
-// XW：待实现
-exports.VDB = function() {
- throw new Error('VDB is not implemented');
+//TODO 尚未考虑no_switch的情况,起始日和终止日都带小数时存在误差 by 旺旺11/19
+function get_total(cost, salvage, period,life,factor){
+  var total = 0;
+  var current = 0;
+  for (var i = 1; i <= period; i++) {
+    current = Math.min((cost - total) * (factor / life), (cost - salvage - total));
+    total += current;
+  }
+  var currentnew=(period-i+1)*Math.min((cost - total) * (factor / life), (cost - salvage - total))
+  return total + currentnew
+}
+exports.get_total = get_total
+
+exports.VDB = function(cost, salvage, life, Start_period,End_period,factor,No_switch) {
+  var factorNum = (factor === undefined) ? 2 : factor;
+  var costNum = utils.parseNumber(cost);
+  var salvageNum = utils.parseNumber(salvage);
+  var lifeNum = utils.parseNumber(life);
+  var Start_periodNum = utils.parseNumber(Start_period);
+  var End_periodNum = utils.parseNumber(End_period);
+  factorNum = utils.parseNumber(factor);
+  if (utils.anyIsError(costNum, salvageNum, lifeNum, Start_periodNum,End_periodNum, factorNum)) {
+    return error.value;
+  }
+  if (costNum < 0 || salvageNum < 0 || lifeNum < 0 || Start_periodNum < 0 || factorNum <= 0) {
+    return error.num;
+  }
+  if (Start_periodNum > lifeNum) {
+    return error.num;
+  }
+  if (salvageNum >= costNum) {
+    return 0;
+  }
+  var result=get_total(costNum,salvageNum,End_periodNum,lifeNum,factorNum)-get_total(costNum,salvageNum,Start_periodNum,lifeNum,factorNum)
+  return result
 };
-//XW：end
+
 
 
 exports.XIRR = function(values, dates, guess) {
@@ -1306,13 +1425,64 @@ exports.YIELD = function (settlement, maturity, rate, pr, redemption, frequency,
 };
 
 
-// TODO
-exports.YIELDDISC = function() {
- throw new Error('YIELDDISC is not implemented');
+// TODO 调用的parseDate转化日期不够准确,如39494应转为2008/2/16,实际转为2008/2/15 23:54造成basis==0,4时的误差
+exports.YIELDDISC = function(settlement, maturity,pr, redemption,basis) {
+  // throw new Error('YIELDDISC is not implemented');
+  var settlementDate = utils.parseDate(settlement);
+  var maturityDate = utils.parseDate(maturity);
+  if (utils.anyIsError(settlementDate, maturityDate)) {
+    return error.value;
+  }
+  if (pr <= 0) {
+    return error.num;
+  }
+  if (redemption <= 0){
+    return error.num
+  }
+  if (settlementDate >= maturityDate  ) {
+    return error.num;
+  }
+  if ([0,1,2,3,4].indexOf(basis)===-1) {
+    return error.num;
+  }
+  var res
+  if (basis===1){
+    var year=settlementDate.getFullYear()
+    if (0 === year%4 && (year%100 !==0 || year%400 === 0)){
+      var res = (redemption-pr)/pr/(maturityDate-settlementDate)*366*(1000 * 60 * 60 * 24)
+      return res
+    }
+    else{
+      var res = (redemption-pr)/pr/(maturityDate-settlementDate)*365*(1000 * 60 * 60 * 24)
+      return res
+    }
+  }
+  if (basis===2){
+    var res = (redemption-pr)/pr/(maturityDate-settlementDate)*360*(1000 * 60 * 60 * 24)
+    return res
+  }
+  if (basis===3){
+    var res = (redemption-pr)/pr/(maturityDate-settlementDate)*365*(1000 * 60 * 60 * 24)
+    return res
+  }
+  if (basis===0||basis===4){
+    var month_SM=maturityDate.getFullYear()*12+maturityDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth()-1
+    var day_SM=month_SM*30+30-settlementDate.getDay()+maturityDate.getDay()
+    var res=(redemption-pr)/pr/day_SM*360
+    return res
+  }
 };
 
 // TODO
 exports.YIELDMAT = function() {
- throw new Error('YIELDMAT is not implemented');
+  throw new Error('YIELDMAT is not implemented');
 };
 //XW：end
+
+exports.FACTORIAL = function (n){
+  var result = 1
+  for (var i=n; i>=1;i--){
+    result *= i
+  }
+  return result
+}

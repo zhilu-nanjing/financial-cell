@@ -45,7 +45,7 @@ function inputEnter(evt) {
              createEvent.call(this, 13, false);
 
         return
-    };
+    }
 
     filterItems[this.itemIndex].el.click();
     this.hide();

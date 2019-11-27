@@ -3,7 +3,7 @@
 const int_2_col_str = require('./int_2_col_str.js');
 const col_str_2_int = require('./col_str_2_int.js');
 const exec_formula = require('./exec_formula.js');
-const find_all_need_calc_cell = require('./find_all_cells_with_formulas.js');
+const finder = require('./finder');
 const Calculator = require('./Calculator.js');
 const CalcCell = require('./CalcCell.js');
 const checker = require('./formula_check.js');
@@ -18,7 +18,7 @@ var mymodule = function(rows, tileArr) {
         var Calc_WorkBook = new CalcWorkBook(rows, tileArr)
         var workbook = rows.workbook
         workbook = Calc_WorkBook.get_workbook(workbook)
-        var formulas = find_all_need_calc_cell(workbook, tileArr, exec_formula)
+        var formulas = finder.find_all_need_calc_cell(workbook, tileArr, exec_formula)//找到所有需要计算的单元格
         for (var i = formulas.length - 1; i >= 0; i--) {
             try {
                 if(!helper.isHave(formulas[i].cell)){//如果该单元格为空，设置f,v为空
@@ -33,7 +33,7 @@ var mymodule = function(rows, tileArr) {
                     formulas[i].cell.v = valid_res
                 }else{
                     //对cell和sheet进行处理和转换({}参数加上'',未定义单元格置为default_0等)，计算完成后需将多余变动部分还原
-                    formulas[i].cell.f = calc_cell.trans_formula()
+                    formulas[i].cell.f = calc_cell.trans_formula(rows)
                     checker.trans_sheet(formulas[i].sheet)
                     exec_formula(formulas[i]);
                     formulas[i].cell.f = calc_cell.recover_formula()
