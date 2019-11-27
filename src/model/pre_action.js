@@ -44,7 +44,10 @@ export default class PreAction {
         this.newData = newData;
         this.data = data;
     }
-
+    /**
+     * 获取所有需要计算的单元格列表
+     * @returns {Array}
+     */
     findAllNeedCalcCell() {
         let changeArr = [];
         let {oldCell, newCell, ri, ci} = this;
@@ -53,7 +56,6 @@ export default class PreAction {
         if (ri !== -1 && ci !== -1) {
             changeArr.push(xy2expr(ci, ri));
         }
-
         changeArr = distinct(changeArr);
         return changeArr;
     }

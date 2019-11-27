@@ -25,7 +25,7 @@ function isHave(param) {
 }
 class CalcWorkBook { // 对workbook处理的类
   constructor(rows, tileArr) {
-    this.rows = rows
+    this.rows = rows;
     this.tileArr = tileArr
   }
 

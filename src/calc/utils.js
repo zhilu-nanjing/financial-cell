@@ -22,7 +22,7 @@ exports.isHave = function(param) {
 }
 
 
-exports.Rows2Workbook = function (rows) {
+exports.Rows2Workbook = function (rows, isInit = false) {
   var cells = rows._
   var workbook = {
     Sheets:{},
@@ -35,7 +35,7 @@ exports.Rows2Workbook = function (rows) {
     Object.keys(cells[ri].cells).forEach(ci => {
       var cell = rows.getCell(ri, ci)
       var cell_name = exp.xy2expr(ci, ri)
-      if(exports.isHave(cell)) {
+      if(exports.isHave(cell) && isInit) {
         workbook.Sheets[name][cell_name] = {
           v: cell.text,
           f: cell.formulas,
