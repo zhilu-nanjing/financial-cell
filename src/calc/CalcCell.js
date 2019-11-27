@@ -15,7 +15,7 @@ function isHave(param) {
 class CalcCell { // 对cell中的参数做转换，判断,多单元格处理等的类
   constructor(formulas_i) {
     this.cell = formulas_i.cell
-    this.f = formulas_i.cell.f
+    this.f = isHave(formulas_i.cell)? formulas_i.cell.f: null
     this.name = formulas_i.name
     this.sheet = formulas_i.sheet
   }
@@ -23,6 +23,9 @@ class CalcCell { // 对cell中的参数做转换，判断,多单元格处理等�
   //检测是否合法
   check_valid() {
     var text = this.f
+    if (!isHave(text)){
+      return ""
+    }
     //==A1报错
     if (text[1] === '='){
       return error.name

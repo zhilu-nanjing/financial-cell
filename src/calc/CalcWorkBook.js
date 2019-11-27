@@ -1,6 +1,6 @@
 var exp = require("../core/alphabet");
 var error = require('./formulajs/lib/error');
-
+const es6 = require('./es6');
 
 function isEqual(v1, v2) {
   v1 = v1 + "";
@@ -46,7 +46,7 @@ class CalcWorkBook { // 对workbook处理的类
   }
 
   //workbook填入rows
-  calcDoneToSetCells(workbook, rows) {
+  calcDoneToSetCells(workbook, rows, clash_cells) {
     let {data} = rows;
     let name = data['name']
     var sheet = workbook.Sheets[name]
@@ -68,11 +68,29 @@ class CalcWorkBook { // 对workbook处理的类
         cell.multivalueRefsCell = sheet[i].multivalueRefsCell
         if (isHave(sheet[i].source_v) && sheet[i].source_v instanceof Array){
           cell.source_v = sheet[i].source_v
+        }else{
+          cell.source_v = null
         }
         rows.setCell(arg[1], arg[0], cell);
       }
     });
     rows.workbook = workbook
+    //如果有冲突单元格，重新触发计算冲突单元格
+    if (isHave(clash_cells)){
+      var a = new es6.PreAction({
+          type: 11,
+          action: "重新计算",
+          ri: -1,
+          ci: -1,
+          oldCell: {},
+          newCell: {}
+      }, rows.data);
+      //重写发现需计算单元格函数，使其等于冲突单元格列表
+      a.findAllNeedCalcCell = function() {
+        return clash_cells
+      }
+      data.calc(rows, a);
+    }
   }
 
   // 判断是否是多值函数的单元格
@@ -83,13 +101,15 @@ class CalcWorkBook { // 对workbook处理的类
     }
     return isHave(multivalueRefsCell) ? true : false
   }
-  //判断是否已经是别的多值函数的单元格
-  al_have_muti(cell, source, multivalueRefsCell){
-    if (isHave(source) && isHave(source.multivalueRefsCell) && source.multivalueRefsCell !== multivalueRefsCell && (isHave(cell) && isHave(cell.v) && cell.v !== "")){
+
+  //判断是否已经是别的多值函数的占用了的单元格
+  al_have_muti(source, multivalueRefsCell){
+    if (isHave(source) && isHave(source.multivalueRefsCell) && source.multivalueRefsCell !== multivalueRefsCell){
       return true
     }
     return false
   }
+
   //一维数组
   process_arr(formulas_i, multivalueRefsCell){
     let enter = true
@@ -120,7 +140,12 @@ class CalcWorkBook { // 对workbook处理的类
           enter = false;
           cell = source;
           expr = c;
-          if (this.al_have_muti(source, multivalueRefsCell)){//如果需要占用的单元格已经是其他函数的多值单元格，直接报错。。
+          if (this.al_have_muti(source, multivalueRefsCell)){//如果需要占用的单元格已经是其他函数的多值单元格， 将冲突单元格标记，然后直接报错。。
+            if (isHave( wb[source.multivalueRefsCell].clash_cells) &&  wb[source.multivalueRefsCell].clash_cells.indexOf(multivalueRefsCell) < 0){
+              wb[source.multivalueRefsCell].clash_cells.push(multivalueRefsCell)
+            }else{
+              wb[source.multivalueRefsCell].clash_cells = [multivalueRefsCell]
+            }
             return this.clean_arr(wb, cell_v, cell, multivalueRefsCell, expr)
           }
           wb[c] = {
@@ -150,7 +175,8 @@ class CalcWorkBook { // 对workbook处理的类
           wb[c] = {
             "v": error.ref,
             "f": wb[c].f,
-            'multivalueRefsCell': multivalueRefsCell
+            'multivalueRefsCell': multivalueRefsCell,
+            'clash_cells': (isHave(wb[c]) && isHave(wb[c].clash_cells))? wb[c].clash_cells: null
           }
         } else if (expr === c) {
           wb[c] = {
@@ -193,7 +219,7 @@ class CalcWorkBook { // 对workbook处理的类
           }
         } else {
           var source = this.rows.getCell( cell_y + j,  cell_x + i);
-          if ((!isHave(source) || !isHave(source.text) || (isHave(source.text) && (isEqual(source.text, v) || source.text === ""))) && (!this.al_have_muti(wb[c], source, multivalueRefsCell))) {
+          if ((!isHave(source) || !isHave(source.text) || (isHave(source.text) && (isEqual(source.text, v) || source.text === ""))) && (!this.al_have_muti(source, multivalueRefsCell))) {
             wb[c] = {
               "v": cell_v[i][j],
               "f": cell_v[i][j],
@@ -203,7 +229,7 @@ class CalcWorkBook { // 对workbook处理的类
             enter = false;
             cell = source;
             expr = c;
-            if (this.al_have_muti(wb[c], source, multivalueRefsCell)){//如果需要占用的单元格已经是其他函数的多值单元格， 将冲突单元格标记，然后直接报错。。
+            if (this.al_have_muti(source, multivalueRefsCell)){//如果需要占用的单元格已经是其他函数的多值单元格， 将冲突单元格标记，然后直接报错。。
               if (isHave( wb[source.multivalueRefsCell].clash_cells) &&  wb[source.multivalueRefsCell].clash_cells.indexOf(multivalueRefsCell) < 0){
                 wb[source.multivalueRefsCell].clash_cells.push(multivalueRefsCell)
               }else{
@@ -264,9 +290,10 @@ class CalcWorkBook { // 对workbook处理的类
   }
 
 
-  //如果多值原始单元格发生变动，清除所有该多值函数生成的单元格中的标记
+  //如果多值原始单元格发生变动，清除所有该多值函数生成的单元格中的标记,并重新计算
   clean_all_flag(formulas_i, multivalueRefsCell){
     var wb = formulas_i.sheet
+    var clash_cells  = isHave(wb[multivalueRefsCell].clash_cells) ? wb[multivalueRefsCell].clash_cells : []
     var zb = exp.expr2xy(multivalueRefsCell)
     var cell_x = zb[0]
     var cell_y = zb[1]
@@ -277,6 +304,7 @@ class CalcWorkBook { // 对workbook处理的类
       for (var i = 0; i < len; i++) {
         for (var j = 0; j < cell_v[i].length ; j++) {
           var c = exp.xy2expr(cell_x + i, cell_y + j)
+          clash_cells.push(c)
           if (i === 0 && j === 0) {
             wb[c] = {
               "v": formulas_i.cell.v,
@@ -299,6 +327,7 @@ class CalcWorkBook { // 对workbook处理的类
     }else{
       for (var j = 0; j < cell_v.length ; j++) {
         var c = exp.xy2expr(cell_x, cell_y + j)
+        clash_cells.push(c)
         if (j === 0) {
           wb[c] = {
             "v": formulas_i.cell.v,
@@ -318,10 +347,8 @@ class CalcWorkBook { // 对workbook处理的类
         }
       }
     }
-    if (isHave(wb[c].clash_cells)) { //删除单元格时如果有冲突单元格，清除
-      wb[c].clash_cells = null
-    }
-    return wb
+   //删除单元格时触发计算所有与之相关的单元格
+    return [wb, clash_cells]
   }
 
 
@@ -346,11 +373,15 @@ class CalcWorkBook { // 对workbook处理的类
       }
     }else {
       if(!(cell_v instanceof Array)) {
-        workbook.Sheets[name] = this.clean_all_flag(formulas_i, multivalueRefsCell)
+        let result = this.clean_all_flag(formulas_i, multivalueRefsCell)
+        workbook.Sheets[name] = result[0]
+        return result[1]
       }else{
         var zb = exp.expr2xy(multivalueRefsCell)
         if (isHave(this.rows.getCell(zb[1], zb[0]).source_v) && this.rows.getCell(zb[1], zb[0]).source_v.toString() !== cell_v.toString()){
-          workbook.Sheets[name] = this.clean_all_flag(formulas_i, multivalueRefsCell)
+          let result = this.clean_all_flag(formulas_i, multivalueRefsCell)
+          workbook.Sheets[name] = result[0]
+          return result[1]
         }
         if (!(cell_v[0] instanceof Array)){//判断是一维数组还是二维数组
           workbook.Sheets[name] = this.process_arr(formulas_i, multivalueRefsCell)
