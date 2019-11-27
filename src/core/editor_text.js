@@ -1,5 +1,5 @@
 import {cuttingByPos, cuttingByPosEnd2, isAbsoluteValue, value2absolute} from "../core/operator";
-import {toUpperCase} from "./table";
+import {toUpperCase} from "../component/table";
 
 export default class EditorText {
     constructor() {

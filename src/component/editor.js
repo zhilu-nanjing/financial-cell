@@ -15,7 +15,7 @@ import {
 import SuggestContent from './suggest_content';
 import {findBracket, suggestContent} from './formula_editor';
 import {createEvent} from './event';
-import EditorText from "./editor_text";
+import EditorText from "../core/editor_text";
 import {testValid} from "../utils/test";
 import {isHave} from "../core/helper";
 

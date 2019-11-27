@@ -2,7 +2,7 @@ import {describe, it} from 'mocha';
 import DataProxy from "../../src/core/data_proxy";
 import Recast from "../../src/core/recast";
 import {cutStr, deepCopy, splitStr} from "../../src/core/operator";
-import EditorText from "../../src/component/editor_text";
+import EditorText from "../../src/core/editor_text";
 import {calcDecimals, changeFormat, dateDiff, formatDate} from '../../src/utils/date';
 import {isHave} from "../../src/core/helper";
 import {copyPasteTemplate} from "../util/templates";
