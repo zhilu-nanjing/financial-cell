@@ -7,7 +7,7 @@ export default class DropdownColor extends Dropdown {
   constructor(iconName, color) {
     const icon = new Icon(iconName)
       .css('height', '16px')
-      .css('border-bottom', `3px solid ${color}`);
+      .css('border-bottom', `3px solid ${color}`);//这个对应填充按钮下面那个颜色图标的高度
     const colorPalette = new ColorPalette();
     colorPalette.change = (v) => {
       this.setTitle(v);
