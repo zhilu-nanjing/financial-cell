@@ -60,4 +60,4 @@ https://zhilu-nanjing.github.io/zhilu-demo/docs/index.html
 https://www.notion.so/financial-cell-6ed2e5093897477fbea6088b4dab8122
 
 ## LICENSE
-MIT
+LGPL
