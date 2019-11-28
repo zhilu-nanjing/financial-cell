@@ -8,7 +8,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = merge(common, {
     mode: 'production',
-    devtool: 'none',
+    devtool: 'inline-source-map', // none
     plugins: [
         // new BundleAnalyzerPlugin(),     // 视图
         new CleanWebpackPlugin(['dist']),
