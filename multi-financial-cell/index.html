@@ -45,8 +45,41 @@
             opacity: 0.75;
         }
 
+        .el-popper .popper__arrow::after {
+            border-width: 0;
+        }
+
+        .el-dropdown-menu__item {
+            color: #fff;
+        }
+
+        .el-dropdown-menu__item:not(.is-disabled):hover {
+            background-color: transparent;
+            color: #fff;
+        }
+
+        .el-tabs__item {
+            background-color: rgba(0, 0, 0, 0.1);
+            margin-left: 3px;
+            margin-right: 3px;
+            height: 30px;
+            line-height: 30px;
+            font-size: .9rem;
+        }
+
+        .el-popper[x-placement^=bottom] {
+            margin-top: 0;
+        }
+
+        .el-dropdown-menu {
+            background: hsl(0,0%,20%);
+            padding: 0;
+            margin: 0;
+            z-index: 99999999 !important;
+        }
+
         .el-tabs--border-card > .el-tabs__header {
-            background-color: #2d7ff9;
+            background-color: #1283da;
         }
     </style>
 </head>
@@ -56,13 +89,13 @@
     <el-tabs type="border-card" v-model="activeTab" @tab-click="clickTab" @tab-remove="removeTab">
         <el-tab-pane v-for="item in menu" :key="item.name" :name="item.name">
             <span v-if="item.isShow === 1" slot="label" @click="deleteNote = false">
-                <el-dropdown v-popover:popover trigger="click" slot="label" @command="commandDropDown">
+                <el-dropdown style="z-index: 999999999" v-popover:popover trigger="click" slot="label" @command="commandDropDown">
                 <span class="el-dropdown-link" style="color: hsl(0,0%,20%);">
                     {{item.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command="rename">重命名</el-dropdown-item>
-                        <el-dropdown-item command="delete">删除</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-edit" command="rename">重命名</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-delete" command="delete">删除</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
                 <el-popover
@@ -178,6 +211,12 @@
             },
             removeTab() {
                 this.deleteNote = true;
+            },
+            okClick() {
+
+            },
+            cancelClick() {
+
             },
             initTabs() {
                 let el = document.getElementsByClassName("el-tabs__nav")[0];
