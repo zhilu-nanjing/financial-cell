@@ -1,5 +1,5 @@
-var formulajs = require('../src/calc/formulajs/index');
-var CALC = require('../src/calc/index');
+var formulajs = require('../../src/calc/formulajs');
+var CALC = require('../../src/calc');
 var assert = require('assert');
 describe('formulajs integration', function() {
   describe('CALC_TEST.import_functions()', function() {
