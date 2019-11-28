@@ -261,8 +261,7 @@ class Draw {
             return 0;
         const {ctx} = this;
         ctx.font = `${font.italic ? 'italic' : ''} ${font.bold ? 'bold' : ''} ${npx(font.size)}px ${font.name}`;
-
-        return ctx.measureText(txt).width + box.padding * 2;
+        return ctx.measureText(txt).width*0.81;//todo:暂时先通过比例补偿的方式解决删除线和下划线过长的问题，可能会有更好的方法
     }
 
     selfAdaptionOneTxtWidth(txt, font) {
@@ -357,7 +356,7 @@ class Draw {
         } else {
             this.fillText(txt, tx, ty);
             if (strike) {
-                drawFontLine.call(this, 'striket', tx, ty, align, valign, font.size, txtWidth);
+                drawFontLine.call(this, 'strike', tx, ty, align, valign, font.size, txtWidth);
             }
             if (underline) {
                 drawFontLine.call(this, 'underline', tx, ty, align, valign, font.size, txtWidth);
