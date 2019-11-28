@@ -261,7 +261,7 @@ class Draw {
             return 0;
         const {ctx} = this;
         ctx.font = `${font.italic ? 'italic' : ''} ${font.bold ? 'bold' : ''} ${npx(font.size)}px ${font.name}`;
-        return ctx.measureText(txt).width/dpr();
+        return ctx.measureText(txt).width*font.size/npx(font.size);
     }
 
     selfAdaptionOneTxtWidth(txt, font) {
