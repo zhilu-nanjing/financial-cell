@@ -84,9 +84,9 @@ function isHave(param) {
         return false;
     }
 
-    // if (param === null) {
-    //     return false;
-    // }
+    if (param === null) {
+        return false;
+    }
 
     return param !== null;
 }

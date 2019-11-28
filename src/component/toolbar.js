@@ -89,8 +89,9 @@ function moreResize(widthFn = this.widthFn) {
         el, btns, moreEl, ddMore, btns2,
     } = this;
     const {moreBtns, contentEl} = ddMore;
-    el.css('width', `${ widthFn() - 60}px`);
+    el.css('width', `${widthFn() - 60}px`);
     const elBox = el.box();
+    console.log("92: ", elBox);
 
     let sumWidth = 160;
     let sumWidth2 = 12;
@@ -190,6 +191,11 @@ export default class Toolbar {
         bind(window, 'resize', () => {
             moreResize.call(this, data.settings.view.width);
         });
+    }
+
+    moreResize() {
+        let {data} = this;
+        moreResize.call(this, data.settings.view.width);
     }
 
     paintformatActive() {

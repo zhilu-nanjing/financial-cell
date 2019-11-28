@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <!-- import Vue before Element -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <link href="../dist/xspreadsheet.css" rel="stylesheet">
+    <style>
+        .el-tabs--border-card > .el-tabs__content {
+            padding: 0;
+        }
+
+        input:focus :focus .el-dropdown:focus {
+            outline: none;
+        }
+
+        :active {outline:none}
+
+        :focus {
+            outline: none;
+        }
+
+        #rename_input {
+            text-align: center;
+            padding: 4px;
+            border-radius: 2px;
+            font-size: 13px;
+            line-height: 18px;
+            color: #333333;
+            background: white;
+            box-shadow: none;
+            resize: none;
+            background: none;
+            outline: none;
+            border: 0;
+        }
+
+        .other-tab:hover {
+            opacity: 1;
+        }
+
+        .other-tab {
+            color: #fff;
+            opacity: 0.75;
+        }
+
+        .el-popper .popper__arrow::after {
+            border-width: 0;
+        }
+
+        .el-dropdown-menu__item {
+            color: #fff;
+        }
+
+        .el-dropdown-menu__item:not(.is-disabled):hover {
+            background-color: transparent;
+            color: #fff;
+        }
+
+        .el-tabs__item {
+            background-color: rgba(0, 0, 0, 0.1);
+            margin-left: 3px;
+            margin-right: 3px;
+            height: 30px;
+            line-height: 30px;
+            font-size: .9rem;
+        }
+
+        .el-popper[x-placement^=bottom] {
+            margin-top: 0;
+        }
+
+        .el-dropdown-menu {
+            background: hsl(0,0%,20%);
+            padding: 0;
+            margin: 0;
+            z-index: 99999999 !important;
+        }
+
+        .el-tabs--border-card > .el-tabs__header {
+            background-color: #1283da;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <el-tabs type="border-card" v-model="activeTab" @tab-click="clickTab" @tab-remove="removeTab">
+        <el-tab-pane v-for="item in menu" :key="item.name" :name="item.name">
+            <span v-if="item.isShow === 1" slot="label" @click="deleteNote = false">
+                <el-dropdown style="z-index: 999999999" v-popover:popover trigger="click" slot="label" @command="commandDropDown">
+                <span class="el-dropdown-link" style="color: hsl(0,0%,20%);">
+                    {{item.name}}<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item icon="el-icon-edit" command="rename">重命名</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-delete" command="delete">删除</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+                <el-popover
+                        ref="popover"
+                        v-model="deleteNote"
+                        ref="popover"
+                        placement="top"
+                        width="160">
+                    <div style="margin-bottom: .5rem; font-size: .9rem; line-height: 1.5; font-weight: 500;color: hsl(0,0%,30%);">你确定要删除这张表吗？</div>
+                    <div style="opacity: .75; font-weight: 500; font-size: 13px;">这张表的所有数据都会丢失。</div>
+                    <div style="text-align: right; margin: 0; padding-top: 15px;">
+                        <el-button size="mini" type="text" @click="deleteNote = false">取消</el-button>
+                        <el-button type="primary" size="mini" @click="okClick">确定</el-button>
+                    </div>
+                </el-popover>
+            </span>
+            <input @click="InputEvent" @blur="inputBlur($event)" @input="changeName" ref="rename_input"
+                   type="text" slot="label" id="rename_input"
+                   v-else-if="item.isShow === 3"
+                   v-model="inputValue"/>
+            <span class="other-tab" v-else slot="label">{{item.name}}</span>
+            <div :id="item.name"></div>
+        </el-tab-pane>
+        <el-tab-pane ref="addTab">
+            <div slot="label">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" class="flex-none" style="shape-rendering: geometricprecision;"><path fill-rule="evenodd" class="" fill="currentColor" d="M0,2.0085302 C0,0.899249601 0.901950359,0 2.0085302,0 L9.9914698,0 C11.1007504,0 12,0.901950359 12,2.0085302 L12,9.9914698 C12,11.1007504 11.0980496,12 9.9914698,12 L2.0085302,12 C0.899249601,12 0,11.0980496 0,9.9914698 L0,2.0085302 Z M9.5,5 L7,5 L7,2.5 C7,2.224 6.776,2 6.5,2 L5.5,2 C5.224,2 5,2.224 5,2.5 L5,5 L2.5,5 C2.224,5 2,5.224 2,5.5 L2,6.5 C2,6.776 2.224,7 2.5,7 L5,7 L5,9.5 C5,9.776 5.224,10 5.5,10 L6.5,10 C6.776,10 7,9.776 7,9.5 L7,7 L9.5,7 C9.776,7 10,6.776 10,6.5 L10,5.5 C10,5.224 9.776,5 9.5,5 Z"></path></svg>
+            </div>
+        </el-tab-pane>
+    </el-tabs>
+</div>
+
+<script type="text/javascript" src="../dist/xspreadsheet.js"></script>
+<script type="text/javascript" src="../dist/f.js"></script>
+<script type="text/javascript" src="../dist/vendors~xspreadsheet.js"></script>
+<script src="./utils/helper.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                menu: [
+                    {
+                        name: "sheet1",
+                        content: "123",
+                        isShow: 1,
+                        financialCell: null,
+                        init: false,
+                    },
+                    {
+                        name: "sheet2",
+                        content: "456",
+                        isShow: 2,
+                        financialCell: null,
+                        init: false,
+                    },
+                    {
+                        name: "sheet3",
+                        content: "123",
+                        isShow: 2,
+                        financialCell: null,
+                        init: false,
+                    },
+                    {
+                        name: "sheet4",
+                        content: "456",
+                        isShow: 2,
+                        financialCell: null,
+                        init: false,
+                    }
+                ],
+                activeTab: 'sheet1',
+                inputValue: 'sheet1',
+                deleteNote: false,
+            }
+        },
+        mounted() {
+            this.initAddTabOperator();
+            this.initTabs();
+            this.initFinancialCell();
+        },
+        methods: {
+            initAddTabOperator() {
+                console.log(this.$refs.addTab.style);
+            },
+            clickTab() {
+                setIsShow(this.menu, 2);
+                setSelectorIsShow(this.menu, this.activeTab, 1);
+                setSelectorToolbar(this.menu, this.activeTab);
+            },
+            initFinancialCell() {
+                for (let i = 0; i < this.menu.length; i++) {
+                    let item = this.menu[i];
+                    item.financialCell = initFinancialCell(item.name);
+                }
+            },
+            commandDropDown(command) {
+                if (command === 'rename') {
+                    this.inputValue = this.activeTab;
+                    setIsShow(this.menu, 2);
+                    setSelectorIsShow(this.menu, this.activeTab, 3);
+                    setTimeout(() => {
+                        this.$refs.rename_input[0].select();
+                    });
+                } else if (command === 'delete') {
+                    this.removeTab();
+                }
+            },
+            changeName() {
+            },
+            InputEvent(e) {
+                e.stopPropagation();
+            },
+            inputBlur(e) {
+                // 失去焦距的时候 -> input 绑定 inputValue  然后主动改变menu和activeTab的值
+                let item = getSelector(this.menu, this.activeTab);
+                this.activeTab = this.inputValue;
+                item.name = this.activeTab;
+
+                setIsShow(this.menu, 2);
+                setSelectorIsShow(this.menu, this.activeTab, 1);
+                e.stopPropagation();
+            },
+            removeTab() {
+                this.deleteNote = true;
+            },
+            okClick() {
+
+            },
+            cancelClick() {
+
+            },
+            initTabs() {
+                let el = document.getElementsByClassName("el-tabs__nav")[0];
+                console.log(el);
+                Sortable.create(el, {
+                    onEnd: (e) => {
+                        this.deleteNote = false;
+                    },
+                })
+            }
+        }
+    })
+</script>
+</body>
+</html>

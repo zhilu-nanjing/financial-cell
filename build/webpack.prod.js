@@ -4,11 +4,13 @@ const common = require('./webpack.config.js');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = merge(common, {
     mode: 'production',
-    devtool: 'source-map',
+    devtool: 'inline-source-map', // none
     plugins: [
+        // new BundleAnalyzerPlugin(),     // 视图
         new CleanWebpackPlugin(['dist']),
         //  you should know that the HtmlWebpackPlugin by default will generate its own index.html
         new HtmlWebpackPlugin({
@@ -39,7 +41,7 @@ module.exports = merge(common, {
         },
     },
     entry: {
-      f: "./src/core/operator.js"
+      f: "./src/core/operator.js",
     },
     output: {
         filename: '[name].js',
