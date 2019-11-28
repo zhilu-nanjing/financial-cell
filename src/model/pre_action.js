@@ -21,7 +21,6 @@ function getCellDepend(cells) {
     return arr;
 }
 
-
 export default class PreAction {
     constructor({type = -1, action = "",  ri = -1, ci = -1, oldData = "", newData = "", expr = "", oldStep = "", cellRange = "", cells = {}, height = -1, width = -1, oldCell = {}, newCell = {}, newMergesData = "", oldMergesData = "", property = "", value = ""}, data) {
         this.type = type;
@@ -45,7 +44,10 @@ export default class PreAction {
         this.newData = newData;
         this.data = data;
     }
-
+    /**
+     * 获取所有需要计算的单元格列表
+     * @returns {Array}
+     */
     findAllNeedCalcCell() {
         let changeArr = [];
         let {oldCell, newCell, ri, ci} = this;
@@ -54,7 +56,6 @@ export default class PreAction {
         if (ri !== -1 && ci !== -1) {
             changeArr.push(xy2expr(ci, ri));
         }
-
         changeArr = distinct(changeArr);
         return changeArr;
     }

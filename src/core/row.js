@@ -1297,7 +1297,7 @@ class Rows {
                 console.time("setData");
                 if (rowsInit) {
                     this.init();
-                    this.workbook = calcUtils.Rows2Workbook(this);
+                    this.workbook = calcUtils.Rows2Workbook(this, true); // jobs： 存放作为全局变量
                     sheet.toolbar.change('close', '');
                 }
                 console.timeEnd("setData");

@@ -1,10 +1,21 @@
 const checker = require('./formula_check.js');
 const error = require('./formulajs/lib/error');
+const exp = require("../core/alphabet");
+
+function isHave(param) {
+  if (typeof param === "undefined") {
+    return false;
+  }
+  if (param === null) {
+    return false;
+  }
+  return true;
+}
+
 class CalcCell { // 对cell中的参数做转换，判断,多单元格处理等的类
-  constructor(formulas_i, rows) {
+  constructor(formulas_i) {
     this.cell = formulas_i.cell
-    this.rows = rows
-    this.f = formulas_i.cell.f
+    this.f = isHave(formulas_i.cell)? formulas_i.cell.f: null
     this.name = formulas_i.name
     this.sheet = formulas_i.sheet
   }
@@ -12,6 +23,9 @@ class CalcCell { // 对cell中的参数做转换，判断,多单元格处理等�
   //检测是否合法
   check_valid() {
     var text = this.f
+    if (!isHave(text)){
+      return ""
+    }
     //==A1报错
     if (text[1] === '='){
       return error.name
@@ -20,7 +34,7 @@ class CalcCell { // 对cell中的参数做转换，判断,多单元格处理等�
     if (params != null && this.f.indexOf('(') <0 && this.f.indexOf(')')<0){
       return error.name
     }
-    // 处理"中""的转义
+    // 处理"" 中""的转义
     if (this.f.indexOf('""') >= 1 && this.f.indexOf('(') < 0 && this.f.indexOf(')') < 0) {
       return this.f.slice(2, this.f.length - 1).replace('""', '"')
     }
@@ -42,8 +56,17 @@ class CalcCell { // 对cell中的参数做转换，判断,多单元格处理等�
   }
 
   //参数转换
-  trans_formula() {
-    var fml = this.f
+  trans_formula(rows) {
+    var zb = exp.expr2xy(this.name)
+    var source = rows.getCell(zb[1], zb[0])
+    if (isHave(source) && isHave(source.formatText)){
+      var fml = source.formatText
+    }else{
+      var fml = this.f
+    }
+    if (typeof fml === 'number'){
+      return fml
+    }
     //去除公式开头结尾的空格
     fml = checker.strim(fml)
     //公式参数转换
