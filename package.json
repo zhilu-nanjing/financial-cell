@@ -30,7 +30,7 @@
     "lint": "./node_modules/eslint/bin/eslint.js src",
     "analyz": "ODE_ENV=production npm_config_report=true npm run build",
     "test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/*",
-    "calc_test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/calc_test.js",
+    "calc_test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/calc/calc_test.js",
     "format_test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/core/format_test.js",
     "chrome_test": "node /Users/wen/Downloads/karma-webpack-example/node_modules/karma/bin/karma start --single-run --browsers PhantomJS --require css-loader",
     "selectors_test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register test/core/selectors_test.js",

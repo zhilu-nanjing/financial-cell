@@ -43,7 +43,7 @@ module.exports = function str_2_val(buffer, formula, position_i) { // buffer 在
     }
     else {
         v = buffer;
-        v.end_pst = position_i // 后面一个字符的位置
+        // v.end_pst = position_i // 后面一个字符的位置
     }
     return v;
 };
