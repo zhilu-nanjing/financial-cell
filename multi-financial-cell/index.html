@@ -229,7 +229,8 @@
                 console.log(el);
                 Sortable.create(el, {
                     onEnd: (e) => {
-                    }
+                        this.deleteNote = false;
+                    },
                 })
             }
         }
