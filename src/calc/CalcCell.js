@@ -58,11 +58,12 @@ class CalcCell { // 对cell中的参数做转换，判断,多单元格处理等�
   //参数转换
   trans_formula(rows) {
     var zb = exp.expr2xy(this.name)
-    var source = rows.getCell(zb[1], zb[0])
-    if (isHave(source) && isHave(source.formatText)){//如果有formatText(如日期会转为excel数字），将f设为对应值
-      var fml = source.formatText
-    }else{
-      var fml = this.f
+    var fml = this.f
+    if (isHave(rows)){
+      var source = rows.getCell(zb[1], zb[0])
+      if (isHave(source) && isHave(source.formatText)){//如果有formatText(如日期会转为excel数字），将f设为对应值
+        fml = source.formatText
+      }
     }
     if (typeof fml === 'number'){
       return fml

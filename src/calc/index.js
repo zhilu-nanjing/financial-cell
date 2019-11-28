@@ -27,7 +27,7 @@ var mymodule = function(rows, tileArr) {
                         "v": ""
                     }
                 }
-                var calc_cell = new CalcCell(formulas[i], rows)
+                var calc_cell = new CalcCell(formulas[i])
                 var valid_res = calc_cell.check_valid()
                 if (valid_res !== true){//如果公式不合法，将公式值设为相应值
                     formulas[i].cell.v = valid_res
@@ -48,6 +48,35 @@ var mymodule = function(rows, tileArr) {
 
 };
 
+var test = function(workbook) { //公式模块测试
+    var formulas = finder.find_all_cells_with_formulas(workbook, exec_formula)//找到所有需要计算的单元格
+    for (var i = formulas.length - 1; i >= 0; i--) {
+        try {
+            if(!helper.isHave(formulas[i].cell)){//如果该单元格为空，设置f,v为空
+                formulas[i].cell = {
+                    "f": "",
+                    "v": ""
+                }
+            }
+            var calc_cell = new CalcCell(formulas[i])
+            var valid_res = calc_cell.check_valid()
+            if (valid_res !== true){//如果公式不合法，将公式值设为相应值
+                formulas[i].cell.v = valid_res
+            }else{
+                //对cell和sheet进行处理和转换({}参数加上'',未定义单元格置为default_0等)，计算完成后需将多余变动部分还原
+                formulas[i].cell.f = calc_cell.trans_formula(null)
+                checker.trans_sheet(formulas[i].sheet)
+                exec_formula(formulas[i]);
+                formulas[i].cell.f = calc_cell.recover_formula()
+                checker.recover_sheet(formulas[i].sheet)
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+};
+
+
 mymodule.calculator = function calculator(workbook) {
     return new Calculator(workbook, exec_formula);
 };
@@ -62,5 +91,6 @@ mymodule.xlsx_Fx = exec_formula.xlsx_Fx;
 mymodule.localizeFunctions = exec_formula.localizeFunctions;
 
 mymodule.XLSX_CALC = mymodule
+mymodule.CALC_TEST = test
 
 module.exports = mymodule;
