@@ -345,8 +345,8 @@ exports.CHISQ.TEST = function(observed, expected) {
 };
 
 exports.COLUMN = function() {
-  col_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-  cell_name = this.args[0].formula.name
+  var col_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+  var cell_name = this.args[0].formula.name
   cell_name = cell_name.replace(/\d+/g,'')
   return col_list.indexOf(cell_name)+1
 };

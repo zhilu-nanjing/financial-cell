@@ -42,7 +42,7 @@ exports.argsToArray = function(args) {
 };
 
 exports.numbers = function() {
-
+  var possibleNumbers = this.flatten.apply(null, arguments);
   return possibleNumbers.filter(function(el) {
     return typeof el === 'number';
   });

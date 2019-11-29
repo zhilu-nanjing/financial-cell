@@ -5,6 +5,7 @@ var numeral = require('numeral');
 //TODO
 exports.ASC = function(str) {
   var tmp = "";
+  str= str.toString()
   for (var i = 0; i < str.length; i++) {
     if (str.charCodeAt(i) > 65248 && str.charCodeAt(i) < 65375) {
       tmp += String.fromCharCode(str.charCodeAt(i) - 65248);
