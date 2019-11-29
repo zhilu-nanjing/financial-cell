@@ -1,4 +1,4 @@
-const checker = require('./formula_check.js');
+const checker = require('./cell_formula/formula_check.js');
 const error = require('./formulajs/lib/error');
 const exp = require("../core/alphabet");
 

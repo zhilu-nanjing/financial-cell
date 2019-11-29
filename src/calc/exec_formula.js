@@ -1,6 +1,6 @@
 "use strict";
 
-const expression_builder = require('./expression_builder.js');
+const expression_builder = require('./cell_formula/expression_builder.js');
 
 let xlsx_Fx = {};
 let xlsx_raw_Fx = {};

@@ -164,5 +164,17 @@ describe('formulajs integration', function() {
       CALC.CALC_TEST(workbook);
       console.log(workbook.Sheets.Sheet1.H614.v);
     });
+    it('minus', function() {
+      CALC.import_functions(formulajs);
+      var workbook = {};
+      workbook.Sheets = {};
+      workbook.Sheets.Sheet1 = {};
+      workbook.Sheets.Sheet1.A1 = {f: 'asdfasf'}; // 没有带等号的
+      workbook.Sheets.Sheet1.A2 = {f: 'asdf-as'}; // 没有带等号，有减号
+      workbook.Sheets.Sheet1.A3 = {f: 'asdf+as'}; // 没有带等号，有加号
+      CALC.CALC_TEST(workbook);
+      console.log(workbook.Sheets.Sheet1.H614.v);
+      assert.equal(workbook.Sheets.Sheet1.H614.v, "asdf-as");
+    });
   });
 });

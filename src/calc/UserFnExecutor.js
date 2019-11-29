@@ -1,11 +1,16 @@
 "use strict";
 
-module.exports = function UserFnExecutor(user_function) {
-    var self = this;
-    self.name = 'UserFn';
-    self.args = [];
-    self.calc = function() {
-        var errorValues = {
+class UserFnExecutor{
+    constructor(user_function){
+        let self = this;
+        self.name = 'UserFn';
+        self.args = [];
+        self.user_function = user_function;
+    }
+    calc(){
+        let self = this;
+        let user_function = this.user_function;
+        let errorValues = {
             '#NULL!': 0x00,
             '#DIV/0!': 0x07,
             '#VALUE!': 0x0F,
@@ -19,12 +24,12 @@ module.exports = function UserFnExecutor(user_function) {
             result = user_function.apply(self, self.args.map(f=>f.calc()));
         } catch (e) {
             if (user_function.name === 'is_blank'
-                && errorValues[e.message] !== undefined) {
+              && errorValues[e.message] !== undefined) {
                 // is_blank applied to an error cell doesn't propagate the error
                 result = 0;
             }
             else if (user_function.name === 'iserror'
-                && errorValues[e.message] !== undefined) {
+              && errorValues[e.message] !== undefined) {
                 // iserror applied to an error doesn't propagate the error and returns true
                 result = true;
             }
@@ -33,8 +38,10 @@ module.exports = function UserFnExecutor(user_function) {
             }
         }
         return result;
+    }
+    push(buffer) {
+        this.args.push(buffer);
     };
-    self.push = function(buffer) {
-        self.args.push(buffer);
-    };
-};
+
+}
+module.exports = UserFnExecutor;

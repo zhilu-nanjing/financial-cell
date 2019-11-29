@@ -1,7 +1,7 @@
 "use strict";
 
-const RawValue = require('./RawValue.js');
-const str_2_val = require('./str_2_val.js');
+const RawValue = require('./cell_formula/RawValue.js');
+const str_2_val = require('./cell_formula/str_2_val.js');
 const finder = require('./finder');
 
 class Calculator { // 这个应该是对重对外暴露的类。

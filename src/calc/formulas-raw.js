@@ -1,10 +1,10 @@
 "use strict";
 
-const int_2_col_str = require('./int_2_col_str.js');
-const col_str_2_int = require('./col_str_2_int.js');
-const RawValue = require('./RawValue.js');
-const Range = require('./Range.js');
-const RefValue = require('./RefValue.js');
+const int_2_col_str = require('./helper/int_2_col_str.js');
+const col_str_2_int = require('./helper/col_str_2_int.js');
+const RawValue = require('./cell_formula/RawValue.js');
+const Range = require('./cell_formula/Range.js');
+const RefValue = require('./cell_formula/RefValue.js');
 
 function raw_offset(cell_ref, rows, columns, height, width) {
     height = (height || new RawValue(1)).calc();

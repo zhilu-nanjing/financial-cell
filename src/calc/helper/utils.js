@@ -1,5 +1,5 @@
-var exp = require("../core/alphabet");
-const helper = require("../core/helper");
+var exp = require("../../core/alphabet");
+const helper = require("../../core/helper");
 
 exports.Rows2Workbook = function (rows) {
   var cells = rows._

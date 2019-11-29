@@ -10,7 +10,7 @@ import CellProxy from "./cell_proxy";
 import CellRange from "./cell_range";
 import CellProp from "../model/cell_prop";
 import Cell from "../model/cell";
-let calcUtils = require('../calc/utils');
+let calcUtils = require('../calc/helper/utils');
 
 export function isFormula(text) {
     // if (text && text[0] === "=") {

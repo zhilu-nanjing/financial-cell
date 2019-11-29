@@ -1,15 +1,15 @@
 "use strict";
 
-const int_2_col_str = require('./int_2_col_str.js');
-const col_str_2_int = require('./col_str_2_int.js');
+const int_2_col_str = require('./helper/int_2_col_str.js');
+const col_str_2_int = require('./helper/col_str_2_int.js');
 const exec_formula = require('./exec_formula.js');
 const finder = require('./finder');
 const Calculator = require('./Calculator.js');
 const CalcCell = require('./CalcCell.js');
-const checker = require('./formula_check.js');
+const checker = require('./cell_formula/formula_check.js');
 const helper = require("../core/helper")
 const CalcWorkBook = require('./CalcWorkBook')
-const utils = require('./utils')
+const utils = require('./helper/utils')
 var mymodule = function(rows, tileArr) {
     if (helper.isHave(tileArr)){
         if (tileArr.action.indexOf("删除")>=0){ // 删除时同步workbook

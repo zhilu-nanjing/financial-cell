@@ -1,8 +1,8 @@
 "use strict";
 
-const col_str_2_int = require('./col_str_2_int.js');
-const int_2_col_str = require('./int_2_col_str.js');
-const getSanitizedSheetName = require('./getSanitizedSheetName.js');
+const col_str_2_int = require('../helper/col_str_2_int.js');
+const int_2_col_str = require('../helper/int_2_col_str.js');
+const getSanitizedSheetName = require('../getSanitizedSheetName.js');
 
 class Range{
     constructor(str_expression, formula, possition_i){

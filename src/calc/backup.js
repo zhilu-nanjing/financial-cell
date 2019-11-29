@@ -40,7 +40,7 @@ for (var i=0;i<need_calc_cells.length;i++){
 
 var exp = require("../core/alphabet");
 var error = require('./formulajs/lib/error');
-const checker = require('./formula_check.js');
+const checker = require('./cell_formula/formula_check.js');
 
 
 function isEqual(v1, v2) {
