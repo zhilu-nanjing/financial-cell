@@ -41,6 +41,21 @@ exports.CODE = function(text) {
   return text.charCodeAt(0);
 };
 
+exports.CONCATE = function() {
+  var args = utils.flatten(arguments);
+
+  var trueFound = 0;
+  while ((trueFound = args.indexOf(true)) > -1) {
+    args[trueFound] = 'TRUE';
+  }
+
+  var falseFound = 0;
+  while ((falseFound = args.indexOf(false)) > -1) {
+    args[falseFound] = 'FALSE';
+  }
+
+  return args.join('');
+};
 exports.CONCATENATE = function() {
   var args = utils.flatten(arguments);
 
