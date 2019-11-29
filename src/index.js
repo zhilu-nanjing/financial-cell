@@ -108,6 +108,7 @@ class Spreadsheet {
     }
 }
 
+
 const spreadsheet = (el, options = {}) => new Spreadsheet(el, options);
 
 if (window) {
