@@ -1,6 +1,6 @@
 "use strict";
 
-const expression_builder = require('../expression/expression_builder.js');
+import {parseExpression} from '../expression/expression_builder.js';
 
 let xlsx_Fx = {};
 let xlsx_raw_Fx = {};
@@ -44,12 +44,12 @@ function my_assign(dest, source) {
 }
 
 function build_expression(formula) {
-    return expression_builder(formula, {xlsx_Fx: xlsx_Fx, xlsx_raw_Fx: xlsx_raw_Fx});
+    return parseExpression(formula, {xlsx_Fx: xlsx_Fx, xlsx_raw_Fx: xlsx_raw_Fx});
     // xlsx_raw_Fx = {AND, IF, IFERROR, OFFSET}
     // xlsx_Fx = {FLOOR, AVERGAE ... }
 }
 
-function exec_formula(formula) { // cellFormulaProxy.cell.f = "Average(1,2,3,4,5)
+export function exec_formula(formula) { // cellFormulaProxy.cell.f = "Average(1,2,3,4,5)
     let root_exp = build_expression(formula);
     root_exp.update_cell_value();
 }
@@ -78,4 +78,3 @@ exec_formula.import_functions = import_functions;
 exec_formula.import_raw_functions = import_raw_functions;
 exec_formula.build_expression = build_expression;
 exec_formula.xlsx_Fx = xlsx_Fx;
-module.exports = exec_formula;

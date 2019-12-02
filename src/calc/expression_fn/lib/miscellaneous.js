@@ -1,5 +1,5 @@
-let utils   = require('./utils');
-let numeral = require('numeral');
+import utils from './utils'
+import numeral from 'numeral'
 
 exports.UNIQUE = function () {
   let result = [];

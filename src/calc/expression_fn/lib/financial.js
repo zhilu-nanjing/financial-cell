@@ -1,6 +1,6 @@
-let errorObj = require('../../calc_utils/error_config');
-let dateTime = require('./date-time');
-let utils = require('./utils');
+import {errorObj} from '../../calc_utils/error_config'
+import dateTime from './date-time'
+import utils from './utils'
 
 // exports.validDate = function (d)
 function validDate(d){

@@ -1,7 +1,7 @@
-import {StructuralExp} from './structural_exp.js';
-const {RawValue} = require('./RawValue.js');
-const UserFnExecutor = require('./UserFnExecutor.js');
-const UserRawFnExecutor = require('./UserRawFnExecutor.js');
+import {StructuralExp} from './structural_exp.js'
+import {RawValue}  from './RawValue.js'
+import {UserFnExecutor} from './UserFnExecutor.js'
+import {UserRawFnExecutor}  from './UserRawFnExecutor.js'
 
 const common_operations = { // todo: 需要把这个常数放到config里面
   '*': 'multiply',
@@ -14,12 +14,12 @@ const common_operations = { // todo: 需要把这个常数放到config里面
   '>': 'gt',
   '=': 'eq'
 };
-module.exports = function (formula, opts) {
+export function  parseExpression(formula, opts) {
   let exp_builder =  new StructuralExpressionBuilder(formula, opts);
   return exp_builder.parseExpression();
 };
 
-class FormulaParser{
+export class FormulaParser{
   constructor(opts){
     this.opts = opts;
   }

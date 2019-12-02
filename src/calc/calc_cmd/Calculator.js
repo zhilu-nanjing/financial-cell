@@ -1,10 +1,9 @@
 "use strict";
+import {RawValue} from '../expression/RawValue.js'
+import {str_2_val} from '../expression/str_2_val.js'
+import finder from './finder'
 
-const RawValue = require('../expression/RawValue.js');
-const str_2_val = require('../expression/str_2_val.js');
-const finder = require('./finder');
-
-class Calculator { // 这个应该是对重对外暴露的类。
+export class Calculator { // 这个应该是对重对外暴露的类。
 
     constructor(workbook, exec_formula) {
         this.workbook = workbook;
@@ -83,4 +82,3 @@ class Calculator { // 这个应该是对重对外暴露的类。
     }
 }
 
-module.exports = Calculator;

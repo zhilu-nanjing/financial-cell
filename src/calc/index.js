@@ -1,21 +1,21 @@
 "use strict";
 
-const int_2_col_str = require('./expression/int_2_col_str.js');
-const col_str_2_int = require('./expression/col_str_2_int.js');
-const exec_formula = require('./cell_formula/exec_formula.js');
-const finder = require('./calc_cmd/finder');
-const Calculator = require('./calc_cmd/Calculator.js');
-const CellFormulaProxy = require('./cell_formula/cellFormulaProxy.js');
-const checker = require('./cell_formula/formula_check.js');
-const helper = require("../core/helper");
-const CalcWorkBook = require('./calc_cmd/CalcWorkBook');
-const Rows2Workbook = require('./calc_cmd/row2workbook').Rows2Workbook;
+import int_2_col_str  from './expression/int_2_col_str.js'
+import col_str_2_int from './expression/col_str_2_int.js'
+import {exec_formula} from './cell_formula/exec_formula.js'
+import {find_all_cells_with_formulas, find_all_need_calc_cell} from './calc_cmd/finder'
+import Calculator from './calc_cmd/Calculator.js'
+import CellFormulaProxy from './cell_formula/cellFormulaProxy.js'
+import checker from './cell_formula/formula_check.js'
+import {isValueValid} from "../core/helper"
+import CalcWorkBook from './calc_cmd/CalcWorkBook'
+import {Rows2Workbook} from './calc_cmd/row2workbook'
 
 function calculateFormulas(formulas) { // 核心的计算引擎 formulas是数组，应该转化为cellFormula类。
     for (let i = formulas.length - 1; i >= 0; i--) { // 遍历所有需要计算的formulas; 从后向前遍历
         try {
             let curCellFormula = formulas[i];
-            if (!helper.isHave(curCellFormula.cell)) {//如果该单元格为空，设置f,v为空
+            if (!isValueValid(curCellFormula.cell)) {//如果该单元格为空，设置f,v为空
                 curCellFormula.cell = {
                     'f': '',
                     'v': ''
@@ -39,21 +39,21 @@ function calculateFormulas(formulas) { // 核心的计算引擎 formulas是数�
 }
 
 export function calc(rows, tileArr) {
-    if (helper.isHave(tileArr)){
+    if (isValueValid(tileArr)){
         if (tileArr.action.indexOf("删除")>=0){ // 删除时同步workbook
             rows.workbook= Rows2Workbook(rows); // 转化一次
         }
         let Calc_WorkBook = new CalcWorkBook(rows, tileArr);
         let workbook = rows.workbook;
         workbook = Calc_WorkBook.get_workbook(workbook);
-        let formulas = finder.find_all_need_calc_cell(workbook, tileArr, exec_formula);//找到所有需要计算的单元格
+        let formulas = find_all_need_calc_cell(workbook, tileArr, exec_formula);//找到所有需要计算的单元格
         calculateFormulas(formulas);
         Calc_WorkBook.calcDoneToSetCells(workbook, rows) // 把workbook的值再转化为rows的形式
     }
 }
 
 let calculateWorkbook = function(workbook) {
-    let formulaArray = finder.find_all_cells_with_formulas(workbook, exec_formula);//找到所有需要计算的单元格
+    let formulaArray = find_all_cells_with_formulas(workbook, exec_formula);//找到所有需要计算的单元格
     calculateFormulas(formulaArray); // 计算所有的formulas
 };
 

@@ -1,5 +1,5 @@
-let errorObj = require('../../calc_utils/error_config');
-let utils = require('./utils');
+import {errorObj} from '../../calc_utils/error_config';
+import utils from './utils';
 function match_less_than_or_equal(matrix, lookupValue) {
   let index;
   let indexValue;

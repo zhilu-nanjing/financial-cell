@@ -1,6 +1,6 @@
-let formulajs = require('../../src/calc/expression_fn');
-let calc = require('../../src/calc');
-let assert = require('assert');
+import * as formulajs from '../../src/calc/expression_fn';
+import {calc} from '../../src/calc'
+import assert from 'assert'
 describe('expression_fn integration', function() {
   describe('calculateWorkBook.import_functions()', function() {
     it('xlfn', function() {

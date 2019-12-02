@@ -1,4 +1,4 @@
-let errorObj = require('../../calc_utils/error_config');
+import {errorObj} from '../../calc_utils/error_config'
 //XW: 自定义函数
 exports.PQUERY = function () {
   if (arguments.length !== 5) {

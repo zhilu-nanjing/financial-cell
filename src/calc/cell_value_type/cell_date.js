@@ -1,4 +1,4 @@
-const cf = require("../calc_utils/config")
+import cf from "../calc_utils/config"
 
 export const d1900 = new Date(1900, 0, 1);
 

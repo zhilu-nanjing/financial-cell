@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function UserRawFnExecutor(user_function) {
+export function UserRawFnExecutor(user_function) {
     let self = this;
     self.name = 'UserRawFn';
     self.args = [];

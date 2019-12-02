@@ -1,6 +1,6 @@
-let utils = require('./utils');
-let errorObj = require('../../calc_utils/error_config').errorObj;
-let numeral = require('numeral');
+import utils from './utils'
+import {errorObj} from '../../calc_utils/error_config'
+import numeral from 'numeral'
 
 //TODO
 exports.ASC = function(str) {

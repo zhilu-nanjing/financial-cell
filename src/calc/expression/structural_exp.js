@@ -1,10 +1,11 @@
 "use strict";
-const cf = require("../calc_utils/config");
+import cf  from "../calc_utils/config"
 import {RawValue} from './RawValue.js';
 import {Range} from './Range.js';
-const str_2_val = require('./str_2_val.js');
-let {errorObj, errorMsgArr} = require('../calc_utils/error_config');
+import {str_2_val}  from './str_2_val.js'
+import {errorObj, errorMsgArr}  from '../calc_utils/error_config'
 import {CellDate} from "../cell_value_type/cell_date";
+
 let exp_id = 0; // 全局变量
 export class StructuralExp {
     // 代表语法书上面的一个节点。这个几点的args是代表树枝，

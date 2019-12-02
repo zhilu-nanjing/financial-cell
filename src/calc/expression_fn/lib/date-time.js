@@ -1,7 +1,7 @@
-let {errorObj} = require('../../calc_utils/error_config');
+import {errorObj} from '../../calc_utils/error_config'
 import {CellDate, stamp2DayNum} from '../../cell_value_type/cell_date';
-const cf = require('../../calc_utils/config');
-let utils = require('./utils');
+import * as cf from '../../calc_utils/config'
+import utils from './utils'
 
 let d1900 = new CellDate(1900, 0, 1);
 let WEEK_STARTS = [

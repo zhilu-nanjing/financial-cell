@@ -1,8 +1,6 @@
 "use strict";
-const cf = require("../calc_utils/config.js");
-
-
-class UserFnExecutor{
+import cf from "../calc_utils/config.js"
+export class UserFnExecutor{
     constructor(user_function){
         let self = this;
         self.name = 'UserFn';
@@ -37,4 +35,3 @@ class UserFnExecutor{
     };
 
 }
-module.exports = UserFnExecutor;

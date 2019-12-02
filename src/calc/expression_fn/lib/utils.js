@@ -1,5 +1,5 @@
-const errorObj = require('../../calc_utils/error_config').errorObj;
-const cf =  require('../../calc_utils/config')
+import {errorObj} from '../../calc_utils/error_config'
+import {MS_PER_DAY} from '../../calc_utils/config'
 import {CellDate, d1900} from "../../cell_value_type/cell_date"
 
 function flattenShallow(array) {
@@ -201,9 +201,9 @@ exports.parseDate = function(date) {
       return errorObj.ERROR_NUM;
     }
     if (d <= 60) {
-      return new CellDate(d1900.getTime() + (d - 1) * cf.MS_PER_DAY);
+      return new CellDate(d1900.getTime() + (d - 1) * MS_PER_DAY);
     }
-    return new CellDate(d1900.getTime() + (d - 2) * cf.MS_PER_DAY);
+    return new CellDate(d1900.getTime() + (d - 2) * MS_PER_DAY);
   }
   if (typeof date === 'string') {
     date = new CellDate(date);
@@ -270,7 +270,7 @@ exports.ExcelDateToJSDate = function (date) {
   if (typeof date == 'string'){
     date = utils.parseDate(issue)
   }
-  return (date instanceof CellDate) ? date : new CellDate(Math.round((date - 25569)*cf.MS_PER_DAY));
+  return (date instanceof CellDate) ? date : new CellDate(Math.round((date - 25569)*MS_PER_DAY));
 }
 //XW：end
 //XW：判定是否是数字

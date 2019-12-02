@@ -1,4 +1,4 @@
-let exp = require("../../utils/alphabet");
+import exp from "../../utils/alphabet";
 
 
 function isEqual(v1, v2) {
@@ -21,7 +21,7 @@ function isHave(param) {
   }
   return true;
 }
-class CalcWorkBook { // 对workbook处理的类
+export class CalcWorkBook { // 对workbook处理的类
   constructor(rows, tileArr) {
     this.rows = rows;
     this.tileArr = tileArr
@@ -67,4 +67,3 @@ class CalcWorkBook { // 对workbook处理的类
   }
 }
 
-module.exports = CalcWorkBook;

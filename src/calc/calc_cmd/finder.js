@@ -1,6 +1,7 @@
 "use strict";
-const CellFormulaProxy = require('../cell_formula/cellFormulaProxy.js');
-exports.find_all_cells_with_formulas = function(wb, exec_formula) {
+import {CellFormulaProxy} from '../cell_formula/cellFormulaProxy.js'
+
+export function find_all_cells_with_formulas(wb, exec_formula) {
     let formula_ref = {}; // 把workbook转化为formulas的形式
     let formulaArray = [];
     for (let sheet_name in wb.Sheets) {
@@ -24,7 +25,7 @@ exports.find_all_cells_with_formulas = function(wb, exec_formula) {
     return formulaArray;
 };
 
-exports.find_all_need_calc_cell = function (wb, tileArr, exec_formula) { // todo: tileArr.findAllNeedCalcCell 应该返回workbook中多个sheet的变化结果； 需要筛选出那些需要重新计算的formulas
+export function find_all_need_calc_cell(wb, tileArr, exec_formula) { // todo: tileArr.findAllNeedCalcCell 应该返回workbook中多个sheet的变化结果； 需要筛选出那些需要重新计算的formulas
     console.log("find_all_need_calc_cell");
     var need_calc_cells = tileArr.findAllNeedCalcCell(); // 获取所有需要计算的单元格
     let formula_ref = {};

@@ -1,8 +1,8 @@
-let errorObj = require('../../calc_utils/error_config');
-let jStat = require('jstat').jStat;
-let text = require('./text');
-let utils = require('./utils');
-let bessel = require('bessel');
+import {errorObj} from '../../calc_utils/error_config'
+import {jStat} from 'jstat'
+import text  from './text'
+import utils from './utils'
+import bessel from 'bessel'
 
 function isValidBinaryNumber(number) {
   return (/^[01]{1,10}$/).test(number);

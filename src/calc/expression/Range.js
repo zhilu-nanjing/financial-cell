@@ -1,9 +1,9 @@
 "use strict";
 
-const col_str_2_int = require('./col_str_2_int.js');
-const int_2_col_str = require('./int_2_col_str.js');
-const getSanitizedSheetName = require('./getSanitizedSheetName.js');
-const error_cf = require('../calc_utils/error_config.js');
+import {col_str_2_int} from './col_str_2_int.js'
+import {int_2_col_str} from './int_2_col_str.js'
+import {getSanitizedSheetName} from './getSanitizedSheetName.js'
+import {ERROR_CIRCULAR} from '../calc_utils/error_config.js'
 
 export class Range{
     constructor(str_expression, formula, possition_i){
@@ -57,7 +57,7 @@ export class Range{
                         formula.exec_formula(formula.formula_ref[cell_full_name]);
                     }
                     else if (formula.formula_ref[cell_full_name].status === 'working') {
-                        throw new Error(error_cf.ERROR_CIRCULAR);
+                        throw new Error(ERROR_CIRCULAR);
                     }
                     if (sheet[cell_name].t === 'e') {
                         row.push(sheet[cell_name]);

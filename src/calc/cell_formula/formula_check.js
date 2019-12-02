@@ -1,4 +1,4 @@
-let helper = require("../../core/helper");
+import helper from "../../core/helper";
 //XW: end
 //XW:大括号参数判断,有大括号参数用''包起来作为一个参数
 exports.trans_params = function (cell) {

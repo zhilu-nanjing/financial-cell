@@ -1,7 +1,7 @@
 "use strict";
 
-const getSanitizedSheetName = require('./getSanitizedSheetName.js');
-const error_cf = require('../calc_utils/error_config.js');
+import getSanitizedSheetName from './getSanitizedSheetName.js';
+import error_cf from '../calc_utils/error_config.js'
 
 export class RefValue{
     constructor(str_expression, formula){

@@ -1,7 +1,7 @@
 
-const checker = require('./formula_check.js');
-const {errorObj} = require('../calc_utils/error_config');
-const exp = require("../../utils/alphabet");
+import checker from './formula_check.js'
+import {errorObj} from '../calc_utils/error_config'
+import exp from "../../utils/alphabet"
 
 class CalcBhv { // 对cell中的参数做转换，判断,多单元格处理等的类; 不对外暴露
   constructor(formulas_i) {
@@ -76,7 +76,7 @@ class CalcBhv { // 对cell中的参数做转换，判断,多单元格处理等�
 }
 
 
-module.exports = class CellFormulaProxy{
+export class CellFormulaProxy{
   constructor(wb,sheet,sheet_name,cell,formula_ref,name, status,exec_formula){
     this.wb = wb;
     this.sheet = sheet;

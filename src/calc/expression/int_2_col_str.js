@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function int_2_col_str(n) {
+export function int_2_col_str(n) {
     let dividend = n + 1;
     let columnName = '';
     let modulo;

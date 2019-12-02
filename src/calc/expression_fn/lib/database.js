@@ -1,7 +1,7 @@
-let errorObj = require('../../calc_utils/error_config');
-let stats = require('./statistical');
-let maths = require('./math-trig');
-let utils = require('./utils');
+import errorObj from '../../calc_utils/error_config'
+import stats from  './statistical'
+import maths from  './math-trig'
+import utils from  './utils'
 
 function compact(array) {
   if (!array) { return array; }

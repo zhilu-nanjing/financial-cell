@@ -1,8 +1,8 @@
-let numeric = require('numeric');
-let utils = require('./utils');
-let errorObj = require('../../calc_utils/error_config').errorObj;
-let statistical = require('./statistical');
-let information = require('./information');
+import numeric from 'numeric'
+import utils from './utils'
+import {errorObj} from '../../calc_utils/error_config'
+import statistical from './statistical'
+import information from './information'
 
 exports.ABS = function(number) {
   number = utils.parseNumber(number);

@@ -1,4 +1,4 @@
-const {errorObj, errorMsgArr} = require('../../calc_utils/error_config');
+import {errorObj, errorMsgArr} from '../../calc_utils/error_config'
 
 // TODO
 exports.CELL = function() {

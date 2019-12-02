@@ -1,8 +1,8 @@
-const {RawValue} = require('./RawValue.js');
-const {RefValue} = require('./RefValue.js');
-const {Range} = require('./Range.js');
+import {RawValue} from './RawValue.js';
+import {RefValue} from './RefValue.js';
+import {Range} from './Range.js';
 
-module.exports = function str_2_val(buffer, formula, position_i) { // buffer 在这里是但一个字符串表达式
+export function str_2_val(buffer, formula, position_i) { // buffer 在这里是但一个字符串表达式
     let v;
     if (!isNaN(buffer)) {
         v = new RawValue(+buffer);

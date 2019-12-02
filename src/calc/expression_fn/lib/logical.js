@@ -1,6 +1,6 @@
-let errorObj = require('../../calc_utils/error_config');
-let utils = require('./utils');
-let information = require('./information');
+import {errorObj} from '../../calc_utils/error_config'
+import utils from './utils'
+import information from './information'
 
 exports.AND = function() {
   let args = utils.flatten(arguments);

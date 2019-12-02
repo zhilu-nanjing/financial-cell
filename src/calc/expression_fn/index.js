@@ -14,7 +14,7 @@ let categories = [
   require('./lib/custom')
 ];
 
-for (let c in categories) {
+for (let c in categories) { // 遍历获取所有的引用
   let category = categories[c];
   for (let f in category) {
     exports[f] = exports[f] || category[f];

@@ -1,7 +1,7 @@
-let mathTrig = require('./math-trig');
-let statistical = require('./statistical');
-let engineering = require('./engineering');
-let dateTime = require('./date-time');
+import mathTrig from './math-trig'
+import statistical from './statistical'
+import engineering from './engineering'
+import dateTime from './date-time'
 
 function set(fn, root) {
   if (root) {

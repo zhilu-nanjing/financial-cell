@@ -1,5 +1,5 @@
-var exp = require("../../utils/alphabet");
-const helper = require("../../core/helper");
+import exp from "../../utils/alphabet"
+import helper from "../../core/helper"
 
 export function Rows2Workbook (rows) {
   var cells = rows._;

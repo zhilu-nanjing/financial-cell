@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-function cloneDeep(obj) {
+export function cloneDeep(obj) {
 
     return JSON.parse(JSON.stringify(obj));
 }
@@ -13,7 +13,7 @@ function cloneDeep(obj) {
 //     return v1 === v2;
 // }
 
-const mergeDeep = (object = {}, ...sources) => {
+export const mergeDeep = (object = {}, ...sources) => {
     sources.forEach((source) => {
         if (source !== null && source !== undefined) {
             Object.keys(source).forEach((key) => {
@@ -34,7 +34,7 @@ const mergeDeep = (object = {}, ...sources) => {
     return object;
 };
 
-function find(arr, str) {
+export function find(arr, str) {
     for (let i = 0; i < arr.length; i++) {
         if (str.indexOf(arr[i]) !== -1) {
             return true;
@@ -44,7 +44,7 @@ function find(arr, str) {
 }
 
 
-function isOusideViewRange(y, x, dy, dx, orien) {
+export function isOusideViewRange(y, x, dy, dx, orien) {
     if (orien === 44 && dy - y + 100 > 0) {
         return true;
     } else if (orien === 11 && dx - 100 < 0) {
@@ -57,7 +57,7 @@ function isOusideViewRange(y, x, dy, dx, orien) {
     return false;
 }
 
-function equals(obj1, obj2) {
+export function equals(obj1, obj2) {
     const keys = Object.keys(obj1);
     if (keys.length !== Object.keys(obj2).length) return false;
     for (let i = 0; i < keys.length; i += 1) {
@@ -79,7 +79,7 @@ function equals(obj1, obj2) {
     return true;
 }
 
-function isHave(param) {
+export function isValueValid(param) {
     if (typeof param === "undefined") {
         return false;
     }
@@ -95,7 +95,7 @@ function isHave(param) {
   objOrAry: obejct or Array
   cb: (value, index | key) => { return value }
 */
-const sum = (objOrAry, cb = value => value) => {
+export const sum = (objOrAry, cb = value => value) => {
     let total = 0;
     let size = 0;
     Object.keys(objOrAry).forEach((key) => {
@@ -111,7 +111,7 @@ const sum = (objOrAry, cb = value => value) => {
 //     return oldv;
 // }
 
-function rangeReduceIf(min, max, inits, initv, ifv, getv) {
+export function rangeReduceIf(min, max, inits, initv, ifv, getv) {
     let s = inits;
     let v = initv;
     let i = min;
@@ -123,7 +123,7 @@ function rangeReduceIf(min, max, inits, initv, ifv, getv) {
     return [i, s - v, v];
 }
 
-function rangeSum(min, max, getv) {
+export function rangeSum(min, max, getv) {
     let s = 0;
     for (let i = min; i < max; i += 1) {
         s += getv(i);
@@ -131,7 +131,7 @@ function rangeSum(min, max, getv) {
     return s;
 }
 
-function isNumber(inputData) {
+export function isNumber(inputData) {
     // if (parseFloat(inputData).toString() === "NaN") {
     //     return false;
     // } else {
@@ -146,7 +146,7 @@ function isNumber(inputData) {
 //     }
 // }
 
-function arrayEquals(a1, a2) {
+export function arrayEquals(a1, a2) {
     if (a1.length === a2.length) {
         for (let i = 0; i < a1.length; i += 1) {
             if (a1[i] !== a2[i]) return false;
@@ -154,21 +154,6 @@ function arrayEquals(a1, a2) {
     } else return false;
     return true;
 }
-
-export default {
-    cloneDeep,
-    merge: (...sources) => mergeDeep({}, ...sources),
-    equals,
-    arrayEquals,
-    sum,
-     rangeSum,
-    rangeReduceIf,
-
-};
-
-export {
-    isNumber,
-    isOusideViewRange,
-    find,
-    isHave,
+export function merge(...sources){
+    return mergeDeep({}, ...sources)
 }
