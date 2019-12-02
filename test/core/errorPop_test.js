@@ -543,6 +543,7 @@ describe('qq', () => {
             assert.equal(pArr[6].cell.style, 1);
         });
 
+
         it(' 1行多列 * 1列多行 ', function () {
             data.rows.setData({
                 0: {

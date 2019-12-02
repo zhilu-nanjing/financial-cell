@@ -101,7 +101,7 @@
     <el-tabs type="border-card" v-model="activeTab" @tab-click="clickTab" :before-leave="beforeLeave"
              @tab-remove="removeTab"
              @contextmenu.native.prevent="clickTab">
-        <el-tab-pane v-for="item in menu" :key="item.name" :name="item.name">
+        <el-tab-pane v-for="item in menu" :key="item.id" :name="item.id">
             <span v-if="item.isShow === 1" slot="label" @click="deleteNote = false">
                  <el-popover
                          ref="popover"
@@ -118,7 +118,7 @@
                 </el-popover>
                 <el-dropdown style="z-index: 999999999" v-popover:popover trigger="click" slot="label"
                              @command="commandDropDown">
-                <span class="el-dropdown-link" style="color: hsl(0,0%,20%);">
+                <span id="rename_tab" class="el-dropdown-link" style="color: hsl(0,0%,20%);">
                     {{item.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                     <el-dropdown-menu slot="dropdown">
@@ -132,18 +132,18 @@
                    v-else-if="item.isShow === 3"
                    v-model="inputValue"/>
             <span class="other-tab" v-else slot="label">{{item.name}}</span>
-            <div :id="item.name"></div>
-        </el-tab-pane>
-        <el-tab-pane name="add-tab-id25921">
-            <div slot="label" style="color: #fff;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" class="flex-none"
-                     style="shape-rendering: geometricprecision;">
-                    <path fill-rule="evenodd" class="" fill="currentColor"
-                          d="M0,2.0085302 C0,0.899249601 0.901950359,0 2.0085302,0 L9.9914698,0 C11.1007504,0 12,0.901950359 12,2.0085302 L12,9.9914698 C12,11.1007504 11.0980496,12 9.9914698,12 L2.0085302,12 C0.899249601,12 0,11.0980496 0,9.9914698 L0,2.0085302 Z M9.5,5 L7,5 L7,2.5 C7,2.224 6.776,2 6.5,2 L5.5,2 C5.224,2 5,2.224 5,2.5 L5,5 L2.5,5 C2.224,5 2,5.224 2,5.5 L2,6.5 C2,6.776 2.224,7 2.5,7 L5,7 L5,9.5 C5,9.776 5.224,10 5.5,10 L6.5,10 C6.776,10 7,9.776 7,9.5 L7,7 L9.5,7 C9.776,7 10,6.776 10,6.5 L10,5.5 C10,5.224 9.776,5 9.5,5 Z"></path>
-                </svg>
-            </div>
+            <div :id="item.id"></div>
         </el-tab-pane>
     </el-tabs>
+    <div id="add-tab-id25921" @click.native="addTabClick">
+        <div slot="label" style="color: #fff;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" class="flex-none"
+                 style="shape-rendering: geometricprecision;">
+                <path fill-rule="evenodd" class="" fill="currentColor"
+                      d="M0,2.0085302 C0,0.899249601 0.901950359,0 2.0085302,0 L9.9914698,0 C11.1007504,0 12,0.901950359 12,2.0085302 L12,9.9914698 C12,11.1007504 11.0980496,12 9.9914698,12 L2.0085302,12 C0.899249601,12 0,11.0980496 0,9.9914698 L0,2.0085302 Z M9.5,5 L7,5 L7,2.5 C7,2.224 6.776,2 6.5,2 L5.5,2 C5.224,2 5,2.224 5,2.5 L5,5 L2.5,5 C2.224,5 2,5.224 2,5.5 L2,6.5 C2,6.776 2.224,7 2.5,7 L5,7 L5,9.5 C5,9.776 5.224,10 5.5,10 L6.5,10 C6.776,10 7,9.776 7,9.5 L7,7 L9.5,7 C9.776,7 10,6.776 10,6.5 L10,5.5 C10,5.224 9.776,5 9.5,5 Z"></path>
+            </svg>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript" src="../dist/xspreadsheet.js"></script>
@@ -160,6 +160,7 @@
                         name: "sheet1",
                         content: "123",
                         isShow: 1,
+                        id: "sheet1",
                         financialCell: null,
                         init: false,
                     },
@@ -167,6 +168,7 @@
                         name: "sheet2",
                         content: "456",
                         isShow: 2,
+                        id: "sheet2",
                         financialCell: null,
                         init: false,
                     },
@@ -174,6 +176,7 @@
                         name: "sheet3",
                         content: "123",
                         isShow: 2,
+                        id: "sheet3",
                         financialCell: null,
                         init: false,
                     },
@@ -181,6 +184,7 @@
                         name: "sheet4",
                         content: "456",
                         isShow: 2,
+                        id: "shet4",
                         financialCell: null,
                         init: false,
                     }
@@ -213,23 +217,29 @@
             beforeLeave(activeName, oldActiveName) {
                 if (activeName === 'add-tab-id25921') {
                     this.addTab();
-                    return false;
+                    // return false;
                 }
                 return true;
             },
+            addTabClick() {
+              console.log("...");
+            },
             addTab() {
-                let newTabName = ++this.tabIndex + '';
-                this.menu.push({
-                    title: 'New Tab',
-                    name: newTabName,
-                    content: 'New Tab content'
-                });
-                this.activeTab = newTabName;
+                setIsShow(this.menu, 2);
+                let newItem = {
+                    name: "sheet5ss",
+                    isShow: 1,
+                    id: "sheet5ss",
+                    financialCell: null,
+                    init: false,
+                };
+                this.menu.push(newItem);
+                this.activeTab = newItem.id;
             },
             initFinancialCell() {
                 for (let i = 0; i < this.menu.length; i++) {
                     let item = this.menu[i];
-                    item.financialCell = initFinancialCell(item.name);
+                    item.financialCell = initFinancialCell(item.id);
                 }
             },
             commandDropDown(command) {
@@ -250,21 +260,36 @@
                 e.stopPropagation();
             },
             inputBlur(e) {
-                // 失去焦距的时候 -> input 绑定 inputValue  然后主动改变menu和activeTab的值
+                // let tab = document.getElementById(this.activeTab);
+
+                // // 失去焦距的时候 -> input 绑定 inputValue  然后主动改变menu和activeTab的值
                 let item = getSelector(this.menu, this.activeTab);
-                this.activeTab = this.inputValue;
-                item.name = this.activeTab;
+                // this.activeTab = this.inputValue;
+                item.name = this.inputValue;
 
                 setIsShow(this.menu, 2);
                 setSelectorIsShow(this.menu, this.activeTab, 1);
+                // setTimeout(() => {
+                //
+                //    console.log("..");
+                // });
+
+                // setTimeout(() => {
+                //     let d2 = document.getElementById(this.activeTab);
+                //     let pn = document.getElementById(this.activeTab).parentNode;
+                //     pn.appendChild(tab);
+                //
+                //     pn.removeChild(d2);
+                //     tab.id = this.activeTab;
+                // });
                 e.stopPropagation();
             },
             removeTab() {
                 setIsShow(this.menu, 2);
 
-                this.menu = this.menu.filter(tab => tab.name !== this.activeTab);
+                this.menu = this.menu.filter(tab => tab.id !== this.activeTab);
                 if (this.menu.length >= 1) {
-                    this.activeTab = this.menu[0].name;
+                    this.activeTab = this.menu[0].id;
                     setSelectorIsShow(this.menu, this.activeTab, 1);
                 } else {
                     this.activeTab = "";
@@ -289,10 +314,10 @@
                         swapClass: 'highlight',
                     });
 
-                    let scrollEl = document.getElementsByClassName("el-tabs__nav-scroll")[0];
-                    if (isHave(scrollEl)) {
-                        scrollEl.appendChild(dom);
-                    }
+                    // let scrollEl = document.getElementsByClassName("el-tabs__nav-scroll")[0];
+                    // if (isHave(scrollEl)) {
+                    //     // scrollEl.appendChild(dom);
+                    // }
                 });
             }
         }

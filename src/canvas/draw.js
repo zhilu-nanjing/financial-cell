@@ -261,7 +261,7 @@ class Draw {
             return 0;
         const {ctx} = this;
         ctx.font = `${font.italic ? 'italic' : ''} ${font.bold ? 'bold' : ''} ${npx(font.size)}px ${font.name}`;
-        return ctx.measureText(txt).width*font.size/npx(font.size);
+        return ctx.measureText(txt).width * font.size / npx(font.size);
     }
 
     selfAdaptionOneTxtWidth(txt, font) {
@@ -450,7 +450,6 @@ class Draw {
             drawFlexFalse.call(this, ctx, npx(sx), npx(sy))
         }
     }
-
 
 
     lineTo(x, y) {

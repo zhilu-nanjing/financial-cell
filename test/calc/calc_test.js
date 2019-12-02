@@ -11,7 +11,7 @@ describe('formulajs integration', function() {
       workbook.Sheets.Sheet1.A29 = {v: 10};
       workbook.Sheets.Sheet1.A30 = {v: 9};
       workbook.Sheets.Sheet1.A31 = {v: 27};
-      workbook.Sheets.Sheet1.A32 = {v: 2};
+      workbook.Sheets.Sheet1.A32 = {v: 2, f: ""};
       workbook.Sheets.Sheet1.A5 = {f: '=AVERAGE($A$28:$A$32)'};
       workbook.Sheets.Sheet1.A28 = {f: '=1+A29'}; // formula的计算顺序与初次赋值时间从晚向前
 

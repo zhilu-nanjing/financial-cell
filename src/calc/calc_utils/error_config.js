@@ -11,8 +11,6 @@ export const ERROR_CIRCULAR = '#CIRCULA!';
 export const ERROR_ERROR = '#ERROR!';
 export const ERROR_SYNTAX = "#SYNTAX" // 语法错误
 
-
-
 // export const errorValues = { // 这个变量没有意义了
 //   ERROR_NULL: 0x00,
 //   ERROR_DIV0: 0x07,
