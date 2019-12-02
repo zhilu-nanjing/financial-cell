@@ -1,8 +1,9 @@
-const FormulaExp = require('./Exp.js');
-const RawValue = require('./RawValue.js');
-const UserFnExecutor = require('../UserFnExecutor.js');
-const UserRawFnExecutor = require('../UserRawFnExecutor.js');
-const common_operations = {
+import {StructuralExp} from './structural_exp.js';
+const {RawValue} = require('./RawValue.js');
+const UserFnExecutor = require('./UserFnExecutor.js');
+const UserRawFnExecutor = require('./UserRawFnExecutor.js');
+
+const common_operations = { // todo: 需要把这个常数放到config里面
   '*': 'multiply',
   '+': 'plus',
   '-': 'subtractDays',
@@ -14,11 +15,39 @@ const common_operations = {
   '=': 'eq'
 };
 module.exports = function (formula, opts) {
-  let exp_builder =  new ExpressionBuilder(formula, opts);
-  return exp_builder.do_jobs();
+  let exp_builder =  new StructuralExpressionBuilder(formula, opts);
+  return exp_builder.parseExpression();
 };
 
-class ExpressionBuilder {
+class FormulaParser{
+  constructor(opts){
+    this.opts = opts;
+  }
+
+  parseFormula(formula_str){
+    console.assert(typeof formula_str === "string")
+    if(formula_str === "" || formula_str.slice(0,1)!== "="){
+      let exp = SimpleExpressionBuilder(formula_str, opts)
+      return
+    }
+    if(formula_str.slice(0,1)){
+      return;
+    }
+
+  }
+}
+
+class BaseExpressionBuilder{
+  constructor(formula, opts){
+
+  }
+}
+
+class SimpleExpressionBuilder{ // 解析不含等号的那些表达式
+
+}
+
+class StructuralExpressionBuilder {
   constructor(formula, opts) {
     formula.status = 'working';
     this.formula = formula ;
@@ -29,7 +58,7 @@ class ExpressionBuilder {
       str_formula = str_formula.substr(1); // =adsf 会变为adsf
     }
     this.str_formula = str_formula;
-    this.exp_obj = this.root_exp = new FormulaExp(formula);  // 封装公式实例
+    this.exp_obj = this.root_exp = new StructuralExp(formula);  // 封装公式实例
     this.buffer = '';
     this.was_string = false;
     this.fn_stack = [{ // 这个是函数调用栈？
@@ -75,7 +104,7 @@ class ExpressionBuilder {
       //Error: "Worksheet 1"!D145: Function INDEX not found
       throw new Error('"' + self.formula.sheet_name + '"!' + self.formula.name + ': Function ' + self.buffer + ' not found');
     }
-    o = new FormulaExp(self.formula);
+    o = new StructuralExp(self.formula);
     self.fn_stack.push({
       exp: o,
       special: special
@@ -127,14 +156,14 @@ class ExpressionBuilder {
       this.was_string = false;
       fn_stack[fn_stack.length - 1].exp.push(this.buffer, this.position_i);
       fn_stack[fn_stack.length - 1].special.push(fn_stack[fn_stack.length - 1].exp);
-      fn_stack[fn_stack.length - 1].exp = this.exp_obj = new FormulaExp(this.formula);
+      fn_stack[fn_stack.length - 1].exp = this.exp_obj = new StructuralExp(this.formula);
       this.buffer = '';
     } else {
       this.buffer += char;
     }
   }
 
-  do_jobs() {
+  parseExpression() {
     // 主执行语句在这里，上面是定义一系列方法
     let self = this;
     for (; this.position_i < this.str_formula.length; this.position_i++) {

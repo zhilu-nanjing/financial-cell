@@ -1,11 +1,11 @@
 "use strict";
 
-const col_str_2_int = require('../calc_utils/col_str_2_int.js');
-const int_2_col_str = require('../calc_utils/int_2_col_str.js');
-const getSanitizedSheetName = require('../getSanitizedSheetName.js');
+const col_str_2_int = require('./col_str_2_int.js');
+const int_2_col_str = require('./int_2_col_str.js');
+const getSanitizedSheetName = require('./getSanitizedSheetName.js');
 const error_cf = require('../calc_utils/error_config.js');
 
-class Range{
+export class Range{
     constructor(str_expression, formula, possition_i){
         let range_expression, sheet_name, sheet;
         this.start_pst = possition_i - str_expression.length;
@@ -85,4 +85,3 @@ class Range{
 
 }
 
-module.exports = Range;

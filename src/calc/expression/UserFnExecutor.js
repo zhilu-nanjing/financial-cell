@@ -1,5 +1,5 @@
 "use strict";
-const cf = require("./calc_utils/config.js");
+const cf = require("../calc_utils/config.js");
 
 
 class UserFnExecutor{

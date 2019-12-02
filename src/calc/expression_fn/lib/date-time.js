@@ -1,5 +1,5 @@
 let {errorObj} = require('../../calc_utils/error_config');
-const {CellDate, stamp2DayNum} = require('../../calc_utils/cellValueType');
+import {CellDate, stamp2DayNum} from '../../cell_value_type/cell_date';
 const cf = require('../../calc_utils/config');
 let utils = require('./utils');
 

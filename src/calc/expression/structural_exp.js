@@ -1,16 +1,12 @@
 "use strict";
 const cf = require("../calc_utils/config");
-const RawValue = require('./RawValue.js');
-const Range = require('./Range.js');
+import {RawValue} from './RawValue.js';
+import {Range} from './Range.js';
 const str_2_val = require('./str_2_val.js');
 let {errorObj, errorMsgArr} = require('../calc_utils/error_config');
-const {CellDate} = require("../calc_utils/cellValueType");
-
-
-
-
+import {CellDate} from "../cell_value_type/cell_date";
 let exp_id = 0; // 全局变量
-module.exports = class FormulaExp {
+export class StructuralExp {
     // 代表语法书上面的一个节点。这个几点的args是代表树枝，
     // 可以为RawValue，RefValue，LazyValue或字符或FormulaExp; 存在括号的时候，会把括号内的表达式构造为FormulaExp
     constructor(cellFormulaProxy) {
@@ -42,7 +38,7 @@ module.exports = class FormulaExp {
         } catch (e) {
             if (errorMsgArr.indexOf(e.message) !== -1) {
                 selfCell.t = 'e';
-                selfCell.w = e.message;
+                selfCell.w = e.message; // todo: 把.w 属性改为  .text属性， cell使用calcCell实例而不是单纯的obj
                 selfCell.v = e.message; // 出错的话，v属性应该没有用了把
             } else {
                 throw e;
@@ -88,7 +84,7 @@ module.exports = class FormulaExp {
                     args.splice(i - 1, 3, new RawValue(r));
                     i--;
                 } catch (e) { // 上面一旦出现错误，就直接跳出了
-                    console.log('[Exp.js] - ' + this.name + ': evaluating ' + this.cellFormulaProxy.cell.f + '\n' + e.message);
+                    console.log('[structural_exp.js] - ' + this.name + ': evaluating ' + this.cellFormulaProxy.cell.f + '\n' + e.message);
                     throw e;
                 }
             }

@@ -1,5 +1,5 @@
 "use strict";
-const CellFormulaProxy = require('./cell_formula/cellFormulaProxy.js');
+const CellFormulaProxy = require('../cell_formula/cellFormulaProxy.js');
 exports.find_all_cells_with_formulas = function(wb, exec_formula) {
     let formula_ref = {}; // 把workbook转化为formulas的形式
     let formulaArray = [];

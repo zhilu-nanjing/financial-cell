@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = class RawValue{
+export class RawValue{
     constructor(value){
         this.value = value
     };

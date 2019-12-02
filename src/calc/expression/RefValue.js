@@ -1,9 +1,9 @@
 "use strict";
 
-const getSanitizedSheetName = require('../getSanitizedSheetName.js');
+const getSanitizedSheetName = require('./getSanitizedSheetName.js');
 const error_cf = require('../calc_utils/error_config.js');
 
-module.exports = class RefValue{
+export class RefValue{
     constructor(str_expression, formula){
         this.name = 'RefValue';
         this.str_expression = str_expression;

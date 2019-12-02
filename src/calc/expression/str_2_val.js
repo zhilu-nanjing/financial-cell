@@ -1,6 +1,6 @@
-const RawValue = require('./RawValue.js');
-const RefValue = require('./RefValue.js');
-const Range = require('./Range.js');
+const {RawValue} = require('./RawValue.js');
+const {RefValue} = require('./RefValue.js');
+const {Range} = require('./Range.js');
 
 module.exports = function str_2_val(buffer, formula, position_i) { // buffer 在这里是但一个字符串表达式
     let v;

@@ -1,6 +1,6 @@
 const errorObj = require('../../calc_utils/error_config').errorObj;
 const cf =  require('../../calc_utils/config')
-const {CellDate, d1900} = require('../../calc_utils/cellValueType');
+import {CellDate, d1900} from "../../cell_value_type/cell_date"
 
 function flattenShallow(array) {
   if (!array || !array.reduce) { return array; }

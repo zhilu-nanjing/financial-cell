@@ -1,4 +1,4 @@
-let exp = require("../utils/alphabet");
+let exp = require("../../utils/alphabet");
 
 
 function isEqual(v1, v2) {

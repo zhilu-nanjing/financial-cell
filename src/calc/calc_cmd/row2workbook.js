@@ -21,7 +21,7 @@ export function Rows2Workbook (rows) {
       var cell_name = exp.xy2expr(ci, ri);
       if(helper.isHave(cell)) {
         workbook.Sheets[name][cell_name] = {
-          v: cell.text,
+          v: cell.text, // todo: cell.text不应该直接赋值给v，因为text只是字符串。
           f: cell.formulas
         }
       }

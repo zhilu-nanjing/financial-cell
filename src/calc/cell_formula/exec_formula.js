@@ -1,12 +1,12 @@
 "use strict";
 
-const expression_builder = require('./cell_formula/expression_builder.js');
+const expression_builder = require('../expression/expression_builder.js');
 
 let xlsx_Fx = {};
 let xlsx_raw_Fx = {};
 
-import_functions(require('.//formulajs/index'));
-import_raw_functions(require('./formulas-raw.js'));
+import_functions(require('../expression_fn/index'));
+import_raw_functions(require('../old/formulas-raw.js'));
 
 function import_raw_functions(functions, opts) {
     for (let key in functions) {

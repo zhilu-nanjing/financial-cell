@@ -1,7 +1,7 @@
 import {expr2xy, xy2expr} from '../utils/alphabet';
 import {look, look2} from "../config";
 // import XLSX_CALC from "calc"
-// var formulajs = require('formulajs');
+// var expression_fn = require('expression_fn');
 // Converting infix expression to a suffix expression
 // src: AVERAGE(SUM(A1,A2), B1) + 50 + B20
 // return: [A1, A2], SUM[, B1],AVERAGE,50,+,B20,+
@@ -204,7 +204,7 @@ const cellRender = (data, sheetbook, y, x, src, formulaMap, getCellText, cellLis
             return src.toUpperCase();
         } else if (src.substring(1) && sheetbook && sheetbook.Sheets && sheetbook.Sheets[data.name] && sheetbook.Sheets[data.name][xy2expr(x, y)]) {
             // sheetbook.Sheets.Sheet1[xy2expr(x, y)].f = src.substring(1).toUpperCase();
-            // XLSX_CALC.import_functions(formulajs);
+            // XLSX_CALC.import_functions(expression_fn);
             // XLSX_CALC(sheetbook);
 
             if ((sheetbook.Sheets[data.name][xy2expr(x, y)].f && sheetbook.Sheets[data.name][xy2expr(x, y)].f.search(/\((\+|\-|\*|\/)/) !== -1) || sheetbook.Sheets[data.name][xy2expr(x, y)].v === undefined || sheetbook.Sheets[data.name][xy2expr(x, y)].v === "") {

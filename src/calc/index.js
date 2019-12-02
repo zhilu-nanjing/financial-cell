@@ -1,15 +1,15 @@
 "use strict";
 
-const int_2_col_str = require('./calc_utils/int_2_col_str.js');
-const col_str_2_int = require('./calc_utils/col_str_2_int.js');
-const exec_formula = require('./exec_formula.js');
-const finder = require('./finder');
-const Calculator = require('./Calculator.js');
+const int_2_col_str = require('./expression/int_2_col_str.js');
+const col_str_2_int = require('./expression/col_str_2_int.js');
+const exec_formula = require('./cell_formula/exec_formula.js');
+const finder = require('./calc_cmd/finder');
+const Calculator = require('./calc_cmd/Calculator.js');
 const CellFormulaProxy = require('./cell_formula/cellFormulaProxy.js');
 const checker = require('./cell_formula/formula_check.js');
 const helper = require("../core/helper");
-const CalcWorkBook = require('./CalcWorkBook');
-const Rows2Workbook = require('./calc_utils/row2workbook').Rows2Workbook;
+const CalcWorkBook = require('./calc_cmd/CalcWorkBook');
+const Rows2Workbook = require('./calc_cmd/row2workbook').Rows2Workbook;
 
 function calculateFormulas(formulas) { // 核心的计算引擎 formulas是数组，应该转化为cellFormula类。
     for (let i = formulas.length - 1; i >= 0; i--) { // 遍历所有需要计算的formulas; 从后向前遍历
@@ -38,7 +38,7 @@ function calculateFormulas(formulas) { // 核心的计算引擎 formulas是数�
     }
 }
 
-let calcModule = function(rows, tileArr) {
+export function calc(rows, tileArr) {
     if (helper.isHave(tileArr)){
         if (tileArr.action.indexOf("删除")>=0){ // 删除时同步workbook
             rows.workbook= Rows2Workbook(rows); // 转化一次
@@ -50,8 +50,7 @@ let calcModule = function(rows, tileArr) {
         calculateFormulas(formulas);
         Calc_WorkBook.calcDoneToSetCells(workbook, rows) // 把workbook的值再转化为rows的形式
     }
-
-};
+}
 
 let calculateWorkbook = function(workbook) {
     let formulaArray = finder.find_all_cells_with_formulas(workbook, exec_formula);//找到所有需要计算的单元格
@@ -59,19 +58,17 @@ let calculateWorkbook = function(workbook) {
 };
 
 
-calcModule.calculator = function calculator(workbook) {
+calc.calculator = function calculator(workbook) {
     return new Calculator(workbook, exec_formula);
 };
 
-calcModule.set_fx = exec_formula.set_fx;
-calcModule.exec_fx = exec_formula.exec_fx;
-calcModule.col_str_2_int = col_str_2_int;
-calcModule.int_2_col_str = int_2_col_str;
-calcModule.import_functions = exec_formula.import_functions;
-calcModule.import_raw_functions = exec_formula.import_raw_functions;
-calcModule.xlsx_Fx = exec_formula.xlsx_Fx;
-calcModule.localizeFunctions = exec_formula.localizeFunctions;
-// calcModule.XLSX_CALC = calcModule
-calcModule.calculateWorkBook = calculateWorkbook;
-
-module.exports = calcModule;
+calc.set_fx = exec_formula.set_fx;
+calc.exec_fx = exec_formula.exec_fx;
+calc.col_str_2_int = col_str_2_int;
+calc.int_2_col_str = int_2_col_str;
+calc.import_functions = exec_formula.import_functions;
+calc.import_raw_functions = exec_formula.import_raw_functions;
+calc.xlsx_Fx = exec_formula.xlsx_Fx;
+calc.localizeFunctions = exec_formula.localizeFunctions;
+// calc.XLSX_CALC = calc
+calc.calculateWorkBook = calculateWorkbook;

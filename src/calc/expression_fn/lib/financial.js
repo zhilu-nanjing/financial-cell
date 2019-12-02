@@ -1279,7 +1279,8 @@ exports.TBILLYIELD = function(settlement, maturity, price) {
 function get_total(cost, salvage, period,life,factor){
   let total = 0;
   let current = 0;
-  for (let i = 1; i <= period; i++) {
+  let i = 1
+  for (; i <= period; i++) {
     current = Math.min((cost - total) * (factor / life), (cost - salvage - total));
     total += current;
   }
