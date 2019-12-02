@@ -62,3 +62,5 @@ https://www.notion.so/financial-cell-6ed2e5093897477fbea6088b4dab8122
 
 ## LICENSE
 LGPL
+
+

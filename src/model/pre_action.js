@@ -1,6 +1,6 @@
 import {deepCopy, distinct} from "../core/operator";
 import {isHave} from '../core/helper';
-import {expr2xy, xy2expr} from "../core/alphabet";
+import {expr2xy, xy2expr} from "../utils/alphabet";
 
 function getCellDepend(cells) {
     let arr = [];
@@ -50,7 +50,7 @@ export default class PreAction {
      */
     findAllNeedCalcCell() {
         let changeArr = [];
-        let {oldCell, newCell, ri, ci} = this;
+        let {oldCell, newCell, ri, ci} = this; // 应该得到多个sheet的变更结果
         changeArr.push(...getCellDepend(oldCell));
         changeArr.push(...getCellDepend(newCell));
         if (ri !== -1 && ci !== -1) {

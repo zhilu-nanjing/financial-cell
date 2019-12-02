@@ -1,12 +1,12 @@
-var utils = require('./utils');
-var error = require('./error');
-var numeral = require('numeral');
+let utils = require('./utils');
+let errorObj = require('../../calc_utils/error_config').errorObj;
+let numeral = require('numeral');
 
 //TODO
 exports.ASC = function(str) {
-  var tmp = "";
+  let tmp = "";
   str= str.toString()
-  for (var i = 0; i < str.length; i++) {
+  for (let i = 0; i < str.length; i++) {
     if (str.charCodeAt(i) > 65248 && str.charCodeAt(i) < 65375) {
       tmp += String.fromCharCode(str.charCodeAt(i) - 65248);
     }
@@ -83,7 +83,7 @@ exports.DOLLAR = function(number, decimals) {
   number = utils.parseNumber(number);
   decimals = utils.parseNumber(decimals);
   if (utils.anyIsError(number, decimals)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   var format = '';
   if (decimals <= 0) {
@@ -111,7 +111,7 @@ exports.FIXED = function(number, decimals, no_commas) {
   number = utils.parseNumber(number);
   decimals = utils.parseNumber(decimals);
   if (utils.anyIsError(number, decimals)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   var format = no_commas ? '0' : '0,0';
@@ -151,14 +151,14 @@ exports.LEFT = function(text, number) {
   number = (number === undefined) ? 1 : number;
   number = utils.parseNumber(number);
   if (number instanceof Error || typeof text !== 'string') {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   return text ? text.substring(0, number) : null;
 };
 
 exports.LEN = function(text) {
   if (arguments.length === 0) {
-    return error.error;
+    return errorObj.ERROR;
   }
 
   if (typeof text === 'string') {
@@ -169,12 +169,12 @@ exports.LEN = function(text) {
     return text.length;
   }
 
-  return error.value;
+  return errorObj.ERROR_VALUE;
 };
 
 exports.LOWER = function(text) {
   if (typeof text !== 'string') {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   return text ? text.toLowerCase() : text;
 };
@@ -210,7 +210,7 @@ exports.PRONETIC = function() {
 
 exports.PROPER = function(text) {
   if (text === undefined || text.length === 0) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   if (text === true) {
     text = 'TRUE';
@@ -219,7 +219,7 @@ exports.PROPER = function(text) {
     text = 'FALSE';
   }
   if (isNaN(text) && typeof text === 'number') {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   if (typeof text === 'number') {
     text = '' + text;
@@ -250,7 +250,7 @@ exports.REPLACE = function(text, position, length, new_text) {
   if (utils.anyIsError(position, length) ||
     typeof text !== 'string' ||
     typeof new_text !== 'string') {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   return text.substr(0, position - 1) + new_text + text.substr(position - 1 + length);
 };
@@ -275,11 +275,11 @@ exports.RIGHT = function(text, number) {
 exports.SEARCH = function(find_text, within_text, position) {
   var foundAt;
   if (typeof find_text !== 'string' || typeof within_text !== 'string') {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   position = (position === undefined) ? 0 : position;
   foundAt = within_text.toLowerCase().indexOf(find_text.toLowerCase(), position - 1)+1;
-  return (foundAt === 0)?error.value:foundAt;
+  return (foundAt === 0)?errorObj.ERROR_VALUE:foundAt;
 };
 
 exports.SPLIT = function (text, separator) {
@@ -323,7 +323,7 @@ function num2e(num){
 function allzero(num){
   num = num.toString()
   for (var i=0;i<num.length;i++){
-    if (num[i] != '0'){
+    if (num[i] !== '0'){
       return false
     }
   }
@@ -363,7 +363,7 @@ exports.TEXT = function (value, format) {
   if (result == undefined){
     if (format.indexOf('#') >= 0 && format.indexOf('?/?') >=0){
       var x = parseFloat(value) - parseInt(value);
-      if (parseInt(value) != 0){
+      if (parseInt(value) !== 0){
         return parseInt(value) + ' ' + decimalsToFractional(x)
       }
       return decimalsToFractional(x)
@@ -425,14 +425,14 @@ exports.TEXT = function (value, format) {
 
 exports.TRIM = function(text) {
   if (typeof text !== 'string') {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   return text.replace(/ +/g, ' ').trim();
 };
 
 exports.UNICHAR = function (text) {
   if (text == 0){
-    return error.value
+    return errorObj.ERROR_VALUE
   }
   return String.fromCharCode(text);
 };
@@ -443,14 +443,14 @@ exports.UNICODE = function (text){
 
 exports.UPPER = function(text) {
   if (typeof text !== 'string') {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   return text.toUpperCase();
 };
 
 exports.VALUE = function(text) {
   if (typeof text !== 'string') {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   return numeral().unformat(text);
 };

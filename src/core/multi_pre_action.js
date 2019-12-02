@@ -1,4 +1,4 @@
-import {xy2expr} from "./alphabet";
+import {xy2expr} from "../utils/alphabet";
 import PreAction from "../model/pre_action";
 import {testValid} from "../utils/test";
 

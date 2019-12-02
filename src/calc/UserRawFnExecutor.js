@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = function UserRawFnExecutor(user_function) {
-    var self = this;
+    let self = this;
     self.name = 'UserRawFn';
     self.args = [];
     self.calc = function() {

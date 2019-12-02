@@ -1,14 +1,14 @@
-var utils   = require('./utils');
-var numeral = require('numeral');
+let utils   = require('./utils');
+let numeral = require('numeral');
 
 exports.UNIQUE = function () {
-  var result = [];
-  for (var i = 0; i < arguments.length; ++i) {
-    var hasElement = false;
-    var element    = arguments[i];
+  let result = [];
+  for (let i = 0; i < arguments.length; ++i) {
+    let hasElement = false;
+    let element    = arguments[i];
 
     // Check if we've already seen this element.
-    for (var j = 0; j < result.length; ++j) {
+    for (let j = 0; j < result.length; ++j) {
       hasElement = result[j] === element;
       if (hasElement) { break; }
     }
@@ -29,13 +29,13 @@ exports.ARGS2ARRAY = function () {
 
 exports.REFERENCE = function (context, reference) {
   try {
-    var path = reference.split('.');
-    var result = context;
-    for (var i = 0; i < path.length; ++i) {
-      var step = path[i];
+    let path = reference.split('.');
+    let result = context;
+    for (let i = 0; i < path.length; ++i) {
+      let step = path[i];
       if (step[step.length - 1] === ']') {
-        var opening = step.indexOf('[');
-        var index = step.substring(opening + 1, step.length - 1);
+        let opening = step.indexOf('[');
+        let index = step.substring(opening + 1, step.length - 1);
         result = result[step.substring(0, opening)][index];
       } else {
         result = result[step];
@@ -50,7 +50,7 @@ exports.JOIN = function (array, separator) {
 };
 
 exports.NUMBERS = function () {
-  var possibleNumbers = utils.flatten(arguments);
+  let possibleNumbers = utils.flatten(arguments);
   return possibleNumbers.filter(function (el) {
     return typeof el === 'number';
   });

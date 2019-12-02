@@ -1,11 +1,11 @@
-var mathTrig = require('./math-trig');
-var statistical = require('./statistical');
-var engineering = require('./engineering');
-var dateTime = require('./date-time');
+let mathTrig = require('./math-trig');
+let statistical = require('./statistical');
+let engineering = require('./engineering');
+let dateTime = require('./date-time');
 
 function set(fn, root) {
   if (root) {
-    for (var i in root) {
+    for (let i in root) {
       fn[i] = root[i];
     }
   }

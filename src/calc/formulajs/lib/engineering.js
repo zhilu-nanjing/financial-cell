@@ -1,8 +1,8 @@
-var error = require('./error');
-var jStat = require('jstat').jStat;
-var text = require('./text');
-var utils = require('./utils');
-var bessel = require('bessel');
+let errorObj = require('../../calc_utils/error_config');
+let jStat = require('jstat').jStat;
+let text = require('./text');
+let utils = require('./utils');
+let bessel = require('bessel');
 
 function isValidBinaryNumber(number) {
   return (/^[01]{1,10}$/).test(number);
@@ -12,7 +12,7 @@ exports.BESSELI = function(x, n) {
   x = utils.parseNumber(x);
   n = utils.parseNumber(n);
   if (utils.anyIsError(x, n)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   return bessel.besseli(x, n);
 };
@@ -21,7 +21,7 @@ exports.BESSELJ = function(x, n) {
   x = utils.parseNumber(x);
   n = utils.parseNumber(n);
   if (utils.anyIsError(x, n)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   return bessel.besselj(x, n);
 };
@@ -30,7 +30,7 @@ exports.BESSELK = function(x, n) {
   x = utils.parseNumber(x);
   n = utils.parseNumber(n);
   if (utils.anyIsError(x, n)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   return bessel.besselk(x, n);
 };
@@ -39,7 +39,7 @@ exports.BESSELY = function(x, n) {
   x = utils.parseNumber(x);
   n = utils.parseNumber(n);
   if (utils.anyIsError(x, n)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   return bessel.bessely(x, n);
 };
@@ -47,14 +47,14 @@ exports.BESSELY = function(x, n) {
 exports.BIN2DEC = function(number) {
   // Return error if number is not binary or contains more than 10 characters (10 digits)
   if (!isValidBinaryNumber(number)) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Convert binary number to decimal
-  var result = parseInt(number, 2);
+  let result = parseInt(number, 2);
 
   // Handle negative numbers
-  var stringified = number.toString();
+  let stringified = number.toString();
   if (stringified.length === 10 && stringified.substring(0, 1) === '1') {
     return parseInt(stringified.substring(1), 2) - 512;
   } else {
@@ -66,17 +66,17 @@ exports.BIN2DEC = function(number) {
 exports.BIN2HEX = function(number, places) {
   // Return error if number is not binary or contains more than 10 characters (10 digits)
   if (!isValidBinaryNumber(number)) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Ignore places and return a 10-character hexadecimal number if number is negative
-  var stringified = number.toString();
+  let stringified = number.toString();
   if (stringified.length === 10 && stringified.substring(0, 1) === '1') {
     return (1099511627264 + parseInt(stringified.substring(1), 2)).toString(16);
   }
 
   // Convert binary number to hexadecimal
-  var result = parseInt(number, 2).toString(16);
+  let result = parseInt(number, 2).toString(16);
 
   // Return hexadecimal number using the minimum number of characters necessary if places is undefined
   if (places === undefined) {
@@ -84,36 +84,36 @@ exports.BIN2HEX = function(number, places) {
   } else {
     // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return error.value;
+      return errorObj.ERROR_VALUE;
     }
 
     // Return error if places is negative
     if (places < 0) {
-      return error.num;
+      return errorObj.ERROR_NUM;
     }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
 
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : error.num;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
   }
 };
 
 exports.BIN2OCT = function(number, places) {
   // Return error if number is not binary or contains more than 10 characters (10 digits)
   if (!isValidBinaryNumber(number)) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Ignore places and return a 10-character octal number if number is negative
-  var stringified = number.toString();
+  let stringified = number.toString();
   if (stringified.length === 10 && stringified.substring(0, 1) === '1') {
     return (1073741312 + parseInt(stringified.substring(1), 2)).toString(8);
   }
 
   // Convert binary number to octal
-  var result = parseInt(number, 2).toString(8);
+  let result = parseInt(number, 2).toString(8);
 
   // Return octal number using the minimum number of characters necessary if places is undefined
   if (places === undefined) {
@@ -121,19 +121,19 @@ exports.BIN2OCT = function(number, places) {
   } else {
     // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return error.value;
+      return errorObj.ERROR_VALUE;
     }
 
     // Return error if places is negative
     if (places < 0) {
-      return error.num;
+      return errorObj.ERROR_NUM;
     }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
 
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : error.num;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
   }
 };
 
@@ -142,22 +142,22 @@ exports.BITAND = function(number1, number2) {
   number1 = utils.parseNumber(number1);
   number2 = utils.parseNumber(number2);
   if (utils.anyIsError(number1, number2)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Return error if either number is less than 0
   if (number1 < 0 || number2 < 0) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return error if either number is a non-integer
   if (Math.floor(number1) !== number1 || Math.floor(number2) !== number2) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return error if either number is greater than (2^48)-1
   if (number1 > 281474976710655 || number2 > 281474976710655) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return bitwise AND of two numbers
@@ -168,27 +168,27 @@ exports.BITLSHIFT = function(number, shift) {
   number = utils.parseNumber(number);
   shift = utils.parseNumber(shift);
   if (utils.anyIsError(number, shift)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Return error if number is less than 0
   if (number < 0) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return error if number is a non-integer
   if (Math.floor(number) !== number) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return error if number is greater than (2^48)-1
   if (number > 281474976710655) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return error if the absolute value of shift is greater than 53
   if (Math.abs(shift) > 53) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return number shifted by shift bits to the left or to the right if shift is negative
@@ -199,22 +199,22 @@ exports.BITOR = function(number1, number2) {
   number1 = utils.parseNumber(number1);
   number2 = utils.parseNumber(number2);
   if (utils.anyIsError(number1, number2)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Return error if either number is less than 0
   if (number1 < 0 || number2 < 0) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return error if either number is a non-integer
   if (Math.floor(number1) !== number1 || Math.floor(number2) !== number2) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return error if either number is greater than (2^48)-1
   if (number1 > 281474976710655 || number2 > 281474976710655) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return bitwise OR of two numbers
@@ -225,27 +225,27 @@ exports.BITRSHIFT = function(number, shift) {
   number = utils.parseNumber(number);
   shift = utils.parseNumber(shift);
   if (utils.anyIsError(number, shift)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Return error if number is less than 0
   if (number < 0) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return error if number is a non-integer
   if (Math.floor(number) !== number) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return error if number is greater than (2^48)-1
   if (number > 281474976710655) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return error if the absolute value of shift is greater than 53
   if (Math.abs(shift) > 53) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return number shifted by shift bits to the right or to the left if shift is negative
@@ -256,22 +256,22 @@ exports.BITXOR = function(number1, number2) {
   number1 = utils.parseNumber(number1);
   number2 = utils.parseNumber(number2);
   if (utils.anyIsError(number1, number2)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Return error if either number is less than 0
   if (number1 < 0 || number2 < 0) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return error if either number is a non-integer
   if (Math.floor(number1) !== number1 || Math.floor(number2) !== number2) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return error if either number is greater than (2^48)-1
   if (number1 > 281474976710655 || number2 > 281474976710655) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return bitwise XOR of two numbers
@@ -283,7 +283,7 @@ exports.COMPLEX = function(real, imaginary, suffix) {
   imaginary = utils.parseNumber(imaginary);
   //XW: 参数报错
   if (utils.anyIsError(real, imaginary)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   //XW：end
 
@@ -292,7 +292,7 @@ exports.COMPLEX = function(real, imaginary, suffix) {
   suffix = suffix.toLowerCase();
   // Return error if suffix is neither "i" nor "j"
   if (suffix !== 'i' && suffix !== 'j') {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Return complex number
@@ -303,7 +303,7 @@ exports.COMPLEX = function(real, imaginary, suffix) {
   } else if (imaginary === 0) {
     return real.toString();
   } else {
-    var sign = (imaginary > 0) ? '+' : '';
+    let sign = (imaginary > 0) ? '+' : '';
     return real.toString() + sign + ((imaginary === 1) ? suffix : imaginary.toString() + suffix);
   }
 };
@@ -315,7 +315,7 @@ exports.CONVERT = function(number, from_unit, to_unit) {
   }
   // List of units supported by CONVERT and units defined by the International System of Units
   // [Name, Symbol, Alternate symbols, Quantity, ISU, CONVERT, Conversion ratio]
-  var units = [
+  let units = [
     ["a.u. of action", "?", null, "action", false, false, 1.05457168181818e-34],
     ["a.u. of charge", "e", null, "electric_charge", false, false, 1.60217653141414e-19],
     ["a.u. of energy", "Eh", null, "energy", false, false, 4.35974417757576e-18],
@@ -466,7 +466,7 @@ exports.CONVERT = function(number, from_unit, to_unit) {
 
   // Binary prefixes
   // [Name, Prefix power of 2 value, Previx value, Abbreviation, Derived from]
-  var binary_prefixes = {
+  let binary_prefixes = {
     Yi: ["yobi", 80, 1208925819614629174706176, "Yi", "yotta"],
     Zi: ["zebi", 70, 1180591620717411303424, "Zi", "zetta"],
     Ei: ["exbi", 60, 1152921504606846976, "Ei", "exa"],
@@ -479,7 +479,7 @@ exports.CONVERT = function(number, from_unit, to_unit) {
 
   // Unit prefixes
   // [Name, Multiplier, Abbreviation]
-  var unit_prefixes = {
+  let unit_prefixes = {
     Y: ["yotta", 1e+24, "Y"],
     Z: ["zetta", 1e+21, "Z"],
     E: ["exa", 1e+18, "E"],
@@ -503,15 +503,15 @@ exports.CONVERT = function(number, from_unit, to_unit) {
   };
 
   // Initialize units and multipliers
-  var from = null;
-  var to = null;
-  var base_from_unit = from_unit.toLowerCase();
-  var base_to_unit = to_unit.toLowerCase();
-  var from_multiplier = 1;
-  var to_multiplier = 1;
-  var alt;
+  let from = null;
+  let to = null;
+  let base_from_unit = from_unit.toLowerCase();
+  let base_to_unit = to_unit.toLowerCase();
+  let from_multiplier = 1;
+  let to_multiplier = 1;
+  let alt;
   // Lookup from and to units
-  for (var i = 0; i < units.length; i++) {
+  for (let i = 0; i < units.length; i++) {
     alt = (units[i][2] === null) ? [] : units[i][2];
     if (units[i][1].toLowerCase() === base_from_unit || alt.indexOf(from_unit) >= 0) {
       from = units[i];
@@ -522,8 +522,8 @@ exports.CONVERT = function(number, from_unit, to_unit) {
   }
   // Lookup from prefix
   if (from === null) {
-    var from_binary_prefix = binary_prefixes[from_unit.substring(0, 2)];
-    var from_unit_prefix = unit_prefixes[from_unit.substring(0, 1)];
+    let from_binary_prefix = binary_prefixes[from_unit.substring(0, 2)];
+    let from_unit_prefix = unit_prefixes[from_unit.substring(0, 1)];
 
     // Handle dekao unit prefix (only unit prefix with two characters)
     if (from_unit.substring(0, 2) === 'da') {
@@ -539,7 +539,7 @@ exports.CONVERT = function(number, from_unit, to_unit) {
     }
 
     // Lookup from unit
-    for (var j = 0; j < units.length; j++) {
+    for (let j = 0; j < units.length; j++) {
       alt = (units[j][2] === null) ? [] : units[j][2];
       if (units[j][1] === base_from_unit || alt.indexOf(base_from_unit) >= 0) {
         from = units[j];
@@ -549,8 +549,8 @@ exports.CONVERT = function(number, from_unit, to_unit) {
 
   // Lookup to prefix
   if (to === null) {
-    var to_binary_prefix = binary_prefixes[to_unit.substring(0, 2)];
-    var to_unit_prefix = unit_prefixes[to_unit.substring(0, 1)];
+    let to_binary_prefix = binary_prefixes[to_unit.substring(0, 2)];
+    let to_unit_prefix = unit_prefixes[to_unit.substring(0, 1)];
 
     // Handle dekao unit prefix (only unit prefix with two characters)
     if (to_unit.substring(0, 2) === 'da') {
@@ -577,7 +577,7 @@ exports.CONVERT = function(number, from_unit, to_unit) {
 
   // Return error if a unit does not exist
   if (from === null || to === null) {
-    return error.na;
+    return errorObj.ERROR_NA;
   }
 
   //Return error if units represent different quantities
@@ -588,7 +588,7 @@ exports.CONVERT = function(number, from_unit, to_unit) {
     if(from_unit == 'C' && to_unit == 'F'){
       return number * 1.8 + 32
     }
-    return error.na;
+    return errorObj.ERROR_NA;
   }
 
   // Return converted number
@@ -603,7 +603,7 @@ exports.DEC2BIN = function(number, places) {
 
   // Return error if number is not decimal, is lower than -512, or is greater than 511
   if (!/^-?[0-9]{1,3}$/.test(number) || number < -512 || number > 511) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Ignore places and return a 10-character binary number if number is negative
@@ -620,19 +620,19 @@ exports.DEC2BIN = function(number, places) {
   } else {
     // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return error.value;
+      return errorObj.ERROR_VALUE;
     }
 
     // Return error if places is negative
     if (places < 0) {
-      return error.num;
+      return errorObj.ERROR_NUM;
     }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
 
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : error.num;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
   }
 };
 
@@ -644,7 +644,7 @@ exports.DEC2HEX = function(number, places) {
 
   // Return error if number is not decimal, is lower than -549755813888, or is greater than 549755813887
   if (!/^-?[0-9]{1,12}$/.test(number) || number < -549755813888 || number > 549755813887) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Ignore places and return a 10-character hexadecimal number if number is negative
@@ -661,19 +661,19 @@ exports.DEC2HEX = function(number, places) {
   } else {
     // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return error.value;
+      return errorObj.ERROR_VALUE;
     }
 
     // Return error if places is negative
     if (places < 0) {
-      return error.num;
+      return errorObj.ERROR_NUM;
     }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
 
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : error.num;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
   }
 };
 
@@ -685,7 +685,7 @@ exports.DEC2OCT = function(number, places) {
 
   // Return error if number is not decimal, is lower than -549755813888, or is greater than 549755813887
   if (!/^-?[0-9]{1,9}$/.test(number) || number < -536870912 || number > 536870911) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Ignore places and return a 10-character octal number if number is negative
@@ -702,19 +702,19 @@ exports.DEC2OCT = function(number, places) {
   } else {
     // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return error.value;
+      return errorObj.ERROR_VALUE;
     }
 
     // Return error if places is negative
     if (places < 0) {
-      return error.num;
+      return errorObj.ERROR_NUM;
     }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
 
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : error.num;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
   }
 };
 
@@ -724,7 +724,7 @@ exports.DELTA = function(number1, number2) {
   number1 = utils.parseNumber(number1);
   number2 = utils.parseNumber(number2);
   if (utils.anyIsError(number1, number2)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Return delta
@@ -739,7 +739,7 @@ exports.ERF = function(lower_bound, upper_bound) {
   lower_bound = utils.parseNumber(lower_bound);
   upper_bound = utils.parseNumber(upper_bound);
   if (utils.anyIsError(lower_bound, upper_bound)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   return jStat.erf(lower_bound);
@@ -748,7 +748,7 @@ exports.ERF = function(lower_bound, upper_bound) {
 // TODO
 exports.ERF.PRECISE = function(x) {
   if (isNaN(x)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   var Formulas = window.jsSpreadsheet.AllFormulas;
   return Formulas.ERF(x)
@@ -757,7 +757,7 @@ exports.ERF.PRECISE = function(x) {
 exports.ERFC = function(x) {
   // Return error if x is not a number
   if (isNaN(x)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   return jStat.erfc(x);
@@ -766,7 +766,7 @@ exports.ERFC = function(x) {
 // TODO
 exports.ERFC.PRECISE = function(x) {
   if (isNaN(x)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   var Formulas = window.jsSpreadsheet.AllFormulas;
   return Formulas.ERFC(x)
@@ -786,7 +786,7 @@ exports.GESTEP = function(number, step) {
 exports.HEX2BIN = function(number, places) {
   // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
   if (!/^[0-9A-Fa-f]{1,10}$/.test(number)) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Check if number is negative
@@ -797,7 +797,7 @@ exports.HEX2BIN = function(number, places) {
 
   // Return error if number is lower than -512 or greater than 511
   if (decimal < -512 || decimal > 511) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Ignore places and return a 10-character binary number if number is negative
@@ -814,26 +814,26 @@ exports.HEX2BIN = function(number, places) {
   } else {
     // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return error.value;
+      return errorObj.ERROR_VALUE;
     }
 
     // Return error if places is negative
     if (places < 0) {
-      return error.num;
+      return errorObj.ERROR_NUM;
     }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
 
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : error.num;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
   }
 };
 
 exports.HEX2DEC = function(number) {
   // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
   if (!/^[0-9A-Fa-f]{1,10}$/.test(number)) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Convert hexadecimal number to decimal
@@ -846,7 +846,7 @@ exports.HEX2DEC = function(number) {
 exports.HEX2OCT = function(number, places) {
   // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
   if (!/^[0-9A-Fa-f]{1,10}$/.test(number)) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Convert hexadecimal number to decimal
@@ -854,7 +854,7 @@ exports.HEX2OCT = function(number, places) {
 
   // Return error if number is positive and greater than 0x1fffffff (536870911)
   if (decimal > 536870911 && decimal < 1098974756864) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Ignore places and return a 10-character octal number if number is negative
@@ -871,19 +871,19 @@ exports.HEX2OCT = function(number, places) {
   } else {
     // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return error.value;
+      return errorObj.ERROR_VALUE;
     }
 
     // Return error if places is negative
     if (places < 0) {
-      return error.num;
+      return errorObj.ERROR_NUM;
     }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
 
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : error.num;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
   }
 };
 exports.ROWS = function (matrix) {
@@ -892,7 +892,7 @@ exports.ROWS = function (matrix) {
   }
 
   if (!(matrix instanceof Array)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   if (matrix.length === 0) {
@@ -914,7 +914,7 @@ exports.IMABS = function (inumber) {
 
   // Return error if either coefficient is not a number
   if (utils.anyIsError(x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Return absolute value of complex number
@@ -924,7 +924,7 @@ exports.IMABS = function (inumber) {
 exports.IMAGINARY = function (inumber) {
   inumber = trans_num(inumber)
   if (inumber === undefined || inumber === true || inumber === false) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Return 0 if inumber is equal to 0
@@ -958,24 +958,24 @@ exports.IMAGINARY = function (inumber) {
   if (plus >= 0 || minus >= 0) {
     // Return error if imaginary unit is neither i nor j
     if (!unit) {
-      return error.num;
+      return errorObj.ERROR_NUM;
     }
 
     // Return imaginary coefficient of complex number
     if (plus >= 0) {
       return (isNaN(inumber.substring(0, plus)) || isNaN(inumber.substring(plus + 1, inumber.length - 1))) ?
-        error.num :
+        errorObj.ERROR_NUM :
         Number(inumber.substring(plus + 1, inumber.length - 1));
     } else {
       return (isNaN(inumber.substring(0, minus)) || isNaN(inumber.substring(minus + 1, inumber.length - 1))) ?
-        error.num :
+        errorObj.ERROR_NUM :
         -Number(inumber.substring(minus + 1, inumber.length - 1));
     }
   } else {
     if (unit) {
-      return (isNaN(inumber.substring(0, inumber.length - 1))) ? error.num : inumber.substring(0, inumber.length - 1);
+      return (isNaN(inumber.substring(0, inumber.length - 1))) ? errorObj.ERROR_NUM : inumber.substring(0, inumber.length - 1);
     } else {
-      return (isNaN(inumber)) ? error.num : 0;
+      return (isNaN(inumber)) ? errorObj.ERROR_NUM : 0;
     }
   }
 };
@@ -988,12 +988,12 @@ exports.IMARGUMENT = function (inumber) {
 
   // Return error if either coefficient is not a number
   if (utils.anyIsError(x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Return error if inumber is equal to zero
   if (x === 0 && y === 0) {
-    return error.div0;
+    return errorObj.ERROR_DIV0;
   }
 
   // Return PI/2 if x is equal to zero and y is positive
@@ -1033,7 +1033,7 @@ exports.IMCONJUGATE = function (inumber) {
   var y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
@@ -1051,7 +1051,7 @@ exports.IMCOS = function (inumber) {
   var y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
@@ -1069,7 +1069,7 @@ exports.IMCOSH = function (inumber) {
   var y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
@@ -1087,7 +1087,7 @@ exports.IMCOT = function (inumber) {
   var y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Return cotangent of complex number
@@ -1102,7 +1102,7 @@ exports.IMDIV = function(inumber1, inumber2) {
   var d = exports.IMAGINARY(inumber2);
 
   if (utils.anyIsError(a, b, c, d)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
@@ -1117,7 +1117,7 @@ exports.IMDIV = function(inumber1, inumber2) {
 
   // Return error if inumber2 is null
   if (c === 0 && d === 0) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return exponential of complex number
@@ -1132,7 +1132,7 @@ exports.IMEXP = function(inumber) {
   var y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
@@ -1150,7 +1150,7 @@ exports.IMLN = function(inumber) {
   var y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
@@ -1168,7 +1168,7 @@ exports.IMLOG10 = function(inumber) {
   var y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
@@ -1186,7 +1186,7 @@ exports.IMLOG2 = function(inumber) {
   var y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
@@ -1203,7 +1203,7 @@ exports.IMPOWER = function(inumber, number) {
   var x = exports.IMREAL(inumber);
   var y = exports.IMAGINARY(inumber);
   if (utils.anyIsError(number, x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
@@ -1233,7 +1233,7 @@ exports.IMPRODUCT = function() {
     var d = exports.IMAGINARY(arguments[i]);
 
     if (utils.anyIsError(a, b, c, d)) {
-      return error.value;
+      return errorObj.ERROR_VALUE;
     }
 
     // Complute product of two complex numbers
@@ -1247,7 +1247,7 @@ exports.IMPRODUCT = function() {
 exports.IMREAL = function(inumber) {
   inumber = trans_num(inumber)
   if (inumber === undefined || inumber === true || inumber === false) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Return 0 if inumber is equal to 0
@@ -1277,24 +1277,24 @@ exports.IMREAL = function(inumber) {
   if (plus >= 0 || minus >= 0) {
     // Return error if imaginary unit is neither i nor j
     if (!unit) {
-      return error.num;
+      return errorObj.ERROR_NUM;
     }
 
     // Return real coefficient of complex number
     if (plus >= 0) {
       return (isNaN(inumber.substring(0, plus)) || isNaN(inumber.substring(plus + 1, inumber.length - 1))) ?
-        error.num :
+        errorObj.ERROR_NUM :
         Number(inumber.substring(0, plus));
     } else {
       return (isNaN(inumber.substring(0, minus)) || isNaN(inumber.substring(minus + 1, inumber.length - 1))) ?
-        error.num :
+        errorObj.ERROR_NUM :
         Number(inumber.substring(0, minus));
     }
   } else {
     if (unit) {
-      return (isNaN(inumber.substring(0, inumber.length - 1))) ? error.num : 0;
+      return (isNaN(inumber.substring(0, inumber.length - 1))) ? errorObj.ERROR_NUM : 0;
     } else {
-      return (isNaN(inumber)) ? error.num : inumber;
+      return (isNaN(inumber)) ? errorObj.ERROR_NUM : inumber;
     }
   }
 };
@@ -1303,7 +1303,7 @@ exports.IMSEC = function(inumber) {
   inumber = trans_num(inumber)
   // Return error if inumber is a logical value
   if (inumber === true || inumber === false) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
@@ -1311,7 +1311,7 @@ exports.IMSEC = function(inumber) {
   var y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Return secant of complex number
@@ -1325,7 +1325,7 @@ exports.IMSECH = function(inumber) {
   var y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Return hyperbolic secant of complex number
@@ -1339,7 +1339,7 @@ exports.IMSIN = function(inumber) {
   var y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
@@ -1357,7 +1357,7 @@ exports.IMSINH = function(inumber) {
   var y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
@@ -1375,7 +1375,7 @@ exports.IMSQRT = function(inumber) {
   var y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
@@ -1396,7 +1396,7 @@ exports.IMCSC = function (inumber) {
   // Return error if inumber is a logical value
   inumber = trans_num(inumber)
   if (inumber === true || inumber === false) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
@@ -1405,7 +1405,7 @@ exports.IMCSC = function (inumber) {
 
   // Return error if either coefficient is not a number
   if (utils.anyIsError(x, y)) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return cosecant of complex number
@@ -1416,7 +1416,7 @@ exports.IMCSCH = function (inumber) {
   // Return error if inumber is a logical value
   inumber = trans_num(inumber)
   if (inumber === true || inumber === false) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
@@ -1425,7 +1425,7 @@ exports.IMCSCH = function (inumber) {
 
   // Return error if either coefficient is not a number
   if (utils.anyIsError(x, y)) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Return hyperbolic cosecant of complex number
@@ -1443,7 +1443,7 @@ exports.IMSUB = function(inumber1, inumber2) {
   var d = exports.IMAGINARY(inumber2);
 
   if (utils.anyIsError(a, b, c, d)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
@@ -1476,7 +1476,7 @@ exports.IMSUM = function (inumber) {
     var d = exports.IMAGINARY(args[i]);
 
     if (utils.anyIsError(a, b, c, d)) {
-      return error.value;
+      return errorObj.ERROR_VALUE;
     }
 
     // Complute product of two complex numbers
@@ -1491,7 +1491,7 @@ exports.IMTAN = function (inumber) {
   inumber = trans_num(inumber)
   // Return error if inumber is a logical value
   if (inumber === true || inumber === false) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
@@ -1499,7 +1499,7 @@ exports.IMTAN = function (inumber) {
   var y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   // Return tangent of complex number
@@ -1509,7 +1509,7 @@ exports.IMTAN = function (inumber) {
 exports.OCT2BIN = function (number, places) {
   // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
   if (!/^[0-7]{1,10}$/.test(number)) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Check if number is negative
@@ -1520,7 +1520,7 @@ exports.OCT2BIN = function (number, places) {
 
   // Return error if number is lower than -512 or greater than 511
   // if (decimal < -512 || decimal > 511) {
-  //     return error.num;
+  //     return errorObj.ERROR_NUM;
   // }
 
   // Ignore places and return a 10-character binary number if number is negative
@@ -1539,25 +1539,25 @@ exports.OCT2BIN = function (number, places) {
   } else {
     // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return error.value;
+      return errorObj.ERROR_VALUE;
     }
 
     // Return error if places is negative
     if (places < 0) {
-      return error.num;
+      return errorObj.ERROR_NUM;
     }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : error.num;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
   }
 };
 
 exports.OCT2DEC = function(number) {
   // Return error if number is not octal or contains more than ten characters (10 digits)
   if (!/^[0-7]{1,10}$/.test(number)) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Convert octal number to decimal
@@ -1570,7 +1570,7 @@ exports.OCT2DEC = function(number) {
 exports.OCT2HEX = function(number, places) {
   // Return error if number is not octal or contains more than ten characters (10 digits)
   if (!/^[0-7]{1,10}$/.test(number)) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
 
   // Convert octal number to decimal
@@ -1590,18 +1590,18 @@ exports.OCT2HEX = function(number, places) {
   } else {
     // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return error.value;
+      return errorObj.ERROR_VALUE;
     }
 
     // Return error if places is negative
     if (places < 0) {
-      return error.num;
+      return errorObj.ERROR_NUM;
     }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
 
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : error.num;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
   }
 };

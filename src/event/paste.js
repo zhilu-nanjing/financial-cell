@@ -4,9 +4,7 @@ import Drag from "../external/drag";
 import Resize from "../external/resize";
 import {cssPrefix} from "../config";
 import {getChooseImg} from "../event/copy";
-// import {xy2expr} from "../core/alphabet";
 import CellRange from "../core/cell_range";
-// import {deepCopy} from "../core/operator";
 import TableProxy from "../core/table_proxy";
 
 export let resizeOption = {

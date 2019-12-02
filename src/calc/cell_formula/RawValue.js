@@ -1,10 +1,13 @@
 "use strict";
 
-module.exports = function RawValue(value) {
-    this.setValue = function(v) {
-        value = v;
+module.exports = class RawValue{
+    constructor(value){
+        this.value = value
     };
-    this.calc = function() {
-        return value;
+    setValue(v) {
+        this.value = v;
+    };
+    calc() {
+        return this.value;
     };
 };

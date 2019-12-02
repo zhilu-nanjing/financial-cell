@@ -1,55 +1,49 @@
 "use strict";
-
+const cf = require("../calc_utils/config");
 const RawValue = require('./RawValue.js');
 const Range = require('./Range.js');
 const str_2_val = require('./str_2_val.js');
-//XW：统一报错
-var error = require('../formulajs/lib/error');
-//XW：end
-const MS_PER_DAY = 24 * 60 * 60 * 1000;
-var exp_id = 0;
+let {errorObj, errorMsgArr} = require('../calc_utils/error_config');
+const {CellDate} = require("../calc_utils/cellValueType");
 
-module.exports = class FormulaExp {  // cell的f属性data_proxy;
-    constructor(formula) {
+
+
+
+let exp_id = 0; // 全局变量
+module.exports = class FormulaExp {
+    // 代表语法书上面的一个节点。这个几点的args是代表树枝，
+    // 可以为RawValue，RefValue，LazyValue或字符或FormulaExp; 存在括号的时候，会把括号内的表达式构造为FormulaExp
+    constructor(cellFormulaProxy) {
         let self = this;
         self.id = ++exp_id;   // id 是一个递增序列，其中root_exp的id为1
         self.args = [];
         self.name = 'Expression';
-        self.formula = formula;
+        self.cellFormulaProxy = cellFormulaProxy;
         self.last_arg = "";
     }
 
     update_cell_value() {
         let self = this;
-        let formula = this.formula;
+        let formula = this.cellFormulaProxy;
+        let selfCell = formula.cell;
         try {
-            if (Array.isArray(self.args)
+            if (Array.isArray(self.args) // 不合法的参数； 何时会出现这种情况？
               && self.args.length === 1
               && self.args[0] instanceof Range) {
-                throw error.value;
+                throw errorObj.ERROR_VALUE;
             }
-            formula.cell.v = self.calc();
+            selfCell.v = self.calc(); // 计算数值
 
-            if (typeof (formula.cell.v) === 'string') {
-                formula.cell.t = 's';
-            } else if (typeof (formula.cell.v) === 'number') {
-                formula.cell.t = 'n';
+            if (typeof (selfCell.v) === 'string') {
+                selfCell.t = 's';
+            } else if (typeof (selfCell.v) === 'number') {
+                selfCell.t = 'n';
             }
         } catch (e) {
-            var errorValues = {
-                '#NULL!': 0x00,
-                '#DIV/0!': 0x07,
-                '#VALUE!': 0x0F,
-                '#REF!': 0x17,
-                '#NAME?': 0x1D,
-                '#NUM!': 0x24,
-                '#N/A': 0x2A,
-                '#GETTING_DATA': 0x2B
-            };
-            if (errorValues[e.message] !== undefined) {
-                formula.cell.t = 'e';
-                formula.cell.w = e.message;
-                formula.cell.v = errorValues[e.message];
+            if (errorMsgArr.indexOf(e.message) !== -1) {
+                selfCell.t = 'e';
+                selfCell.w = e.message;
+                selfCell.v = e.message; // 出错的话，v属性应该没有用了把
             } else {
                 throw e;
             }
@@ -62,64 +56,60 @@ module.exports = class FormulaExp {  // cell的f属性data_proxy;
         return value === undefined || value === null || value === "";
     }
 
-    checkVariable(obj) {
-        if (typeof obj.calc !== 'function') {
-            return 0;
+    hasCalcMethod(obj) {
+        return typeof obj.calc === 'function'
+    }
+    convertDateToNumber(res){
+        if(res instanceof CellDate){
+            return res.toNumber()
         }
-        return 1;
+        else {
+            return res
+        }
+    }
+    execCalcMethod(obj, isConvertDateToNumber = true){
+        if(this.hasCalcMethod(obj)){
+            let res = obj.calc()
+            if(isConvertDateToNumber){
+                res = this.convertDateToNumber(res)
+            }
+            return res
+        }
+        else {
+            throw errorObj.ERROR_SYNTAX
+        }
     }
 
-    exec(op, args, fn) {
-        for (var i = 0; i < args.length; i++) {
+    execOperatorWith2Args(op, args, fn) { // fn含有两个参数，因为运算符有优先级顺序，所以需要依次执行
+        for (let i = 0; i < args.length; i++) {
             if (args[i] === op) {
                 try {
-                    if (i === 0 && op === '+') {
-                        let as = this.checkVariable(args[i + 1]);
-                        if (!as)
-                            break;
-                        let r = args[i + 1].calc();
-                        args.splice(i, 2, new RawValue(r));
-                    } else {
-                        let as = this.checkVariable(args[i - 1]);
-                        if (!as)
-                            break;
-                        as = this.checkVariable(args[i + 1]);
-                        if (!as)
-                            break;
-                        let r = fn(args[i - 1].calc(), args[i + 1].calc());
-                        args.splice(i - 1, 3, new RawValue(r));
-                        i--;
-                    }
-                } catch (e) {
-                    // console.log('[Exp.js] - ' + formula.name + ': evaluating ' + formula.cell.f + '\n' + e.message);
+                    let r = fn(this.execCalcMethod(args[i-1]), this.execCalcMethod(args[i+1]));// 这里存在递归
+                    args.splice(i - 1, 3, new RawValue(r));
+                    i--;
+                } catch (e) { // 上面一旦出现错误，就直接跳出了
+                    console.log('[Exp.js] - ' + this.name + ': evaluating ' + this.cellFormulaProxy.cell.f + '\n' + e.message);
                     throw e;
                 }
             }
         }
     }
 
-    exec_minus(args) {
-        for (var i = args.length; i--;) {
+    exec_minus(args) { // =1.1^-12；=1.1*-12 在负号之前有其他运算符
+        for (let i = args.length; i--;) {
             if (args[i] === '-') {
-                this.checkVariable(args[i + 1]);
-                var b = args[i + 1].calc();
-                if (i > 0 && typeof args[i - 1] !== 'string') {
-                    args.splice(i, 1, '+');
-                    if (b instanceof Date) {
-                        b = Date.parse(b);
-                        this.checkVariable(args[i - 1]);
-                        var a = args[i - 1].calc();
-                        if (a instanceof Date) {
-                            a = Date.parse(a) / MS_PER_DAY;
-                            b = b / MS_PER_DAY;
-                            args.splice(i - 1, 1, new RawValue(a));
-                        }
-                    }
-                    args.splice(i + 1, 1, new RawValue(-b));
-                } else {
-                    args.splice(i, 2, new RawValue(-b));
+                this.execCalcMethod(args[i+1])
+                if (i > 0 && typeof args[i - 1] === 'string') {
+                    args.splice(i, 2, new RawValue(-rightArg));// 替换2个原有arg
                 }
             }
+        }
+    }
+
+    exec_plus(args){
+        if (args[0] === '+') { // 第一个运算符符就是加号
+            let r = this.execCalcMethod(args[1]); // 这里存在递归
+            args.splice(0, 2, new RawValue(r));
         }
     }
 
@@ -129,85 +119,66 @@ module.exports = class FormulaExp {  // cell的f属性data_proxy;
         // console.log(args)
         //XW: 对函数参数做转换、判断
         try {
-            for (var i = 0; i < args.length; i++) {
-                if (args[i].name === 'RefValue') {
-                    var sheet = args[i].formula.sheet;
+            for (let i = 0; i < args.length; i++) { // 遍历所有的参数
+                if (args[i].name === 'RefValue') { // 属于引用的字符串
+                    let sheet = args[i].cellFormulaProxy.sheet;
                     //未定义单元格f置为default_0
-                    if (sheet[args[i].str_expression] === undefined) {
-                        args[i].formula.sheet[args[i].str_expression] = { v: 'default_0' }
+                    if (sheet[args[i].str_expression] === undefined) { // 判定空单元格，args[i].str_expression = "A28", sheet是一个obj, value 是 ｛v:,f:}这种形式的obj
+                        sheet[args[i].str_expression] = { v: 'default_0' } // 未定义的值赋值，合理么？
                     }
                     //=A0形式参数报错
                     if (args[i].str_expression.slice(1, args[i].str_expression.length) === '0') {
-                        return error.name;
+                        return errorObj.ERROR_NAME;
                     }
                 }
             }
         } catch (e) {
         }
-        try {
-            //形如2019年10月19日参数转为2019-10-19
-            if (args[0].name === 'RefValue' && args[1] === '-' && args[2].name === 'RefValue') {
-                var sheet = args[0].formula.sheet;
-                var a = sheet[args[0].str_expression].v;
-                var b = sheet[args[2].str_expression].v;
-                var a = a.replace('年', '-')
-                  .replace('月', '-')
-                  .replace('日', '');
-                var b = b.replace('年', '-')
-                  .replace('月', '-')
-                  .replace('日', '');
-                return datedifference(a, b)
-            }
-        } catch (e) {
-        }
         //XW：end
-        this.exec_minus(args); // jobs:Array(3), ['asdf',"-","as"]
-        this.exec('^', args, function (a, b) {
+        // 以下是依次执行各个运算符，最优先的运算符在最上面
+        this.exec_minus(args); // 执行负号运算
+        this.exec_plus(args); // 执行第一个加号
+        this.execOperatorWith2Args('^', args, function (a, b) {
             return Math.pow(+a, +b);
         });
-        this.exec('/', args, function (a, b) {
+        this.execOperatorWith2Args('/', args, function (a, b) {
             if (b === 0) {
-                throw error.div0;
+                throw errorObj.ERROR_DIV0;
             }
             return (+a) / (+b);
         });
-        this.exec('*', args, function (a, b) {
+        this.execOperatorWith2Args('*', args, function (a, b) {
             return (+a) * (+b);
         });
-        this.exec('+', args, function (a, b) {
-            if (a instanceof Date && typeof b === 'number') {
-                b = b * MS_PER_DAY;
-            }
+        this.execOperatorWith2Args('-', args, function (a, b) { // 执行减法
+            return a - b
+        });
+
+        this.execOperatorWith2Args('+', args, function (a, b) { // 执行加法
             return (+a) + (+b);
         });
-        this.exec('&', args, function (a, b) {
+        this.execOperatorWith2Args('&', args, function (a, b) {
             return '' + a + b;
         });
-        this.exec('<', args, function (a, b) {
+        this.execOperatorWith2Args('<', args, function (a, b) {
             return a < b;
         });
-        this.exec('>', args, function (a, b) {
+        this.execOperatorWith2Args('>', args, function (a, b) {
             return a > b;
         });
-        this.exec('>=', args, function (a, b) {
+        this.execOperatorWith2Args('>=', args, function (a, b) {
             return a >= b;
         });
-        this.exec('<=', args, function (a, b) {
+        this.execOperatorWith2Args('<=', args, function (a, b) {
             return a <= b;
         });
-        this.exec('<>', args, function (a, b) {
-            if (a instanceof Date && b instanceof Date) {
-                return a.getTime() !== b.getTime();
-            }
+        this.execOperatorWith2Args('<>', args, function (a, b) {
             if (self.isEmpty(a) && self.isEmpty(b)) {
                 return false;
             }
             return a !== b;
         });
-        this.exec('=', args, function (a, b) {
-            if (a instanceof Date && b instanceof Date) {
-                return a.getTime() === b.getTime();
-            }
+        this.execOperatorWith2Args('=', args, function (a, b) {
             if (self.isEmpty(a) && self.isEmpty(b)) {
                 return true;
             }
@@ -220,18 +191,21 @@ module.exports = class FormulaExp {  // cell的f属性data_proxy;
             return a === b;
         });
         if (args.length === 1) {
-            if (typeof (args[0].calc) !== 'function') {
-                return args[0];
-            } else {
-                return args[0].calc();
-            }
+            return this.calcLastArg(args[0]) // 计算最后一个值
         }
     };
+    calcLastArg(arg){
+        if (typeof (arg.calc) !== 'function') {
+            return arg;
+        } else {
+            return arg.calc();
+        }
+    }
 
     push(buffer, position_i) {
         let self = this;
         if (buffer) {
-            var v = str_2_val(buffer, self.formula, position_i);
+            let v = str_2_val(buffer, self.cellFormulaProxy, position_i);
             if (((v === '=') && (self.last_arg === '>' || self.last_arg === '<')) || (self.last_arg === '<' && v === '>')) {
                 self.args[self.args.length - 1] += v;
             } else {

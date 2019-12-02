@@ -1,4 +1,4 @@
-var categories = [
+let categories = [
   require('./lib/compatibility'),
   require('./lib/database'),
   require('./lib/engineering'),
@@ -14,9 +14,9 @@ var categories = [
   require('./lib/custom')
 ];
 
-for (var c in categories) {
-  var category = categories[c];
-  for (var f in category) {
+for (let c in categories) {
+  let category = categories[c];
+  for (let f in category) {
     exports[f] = exports[f] || category[f];
   }
 }

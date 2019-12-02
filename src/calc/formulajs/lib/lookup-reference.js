@@ -1,9 +1,9 @@
-var error = require('./error');
-var utils = require('./utils');
+let errorObj = require('../../calc_utils/error_config');
+let utils = require('./utils');
 function match_less_than_or_equal(matrix, lookupValue) {
-  var index;
-  var indexValue;
-  for (var idx = 0; idx < matrix.length; idx++) {
+  let index;
+  let indexValue;
+  for (let idx = 0; idx < matrix.length; idx++) {
     if (matrix[idx] === lookupValue) {
       return idx + 1;
     } else if (matrix[idx] < lookupValue) {
@@ -17,13 +17,13 @@ function match_less_than_or_equal(matrix, lookupValue) {
     }
   }
   if (!index) {
-    return error.na;
+    return errorObj.ERROR_NA;
   }
   return index;
 }
 
 function match_exactly_string(matrix, lookupValue) {
-  for (var idx = 0; idx < matrix.length; idx++) {
+  for (let idx = 0; idx < matrix.length; idx++) {
     lookupValue = lookupValue.replace(/\?/g, '.');
     if (Array.isArray(matrix[idx])) {
       if (matrix[idx].length === 1
@@ -39,11 +39,11 @@ function match_exactly_string(matrix, lookupValue) {
     }
 
   }
-  return error.na;
+  return errorObj.ERROR_NA;
 }
 
 function match_exactly_non_string(matrix, lookupValue) {
-  for (var idx = 0; idx < matrix.length; idx++) {
+  for (let idx = 0; idx < matrix.length; idx++) {
     if (Array.isArray(matrix[idx])) {
       if (matrix[idx].length === 1) {
         if (matrix[idx][0] === lookupValue) {
@@ -55,14 +55,14 @@ function match_exactly_non_string(matrix, lookupValue) {
     }
   }
   //XW:统一错误变量
-  return error.na;
+  return errorObj.ERROR_NA;
   //XW：end
 }
 
 function match_greater_than_or_equal(matrix, lookupValue) {
-  var index;
-  var indexValue;
-  for (var idx = 0; idx < matrix.length; idx++) {
+  let index;
+  let indexValue;
+  for (let idx = 0; idx < matrix.length; idx++) {
     if (matrix[idx] === lookupValue) {
       return idx + 1;
     } else if (matrix[idx] > lookupValue) {
@@ -76,7 +76,7 @@ function match_greater_than_or_equal(matrix, lookupValue) {
     }
   }
   if (!index) {
-    return error.na;
+    return errorObj.ERROR_NA;
   }
   return index;
 }
@@ -87,13 +87,13 @@ exports.MATCH = function (lookupValue, matrix, matchType) {
     matrix = matrix[0];
   }
   if (!lookupValue && !matrix) {
-    return error.na;
+    return errorObj.ERROR_NA;
   }
   if (arguments.length === 2) {
     matchType = 1;
   }
   if (!(matrix instanceof Array)) {
-    return error.na;
+    return errorObj.ERROR_NA;
   }
   if (matchType === 0) {
     if (typeof lookupValue === 'string') {
@@ -104,33 +104,33 @@ exports.MATCH = function (lookupValue, matrix, matchType) {
   } else if (matchType === 1) {
     return match_less_than_or_equal(matrix, lookupValue);
   } else if (matchType === -1) {
-    var a = matrix[0][0]
-    for (var i=1;i<matrix.length;i++){
+    let a = matrix[0][0]
+    for (let i=1;i<matrix.length;i++){
       if (matrix[i][0] > a){
-        return error.na;
+        return errorObj.ERROR_NA;
       }
     }
     return match_greater_than_or_equal(matrix, lookupValue);
   } else {
-    return error.na;
+    return errorObj.ERROR_NA;
   }
 }
 //XW: vlookup函数实现
 exports.VLOOKUP = function (key, matrix, return_index, cumulative) {
   if(typeof cumulative == 'string' && !(cumulative == 'FALSE' || cumulative == 'TRUE')){
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   if (cumulative == 'FALSE') {
     cumulative = false
   }else{
     cumulative = true
   }
-  for (var i = 0; i < matrix.length; i++) {
+  for (let i = 0; i < matrix.length; i++) {
     if (matrix[i][0] == key) {
       return matrix[i][return_index - 1];
     }
   }
-  return error.na;
+  return errorObj.ERROR_NA;
 };
 //XW：end
 
@@ -147,7 +147,7 @@ exports.HLOOKUP = function (needle, table, index, exactmatch) {
     table = utils.strToMatrix(table)
   }
   if (typeof needle === "undefined" || table[0].indexOf(needle) < 0) {
-    return error.na;
+    return errorObj.ERROR_NA;
   }
 
   index = index || 0;
@@ -159,6 +159,6 @@ exports.HLOOKUP = function (needle, table, index, exactmatch) {
     }
   }
 
-  return error.na;
+  return errorObj.ERROR_NA;
 }
 //XW：end

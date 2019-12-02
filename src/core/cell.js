@@ -1,4 +1,4 @@
-import {expr2xy, xy2expr} from './alphabet';
+import {expr2xy, xy2expr} from '../utils/alphabet';
 import {look, look2} from "../config";
 // import XLSX_CALC from "calc"
 // var formulajs = require('formulajs');

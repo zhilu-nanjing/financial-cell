@@ -1,8 +1,8 @@
-var defaultOperator = '=';
-var validSymbols = ['>', '>=', '<', '<=', '=', '<>'];
-var TOKEN_TYPE_OPERATOR = 'operator';
-var TOKEN_TYPE_LITERAL = 'literal';
-var SUPPORTED_TOKENS = [TOKEN_TYPE_OPERATOR, TOKEN_TYPE_LITERAL];
+let defaultOperator = '=';
+let validSymbols = ['>', '>=', '<', '<=', '=', '<>'];
+let TOKEN_TYPE_OPERATOR = 'operator';
+let TOKEN_TYPE_LITERAL = 'literal';
+let SUPPORTED_TOKENS = [TOKEN_TYPE_OPERATOR, TOKEN_TYPE_LITERAL];
 
 exports.TOKEN_TYPE_OPERATOR = TOKEN_TYPE_OPERATOR;
 exports.TOKEN_TYPE_LITERAL = TOKEN_TYPE_LITERAL;
@@ -50,14 +50,14 @@ function castValueToCorrectType(value) {
  * @return {String[]}
  */
 function tokenizeExpression(expression) {
-  var expressionLength = expression.length;
-  var tokens = [];
-  var cursorIndex = 0;
-  var processedValue = '';
-  var processedSymbol = '';
+  let expressionLength = expression.length;
+  let tokens = [];
+  let cursorIndex = 0;
+  let processedValue = '';
+  let processedSymbol = '';
 
   while (cursorIndex < expressionLength) {
-    var char = expression.charAt(cursorIndex);
+    let char = expression.charAt(cursorIndex);
 
     switch (char) {
       case '>':
@@ -99,11 +99,11 @@ function tokenizeExpression(expression) {
  * @return {Object[]}
  */
 function analyzeTokens(tokens) {
-  var literalValue = '';
-  var analyzedTokens = [];
+  let literalValue = '';
+  let analyzedTokens = [];
 
-  for (var i = 0; i < tokens.length; i++) {
-    var token = tokens[i];
+  for (let i = 0; i < tokens.length; i++) {
+    let token = tokens[i];
 
     if (i === 0 && validSymbols.indexOf(token) >= 0) {
       analyzedTokens.push(createToken(token, TOKEN_TYPE_OPERATOR));
@@ -130,11 +130,11 @@ function analyzeTokens(tokens) {
  * @return {Boolean}
  */
 function computeExpression(tokens) {
-  var values = [];
-  var operator;
+  let values = [];
+  let operator;
 
-  for (var i = 0; i < tokens.length; i++) {
-    var token = tokens[i];
+  for (let i = 0; i < tokens.length; i++) {
+    let token = tokens[i];
 
     switch (token.type) {
       case TOKEN_TYPE_OPERATOR:
@@ -157,7 +157,7 @@ function computeExpression(tokens) {
  * @return {Boolean}
  */
 function evaluate(values, operator) {
-  var result = false;
+  let result = false;
 
   switch (operator) {
     case '>':
@@ -173,10 +173,10 @@ function evaluate(values, operator) {
       result = values[0] <= values[1];
       break;
     case '=':
-      result = values[0] == values[1];
+      result = values[0] === values[1];
       break;
     case '<>':
-      result = values[0] != values[1];
+      result = values[0] !== values[1];
       break;
   }
 

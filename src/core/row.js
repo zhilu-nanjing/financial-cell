@@ -1,7 +1,7 @@
 import helper, {isHave} from './helper';
-import {xy2expr} from './alphabet';
+import {xy2expr} from '../utils/alphabet';
 import {changeFormula, cutStr, isAbsoluteValue, value2absolute} from "../core/operator";
-import {expr2xy} from "../core/alphabet";
+import {expr2xy} from "../utils/alphabet";
 import dayjs from 'dayjs'
 import {deepCopy, distinct, isSheetVale, splitStr} from "./operator";
 import Recast from "./recast";
@@ -10,7 +10,7 @@ import CellProxy from "./cell_proxy";
 import CellRange from "./cell_range";
 import CellProp from "../model/cell_prop";
 import Cell from "../model/cell";
-let calcUtils = require('../calc/helper/utils');
+let calcUtils = require('../calc/calc_utils/utils');
 
 export function isFormula(text) {
     // if (text && text[0] === "=") {

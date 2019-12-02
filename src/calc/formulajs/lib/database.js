@@ -1,12 +1,12 @@
-var error = require('./error');
-var stats = require('./statistical');
-var maths = require('./math-trig');
-var utils = require('./utils');
+let errorObj = require('../../calc_utils/error_config');
+let stats = require('./statistical');
+let maths = require('./math-trig');
+let utils = require('./utils');
 
 function compact(array) {
   if (!array) { return array; }
-  var result = [];
-  for (var i = 0; i < array.length; ++i) {
+  let result = [];
+  for (let i = 0; i < array.length; ++i) {
     if (!array[i]) { continue; }
     result.push(array[i]);
   }
@@ -14,8 +14,8 @@ function compact(array) {
 }
 
 exports.FINDFIELD = function(database, title) {
-  var index = null;
-  for (var i = 0; i < database.length; i++) {
+  let index = null;
+  for (let i = 0; i < database.length; i++) {
     if (database[i][0] === title) {
       index = i;
       break;
@@ -24,36 +24,36 @@ exports.FINDFIELD = function(database, title) {
 
   // Return error if the input field title is incorrect
   if (index == null) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   return index;
 };
 
 //XW: 重写函数
 function find_result_idx(database, criteria){
-  var valid_arr = []
-  var filter_arr = []
-  for (var i=0; i < criteria[0].length; i++) {
+  let valid_arr = []
+  let filter_arr = []
+  for (let i=0; i < criteria[0].length; i++) {
     filter_arr.push(criteria[0][i])
   }
-  for (var i=1; i < criteria.length; i++){
-    var arr = criteria[i]
-    var valid_str = []
-    for (var j=0; j < filter_arr.length; j++){
-      if (arr[j] != null){
+  for (let i=1; i < criteria.length; i++){
+    let arr = criteria[i]
+    let valid_str = []
+    for (let j=0; j < filter_arr.length; j++){
+      if (arr[j] !== null){
         valid_str.push(database[0].indexOf(criteria[0][j]) + '-' + arr[j])
       }
     }
     valid_arr.push(valid_str)
   }
-  var result_idx = []
-  for (var i=1; i < database.length; i++){
-    var data = database[i]
-    for(var j=0;j<valid_arr.length;j++){
-      var is_valid = true
-      for(var k=0;k<valid_arr[j].length;k++){
-        var a = data[parseInt(valid_arr[j][k].split('-')[0])]
-        var b = valid_arr[j][k].split('-')[1]
+  let result_idx = []
+  for (let i=1; i < database.length; i++){
+    let data = database[i]
+    for(let j=0;j<valid_arr.length;j++){
+      let is_valid = true
+      for(let k=0;k<valid_arr[j].length;k++){
+        let a = data[parseInt(valid_arr[j][k].split('-')[0])]
+        let b = valid_arr[j][k].split('-')[1]
         if (b.indexOf('=') >= 0){
           is_valid = (a == b.replace('=', ''))
         }else if(!eval(a+b)){
@@ -69,12 +69,12 @@ function find_result_idx(database, criteria){
 }
 function get_values(resultIndexes, database, field){
   if (typeof field == 'number'){
-    var field_idx = field - 1
+    let field_idx = field - 1
   }else{
-    var field_idx = database[0].indexOf(field)
+    let field_idx = database[0].indexOf(field)
   }
-  var values= []
-  for (var i=0; i< resultIndexes.length; i++){
+  let values= []
+  for (let i=0; i< resultIndexes.length; i++){
     values.push(database[resultIndexes[i]][field_idx])
   }
   return values
@@ -83,62 +83,62 @@ function get_values(resultIndexes, database, field){
 exports.DAVERAGE = function (database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   if (typeof field == 'number'){
-    var resultIndexes = [];
-    for (var i=1;i<database.length;i++){
+    let resultIndexes = [];
+    for (let i=1;i<database.length;i++){
       resultIndexes.push(i)
     }
   }else{
-    var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
+    let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   }
-  var targetValues = get_values(resultIndexes, database, field);
-  var sum = 0
-  for (var i=0; i < targetValues.length; i++){
+  let targetValues = get_values(resultIndexes, database, field);
+  let sum = 0
+  for (let i=0; i < targetValues.length; i++){
     sum += targetValues[i]
   }
-  return resultIndexes.length === 0 ? error.div0 : sum / targetValues.length;
+  return resultIndexes.length === 0 ? errorObj.ERROR_DIV0 : sum / targetValues.length;
 };
 exports.DCOUNT = function(database, field, criteria) {
   if (isNaN(field) && (typeof field !== "string")) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
-  var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
-  var targetValues = get_values(resultIndexes, database, field);
+  let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
+  let targetValues = get_values(resultIndexes, database, field);
   return stats.COUNT(targetValues);
 };
 
 exports.DCOUNTA = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
-  var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
-  var targetValues = get_values(resultIndexes, database, field);
+  let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
+  let targetValues = get_values(resultIndexes, database, field);
   return stats.COUNTA(targetValues);
 };
 
 exports.DGET = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
-  var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
+  let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   if (resultIndexes.length > 1){
-    return error.num
+    return errorObj.ERROR_NUM
   }
-  var targetValues = get_values(resultIndexes, database, field);
+  let targetValues = get_values(resultIndexes, database, field);
   return targetValues[0];
 };
 
 exports.DMAX = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
-  var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
-  var targetValues = get_values(resultIndexes, database, field);
+  let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
+  let targetValues = get_values(resultIndexes, database, field);
   var max = targetValues[0]
   for (var i=0;i<targetValues.length;i++){
     if (targetValues[i] > max){
@@ -151,7 +151,7 @@ exports.DMAX = function(database, field, criteria) {
 exports.DMIN = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   var targetValues = get_values(resultIndexes, database, field);
@@ -167,7 +167,7 @@ exports.DMIN = function(database, field, criteria) {
 exports.DPRODUCT = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
@@ -182,7 +182,7 @@ exports.DPRODUCT = function(database, field, criteria) {
 exports.DSTDEV = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   var targetValues = get_values(resultIndexes, database, field);
@@ -193,7 +193,7 @@ exports.DSTDEV = function(database, field, criteria) {
 exports.DSTDEVP = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   var targetValues = get_values(resultIndexes, database, field);
@@ -204,7 +204,7 @@ exports.DSTDEVP = function(database, field, criteria) {
 exports.DSUM = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   var targetValues = get_values(resultIndexes, database, field);
@@ -214,7 +214,7 @@ exports.DSUM = function(database, field, criteria) {
 exports.DVAR = function (database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   var targetValues = get_values(resultIndexes, database, field);
@@ -224,7 +224,7 @@ exports.DVAR = function (database, field, criteria) {
 exports.DVARP = function (database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   var targetValues = get_values(resultIndexes, database, field);

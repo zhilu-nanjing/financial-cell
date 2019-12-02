@@ -1,10 +1,12 @@
-var error = require('./error');
+const errorObj = require('../../calc_utils/error_config').errorObj;
+const cf =  require('../../calc_utils/config')
+const {CellDate, d1900} = require('../../calc_utils/cellValueType');
 
 function flattenShallow(array) {
   if (!array || !array.reduce) { return array; }
   return array.reduce(function(a, b) {
-    var aIsArray = Array.isArray(a);
-    var bIsArray = Array.isArray(b);
+    let aIsArray = Array.isArray(a);
+    let bIsArray = Array.isArray(b);
     if (aIsArray && bIsArray ) {
       return a.concat(b);
     }
@@ -21,7 +23,7 @@ function flattenShallow(array) {
 
 function isFlat(array) {
   if (!array) { return false; }
-  for (var i = 0; i < array.length; ++i) {
+  for (let i = 0; i < array.length; ++i) {
     if (Array.isArray(array[i])) {
       return false;
     }
@@ -30,7 +32,7 @@ function isFlat(array) {
 }
 
 exports.flatten = function() {
-  var result = exports.argsToArray.apply(null, arguments);
+  let result = exports.argsToArray.apply(null, arguments);
   while (!isFlat(result)) {
     result = flattenShallow(result);
   }
@@ -42,7 +44,7 @@ exports.argsToArray = function(args) {
 };
 
 exports.numbers = function() {
-  var possibleNumbers = this.flatten.apply(null, arguments);
+  let possibleNumbers = this.flatten.apply(null, arguments);
   return possibleNumbers.filter(function(el) {
     return typeof el === 'number';
   });
@@ -53,16 +55,16 @@ function parse(a){
     return a
   }
   if (a instanceof Array){
-    var arr = []
-    for (var i=0;i<a.length;i++){
+    let arr = []
+    for (let i=0;i<a.length;i++){
       if (typeof a[i][0] === 'string' && a[i][0] !== 'default_0'){
-        return error.name
+        return errorObj.ERROR_NAME
       }
       if (typeof a[i][0] === 'number'){
         arr.push(a[i][0])
       }
       if (a[i][0] instanceof Object){
-        return error.name
+        return errorObj.ERROR_NAME
       }
     }
     return arr
@@ -71,7 +73,7 @@ function parse(a){
     if (a === 'default_0'){
       return 'pass'
     }else{
-      return error.name
+      return errorObj.ERROR_NAME
     }
   }
   if (typeof a === 'number'){
@@ -81,19 +83,19 @@ function parse(a){
 exports.flattenNum = function(args) {
   try{
     if (args.length === 1 && args[0][0] === 'default_0'){
-      return error.div0
+      return errorObj.ERROR_DIV0
     }
-    var arr = []
-    for( var i=0;i<args.length;i++){
-      var p = parse(args[i])
+    let arr = []
+    for( let i=0;i<args.length;i++){
+      let p = parse(args[i])
       if (p === undefined){
-        return error.name
+        return errorObj.ERROR_NAME
       }
       if (p instanceof Error){
         return p
       }else if(p !== 'pass'){
         if (p instanceof Array){
-          for (var n=0; n < p.length;n++){
+          for (let n=0; n < p.length;n++){
             arr.push(p[n])
           }
         }else{
@@ -103,13 +105,13 @@ exports.flattenNum = function(args) {
     }
     return arr
   }catch{
-    return error.name
+    return errorObj.ERROR_NAME
   }
 };
 //XW:end
 
 exports.cleanFloat = function(number) {
-  var power = 1e14;
+  let power = 1e14;
   return Math.round(number * power) / power;
 };
 
@@ -130,7 +132,7 @@ exports.parseBool = function(bool) {
   }
 
   if (typeof bool === 'string') {
-    var up = bool.toUpperCase();
+    let up = bool.toUpperCase();
     if (up === 'TRUE') {
       return true;
     }
@@ -140,32 +142,32 @@ exports.parseBool = function(bool) {
     }
   }
 
-  if (bool instanceof Date && !isNaN(bool)) {
+  if (bool instanceof CellDate && !isNaN(bool)) {
     return true;
   }
 
-  return error.value;
+  return errorObj.ERROR_VALUE;
 };
 
 exports.parseNumber = function(string) {
   if (string === undefined || string === '') {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   if (!isNaN(string)) {
     return parseFloat(string);
   }
-  return error.value;
+  return errorObj.ERROR_VALUE;
 };
 
 exports.parseNumberArray = function(arr) {
-  var len;
+  let len;
   if (!arr || (len = arr.length) === 0) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
-  var parsed;
+  let parsed;
   while (len--) {
     parsed = exports.parseNumber(arr[len]);
-    if (parsed === error.value) {
+    if (parsed === errorObj.ERROR_VALUE) {
       return parsed;
     }
     arr[len] = parsed;
@@ -174,12 +176,12 @@ exports.parseNumberArray = function(arr) {
 };
 
 exports.parseMatrix = function(matrix) {
-  var n;
+  let n;
   if (!matrix || (n = matrix.length) === 0) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
-  var pnarr;
-  for (var i = 0; i < matrix.length; i++) {
+  let pnarr;
+  for (let i = 0; i < matrix.length; i++) {
     pnarr = exports.parseNumberArray(matrix[i]);
     matrix[i] = pnarr;
     if (pnarr instanceof Error) {
@@ -189,50 +191,49 @@ exports.parseMatrix = function(matrix) {
   return matrix;
 };
 
-var d1900 = new Date(1900, 0, 1);
 exports.parseDate = function(date) {
   if (!isNaN(date)) {
-    if (date instanceof Date) {
-      return new Date(date);
+    if (date instanceof CellDate) {
+      return new CellDate(date);
     }
-    var d = parseInt(date, 10);
+    let d = parseInt(date, 10);
     if (d < 0) {
-      return error.num;
+      return errorObj.ERROR_NUM;
     }
     if (d <= 60) {
-      return new Date(d1900.getTime() + (d - 1) * 86400000);
+      return new CellDate(d1900.getTime() + (d - 1) * cf.MS_PER_DAY);
     }
-    return new Date(d1900.getTime() + (d - 2) * 86400000);
+    return new CellDate(d1900.getTime() + (d - 2) * cf.MS_PER_DAY);
   }
   if (typeof date === 'string') {
-    date = new Date(date);
+    date = new CellDate(date);
     if (!isNaN(date)) {
       return date;
     }
   }
-  return error.value;
+  return errorObj.ERROR_VALUE;
 };
 exports.Copy =  function (obj) {
   // Handle the 3 simple types, and null or undefined
-  if (null == obj || "object" != typeof obj) return obj;
-  // Handle Date
-  if (obj instanceof Date) {
-    var copy = new Date();
+  if (null == obj || "object" !== typeof obj) return obj;
+  // Handle CellDate
+  if (obj instanceof CellDate) {
+    let copy = new CellDate();
     copy.setTime(obj.getTime());
     return copy;
   }
   // Handle Array
   if (obj instanceof Array) {
-    var copy = [];
-    for (var i = 0; i < obj.length; ++i) {
+    let copy = [];
+    for (let i = 0; i < obj.length; ++i) {
       copy[i] = clone(obj[i]);
     }
     return copy;
   }
   // Handle Object
   if (obj instanceof Object) {
-    var copy = {};
-    for (var attr in obj) {
+    let copy = {};
+    for (let attr in obj) {
       if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
     }
     return copy;
@@ -247,11 +248,11 @@ function parse_arg(arg) {
   return arg.replace('"', '').replace('"', '')
 }
 exports.strToMatrix = function (str) {
-  var arg = str.slice(2,str.length-2).split(',')
-  var matrix = [];
-  var arr = []
-  for (var i=0; i < arg.length; i++){
-    var num = arg[i].toString()
+  let arg = str.slice(2,str.length-2).split(',')
+  let matrix = [];
+  let arr = []
+  for (let i=0; i < arg.length; i++){
+    let num = arg[i].toString()
     if (num.indexOf(';') > 0) {
       arr.push(parse_arg(num.split(';')[0]))
       matrix.push(arr)
@@ -269,13 +270,13 @@ exports.ExcelDateToJSDate = function (date) {
   if (typeof date == 'string'){
     date = utils.parseDate(issue)
   }
-  return (date instanceof Date) ? date : new Date(Math.round((date - 25569)*86400*1000));
+  return (date instanceof CellDate) ? date : new CellDate(Math.round((date - 25569)*cf.MS_PER_DAY));
 }
 //XW：end
 //XW：判定是否是数字
 exports.isNumber = function (val) {
-  var regPos = /^\d+(\.\d+)?$/; //非负浮点数
-  var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+  let regPos = /^\d+(\.\d+)?$/; //非负浮点数
+  let regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
   if(regPos.test(val) || regNeg.test(val)) {
     return true;
   } else {
@@ -284,11 +285,11 @@ exports.isNumber = function (val) {
 }
 //XW：end
 exports.parseDateArray = function(arr) {
-  var len = arr.length;
-  var parsed;
+  let len = arr.length;
+  let parsed;
   while (len--) {
     parsed = this.parseDate(arr[len]);
-    if (parsed === error.value) {
+    if (parsed === errorObj.ERROR_VALUE) {
       return parsed;
     }
     arr[len] = parsed;
@@ -297,7 +298,7 @@ exports.parseDateArray = function(arr) {
 };
 
 exports.anyIsError = function() {
-  var n = arguments.length;
+  let n = arguments.length;
   while (n--) {
     if (arguments[n] instanceof Error) {
       return true;
@@ -307,8 +308,8 @@ exports.anyIsError = function() {
 };
 
 exports.arrayValuesToNumbers = function(arr) {
-  var n = arr.length;
-  var el;
+  let n = arr.length;
+  let el;
   while (n--) {
     el = arr[n];
     if (typeof el === 'number') {
@@ -323,7 +324,7 @@ exports.arrayValuesToNumbers = function(arr) {
       continue;
     }
     if (typeof el === 'string') {
-      var number = this.parseNumber(el);
+      let number = this.parseNumber(el);
       if (number instanceof Error) {
         arr[n] = 0;
       } else {

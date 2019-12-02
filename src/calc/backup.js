@@ -38,8 +38,8 @@ for (var i=0;i<need_calc_cells.length;i++){
 }
 
 
-var exp = require("../core/alphabet");
-var error = require('./formulajs/lib/error');
+var exp = require("../utils/alphabet");
+var error = require('./calc_utils/error');
 const checker = require('./cell_formula/formula_check.js');
 
 
@@ -91,7 +91,7 @@ class CalcCell { // 对cell中的参数做转换，判断,多单元格处理等�
   trans_params(fml) {
     var reg = new RegExp('\{(.*?)\}', 'g')
     var arg = fml.match(reg)
-    if (arg != null) {
+    if (arg !== null) {
       for (var i = 0; i < arg.length; i++) {
         var param = arg[i]
         var rep = "'" + param + "'"
@@ -175,7 +175,7 @@ class CalcCell { // 对cell中的参数做转换，判断,多单元格处理等�
       let expr2 = exp.xy2expr( this.cell_x, this.cell_y + i);
       if (wb[expr2].v instanceof Array && expr2 !== multivalueRefsCell){//如果出现多值单元格中嵌套了多值单元格，直接报错
         wb[expr2] = {
-          "v": error.ref,
+          "v": errorObj.ERROR_REF,
           "f": cell.formulas,
           'multivalueRefsCell': multivalueRefsCell
         }
@@ -187,7 +187,7 @@ class CalcCell { // 对cell中的参数做转换，判断,多单元格处理等�
         }
       } else if(expr2 === multivalueRefsCell) {
         wb[expr2] = {
-          "v": error.ref,
+          "v": errorObj.ERROR_REF,
           "f": this.f,
           'multivalueRefsCell': multivalueRefsCell
         }
@@ -250,9 +250,9 @@ class CalcCell { // 对cell中的参数做转换，判断,多单元格处理等�
       for (let j = 0;  j < cell_v[i].length; j++) {
         let expr2 = exp.xy2expr( this.cell_x + i, this.cell_y + j);
         if (wb[expr2].v instanceof Array && expr2 !== multivalueRefsCell){//如果出现多值单元格中嵌套了多值单元格，直接报错
-          this.rows.setCell(this.cell_y + j, this.cell_x + i, {'text': error.ref, 'formulas': cell.formulas, 'multivalueRefsCell': multivalueRefsCell})
+          this.rows.setCell(this.cell_y + j, this.cell_x + i, {'text': errorObj.ERROR_REF, 'formulas': cell.formulas, 'multivalueRefsCell': multivalueRefsCell})
           wb[expr2] = {
-            "v": error.ref,
+            "v": errorObj.ERROR_REF,
             "f": cell.formulas,
             'multivalueRefsCell': multivalueRefsCell
           }
@@ -265,11 +265,11 @@ class CalcCell { // 对cell中的参数做转换，判断,多单元格处理等�
           this.rows.setCell(this.cell_y + j, this.cell_x + i, {'text': wb[expr2].v, 'formulas': cell.formulas, 'multivalueRefsCell': multivalueRefsCell})
         } else if(expr2 === multivalueRefsCell) {
           wb[expr2] = {
-            "v": error.ref,
+            "v": errorObj.ERROR_REF,
             "f": this.f,
             'multivalueRefsCell': multivalueRefsCell
           }
-          this.rows.setCell(this.cell_y + j, this.cell_x + i, {'text': error.ref, 'formulas': this.f, 'multivalueRefsCell': multivalueRefsCell})
+          this.rows.setCell(this.cell_y + j, this.cell_x + i, {'text': errorObj.ERROR_REF, 'formulas': this.f, 'multivalueRefsCell': multivalueRefsCell})
         } else {
           wb[expr2] = {
             "v": "",

@@ -1,4 +1,4 @@
-var error = require('./error');
+const {errorObj, errorMsgArr} = require('../../calc_utils/error_config');
 
 // TODO
 exports.CELL = function() {
@@ -6,26 +6,14 @@ exports.CELL = function() {
 };
 
 exports.ERROR = {};
-exports.ERROR.TYPE = function (error_val) {
-  switch (error_val) {
-    case error.nil.message:
-      return 1;
-    case error.div0.message:
-      return 2;
-    case error.value.message:
-      return 3;
-    case error.ref.message:
-      return 4;
-    case error.name.message:
-      return 5;
-    case error.num.message:
-      return 6;
-    case error.na.message:
-      return 7;
-    case error.data.message:
-      return 8;
-  }
-  return error.na;
+exports.ERROR.TYPE = function (error_val) { // 判断错误类型
+    let msgIndice = errorMsgArr.indexOf(error_val)
+    if (msgIndice > -1){
+      return msgIndice
+    }
+    else {
+      return errorObj.ERROR_NA;
+    }
 };
 
 // TODO
@@ -41,13 +29,13 @@ exports.ISBINARY = function (number) {
   return (/^[01]{1,10}$/).test(number);
 };
 
-exports.ISERR = function(value) {
-  return ([error.value.message, error.ref.message, error.div0.message, error.num.message, error.name.message, error.nil.message]).indexOf(value) >= 0 ||
+exports.ISERR = function(value) { // 是否是错误1
+  return errorMsgArr.indexOf(value) >= 0 ||
     (typeof value === 'number' && (isNaN(value) || !isFinite(value)));
 };
 
-exports.ISERROR = function(value) {
-  return exports.ISERR(value) || value === error.na;
+exports.ISERROR = function(value) { // 是否是错误2
+  return exports.ISERR(value) || value === errorObj.ERROR_NA;
 };
 
 exports.ISEVEN = function(number) {
@@ -60,14 +48,14 @@ exports.ISFORMULA = function() {
 };
 
 exports.ISLOGICAL = function(value) {
-  if(value == 'FALSE'){
+  if(value === 'FALSE'){
     return false
   }
-  return value == true || value == false;
+  return value === true || value === false;
 };
 
 exports.ISNA = function(value) {
-  return value === error.na || value === error.na.message;;
+  return value === errorObj.ERROR_NA || value === errorObj.ERROR_NA.message;;
 };
 
 exports.ISNONTEXT = function(value) {
@@ -84,7 +72,7 @@ exports.ISODD = function(number) {
 
 // TODO
 exports.ISREF = function() {
-  return arguments['0'] != null
+  return arguments['0'] !== null
 };
 
 exports.ISTEXT = function(value) {
@@ -98,10 +86,10 @@ exports.N = function (value) {
   if (value instanceof Date) {
     return value.getTime();
   }
-  if (value === true || value.toString().toUpperCase() == 'TRUE' || value.toString().toUpperCase() == 'FALSE') {
+  if (value === true || value.toString().toUpperCase() === 'TRUE' || value.toString().toUpperCase() == 'FALSE') {
     return 1;
   }
-  if (value === false || typeof(value)=='string') {
+  if (value === false || typeof(value)==='string') {
     return 0;
   }
   if (ISERROR(value)) {
@@ -111,7 +99,7 @@ exports.N = function (value) {
 };
 
 exports.NA = function() {
-  return error.na;
+  return errorObj.ERROR_NA;
 };
 
 
@@ -130,11 +118,11 @@ exports.TYPE = function (value) {
     return 1;
   }
   // if (typeof(value) !== 'string' && isNaN(value)){
-  //   return error.value
+  //   return errorObj.ERROR_VALUE
   // }
   if (typeof(value) === 'string') {
     if (value.slice(0,1) == '{'){
-      var arr = utils.strToMatrix(value)
+      let arr = utils.strToMatrix(value)
       if (Array.isArray(arr)) {
         return 64;
       }
@@ -148,7 +136,7 @@ exports.TYPE = function (value) {
   if (value == true || value == false) {
     return 4;
   }
-  if (exports.ISERR(value) || value === error.na) {
+  if (exports.ISERR(value) || value === errorObj.ERROR_NA) {
     return 16;
   }
   if (Array.isArray(arr)) {

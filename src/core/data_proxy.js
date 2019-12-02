@@ -11,7 +11,7 @@ import {isFormula, Rows} from './row';
 import {Cols} from './col';
 import {Validations} from './validation';
 import {CellRange} from './cell_range';
-import {expr2xy, xy2expr} from './alphabet';
+import {expr2xy, xy2expr} from '../utils/alphabet';
 import {t} from '../locale/locale';
 import Moved from '../event/move';
 import {h} from "../component/element";
@@ -425,7 +425,7 @@ function setStyleBorders({mode, style, color}) {
 //     const fsw = this.freezeTotalWidth();
 //     let inits = cols.indexWidth;
 //     if (fsw + cols.indexWidth <= x) inits -= scrollOffsetx;
-//     const [ci, left, width] = helper.rangeReduceIf(
+//     const [ci, left, width] = calc_utils.rangeReduceIf(
 //         0,
 //         cols.len,
 //         inits,
@@ -992,7 +992,7 @@ export default class DataProxy {
                 else this.unmerge();
             } else if (property === 'border') {
                 setStyleBorders.call(this, value);
-            } else if (property === 'formula') {
+            } else if (property === 'cellFormulaProxy') {
                 const cell = rows.getCellOrNew(selector.ri, selector.ci);
                 cell.text = `=${value}()`;
                 cell.formulas = `=${value}()`;

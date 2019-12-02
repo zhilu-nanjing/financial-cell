@@ -2,7 +2,7 @@ import {h} from './element';
 import {cssPrefix} from '../config';
 import {CellRange} from '../core/cell_range';
 import {mouseMoveUp} from "../component/event";
-import {xy2expr} from "../core/alphabet";
+import {xy2expr} from "../utils/alphabet";
 import {deepCopy} from '../core/operator';
 import SelectorCell from "./selector_cell";
 import CellProp from "../model/cell_prop";

@@ -9,7 +9,7 @@ import {
     operation,
     value2absolute,
 } from '../core/operator';
-import {expr2xy, xy2expr} from '../core/alphabet';
+import {expr2xy, xy2expr} from '../utils/alphabet';
 import {selectorColor} from './color_palette';
 import {h} from './element';
 

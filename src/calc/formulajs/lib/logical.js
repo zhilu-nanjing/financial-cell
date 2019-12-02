@@ -1,11 +1,11 @@
-var error = require('./error');
-var utils = require('./utils');
-var information = require('./information');
+let errorObj = require('../../calc_utils/error_config');
+let utils = require('./utils');
+let information = require('./information');
 
 exports.AND = function() {
-  var args = utils.flatten(arguments);
-  var result = true;
-  for (var i = 0; i < args.length; i++) {
+  let args = utils.flatten(arguments);
+  let result = true;
+  for (let i = 0; i < args.length; i++) {
     if (!args[i]) {
       result = false;
     }
@@ -15,16 +15,16 @@ exports.AND = function() {
 
 exports.CHOOSE = function() {
   if (arguments.length < 2) {
-    return error.na;
+    return errorObj.ERROR_NA;
   }
 
-  var index = arguments[0];
+  let index = arguments[0];
   if (index < 1 || index > 254) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   if (arguments.length < index + 1) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
 
   return arguments[index];
@@ -46,7 +46,7 @@ exports.IFERROR = function(value, valueIfError) {
 };
 
 exports.IFNA = function(value, value_if_na) {
-  return value === error.na ? value_if_na : value;
+  return value === errorObj.ERROR_NA ? value_if_na : value;
 };
 
 exports.NOT = function(logical) {
@@ -54,9 +54,9 @@ exports.NOT = function(logical) {
 };
 
 exports.OR = function() {
-  var args = utils.flatten(arguments);
-  var result = false;
-  for (var i = 0; i < args.length; i++) {
+  let args = utils.flatten(arguments);
+  let result = false;
+  for (let i = 0; i < args.length; i++) {
     if (args[i]) {
       result = true;
     }
@@ -69,9 +69,9 @@ exports.TRUE = function() {
 };
 
 exports.XOR = function() {
-  var args = utils.flatten(arguments);
-  var result = 0;
-  for (var i = 0; i < args.length; i++) {
+  let args = utils.flatten(arguments);
+  let result = 0;
+  for (let i = 0; i < args.length; i++) {
     if (args[i]) {
       result++;
     }
@@ -80,16 +80,16 @@ exports.XOR = function() {
 };
 
 exports.SWITCH = function () {
-  var result;
+  let result;
   if (arguments.length > 0) {
-    var targetValue = arguments[0];
-    var argc = arguments.length - 1;
-    var switchCount = Math.floor(argc / 2);
-    var switchSatisfied = false;
-    var defaultClause = argc % 2 === 0 ? null : arguments[arguments.length - 1];
+    let targetValue = arguments[0];
+    let argc = arguments.length - 1;
+    let switchCount = Math.floor(argc / 2);
+    let switchSatisfied = false;
+    let defaultClause = argc % 2 === 0 ? null : arguments[arguments.length - 1];
 
     if (switchCount) {
-      for (var index = 0; index < switchCount; index++) {
+      for (let index = 0; index < switchCount; index++) {
         if (targetValue === arguments[index * 2 + 1]) {
           result = arguments[index * 2 + 2];
           switchSatisfied = true;
@@ -103,7 +103,7 @@ exports.SWITCH = function () {
     }
   }
   if (result == undefined){
-    return error.na
+    return errorObj.ERROR_NA
   }
   return result;
 };

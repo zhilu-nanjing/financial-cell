@@ -1,7 +1,7 @@
 "use strict";
 
-const int_2_col_str = require('./helper/int_2_col_str.js');
-const col_str_2_int = require('./helper/col_str_2_int.js');
+const int_2_col_str = require('./calc_utils/int_2_col_str.js');
+const col_str_2_int = require('./calc_utils/col_str_2_int.js');
 const RawValue = require('./cell_formula/RawValue.js');
 const Range = require('./cell_formula/Range.js');
 const RefValue = require('./cell_formula/RefValue.js');
@@ -10,28 +10,28 @@ function raw_offset(cell_ref, rows, columns, height, width) {
     height = (height || new RawValue(1)).calc();
     width = (width || new RawValue(1)).calc();
     if (cell_ref.args.length === 1 && cell_ref.args[0].name === 'RefValue') {
-        var ref_value = cell_ref.args[0];
-        var parsed_ref = ref_value.parseRef();
-        var col = col_str_2_int(parsed_ref.cell_name) + columns.calc();
-        var col_str = int_2_col_str(col);
-        var row = +parsed_ref.cell_name.replace(/^[A-Z]+/g, '') + rows.calc();
-        var cell_name = col_str + row;
+        let ref_value = cell_ref.args[0];
+        let parsed_ref = ref_value.parseRef();
+        let col = col_str_2_int(parsed_ref.cell_name) + columns.calc();
+        let col_str = int_2_col_str(col);
+        let row = +parsed_ref.cell_name.replace(/^[A-Z]+/g, '') + rows.calc();
+        let cell_name = col_str + row;
         if (height === 1 && width === 1) {
-            return new RefValue(cell_name, ref_value.formula).calc();
+            return new RefValue(cell_name, ref_value.cellFormulaProxy).calc();
         }
         else {
-            var end_range_col = int_2_col_str(col + width - 1);
-            var end_range_row = row + height - 1;
-            var end_range = end_range_col + end_range_row;
-            var str_expression = parsed_ref.sheet_name + '!' + cell_name + ':' + end_range;
-            return new Range(str_expression, ref_value.formula).calc();
+            let end_range_col = int_2_col_str(col + width - 1);
+            let end_range_row = row + height - 1;
+            let end_range = end_range_col + end_range_row;
+            let str_expression = parsed_ref.sheet_name + '!' + cell_name + ':' + end_range;
+            return new Range(str_expression, ref_value.cellFormulaProxy).calc();
         }
     }
 }
 
 function iferror(cell_ref, onerrorvalue) {
     try {
-        var value = cell_ref.calc();
+        let value = cell_ref.calc();
         if (typeof value === 'number' && (isNaN(value) || value === Infinity || value === -Infinity)) {
             return onerrorvalue.calc();
         }
@@ -51,7 +51,7 @@ function _if(condition, _then, _else) {
 }
 
 function and() {
-    for (var i = 0; i < arguments.length; i++) {
+    for (let i = 0; i < arguments.length; i++) {
         if(!arguments[i].calc()) return false;
     }
     return true;

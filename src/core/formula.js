@@ -10,17 +10,17 @@ let formulajs = require('../calc/formulajs/index'); // jobs: todo: 这里为何�
 const baseFormulas = [
     {
         key: 'MD.WLAND',
-        title: tf('formula.wland'),
+        title: tf('cellFormulaProxy.wland'),
         render: ary => ary.join(''),
     },
     {
         key: 'MD.WFR',
-        title: tf('formula.wfr'),
+        title: tf('cellFormulaProxy.wfr'),
         render: ary => ary.join(''),
     },
     {
         key: 'MD.RTD',
-        title: tf('formula.rtd'),
+        title: tf('cellFormulaProxy.rtd'),
         render: ary => ary.join(''),
     },
 ];

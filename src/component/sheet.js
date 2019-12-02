@@ -24,7 +24,7 @@ import {cutStr, cuttingByPos, deepCopy} from "../core/operator";
 import {moveCell} from "../event/move";
 import CellRange from "../core/cell_range";
 import {isHave, isOusideViewRange} from "../core/helper";
-import {expr2xy} from "../core/alphabet";
+import {expr2xy} from "../utils/alphabet";
 import ErrorPopUp from "./error_pop_up";
 import RectProxy from "../core/rect_proxy";
 import {testValid} from "../utils/test";
@@ -1004,7 +1004,7 @@ function toolbarChange(type, value) {
         if (type === 'border') {
             borderResSet.call(this, 'none');
         }
-        if (type === 'formula') {
+        if (type === 'cellFormulaProxy') {
             editorSet.call(this);
         }
         sheetReset.call(this);

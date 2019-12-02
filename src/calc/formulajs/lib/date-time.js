@@ -1,8 +1,10 @@
-var error = require('./error');
-var utils = require('./utils');
+let {errorObj} = require('../../calc_utils/error_config');
+const {CellDate, stamp2DayNum} = require('../../calc_utils/cellValueType');
+const cf = require('../../calc_utils/config');
+let utils = require('./utils');
 
-var d1900 = new Date(1900, 0, 1);
-var WEEK_STARTS = [
+let d1900 = new CellDate(1900, 0, 1);
+let WEEK_STARTS = [
   undefined,
   0,
   1,
@@ -23,7 +25,7 @@ var WEEK_STARTS = [
   6,
   0
 ];
-var WEEK_TYPES = [
+let WEEK_TYPES = [
   [],
   [1, 2, 3, 4, 5, 6, 7],
   [7, 1, 2, 3, 4, 5, 6],
@@ -43,7 +45,7 @@ var WEEK_TYPES = [
   [2, 3, 4, 5, 6, 7, 1],
   [1, 2, 3, 4, 5, 6, 7]
 ];
-var WEEKEND_TYPES = [
+let WEEKEND_TYPES = [
   [],
   [6, 0],
   [0, 1],
@@ -64,37 +66,32 @@ var WEEKEND_TYPES = [
 ];
 
 exports.DATE = function(year, month, day) {
-  var Formulas = window.jsSpreadsheet.AllFormulas;
-  return Formulas.DATE(year, month, day)
-  // year = utils.parseNumber(year);
-  // month = utils.parseNumber(month);
-  // day = utils.parseNumber(day);
-  // if (utils.anyIsError(year, month, day)) {
-  //   return error.value;
-  // }
-  // if (year < 0 || month < 0 || day < 0) {
-  //   return error.num;
-  // }
-  // var date = new Date(year, month - 1, day);
-  // return date;
+  year = utils.parseNumber(year);
+  month = utils.parseNumber(month);
+  day = utils.parseNumber(day);
+  if (utils.anyIsError(year, month, day)) {
+    return errorObj.ERROR_VALUE;
+  }
+  if (year < 0 || month < 0 || day < 0) {
+    return errorObj.ERROR_NUM;
+  }
+  let date = new CellDate(year, month - 1, day); // 需要减去1才对
+  return date;
 };
 
 exports.DATEVALUE = function(date_text) {
   if (typeof date_text !== 'string') {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
-  var date = Date.parse(date_text);
+  let date = CellDate.parse(date_text);
   if (isNaN(date)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
-  if (date <= -2203891200000) {
-    return (date - d1900) / 86400000 + 1;
-  }
-  return (date - d1900) / 86400000 + 2;
+  return stamp2DayNum(date);
 };
 
 exports.DAY = function(serial_number) {
-  var date = utils.parseDate(serial_number);
+  let date = utils.parseDate(serial_number);
   if (date instanceof Error) {
     return date;
   }
@@ -110,7 +107,7 @@ exports.DAYS = function(end_date, start_date) {
   if (start_date instanceof Error) {
     return start_date;
   }
-  return serial(end_date) - serial(start_date);
+  return stamp2DayNum(end_date) - stamp2DayNum(start_date);
 };
 
 exports.DAYS360 = function(start_date, end_date, method) {
@@ -126,15 +123,15 @@ exports.DAYS360 = function(start_date, end_date, method) {
   if (method instanceof Error) {
     return method;
   }
-  var sm = start_date.getMonth();
-  var em = end_date.getMonth();
-  var sd, ed;
+  let sm = start_date.getMonth();
+  let em = end_date.getMonth();
+  let sd, ed;
   if (method) {
     sd = start_date.getDate() === 31 ? 30 : start_date.getDate();
     ed = end_date.getDate() === 31 ? 30 : end_date.getDate();
   } else {
-    var smd = new Date(start_date.getFullYear(), sm + 1, 0).getDate();
-    var emd = new Date(end_date.getFullYear(), em + 1, 0).getDate();
+    let smd = new CellDate(start_date.getFullYear(), sm + 1, 0).getDate();
+    let emd = new CellDate(end_date.getFullYear(), em + 1, 0).getDate();
     sd = start_date.getDate() === smd ? 30 : start_date.getDate();
     if (end_date.getDate() === emd) {
       if (sd < 30) {
@@ -157,11 +154,11 @@ exports.EDATE = function(start_date, months) {
     return start_date;
   }
   if (isNaN(months)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   months = parseInt(months, 10);
   start_date.setMonth(start_date.getMonth() + months);
-  return serial(start_date);
+  return stamp2DayNum(start_date);
 };
 
 exports.EOMONTH = function(start_date, months) {
@@ -170,10 +167,10 @@ exports.EOMONTH = function(start_date, months) {
     return start_date;
   }
   if (isNaN(months)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   months = parseInt(months, 10);
-  return serial(new Date(start_date.getFullYear(), start_date.getMonth() + months + 1, 0));
+  return stamp2DayNum(new CellDate(start_date.getFullYear(), start_date.getMonth() + months + 1, 0));
 };
 
 exports.HOUR = function(serial_number) {
@@ -191,23 +188,23 @@ exports.HOUR = function(serial_number) {
 
 exports.INTERVAL = function (second) {
   if (typeof second !== 'number' && typeof second !== 'string') {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   } else {
     second = parseInt(second, 10);
   }
 
-  var year  = Math.floor(second/946080000);
+  let year  = Math.floor(second/946080000);
   second    = second%946080000;
-  var month = Math.floor(second/2592000);
+  let month = Math.floor(second/2592000);
   second    = second%2592000;
-  var day   = Math.floor(second/86400);
+  let day   = Math.floor(second/86400);
   second    = second%86400;
 
-  var hour  = Math.floor(second/3600);
+  let hour  = Math.floor(second/3600);
   second    = second%3600;
-  var min   = Math.floor(second/60);
+  let min   = Math.floor(second/60);
   second    = second%60;
-  var sec   = second;
+  let sec   = second;
 
   year  = (year  > 0) ? year  + 'Y' : '';
   month = (month > 0) ? month + 'M' : '';
@@ -228,12 +225,12 @@ exports.ISOWEEKNUM = function(date) {
 
   date.setHours(0, 0, 0);
   date.setDate(date.getDate() + 4 - (date.getDay() || 7));
-  var yearStart = new Date(date.getFullYear(), 0, 1);
-  return Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
+  let yearStart = new CellDate(date.getFullYear(), 0, 1);
+  return Math.ceil((((date - yearStart) / cf.MS_PER_DAY) + 1) / 7);
 };
 
 exports.MINUTE = function(serial_number) {
-    var Formulas = window.jsSpreadsheet.AllFormulas;
+    let Formulas = window.jsSpreadsheet.AllFormulas;
     return Formulas.MINUTE(serial_number);
 };
 
@@ -249,7 +246,7 @@ exports.NETWORKDAYS = function (start_date, end_date, holidays) {
   if (holidays instanceof Array){
     holidays = utils.flatten(holidays)
   }
-  var Formulas = window.jsSpreadsheet.AllFormulas;
+  let Formulas = window.jsSpreadsheet.AllFormulas;
   return Formulas.NETWORKDAYS(start_date, end_date, holidays);
 };
 exports.NETWORKDAYSINTL = function (start_date, end_date, weekend, holidays) {
@@ -257,7 +254,7 @@ exports.NETWORKDAYSINTL = function (start_date, end_date, weekend, holidays) {
     holidays = utils.parseDateArray(utils.strToMatrix(holidays)[0])
   }
   try{
-    var Formulas = window.jsSpreadsheet.AllFormulas;
+    let Formulas = window.jsSpreadsheet.AllFormulas;
     return Formulas.NETWORKDAYS$INTL(start_date, end_date, weekend, holidays);
   }catch (e) {
     start_date = utils.ExcelDateToJSDate(utils.parseDate(start_date));
@@ -271,8 +268,8 @@ exports.NETWORKDAYSINTL = function (start_date, end_date, weekend, holidays) {
     if (weekend === undefined) {
       weekend = WEEKEND_TYPES[1];
     } else if (typeof weekend=='string' && weekend.length === 7) {
-      var arr = []
-      for (var i=0;i<weekend.length;i++){
+      let arr = []
+      for (let i=0;i<weekend.length;i++){
         if (weekend[i] == '1'){
           arr.push(((i+1)>6)? 0: i+1)
         }
@@ -282,31 +279,31 @@ exports.NETWORKDAYSINTL = function (start_date, end_date, weekend, holidays) {
       weekend = WEEKEND_TYPES[weekend];
     }
     if (!(weekend instanceof Array)) {
-      return error.value;
+      return errorObj.ERROR_VALUE;
     }
     if (holidays === undefined) {
       holidays = [];
     } else if (!(holidays instanceof Array)) {
       holidays = [holidays];
     }
-    for (var i = 0; i < holidays.length; i++) {
-      var h = utils.parseDate(holidays[i]);
+    for (let i = 0; i < holidays.length; i++) {
+      let h = utils.parseDate(holidays[i]);
       if (h instanceof Error) {
         return h;
       }
       holidays[i] = h;
     }
-    var days = (end_date - start_date) / (1000 * 60 * 60 * 24) + 1;
-    var total = days;
-    var day = start_date;
+    let days = (end_date - start_date) / cf.MS_PER_DAY + 1;
+    let total = days;
+    let day = start_date;
     for (i = 0; i < days; i++) {
-      var d = (new Date().getTimezoneOffset() > 0) ? day.getUTCDay() : day.getDay();
-      var dec = false;
+      let d = (new CellDate().getTimezoneOffset() > 0) ? day.getUTCDay() : day.getDay();
+      let dec = false;
       if (d === weekend[0] || d === weekend[1]) {
         dec = true;
       }
-      for (var j = 0; j < holidays.length; j++) {
-        var holiday = holidays[j];
+      for (let j = 0; j < holidays.length; j++) {
+        let holiday = holidays[j];
         if (holiday.getDate() === day.getDate() &&
           holiday.getMonth() === day.getMonth() &&
           holiday.getFullYear() === day.getFullYear()) {
@@ -342,31 +339,31 @@ exports.NETWORKDAYS.INTL = function (start_date, end_date, weekend, holidays) {
     weekend = WEEKEND_TYPES[weekend];
   }
   if (!(weekend instanceof Array)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   if (holidays === undefined) {
     holidays = [];
   } else if (!(holidays instanceof Array)) {
     holidays = [holidays];
   }
-  for (var i = 0; i < holidays.length; i++) {
-    var h = utils.parseDate(holidays[i]);
+  for (let i = 0; i < holidays.length; i++) {
+    let h = utils.parseDate(holidays[i]);
     if (h instanceof Error) {
       return h;
     }
     holidays[i] = h;
   }
-  var days = (end_date - start_date) / (1000 * 60 * 60 * 24) + 1;
-  var total = days;
-  var day = start_date;
+  let days = (end_date - start_date) / cf.MS_PER_DAY + 1;
+  let total = days;
+  let day = start_date;
   for (i = 0; i < days; i++) {
-    var d = (new Date().getTimezoneOffset() > 0) ? day.getUTCDay() : day.getDay();
-    var dec = false;
+    let d = (new CellDate().getTimezoneOffset() > 0) ? day.getUTCDay() : day.getDay();
+    let dec = false;
     if (d === weekend[0] || d === weekend[1]) {
       dec = true;
     }
-    for (var j = 0; j < holidays.length; j++) {
-      var holiday = holidays[j];
+    for (let j = 0; j < holidays.length; j++) {
+      let holiday = holidays[j];
       if (holiday.getDate() === day.getDate() &&
         holiday.getMonth() === day.getMonth() &&
         holiday.getFullYear() === day.getFullYear()) {
@@ -383,7 +380,7 @@ exports.NETWORKDAYS.INTL = function (start_date, end_date, weekend, holidays) {
 };
 
 exports.NOW = function() {
-  return new Date();
+  return new CellDate();
 };
 
 exports.SECOND = function(serial_number) {
@@ -399,25 +396,25 @@ exports.TIME = function(hour, minute, second) {
   minute = utils.parseNumber(minute);
   second = utils.parseNumber(second);
   if (utils.anyIsError(hour, minute, second)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   if (hour < 0 || minute < 0 || second < 0) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
   return (3600 * hour + 60 * minute + second) / 86400;
 };
 
 exports.TIMEVALUE = function(time_text) {
-  var Formulas = window.jsSpreadsheet.AllFormulas;
+  let Formulas = window.jsSpreadsheet.AllFormulas;
   try{
     return Formulas.TIMEVALUE(time_text);
   }catch(e){
-    return error.value
+    return errorObj.ERROR_VALUE
   }
 };
 
 exports.TODAY = function() {
-  var Formulas = window.jsSpreadsheet.AllFormulas;
+  let Formulas = window.jsSpreadsheet.AllFormulas;
   return Formulas.TODAY()
 };
 
@@ -429,7 +426,7 @@ exports.WEEKDAY = function(serial_number, return_type) {
   if (return_type === undefined) {
     return_type = 1;
   }
-  var day = serial_number.getDay();
+  let day = serial_number.getDay();
   return WEEK_TYPES[return_type][day];
 };
 
@@ -444,36 +441,36 @@ exports.WEEKNUM = function(serial_number, return_type) {
   if (return_type === 21) {
     return this.ISOWEEKNUM(serial_number);
   }
-  var week_start = WEEK_STARTS[return_type];
-  var jan = new Date(serial_number.getFullYear(), 0, 1);
-  var inc = jan.getDay() < week_start ? 1 : 0;
-  jan -= Math.abs(jan.getDay() - week_start) * 24 * 60 * 60 * 1000;
-  return Math.floor(((serial_number - jan) / (1000 * 60 * 60 * 24)) / 7 + 1) + inc;
+  let week_start = WEEK_STARTS[return_type];
+  let jan = new CellDate(serial_number.getFullYear(), 0, 1);
+  let inc = jan.getDay() < week_start ? 1 : 0;
+  jan -= Math.abs(jan.getDay() - week_start) * cf.MS_PER_DAY;
+  return Math.floor(((serial_number - jan) / cf.MS_PER_DAY) / 7 + 1) + inc;
 };
 
 exports.WORKDAY = function (start_date, days, holidays) {
-  if (holidays != undefined){
+  if (holidays !== undefined){
     holidays = utils.flatten(holidays)
   }
-  var Formulas = window.jsSpreadsheet.AllFormulas;
+  let Formulas = window.jsSpreadsheet.AllFormulas;
   return Formulas.WORKDAY(start_date, days, holidays);
 };
 exports.WORKDAYINTL = function (start_date, days, weekend, holidays) {
-  // var Formulas = window.jsSpreadsheet.AllFormulas;
+  // let Formulas = window.jsSpreadsheet.AllFormulas;
   // return Formulas.WORKDAY$INTL(start_date, days, weekend, holidays);
   start_date = utils.parseDate(start_date);
   if (start_date instanceof Error) {
     return start_date;
   }
   if (weekend == 0){
-    return error.num
+    return errorObj.ERROR_NUM
   }
   days = utils.parseNumber(days);
   if (days instanceof Error) {
     return days;
   }
   if (days < 0) {
-    return error.num;
+    return errorObj.ERROR_NUM;
   }
   if (weekend === undefined) {
     weekend = WEEKEND_TYPES[1];
@@ -481,29 +478,29 @@ exports.WORKDAYINTL = function (start_date, days, weekend, holidays) {
     weekend = WEEKEND_TYPES[weekend];
   }
   if (!(weekend instanceof Array)) {
-    return error.value;
+    return errorObj.ERROR_VALUE;
   }
   if (holidays === undefined) {
     holidays = [];
   } else if (!(holidays instanceof Array)) {
     holidays = [holidays];
   }
-  for (var i = 0; i < holidays.length; i++) {
-    var h = utils.parseDate(holidays[i]);
+  for (let i = 0; i < holidays.length; i++) {
+    let h = utils.parseDate(holidays[i]);
     if (h instanceof Error) {
       return h;
     }
     holidays[i] = h;
   }
-  var d = 0;
+  let d = 0;
   while (d < days) {
     start_date.setDate(start_date.getDate() + 1);
-    var day = start_date.getDay();
+    let day = start_date.getDay();
     if (day === weekend[0] || day === weekend[1]) {
       continue;
     }
-    for (var j = 0; j < holidays.length; j++) {
-      var holiday = holidays[j];
+    for (let j = 0; j < holidays.length; j++) {
+      let holiday = holidays[j];
       if (holiday.getDate() === start_date.getDate() &&
         holiday.getMonth() === start_date.getMonth() &&
         holiday.getFullYear() === start_date.getFullYear()) {
@@ -513,9 +510,9 @@ exports.WORKDAYINTL = function (start_date, days, weekend, holidays) {
     }
     d++;
   }
-  var year = start_date.getFullYear();
-  var month = start_date.getMonth();
-  var day = start_date.getDay();
+  let year = start_date.getFullYear();
+  let month = start_date.getMonth();
+  let day = start_date.getDay();
   return year+ '/' + month + '/' + day;
 };
 
@@ -528,12 +525,12 @@ exports.YEAR = function(serial_number) {
 };
 
 function isLeapYear(year) {
-  return new Date(year, 1, 29).getMonth() === 1;
+  return new CellDate(year, 1, 29).getMonth() === 1;
 }
 
 // TODO : Use DAYS ?
 function daysBetween(start_date, end_date) {
-  return Math.ceil((end_date - start_date) / 1000 / 60 / 60 / 24);
+  return Math.ceil((end_date - start_date) / cf.MS_PER_DAY);
 }
 
 exports.YEARFRAC = function(start_date, end_date, basis) {
@@ -547,12 +544,12 @@ exports.YEARFRAC = function(start_date, end_date, basis) {
   }
 
   basis = basis || 0;
-  var sd = start_date.getDate();
-  var sm = start_date.getMonth() + 1;
-  var sy = start_date.getFullYear();
-  var ed = end_date.getDate();
-  var em = end_date.getMonth() + 1;
-  var ey = end_date.getFullYear();
+  let sd = start_date.getDate();
+  let sm = start_date.getMonth() + 1;
+  let sy = start_date.getFullYear();
+  let ed = end_date.getDate();
+  let em = end_date.getMonth() + 1;
+  let ey = end_date.getFullYear();
 
   switch (basis) {
     case 0:
@@ -568,17 +565,17 @@ exports.YEARFRAC = function(start_date, end_date, basis) {
       return ((ed + em * 30 + ey * 360) - (sd + sm * 30 + sy * 360)) / 360;
     case 1:
       // Actual/actual
-      var feb29Between = function(date1, date2) {
-        var year1 = date1.getFullYear();
-        var mar1year1 = new Date(year1, 2, 1);
+      let feb29Between = function(date1, date2) {
+        let year1 = date1.getFullYear();
+        let mar1year1 = new CellDate(year1, 2, 1);
         if (isLeapYear(year1) && date1 < mar1year1 && date2 >= mar1year1) {
           return true;
         }
-        var year2 = date2.getFullYear();
-        var mar1year2 = new Date(year2, 2, 1);
+        let year2 = date2.getFullYear();
+        let mar1year2 = new CellDate(year2, 2, 1);
         return (isLeapYear(year2) && date2 >= mar1year2 && date1 < mar1year2);
       };
-      var ylength = 365;
+      let ylength = 365;
       if (sy === ey || ((sy + 1) === ey) && ((sm > em) || ((sm === em) && (sd >= ed)))) {
         if ((sy === ey && isLeapYear(sy)) ||
             feb29Between(start_date, end_date) ||
@@ -587,9 +584,9 @@ exports.YEARFRAC = function(start_date, end_date, basis) {
         }
         return daysBetween(start_date, end_date) / ylength;
       }
-      var years = (ey - sy) + 1;
-      var days = (new Date(ey + 1, 0, 1) - new Date(sy, 0, 1)) / 1000 / 60 / 60 / 24;
-      var average = days / years;
+      let years = (ey - sy) + 1;
+      let days = (new CellDate(ey + 1, 0, 1) - new CellDate(sy, 0, 1)) / cf.MS_PER_DAY;
+      let average = days / years;
       return daysBetween(start_date, end_date) / average;
     case 2:
       // Actual/360
@@ -603,7 +600,3 @@ exports.YEARFRAC = function(start_date, end_date, basis) {
   }
 };
 
-function serial(date) {
-  var addOn = (date > -2203891200000)?2:1;
-  return (date - d1900) / 86400000 + addOn;
-}

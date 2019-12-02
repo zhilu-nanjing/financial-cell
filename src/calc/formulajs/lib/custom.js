@@ -1,16 +1,16 @@
-var error = require('./error');
+let errorObj = require('../../calc_utils/error_config');
 //XW: 自定义函数
 exports.PQUERY = function () {
   if (arguments.length !== 5) {
-    return error.error;
+    return errorObj.ERROR_ERROR;
   }
 
   if (arguments[0].length !== arguments[1].length) {
-    return error.error;
+    return errorObj.ERROR_ERROR;
   }
 
   if (arguments[1].length !== arguments[3].length) {
-    return error.error;
+    return errorObj.ERROR_ERROR;
   }
 
   // 计算出绝对值
@@ -26,8 +26,8 @@ exports.PQUERY = function () {
     }
   }
   absArr = absArr.sort((obj1, obj2) => {
-    var val1 = obj1.value;
-    var val2 = obj2.value;
+    let val1 = obj1.value;
+    let val2 = obj2.value;
     if (val1 < val2) {
       return -1;
     } else if (val1 > val2) {
@@ -64,7 +64,7 @@ exports.PQUERY = function () {
 exports.HYPERLINK = function () {
   console.log(arguments);
   if (!arguments || !arguments[0] || !arguments[1]) {
-    return error.na;
+    return errorObj.ERROR_NA;
   }
   let url = arguments[0];
   if (url.substr(0, 7).toLowerCase() == "http://" || url.substr(0, 8).toLowerCase() == "https://") {

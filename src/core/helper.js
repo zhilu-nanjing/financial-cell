@@ -15,7 +15,7 @@ function cloneDeep(obj) {
 
 const mergeDeep = (object = {}, ...sources) => {
     sources.forEach((source) => {
-        if (source != null && source !== undefined) {
+        if (source !== null && source !== undefined) {
             Object.keys(source).forEach((key) => {
                 const v = source[key];
                 // console.log('k:', key, ', v:', source[key], typeof v, v instanceof Object);

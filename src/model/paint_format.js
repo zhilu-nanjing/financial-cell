@@ -1,6 +1,6 @@
 import CellProp from "./cell_prop";
 import {isHave} from "../core/helper";
-import {xy2expr} from "../core/alphabet";
+import {xy2expr} from "../utils/alphabet";
 
 function getType(dType, sType) {
     if (dType === 1 && sType === 1) {

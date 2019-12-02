@@ -2,7 +2,7 @@
 
     debugout.js
     by @inorganik
-    
+
 */
 
 
@@ -73,7 +73,7 @@ export function debugout() {
             }
         }
         var result = matched.join('\n');
-        if (result.length == 0) result = 'Nothing found for "' + string + '".';
+        if (result.length === 0) result = 'Nothing found for "' + string + '".';
         return result
     }
     // accepts the starting line and how many lines after the starting line you want
@@ -118,7 +118,7 @@ export function debugout() {
         if (self.realTimeLoggingOn) console.log(obj);
         // record log
         var type = self.determineType(obj);
-        if (type != null && self.recordLogs) {
+        if (type !== null && self.recordLogs) {
             var addition = obj;
             // timestamp, formatted for brevity
             if (self.useTimestamps) {
@@ -150,16 +150,16 @@ export function debugout() {
     // like typeof but classifies objects of type 'object'
     // kept separate from formatType() so you can use at your convenience!
     this.determineType = function (object) {
-        if (object != null) {
+        if (object !== null) {
             var typeResult;
             var type = typeof object;
-            if (type == 'object') {
+            if (type === 'object') {
                 var len = object.length;
-                if (len == null) {
-                    if (typeof object.getTime == 'function') {
+                if (len === null) {
+                    if (typeof object.getTime === 'function') {
                         typeResult = 'Date';
                     }
-                    else if (typeof object.test == 'function') {
+                    else if (typeof object.test === 'function') {
                         typeResult = 'RegExp';
                     }
                     else {
@@ -191,10 +191,10 @@ export function debugout() {
                     var subresult = self.formatType(subtype, obj[prop]);
                     if (subresult) {
                         self.currentResult += subresult;
-                        if (i != self.parentSizes[self.depth] - 1) self.currentResult += ',';
+                        if (i !== self.parentSizes[self.depth] - 1) self.currentResult += ',';
                         self.currentResult += '\n';
                     } else {
-                        if (i != self.parentSizes[self.depth] - 1) self.currentResult += ',';
+                        if (i !== self.parentSizes[self.depth] - 1) self.currentResult += ',';
                         self.currentResult += '\n';
                     }
                     i++;
@@ -203,7 +203,7 @@ export function debugout() {
                 self.parentSizes.pop();
                 self.currentResult += self.indentsForDepth(self.depth);
                 self.currentResult += '}';
-                if (self.depth == 0) return self.currentResult;
+                if (self.depth === 0) return self.currentResult;
                 break;
             case 'Array' :
                 self.currentResult += '[';
@@ -211,22 +211,22 @@ export function debugout() {
                 self.parentSizes.push(obj.length);
                 for (var i = 0; i < obj.length; i++) {
                     var subtype = self.determineType(obj[i]);
-                    if (subtype == 'Object' || subtype == 'Array') self.currentResult += '\n' + self.indentsForDepth(self.depth);
+                    if (subtype === 'Object' || subtype === 'Array') self.currentResult += '\n' + self.indentsForDepth(self.depth);
                     var subresult = self.formatType(subtype, obj[i]);
                     if (subresult) {
                         self.currentResult += subresult;
-                        if (i != self.parentSizes[self.depth] - 1) self.currentResult += ', ';
-                        if (subtype == 'Array') self.currentResult += '\n';
+                        if (i !== self.parentSizes[self.depth] - 1) self.currentResult += ', ';
+                        if (subtype === 'Array') self.currentResult += '\n';
                     } else {
-                        if (i != self.parentSizes[self.depth] - 1) self.currentResult += ', ';
-                        if (subtype != 'Object') self.currentResult += '\n';
-                        else if (i == self.parentSizes[self.depth] - 1) self.currentResult += '\n';
+                        if (i !== self.parentSizes[self.depth] - 1) self.currentResult += ', ';
+                        if (subtype !== 'Object') self.currentResult += '\n';
+                        else if (i === self.parentSizes[self.depth] - 1) self.currentResult += '\n';
                     }
                 }
                 self.depth--;
                 self.parentSizes.pop();
                 self.currentResult += ']';
-                if (self.depth == 0) return self.currentResult;
+                if (self.depth === 0) return self.currentResult;
                 break;
             case 'function' :
                 obj += '';
@@ -244,7 +244,7 @@ export function debugout() {
                 break;
             case 'Date' :
             case 'string' :
-                if (self.depth > 0 || obj.length == 0) {
+                if (self.depth > 0 || obj.length === 0) {
                     return '"' + obj + '"';
                 } else {
                     return obj;

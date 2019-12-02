@@ -53,7 +53,7 @@ class Calculator { // 这个应该是对重对外暴露的类。
 
     getRef(ref_name) {
         if (!this.formulas.length) {
-            throw new Error("No formula found.");
+            throw new Error("No cellFormulaProxy found.");
         }
         let first_formula = this.formulas[0];
         let formula_ref = first_formula.formula_ref;

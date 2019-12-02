@@ -5,7 +5,7 @@ const UserRawFnExecutor = require('../UserRawFnExecutor.js');
 const common_operations = {
   '*': 'multiply',
   '+': 'plus',
-  '-': 'minus',
+  '-': 'subtractDays',
   '/': 'divide',
   '^': 'power',
   '&': 'concat',
@@ -25,7 +25,7 @@ class ExpressionBuilder {
     this.xlsx_Fx = opts.xlsx_Fx || {};
     this.xlsx_raw_Fx = opts.xlsx_raw_Fx || {};
     let str_formula = formula.cell.f;
-    if (str_formula[0] == '=') {
+    if (str_formula[0] === '=') {
       str_formula = str_formula.substr(1); // =adsf 会变为adsf
     }
     this.str_formula = str_formula;
@@ -85,7 +85,7 @@ class ExpressionBuilder {
   }
 
   end_parentheses() {
-    let fn_stack = this.fn_stack
+    let fn_stack = this.fn_stack;
     let v, stack = this.fn_stack.pop();
     this.exp_obj = stack.exp;
     this.exp_obj.push(this.buffer, );
@@ -135,7 +135,7 @@ class ExpressionBuilder {
   }
 
   do_jobs() {
-    // 主执行语句在这里，上面是定义一些列方法
+    // 主执行语句在这里，上面是定义一系列方法
     let self = this;
     for (; this.position_i < this.str_formula.length; this.position_i++) {
       self.state(self.str_formula[self.position_i]); // 逐字符解析函数; self.state代表当前的解析状态

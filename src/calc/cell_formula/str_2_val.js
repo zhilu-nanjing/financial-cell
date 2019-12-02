@@ -3,7 +3,7 @@ const RefValue = require('./RefValue.js');
 const Range = require('./Range.js');
 
 module.exports = function str_2_val(buffer, formula, position_i) { // buffer 在这里是但一个字符串表达式
-    var v;
+    let v;
     if (!isNaN(buffer)) {
         v = new RawValue(+buffer);
     }
@@ -38,7 +38,7 @@ module.exports = function str_2_val(buffer, formula, position_i) { // buffer 在
         v.start_pst = position_i - buffer.length
 
     }
-    else if (typeof buffer === 'string' && !isNaN(buffer.trim().replace(/%$/, ''))) {
+    else if (typeof buffer === 'string' && !isNaN(buffer.trim().replace(/%$/, ''))) { // 处理公式中的百分号
         v = new RawValue(+(buffer.trim().replace(/%$/, '')) / 100.0);
     }
     else {

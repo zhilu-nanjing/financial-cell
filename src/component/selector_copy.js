@@ -4,7 +4,7 @@ import {CellRange} from '../core/cell_range';
 import {mouseMoveUp} from "../component/event";
 import {lockCells} from "../component/formula_editor";
 import {cuttingByPos} from "../core/operator";
-import {expr2xy} from "../core/alphabet";
+import {expr2xy} from "../utils/alphabet";
 import {cuttingByPosEnd, isAbsoluteValue} from "../core/operator";
 import SelectorMove from "./selector_move";
 

@@ -3,7 +3,7 @@ import { describe, it } from 'mocha';
 import { formulam } from '../../src/core/formula';
 
 const gformulas = formulam;
-describe('formula', () => {
+describe('cellFormulaProxy', () => {
   describe('#render()', () => {
     it('SUM: should return 36 when the value is [\'12\', \'12\', 12]', () => {
       assert.equal(gformulas.SUM.render(['12', '12', 12]), 36);

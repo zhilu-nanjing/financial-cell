@@ -1,7 +1,7 @@
 import {h} from "./element";
 import {cssPrefix} from "../config";
 import {cuttingByPos, cuttingByPosEnd, isAbsoluteValue} from "../core/operator";
-import {expr2xy} from "../core/alphabet";
+import {expr2xy} from "../utils/alphabet";
 import {lockCells} from "./formula_editor";
 import {CellRange} from "../core/cell_range";
 import {mouseMoveUp} from "./event";

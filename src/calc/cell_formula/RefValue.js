@@ -1,17 +1,22 @@
 "use strict";
 
 const getSanitizedSheetName = require('../getSanitizedSheetName.js');
+const error_cf = require('../calc_utils/error_config.js');
 
-module.exports = function RefValue(str_expression, formula) {
-    var self = this;
-    this.name = 'RefValue';
-    this.str_expression = str_expression;
-    this.formula = formula;
+module.exports = class RefValue{
+    constructor(str_expression, formula){
+        this.name = 'RefValue';
+        this.str_expression = str_expression;
+        this.formula = formula;
+    }
 
-    self.parseRef = function() {
-        var sheet, sheet_name, cell_name, cell_full_name;
-        if (str_expression.indexOf('!') != -1) {
-            var aux = str_expression.split('!');
+    parseRef() {
+        let self = this;
+        let formula = this.formula;
+        let str_expression = this.str_expression;
+        let sheet, sheet_name, cell_name, cell_full_name;
+        if (str_expression.indexOf('!') !== -1) {
+            let aux = str_expression.split('!');
             sheet_name = getSanitizedSheetName(aux[0]);
             sheet = formula.wb.Sheets[sheet_name];
             cell_name = aux[1];
@@ -33,39 +38,66 @@ module.exports = function RefValue(str_expression, formula) {
         };
     };
 
-    this.calc = function() {
-        var resolved_ref = self.parseRef();
-        var sheet = resolved_ref.sheet;
-        var cell_name = resolved_ref.cell_name;
-        var cell_full_name = resolved_ref.cell_full_name;
-        var ref_cell = sheet[cell_name];
-        if (!ref_cell) {
+    calc() {
+        let self = this;
+        let curCellFormulaProxy = this.formula;
+        let resolved_ref = self.parseRef();
+        // 一个Object， {
+        //   "sheet": {
+        //     "A28": {
+        //       "v": 10
+        //     },
+        //     "A29": {
+        //       "f": "=A28+1"
+        //     },
+        //     "A30": {
+        //       "v": 9
+        //     },
+        //     "A31": {
+        //       "v": 27
+        //     },
+        //     "A32": {
+        //       "v": 2
+        //     },
+        //     "A5": {
+        //       "f": "=AVERAGE($A$28:$A$32)"
+        //     }
+        //   },
+        //   "sheet_name": "Sheet1",
+        //   "cell_name": "A28",
+        //   "cell_full_name": "Sheet1!A28"
+        // }
+        let sheet = resolved_ref.sheet;
+        let cell_name = resolved_ref.cell_name;
+        let cell_full_name = resolved_ref.cell_full_name;
+        let ref_cell = sheet[cell_name]; // 引用的cell
+        if (!ref_cell) { // 获取这个cell，如果为空的话返回Null
             return null;
         }
-        var formula_ref = formula.formula_ref[cell_full_name];
+        let formula_ref = curCellFormulaProxy.formula_ref[cell_full_name]; // 判断引用是否是另一个公式，如果是的话还可能还需要进一步计算，如果不是的话直接返回值
         if (formula_ref) {
-            if (formula_ref.status === 'new') {
-                formula.exec_formula(formula_ref);
-                if (ref_cell.t === 'e') {
-                    console.log('ref is an error with new formula', cell_full_name);
+            if (formula_ref.status === 'new') { // 如果发现这个公式还没有被计算出来，那么去计算这个公式
+                curCellFormulaProxy.exec_formula(formula_ref); // 碰到了还没有解出来的公式。这里存在着递归。
+                if (ref_cell.t === 'e') { //  如果self对应的单元格得到的结果是错误。t属性代表类型，如果为e 代表error
+                    console.log('ref is an error at', cell_full_name);
                     throw new Error(ref_cell.w);
                 }
                 return ref_cell.v;
             }
-            else if (formula_ref.status === 'working') {
-                throw new Error('Circular ref');
+            else if (formula_ref.status === 'working') {// 循环依赖
+                throw new Error(error_cf.ERROR_CIRCULAR);
             }
             else if (formula_ref.status === 'done') {
                 if (ref_cell.t === 'e') {
-                    console.log('ref is an error after formula eval');
+                    console.log('ref is an error after cellFormulaProxy eval');
                     throw new Error(ref_cell.w);
                 }
                 return ref_cell.v;
             }
         }
         else {
-            if (ref_cell.t === 'e') {
-                console.log('ref is an error with no formula', cell_name);
+            if (ref_cell.t === 'e') { // 依赖的值是错误
+                console.log('ref is an error ', cell_name);
                 throw new Error(ref_cell.w);
             }
             return ref_cell.v;

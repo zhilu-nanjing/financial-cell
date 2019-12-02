@@ -1,5 +1,5 @@
 import {isHave} from "../core/helper";
-import {expr2xy} from "../core/alphabet";
+import {expr2xy} from "../utils/alphabet";
 
 export default class CellProp {
     constructor(ri, ci, cell, expr, empty) {

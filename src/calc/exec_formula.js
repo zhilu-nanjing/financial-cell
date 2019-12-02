@@ -9,16 +9,16 @@ import_functions(require('.//formulajs/index'));
 import_raw_functions(require('./formulas-raw.js'));
 
 function import_raw_functions(functions, opts) {
-    for (var key in functions) {
+    for (let key in functions) {
         xlsx_raw_Fx[key] = functions[key];
     }
 }
 
 function import_functions(formulajs, opts) {
     opts = opts || {};
-    var prefix = opts.prefix || '';
-    for (var key in formulajs) {
-        var obj = formulajs[key];
+    let prefix = opts.prefix || '';
+    for (let key in formulajs) {
+        let obj = formulajs[key];
         if (typeof(obj) === 'function') {
             if (opts.override || !xlsx_Fx[prefix + key]) {
                 xlsx_Fx[prefix + key] = obj;
@@ -36,8 +36,8 @@ function import_functions(formulajs, opts) {
 }
 
 function my_assign(dest, source) {
-    var obj = JSON.parse(JSON.stringify(dest));
-    for (var k in source) {
+    let obj = JSON.parse(JSON.stringify(dest));
+    for (let k in source) {
         obj[k] = source[k];
     }
     return obj;
@@ -49,7 +49,7 @@ function build_expression(formula) {
     // xlsx_Fx = {FLOOR, AVERGAE ... }
 }
 
-function exec_formula(formula) { // formula.cell.f = "Average(1,2,3,4,5)
+function exec_formula(formula) { // cellFormulaProxy.cell.f = "Average(1,2,3,4,5)
     let root_exp = build_expression(formula);
     root_exp.update_cell_value();
 }

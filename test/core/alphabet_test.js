@@ -5,7 +5,7 @@ import {
   indexAt,
   stringAt,
   expr2xy,
-} from '../../src/core/alphabet';
+} from '../../src/utils/alphabet';
 
 describe('alphabet', () => {
   describe('.indexAt()', () => {

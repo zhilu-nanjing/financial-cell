@@ -1,4 +1,4 @@
-import { stringAt} from '../core/alphabet';
+import { stringAt} from '../utils/alphabet';
 import {getFontSizePxByPt} from '../core/font';
 import _cell from '../core/cell';
 import {formulam} from '../core/formula';
@@ -186,7 +186,7 @@ function renderCell(rindex, cindex) {
         const font = Object.assign({}, style.font);
 
         font.size = getFontSizePxByPt(font.size);
-        let {ignore, minus} = data.settings;
+        let {ignore, subtractDays} = data.settings;
         let color = style.color;
         // console.log('style:', cellText);
         if (minus === true && isMinus(cellText)) {

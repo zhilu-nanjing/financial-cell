@@ -1,4 +1,4 @@
-import {expr2xy, xy2expr} from './alphabet';
+import {expr2xy, xy2expr} from '../utils/alphabet';
 
 class CellRange {
     constructor(sri, sci, eri, eci, w = 0, h = 0) {
