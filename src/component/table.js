@@ -93,52 +93,6 @@ function parseCell() {
     }
 }
 
-// export function parseCell2(viewRange, state = false, src = '') {
-//     let {data} = this;
-//     let {calc, rows} = data;
-//     let workbook = [];
-//     workbook.Sheets = {};
-//     workbook.Sheets[data.name] = {};
-//
-//     viewRange.each2((ri, ci) => {
-//         let cell = data.getCell(ri, ci);
-//         let expr = xy2expr(ci, ri);
-//         if (cell && cell.text) {
-//             cell.text = cell.text + "";
-//             if (cell.text.indexOf("MD.RTD") !== -1) {
-//                 workbook.Sheets[data.name][expr] = {v: "", f: ""};
-//             } else {
-//                 if (cell.text && cell.text.lastIndexOf("=") === 0) {
-//                     workbook.Sheets[data.name][expr] = {
-//                         v: '',
-//                         f: cell.text.replace(/ /g, '').replace(/\"/g, "\"").replace(/\"\"\"\"&/g, "\"'\"&")
-//                     };
-//                 } else {
-//                     workbook.Sheets[data.name][expr] = {
-//                         v: cell.text.replace(/ /g, '').toUpperCase().replace(/\"/g, "\""),
-//                         f: ''
-//                     };
-//                 }
-//             }
-//         }
-//         else {
-//             workbook.Sheets[data.name][expr] = {v: 0, f: 0};
-//         }
-//     });
-//
-//
-//     if (state) {
-//         workbook.Sheets[data.name]['A1'] = {v: '', f: `${src}`};
-//     }
-//
-//     try {
-//         calc(workbook);
-//     } catch (e) {
-//         console.error(e);
-//     }
-//     return workbook;
-// }
-
 function specialStyle(text) {
     text = text + "";
     if (!text) {
