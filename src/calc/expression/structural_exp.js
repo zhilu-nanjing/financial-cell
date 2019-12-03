@@ -1,7 +1,7 @@
 "use strict";
 import cf  from "../calc_utils/config"
-import {RawValue} from './RawValue.js';
-import {Range} from './Range.js';
+import {RawValue} from '../calc_data_proxy/RawValue.js';
+import {Range} from '../calc_data_proxy/Range.js';
 import {str_2_val}  from './str_2_val.js'
 import {errorObj, errorMsgArr}  from '../calc_utils/error_config'
 import {CellDate} from "../cell_value_type/cell_date";
@@ -29,7 +29,7 @@ export class StructuralExp {
               && self.args[0] instanceof Range) {
                 throw errorObj.ERROR_VALUE;
             }
-            selfCell.v = self.calc(); // 计算数值
+            selfCell.v = self.solveExpression(); // 计算数值
 
             if (typeof (selfCell.v) === 'string') {
                 selfCell.t = 's';
@@ -54,7 +54,7 @@ export class StructuralExp {
     }
 
     hasCalcMethod(obj) {
-        return typeof obj.calc === 'function'
+        return typeof obj.solveExpression === 'function'
     }
     convertDateToNumber(res){
         if(res instanceof CellDate){
@@ -66,7 +66,7 @@ export class StructuralExp {
     }
     execCalcMethod(obj, isConvertDateToNumber = true){
         if(this.hasCalcMethod(obj)){
-            let res = obj.calc()
+            let res = obj.solveExpression()
             if(isConvertDateToNumber){
                 res = this.convertDateToNumber(res)
             }
@@ -78,7 +78,7 @@ export class StructuralExp {
     }
 
     execOperatorWith2Args(op, args, fn) { // fn含有两个参数，因为运算符有优先级顺序，所以需要依次执行
-        for (let i = 0; i < args.length; i++) {
+        for (let i = 0; i < args.length; i++) { // todo: 后面会修改args，这样不是很恰当
             if (args[i] === op) {
                 try {
                     let r = fn(this.execCalcMethod(args[i-1]), this.execCalcMethod(args[i+1]));// 这里存在递归
@@ -100,6 +100,7 @@ export class StructuralExp {
                     args.splice(i, 2, new RawValue(-rightArg));// 替换2个原有arg
                 }
             }
+
         }
     }
 
@@ -110,15 +111,16 @@ export class StructuralExp {
         }
     }
 
-    calc() { // 核心方法，做计算
+    solveExpression() { // 核心方法，做计算
         let self = this;
         let args = self.args.concat(); // 应该使用来做个浅复制
+        let sheet
         // console.log(args)
         //XW: 对函数参数做转换、判断
         try {
             for (let i = 0; i < args.length; i++) { // 遍历所有的参数
                 if (args[i].name === 'RefValue') { // 属于引用的字符串
-                    let sheet = args[i].cellFormulaProxy.sheet;
+                    sheet = args[i].cellFormulaProxy.sheet;
                     //未定义单元格f置为default_0
                     if (sheet[args[i].str_expression] === undefined) { // 判定空单元格，args[i].str_expression = "A28", sheet是一个obj, value 是 ｛v:,f:}这种形式的obj
                         sheet[args[i].str_expression] = { v: 'default_0' } // 未定义的值赋值，合理么？
@@ -192,10 +194,10 @@ export class StructuralExp {
         }
     };
     calcLastArg(arg){
-        if (typeof (arg.calc) !== 'function') {
+        if (typeof (arg.solveExpression) !== 'function') {
             return arg;
         } else {
-            return arg.calc();
+            return arg.solveExpression();
         }
     }
 

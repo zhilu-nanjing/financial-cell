@@ -168,7 +168,7 @@ export default class Toolbar {
             // this.chartEl = buildButtonWithIcon('Insert chart', 'chart'),
             this.freezeEl = buildButtonWithIcon(`${t('toolbar.freeze')}`, 'freeze', () => toggleChange.call(this, 'freeze')),
             this.addEl = buildButtonWithIcon(`${t('toolbar.add')}`, 'add', () => toggleChange.call(this, 'add')),
-            this.closeEl = buildButtonWithIcon(`${t('toolbar.calc')}`, 'close', () => toggleChange.call(this, 'close')),
+            this.closeEl = buildButtonWithIcon(`${t('toolbar.solveExpression')}`, 'close', () => toggleChange.call(this, 'close')),
             this.autofilterEl = buildButtonWithIcon(`${t('toolbar.autofilter')}`, 'autofilter', () => toggleChange.call(this, 'autofilter')),
             this.throwFormulaEl = buildButtonWithIcon(`${t('toolbar.throwFormula')}`, 'chevron-right', () => toggleChange.call(this, 'throwFormula')),
             // buildButton(`${t('toolbar.date_formula')}`).child(this.ddFormula.el),

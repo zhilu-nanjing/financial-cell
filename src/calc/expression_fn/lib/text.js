@@ -32,7 +32,7 @@ exports.CHAR = function(number) {
 
 exports.CLEAN = function(text) {
   text = text || '';
-  var re = /[\0-\x1F]/g;
+  let re = /[\0-\x1F]/g;
   return text.replace(re, "");
 };
 
@@ -42,14 +42,14 @@ exports.CODE = function(text) {
 };
 
 exports.CONCATE = function() {
-  var args = utils.flatten(arguments);
+  let args = utils.flatten(arguments);
 
-  var trueFound = 0;
+  let trueFound = 0;
   while ((trueFound = args.indexOf(true)) > -1) {
     args[trueFound] = 'TRUE';
   }
 
-  var falseFound = 0;
+  let falseFound = 0;
   while ((falseFound = args.indexOf(false)) > -1) {
     args[falseFound] = 'FALSE';
   }
@@ -57,14 +57,14 @@ exports.CONCATE = function() {
   return args.join('');
 };
 exports.CONCATENATE = function() {
-  var args = utils.flatten(arguments);
+  let args = utils.flatten(arguments);
 
-  var trueFound = 0;
+  let trueFound = 0;
   while ((trueFound = args.indexOf(true)) > -1) {
     args[trueFound] = 'TRUE';
   }
 
-  var falseFound = 0;
+  let falseFound = 0;
   while ((falseFound = args.indexOf(false)) > -1) {
     args[falseFound] = 'FALSE';
   }
@@ -85,7 +85,7 @@ exports.DOLLAR = function(number, decimals) {
   if (utils.anyIsError(number, decimals)) {
     return errorObj.ERROR_VALUE;
   }
-  var format = '';
+  let format = '';
   if (decimals <= 0) {
     number = Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals);
     format = '($0,0)';
@@ -114,7 +114,7 @@ exports.FIXED = function(number, decimals, no_commas) {
     return errorObj.ERROR_VALUE;
   }
 
-  var format = no_commas ? '0' : '0,0';
+  let format = no_commas ? '0' : '0,0';
   if (decimals <= 0) {
     number = Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals);
   } else if (decimals > 0) {
@@ -124,7 +124,7 @@ exports.FIXED = function(number, decimals, no_commas) {
 };
 
 exports.HTML2TEXT = function (value) {
-  var result = '';
+  let result = '';
 
   if (value) {
     if (value instanceof Array) {
@@ -186,8 +186,8 @@ exports.MID = function(text, start, number) {
     return number;
   }
 
-  var begin = start - 1;
-  var end = begin + number;
+  let begin = start - 1;
+  let end = begin + number;
 
   return text.substring(begin, end);
 };
@@ -231,12 +231,12 @@ exports.PROPER = function(text) {
 };
 
 exports.REGEXEXTRACT = function (text, regular_expression) {
-  var match = text.match(new RegExp(regular_expression));
+  let match = text.match(new RegExp(regular_expression));
   return match ? (match[match.length > 1 ? match.length - 1 : 0]) : null;
 };
 
 exports.REGEXMATCH = function (text, regular_expression, full) {
-  var match = text.match(new RegExp(regular_expression));
+  let match = text.match(new RegExp(regular_expression));
   return full ? match : !!match;
 };
 
@@ -273,7 +273,7 @@ exports.RIGHT = function(text, number) {
 };
 
 exports.SEARCH = function(find_text, within_text, position) {
-  var foundAt;
+  let foundAt;
   if (typeof find_text !== 'string' || typeof within_text !== 'string') {
     return errorObj.ERROR_VALUE;
   }
@@ -292,8 +292,8 @@ exports.SUBSTITUTE = function(text, old_text, new_text, occurrence) {
   } else if (occurrence === undefined) {
     return text.replace(new RegExp(old_text, 'g'), new_text);
   } else {
-    var index = 0;
-    var i = 0;
+    let index = 0;
+    let i = 0;
     while (text.indexOf(old_text, index) > 0) {
       index = text.indexOf(old_text, index + 1);
       i++;
@@ -313,8 +313,8 @@ exports.T = function(value) {
 
 // TODO incomplete implementation
 function num2e(num){
-  var p = Math.floor(Math.log(num)/Math.LN10);
-  var n = num * Math.pow(10, -p);
+  let p = Math.floor(Math.log(num)/Math.LN10);
+  let n = num * Math.pow(10, -p);
   if (p.toString().length < 10){
     p = '0' + p
   }
@@ -322,7 +322,7 @@ function num2e(num){
 }
 function allzero(num){
   num = num.toString()
-  for (var i=0;i<num.length;i++){
+  for (let i=0;i<num.length;i++){
     if (num[i] !== '0'){
       return false
     }
@@ -331,9 +331,9 @@ function allzero(num){
 }
 function decimalsToFractional(decimals){
   formatDecimals = decimals.toFixed(2);
-  var denominator = 3;//初始化分母
-  var numerator  = formatDecimals*3;//初始化分子
-  var bigger = 0;
+  let denominator = 3;//初始化分母
+  let numerator  = formatDecimals*3;//初始化分子
+  let bigger = 0;
   function  recursion (){
     bigger = denominator>numerator?denominator:numerator;
     for(let i=bigger;i>1;i--){
@@ -351,18 +351,18 @@ function decimalsToFractional(decimals){
 exports.TEXT = function (value, format) {
   try{
     if (format.indexOf('%') >= 0){
-      var fixed = format.split('.')[1].length-1
+      let fixed = format.split('.')[1].length-1
       return (parseFloat(value) *100).toFixed(fixed) + '%'
     }
-    var Formulas = window.jsSpreadsheet.AllFormulas;
-    var result = Formulas.TEXT(value, format);
+    let Formulas = window.jsSpreadsheet.AllFormulas;
+    let result = Formulas.TEXT(value, format);
     console.log(result)
   }catch (e) {
-    var result = undefined
+    let result = undefined
   }
   if (result == undefined){
     if (format.indexOf('#') >= 0 && format.indexOf('?/?') >=0){
-      var x = parseFloat(value) - parseInt(value);
+      let x = parseFloat(value) - parseInt(value);
       if (parseInt(value) !== 0){
         return parseInt(value) + ' ' + decimalsToFractional(x)
       }
@@ -371,15 +371,15 @@ exports.TEXT = function (value, format) {
     if (format.indexOf('E+') >=0){
       return num2e(value)
     }else if(allzero(value)){
-      var result = ''
-      for (var i=0;i<format.length-value.length; i++){
+      let result = ''
+      for (let i=0;i<format.length-value.length; i++){
         result += '0'
       }
       return result + value
     }else if (format.indexOf('#') >=0){
-      var fmt = format
+      let fmt = format
       if (format.indexOf('[')>=0 && format.indexOf(';')>=0){
-        var valid = format.split('#')[0]
+        let valid = format.split('#')[0]
         fmt = format.split(']')[1].split(';')
         valid = valid.replace('[', '').replace(']', '')
         if (eval(value + valid)){
@@ -393,9 +393,9 @@ exports.TEXT = function (value, format) {
           value = value.toFixed(format.split('.')[1].length)
         }
         value = value.toString()
-        var result = ''
-        var n = 0
-        for (var i=0; i< fmt.length; i ++){
+        let result = ''
+        let n = 0
+        for (let i=0; i< fmt.length; i ++){
           if (fmt[i] == '#' || fmt[i] == '0' || fmt[i] == '.'){
             result += value[n]
             n += 1
@@ -407,9 +407,9 @@ exports.TEXT = function (value, format) {
       }
       fmt = fmt.replace('##0', '##')
       value = value.toString()
-      var result = ''
-      var n = 0
-      for (var i=0; i< fmt.length; i ++){
+      let result = ''
+      let n = 0
+      for (let i=0; i< fmt.length; i ++){
         if (fmt[i] == '#' || fmt[i] == '0'){
           result += value[n]
           n += 1

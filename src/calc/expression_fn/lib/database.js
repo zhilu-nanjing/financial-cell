@@ -139,8 +139,8 @@ exports.DMAX = function(database, field, criteria) {
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
-  var max = targetValues[0]
-  for (var i=0;i<targetValues.length;i++){
+  let max = targetValues[0]
+  for (let i=0;i<targetValues.length;i++){
     if (targetValues[i] > max){
       max = targetValues[i]
     }
@@ -153,10 +153,10 @@ exports.DMIN = function(database, field, criteria) {
   if (isNaN(field) && (typeof field !== "string")) {
     return errorObj.ERROR_VALUE;
   }
-  var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
-  var targetValues = get_values(resultIndexes, database, field);
-  var min = targetValues[0]
-  for (var i=0;i<targetValues.length;i++){
+  let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
+  let targetValues = get_values(resultIndexes, database, field);
+  let min = targetValues[0]
+  for (let i=0;i<targetValues.length;i++){
     if (targetValues[i] < min){
       min = targetValues[i]
     }
@@ -170,10 +170,10 @@ exports.DPRODUCT = function(database, field, criteria) {
     return errorObj.ERROR_VALUE;
   }
 
-  var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
-  var targetValues = get_values(resultIndexes, database, field);
-  var result = 1;
-  for (var i=0; i < targetValues.length; i++){
+  let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
+  let targetValues = get_values(resultIndexes, database, field);
+  let result = 1;
+  for (let i=0; i < targetValues.length; i++){
     result *= targetValues[i]
   }
   return result;
@@ -184,8 +184,8 @@ exports.DSTDEV = function(database, field, criteria) {
   if (isNaN(field) && (typeof field !== "string")) {
     return errorObj.ERROR_VALUE;
   }
-  var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
-  var targetValues = get_values(resultIndexes, database, field);
+  let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
+  let targetValues = get_values(resultIndexes, database, field);
   targetValues = compact(targetValues);
   return stats.STDEV.S(targetValues);
 };
@@ -195,8 +195,8 @@ exports.DSTDEVP = function(database, field, criteria) {
   if (isNaN(field) && (typeof field !== "string")) {
     return errorObj.ERROR_VALUE;
   }
-  var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
-  var targetValues = get_values(resultIndexes, database, field);
+  let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
+  let targetValues = get_values(resultIndexes, database, field);
   targetValues = compact(targetValues);
   return stats.STDEV.P(targetValues);
 };
@@ -206,8 +206,8 @@ exports.DSUM = function(database, field, criteria) {
   if (isNaN(field) && (typeof field !== "string")) {
     return errorObj.ERROR_VALUE;
   }
-  var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
-  var targetValues = get_values(resultIndexes, database, field);
+  let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
+  let targetValues = get_values(resultIndexes, database, field);
   return maths.SUM(targetValues);
 };
 
@@ -216,8 +216,8 @@ exports.DVAR = function (database, field, criteria) {
   if (isNaN(field) && (typeof field !== "string")) {
     return errorObj.ERROR_VALUE;
   }
-  var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
-  var targetValues = get_values(resultIndexes, database, field);
+  let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
+  let targetValues = get_values(resultIndexes, database, field);
   return stats.VAR.S(targetValues);
 };
 
@@ -226,8 +226,8 @@ exports.DVARP = function (database, field, criteria) {
   if (isNaN(field) && (typeof field !== "string")) {
     return errorObj.ERROR_VALUE;
   }
-  var resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
-  var targetValues = get_values(resultIndexes, database, field);
+  let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
+  let targetValues = get_values(resultIndexes, database, field);
   return stats.VAR.P(targetValues);
 };
 //XW：end

@@ -1,9 +1,9 @@
 "use strict";
 
-import {col_str_2_int} from './col_str_2_int.js'
-import {int_2_col_str} from './int_2_col_str.js'
-import {getSanitizedSheetName} from './getSanitizedSheetName.js'
+import {col_str_2_int} from '../calc_utils/helper.js'
+import {getSanitizedSheetName} from '../expression/getSanitizedSheetName.js'
 import {ERROR_CIRCULAR} from '../calc_utils/error_config.js'
+import { int_2_col_str } from '../calc_utils/helper';
 
 export class Range{
     constructor(str_expression, formula, possition_i){
@@ -29,7 +29,7 @@ export class Range{
         this.formula = formula
 
     }
-    calc(){
+    solveExpression(){
         let sheet_name = this.sheet_name;
         let sheet = this.sheet;
         let range_expression = this.range_expression;
@@ -54,7 +54,7 @@ export class Range{
                 let cell_full_name = sheet_name + '!' + cell_name;
                 if (formula.formula_ref[cell_full_name]) {
                     if (formula.formula_ref[cell_full_name].status === 'new') {
-                        formula.exec_formula(formula.formula_ref[cell_full_name]);
+                        formula.formulaExecutor(formula.formula_ref[cell_full_name]);
                     }
                     else if (formula.formula_ref[cell_full_name].status === 'working') {
                         throw new Error(ERROR_CIRCULAR);

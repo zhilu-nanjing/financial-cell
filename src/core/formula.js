@@ -6,7 +6,7 @@
  */
 import {tf} from '../locale/locale';
 import XLSX_CALC from "../calc"
-let formulajs = require('../calc/expression_fn/index'); // jobs: todo: 这里为何又多出3个函数？似乎应该统一放到formulajs中解决。
+let formulajs = require('../calc/expression_fn/normal_fn'); // jobs: todo: 这里为何又多出3个函数？似乎应该统一放到formulajs中解决。
 const baseFormulas = [
     {
         key: 'MD.WLAND',

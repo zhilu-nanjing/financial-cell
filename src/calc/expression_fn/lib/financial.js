@@ -1,5 +1,5 @@
 import {errorObj} from '../../calc_utils/error_config'
-import dateTime from './date-time'
+import dateTime from './date_time'
 import utils from './utils'
 
 // exports.validDate = function (d)

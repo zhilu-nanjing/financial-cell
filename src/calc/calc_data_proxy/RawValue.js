@@ -7,7 +7,7 @@ export class RawValue{
     setValue(v) {
         this.value = v;
     };
-    calc() {
+    solveExpression() {
         return this.value;
     };
 };

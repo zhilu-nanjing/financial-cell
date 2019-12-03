@@ -1,6 +1,6 @@
-import {RawValue} from './RawValue.js';
-import {RefValue} from './RefValue.js';
-import {Range} from './Range.js';
+import {RawValue} from '../calc_data_proxy/RawValue.js';
+import {RefValue} from '../calc_data_proxy/RefValue.js';
+import {Range} from '../calc_data_proxy/Range.js';
 
 export function str_2_val(buffer, formula, position_i) { // buffer 在这里是但一个字符串表达式
     let v;

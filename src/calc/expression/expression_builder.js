@@ -1,7 +1,5 @@
-import {StructuralExp} from './structural_exp.js'
-import {RawValue}  from './RawValue.js'
-import {UserFnExecutor} from './UserFnExecutor.js'
-import {UserRawFnExecutor}  from './UserRawFnExecutor.js'
+import { StructuralExp } from './structural_exp.js';
+import { RawValue } from '../calc_data_proxy/RawValue.js';
 
 const common_operations = { // todo: 需要把这个常数放到config里面
   '*': 'multiply',
@@ -14,10 +12,7 @@ const common_operations = { // todo: 需要把这个常数放到config里面
   '>': 'gt',
   '=': 'eq'
 };
-export function  parseExpression(formula, opts) {
-  let exp_builder =  new StructuralExpressionBuilder(formula, opts);
-  return exp_builder.parseExpression();
-};
+;
 
 export class FormulaParser{
   constructor(opts){
@@ -37,28 +32,27 @@ export class FormulaParser{
   }
 }
 
-class BaseExpressionBuilder{
+export class BaseExpressionBuilder{
   constructor(formula, opts){
 
   }
 }
 
-class SimpleExpressionBuilder{ // 解析不含等号的那些表达式
+export class SimpleExpressionBuilder{ // 解析不含等号的那些表达式
 
 }
 
-class StructuralExpressionBuilder {
-  constructor(formula, opts) {
-    formula.status = 'working';
-    this.formula = formula ;
-    this.xlsx_Fx = opts.xlsx_Fx || {};
-    this.xlsx_raw_Fx = opts.xlsx_raw_Fx || {};
-    let str_formula = formula.cell.f;
+export class StructuralExpressionBuilder {
+  constructor(formulaProxy, multiCollExpFn) {
+    formulaProxy.status = 'working';
+    this.formulaProxy = formulaProxy ;
+    this.multiCollExpFn = multiCollExpFn;
+    let str_formula = formulaProxy.cell.f;
     if (str_formula[0] === '=') {
       str_formula = str_formula.substr(1); // =adsf 会变为adsf
     }
     this.str_formula = str_formula;
-    this.exp_obj = this.root_exp = new StructuralExp(formula);  // 封装公式实例
+    this.exp_obj = this.root_exp = new StructuralExp(formulaProxy);  // 封装公式实例
     this.buffer = '';
     this.was_string = false;
     this.fn_stack = [{ // 这个是函数调用栈？
@@ -90,21 +84,11 @@ class StructuralExpressionBuilder {
   }
 
   ini_parentheses() {
+    let self = this;
     let o,
       trim_buffer = this.buffer.trim(), // buffer 是一个字符串，代表一个语义单元，例如average
-      special = this.xlsx_Fx[trim_buffer]; // this.xlsx_Fx是一个函数列表
-
-    let special_raw = this.xlsx_raw_Fx[trim_buffer]; // this.xlsx_raw_Fx = {OFFSET; IFERROR; IF; AND}
-    let self = this;
-    if (special_raw !== undefined) {
-      special = new UserRawFnExecutor(special_raw, self.formula);
-    } else if (special) {
-      special = new UserFnExecutor(special, self.formula);
-    } else if (trim_buffer) {
-      //Error: "Worksheet 1"!D145: Function INDEX not found
-      throw new Error('"' + self.formula.sheet_name + '"!' + self.formula.name + ': Function ' + self.buffer + ' not found');
-    }
-    o = new StructuralExp(self.formula);
+      special = this.multiCollExpFn.getFnExecutorByName(trim_buffer) // this.xlsx_Fx是一个函数列表
+    o = new StructuralExp(self.formulaProxy);
     self.fn_stack.push({
       exp: o,
       special: special
@@ -156,7 +140,7 @@ class StructuralExpressionBuilder {
       this.was_string = false;
       fn_stack[fn_stack.length - 1].exp.push(this.buffer, this.position_i);
       fn_stack[fn_stack.length - 1].special.push(fn_stack[fn_stack.length - 1].exp);
-      fn_stack[fn_stack.length - 1].exp = this.exp_obj = new StructuralExp(this.formula);
+      fn_stack[fn_stack.length - 1].exp = this.exp_obj = new StructuralExp(this.formulaProxy);
       this.buffer = '';
     } else {
       this.buffer += char;

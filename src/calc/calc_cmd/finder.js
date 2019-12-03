@@ -27,7 +27,7 @@ export function find_all_cells_with_formulas(wb, exec_formula) {
 
 export function find_all_need_calc_cell(wb, tileArr, exec_formula) { // todo: tileArr.findAllNeedCalcCell 应该返回workbook中多个sheet的变化结果； 需要筛选出那些需要重新计算的formulas
     console.log("find_all_need_calc_cell");
-    var need_calc_cells = tileArr.findAllNeedCalcCell(); // 获取所有需要计算的单元格
+    let need_calc_cells = tileArr.findAllNeedCalcCell(); // 获取所有需要计算的单元格
     let formula_ref = {};
     let cells = [];
     for (let sheet_name in wb.Sheets) {

@@ -567,7 +567,7 @@ exports.CONVERT = function(number, from_unit, to_unit) {
     }
 
     // Lookup to unit
-    for (var k = 0; k < units.length; k++) {
+    for (let k = 0; k < units.length; k++) {
       alt = (units[k][2] === null) ? [] : units[k][2];
       if (units[k][1] === base_to_unit || alt.indexOf(base_to_unit) >= 0) {
         to = units[k];
@@ -612,7 +612,7 @@ exports.DEC2BIN = function(number, places) {
   }
 
   // Convert decimal number to binary
-  var result = parseInt(number, 10).toString(2);
+  let result = parseInt(number, 10).toString(2);
 
   // Return binary number using the minimum number of characters necessary if places is undefined
   if (typeof places === 'undefined') {
@@ -653,7 +653,7 @@ exports.DEC2HEX = function(number, places) {
   }
 
   // Convert decimal number to hexadecimal
-  var result = parseInt(number, 10).toString(16);
+  let result = parseInt(number, 10).toString(16);
 
   // Return hexadecimal number using the minimum number of characters necessary if places is undefined
   if (typeof places === 'undefined') {
@@ -694,7 +694,7 @@ exports.DEC2OCT = function(number, places) {
   }
 
   // Convert decimal number to octal
-  var result = parseInt(number, 10).toString(8);
+  let result = parseInt(number, 10).toString(8);
 
   // Return octal number using the minimum number of characters necessary if places is undefined
   if (typeof places === 'undefined') {
@@ -750,7 +750,7 @@ exports.ERF.PRECISE = function(x) {
   if (isNaN(x)) {
     return errorObj.ERROR_VALUE;
   }
-  var Formulas = window.jsSpreadsheet.AllFormulas;
+  let Formulas = window.jsSpreadsheet.AllFormulas;
   return Formulas.ERF(x)
 };
 
@@ -768,7 +768,7 @@ exports.ERFC.PRECISE = function(x) {
   if (isNaN(x)) {
     return errorObj.ERROR_VALUE;
   }
-  var Formulas = window.jsSpreadsheet.AllFormulas;
+  let Formulas = window.jsSpreadsheet.AllFormulas;
   return Formulas.ERFC(x)
 };
 
@@ -790,10 +790,10 @@ exports.HEX2BIN = function(number, places) {
   }
 
   // Check if number is negative
-  var negative = (number.length === 10 && number.substring(0, 1).toLowerCase() === 'f') ? true : false;
+  let negative = (number.length === 10 && number.substring(0, 1).toLowerCase() === 'f') ? true : false;
 
   // Convert hexadecimal number to decimal
-  var decimal = (negative) ? parseInt(number, 16) - 1099511627776 : parseInt(number, 16);
+  let decimal = (negative) ? parseInt(number, 16) - 1099511627776 : parseInt(number, 16);
 
   // Return error if number is lower than -512 or greater than 511
   if (decimal < -512 || decimal > 511) {
@@ -806,7 +806,7 @@ exports.HEX2BIN = function(number, places) {
   }
 
   // Convert decimal number to binary
-  var result = decimal.toString(2);
+  let result = decimal.toString(2);
 
   // Return binary number using the minimum number of characters necessary if places is undefined
   if (places === undefined) {
@@ -837,7 +837,7 @@ exports.HEX2DEC = function(number) {
   }
 
   // Convert hexadecimal number to decimal
-  var decimal = parseInt(number, 16);
+  let decimal = parseInt(number, 16);
 
   // Return decimal number
   return (decimal >= 549755813888) ? decimal - 1099511627776 : decimal;
@@ -850,7 +850,7 @@ exports.HEX2OCT = function(number, places) {
   }
 
   // Convert hexadecimal number to decimal
-  var decimal = parseInt(number, 16);
+  let decimal = parseInt(number, 16);
 
   // Return error if number is positive and greater than 0x1fffffff (536870911)
   if (decimal > 536870911 && decimal < 1098974756864) {
@@ -863,7 +863,7 @@ exports.HEX2OCT = function(number, places) {
   }
 
   // Convert decimal number to octal
-  var result = decimal.toString(8);
+  let result = decimal.toString(8);
 
   // Return octal number using the minimum number of characters necessary if places is undefined
   if (places === undefined) {
@@ -909,8 +909,8 @@ function trans_num(inumber){
 exports.IMABS = function (inumber) {
   // Lookup real and imaginary coefficients using exports.js [http://formulajs.org]
   inumber = trans_num(inumber)
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   // Return error if either coefficient is not a number
   if (utils.anyIsError(x, y)) {
@@ -941,8 +941,8 @@ exports.IMAGINARY = function (inumber) {
   inumber = inumber.replace('+i', '+1i').replace('-i', '-1i').replace('+j', '+1j').replace('-j', '-1j');
 
   // Lookup sign
-  var plus = inumber.indexOf('+');
-  var minus = inumber.indexOf('-');
+  let plus = inumber.indexOf('+');
+  let minus = inumber.indexOf('-');
   if (plus === 0) {
     plus = inumber.indexOf('+', 1);
   }
@@ -952,8 +952,8 @@ exports.IMAGINARY = function (inumber) {
   }
 
   // Lookup imaginary unit
-  var last = inumber.substring(inumber.length - 1, inumber.length);
-  var unit = (last === 'i' || last === 'j');
+  let last = inumber.substring(inumber.length - 1, inumber.length);
+  let unit = (last === 'i' || last === 'j');
 
   if (plus >= 0 || minus >= 0) {
     // Return error if imaginary unit is neither i nor j
@@ -983,8 +983,8 @@ exports.IMAGINARY = function (inumber) {
 exports.IMARGUMENT = function (inumber) {
   inumber = trans_num(inumber)
   // Lookup real and imaginary coefficients using exports.js [http://formulajs.org]
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   // Return error if either coefficient is not a number
   if (utils.anyIsError(x, y)) {
@@ -1029,15 +1029,15 @@ exports.IMARGUMENT = function (inumber) {
 exports.IMCONJUGATE = function (inumber) {
   inumber = trans_num(inumber)
   // Lookup real and imaginary coefficients using exports.js [http://formulajs.org]
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
     return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
-  var unit = inumber.substring(inumber.length - 1);
+  let unit = inumber.substring(inumber.length - 1);
   unit = (unit === 'i' || unit === 'j') ? unit : 'i';
 
   // Return conjugate of complex number
@@ -1047,15 +1047,15 @@ exports.IMCONJUGATE = function (inumber) {
 exports.IMCOS = function (inumber) {
   // Lookup real and imaginary coefficients using exports.js [http://formulajs.org]
   inumber = trans_num(inumber)
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
     return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
-  var unit = inumber.substring(inumber.length - 1);
+  let unit = inumber.substring(inumber.length - 1);
   unit = (unit === 'i' || unit === 'j') ? unit : 'i';
 
   // Return cosine of complex number
@@ -1065,15 +1065,15 @@ exports.IMCOS = function (inumber) {
 exports.IMCOSH = function (inumber) {
   // Lookup real and imaginary coefficients using exports.js [http://formulajs.org]
   inumber = trans_num(inumber)
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
     return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
-  var unit = inumber.substring(inumber.length - 1);
+  let unit = inumber.substring(inumber.length - 1);
   unit = (unit === 'i' || unit === 'j') ? unit : 'i';
 
   // Return hyperbolic cosine of complex number
@@ -1083,8 +1083,8 @@ exports.IMCOSH = function (inumber) {
 exports.IMCOT = function (inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber = trans_num(inumber)
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
     return errorObj.ERROR_VALUE;
@@ -1096,19 +1096,19 @@ exports.IMCOT = function (inumber) {
 
 exports.IMDIV = function(inumber1, inumber2) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
-  var a = exports.IMREAL(inumber1);
-  var b = exports.IMAGINARY(inumber1);
-  var c = exports.IMREAL(inumber2);
-  var d = exports.IMAGINARY(inumber2);
+  let a = exports.IMREAL(inumber1);
+  let b = exports.IMAGINARY(inumber1);
+  let c = exports.IMREAL(inumber2);
+  let d = exports.IMAGINARY(inumber2);
 
   if (utils.anyIsError(a, b, c, d)) {
     return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
-  var unit1 = inumber1.substring(inumber1.length - 1);
-  var unit2 = inumber2.substring(inumber2.length - 1);
-  var unit = 'i';
+  let unit1 = inumber1.substring(inumber1.length - 1);
+  let unit2 = inumber2.substring(inumber2.length - 1);
+  let unit = 'i';
   if (unit1 === 'j') {
     unit = 'j';
   } else if (unit2 === 'j') {
@@ -1121,40 +1121,40 @@ exports.IMDIV = function(inumber1, inumber2) {
   }
 
   // Return exponential of complex number
-  var den = c * c + d * d;
+  let den = c * c + d * d;
   return exports.COMPLEX((a * c + b * d) / den, (b * c - a * d) / den, unit);
 };
 
 exports.IMEXP = function(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber = trans_num(inumber)
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
     return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
-  var unit = inumber.substring(inumber.length - 1);
+  let unit = inumber.substring(inumber.length - 1);
   unit = (unit === 'i' || unit === 'j') ? unit : 'i';
 
   // Return exponential of complex number
-  var e = Math.exp(x);
+  let e = Math.exp(x);
   return exports.COMPLEX(e * Math.cos(y), e * Math.sin(y), unit);
 };
 
 exports.IMLN = function(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
     return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
-  var unit = inumber.substring(inumber.length - 1);
+  let unit = inumber.substring(inumber.length - 1);
   unit = (unit === 'i' || unit === 'j') ? unit : 'i';
 
   // Return exponential of complex number
@@ -1164,15 +1164,15 @@ exports.IMLN = function(inumber) {
 exports.IMLOG10 = function(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber = trans_num(inumber)
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
     return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
-  var unit = inumber.substring(inumber.length - 1);
+  let unit = inumber.substring(inumber.length - 1);
   unit = (unit === 'i' || unit === 'j') ? unit : 'i';
 
   // Return exponential of complex number
@@ -1182,15 +1182,15 @@ exports.IMLOG10 = function(inumber) {
 exports.IMLOG2 = function(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber = trans_num(inumber)
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
     return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
-  var unit = inumber.substring(inumber.length - 1);
+  let unit = inumber.substring(inumber.length - 1);
   unit = (unit === 'i' || unit === 'j') ? unit : 'i';
 
   // Return exponential of complex number
@@ -1200,21 +1200,21 @@ exports.IMLOG2 = function(inumber) {
 exports.IMPOWER = function(inumber, number) {
   inumber = trans_num(inumber)
   number = utils.parseNumber(number);
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
   if (utils.anyIsError(number, x, y)) {
     return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
-  var unit = inumber.substring(inumber.length - 1);
+  let unit = inumber.substring(inumber.length - 1);
   unit = (unit === 'i' || unit === 'j') ? unit : 'i';
 
   // Calculate power of modulus
-  var p = Math.pow(exports.IMABS(inumber), number);
+  let p = Math.pow(exports.IMABS(inumber), number);
 
   // Calculate argument
-  var t = exports.IMARGUMENT(inumber);
+  let t = exports.IMARGUMENT(inumber);
 
   // Return exponential of complex number
   return exports.COMPLEX(p * Math.cos(number * t), p * Math.sin(number * t), unit);
@@ -1222,15 +1222,15 @@ exports.IMPOWER = function(inumber, number) {
 
 exports.IMPRODUCT = function() {
   // Initialize result
-  var result = arguments[0];
+  let result = arguments[0];
 
   // Loop on all numbers
-  for (var i = 1; i < arguments.length; i++) {
+  for (let i = 1; i < arguments.length; i++) {
     // Lookup coefficients of two complex numbers
-    var a = exports.IMREAL(result);
-    var b = exports.IMAGINARY(result);
-    var c = exports.IMREAL(arguments[i]);
-    var d = exports.IMAGINARY(arguments[i]);
+    let a = exports.IMREAL(result);
+    let b = exports.IMAGINARY(result);
+    let c = exports.IMREAL(arguments[i]);
+    let d = exports.IMAGINARY(arguments[i]);
 
     if (utils.anyIsError(a, b, c, d)) {
       return errorObj.ERROR_VALUE;
@@ -1261,8 +1261,8 @@ exports.IMREAL = function(inumber) {
   }
 
   // Lookup sign
-  var plus = inumber.indexOf('+');
-  var minus = inumber.indexOf('-');
+  let plus = inumber.indexOf('+');
+  let minus = inumber.indexOf('-');
   if (plus === 0) {
     plus = inumber.indexOf('+', 1);
   }
@@ -1271,8 +1271,8 @@ exports.IMREAL = function(inumber) {
   }
 
   // Lookup imaginary unit
-  var last = inumber.substring(inumber.length - 1, inumber.length);
-  var unit = (last === 'i' || last === 'j');
+  let last = inumber.substring(inumber.length - 1, inumber.length);
+  let unit = (last === 'i' || last === 'j');
 
   if (plus >= 0 || minus >= 0) {
     // Return error if imaginary unit is neither i nor j
@@ -1307,8 +1307,8 @@ exports.IMSEC = function(inumber) {
   }
 
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
     return errorObj.ERROR_VALUE;
@@ -1321,8 +1321,8 @@ exports.IMSEC = function(inumber) {
 exports.IMSECH = function(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber = trans_num(inumber)
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
     return errorObj.ERROR_VALUE;
@@ -1335,15 +1335,15 @@ exports.IMSECH = function(inumber) {
 exports.IMSIN = function(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber = trans_num(inumber)
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
     return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
-  var unit = inumber.substring(inumber.length - 1);
+  let unit = inumber.substring(inumber.length - 1);
   unit = (unit === 'i' || unit === 'j') ? unit : 'i';
 
   // Return sine of complex number
@@ -1353,15 +1353,15 @@ exports.IMSIN = function(inumber) {
 exports.IMSINH = function(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber = trans_num(inumber)
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
     return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
-  var unit = inumber.substring(inumber.length - 1);
+  let unit = inumber.substring(inumber.length - 1);
   unit = (unit === 'i' || unit === 'j') ? unit : 'i';
 
   // Return hyperbolic sine of complex number
@@ -1371,22 +1371,22 @@ exports.IMSINH = function(inumber) {
 exports.IMSQRT = function(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber = trans_num(inumber)
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
     return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
-  var unit = inumber.substring(inumber.length - 1);
+  let unit = inumber.substring(inumber.length - 1);
   unit = (unit === 'i' || unit === 'j') ? unit : 'i';
 
   // Calculate power of modulus
-  var s = Math.sqrt(exports.IMABS(inumber));
+  let s = Math.sqrt(exports.IMABS(inumber));
 
   // Calculate argument
-  var t = exports.IMARGUMENT(inumber);
+  let t = exports.IMARGUMENT(inumber);
 
   // Return exponential of complex number
   return exports.COMPLEX(s * Math.cos(t / 2), s * Math.sin(t / 2), unit);
@@ -1400,8 +1400,8 @@ exports.IMCSC = function (inumber) {
   }
 
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   // Return error if either coefficient is not a number
   if (utils.anyIsError(x, y)) {
@@ -1420,8 +1420,8 @@ exports.IMCSCH = function (inumber) {
   }
 
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   // Return error if either coefficient is not a number
   if (utils.anyIsError(x, y)) {
@@ -1437,19 +1437,19 @@ exports.IMSUB = function(inumber1, inumber2) {
   inumber1 = trans_num(inumber1)
   inumber2 = trans_num(inumber2)
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
-  var a = exports.IMREAL(inumber1);
-  var b = exports.IMAGINARY(inumber1);
-  var c = exports.IMREAL(inumber2);
-  var d = exports.IMAGINARY(inumber2);
+  let a = exports.IMREAL(inumber1);
+  let b = exports.IMAGINARY(inumber1);
+  let c = exports.IMREAL(inumber2);
+  let d = exports.IMAGINARY(inumber2);
 
   if (utils.anyIsError(a, b, c, d)) {
     return errorObj.ERROR_VALUE;
   }
 
   // Lookup imaginary unit
-  var unit1 = inumber1.substring(inumber1.length - 1);
-  var unit2 = inumber2.substring(inumber2.length - 1);
-  var unit = 'i';
+  let unit1 = inumber1.substring(inumber1.length - 1);
+  let unit2 = inumber2.substring(inumber2.length - 1);
+  let unit = 'i';
   if (unit1 === 'j') {
     unit = 'j';
   } else if (unit2 === 'j') {
@@ -1462,18 +1462,18 @@ exports.IMSUB = function(inumber1, inumber2) {
 
 exports.IMSUM = function (inumber) {
   inumber = trans_num(inumber)
-  var args = utils.flatten(arguments);
+  let args = utils.flatten(arguments);
 
   // Initialize result
-  var result = args[0];
+  let result = args[0];
 
   // Loop on all numbers
-  for (var i = 1; i < args.length; i++) {
+  for (let i = 1; i < args.length; i++) {
     // Lookup coefficients of two complex numbers
-    var a = exports.IMREAL(result);
-    var b = exports.IMAGINARY(result);
-    var c = exports.IMREAL(args[i]);
-    var d = exports.IMAGINARY(args[i]);
+    let a = exports.IMREAL(result);
+    let b = exports.IMAGINARY(result);
+    let c = exports.IMREAL(args[i]);
+    let d = exports.IMAGINARY(args[i]);
 
     if (utils.anyIsError(a, b, c, d)) {
       return errorObj.ERROR_VALUE;
@@ -1495,8 +1495,8 @@ exports.IMTAN = function (inumber) {
   }
 
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
-  var x = exports.IMREAL(inumber);
-  var y = exports.IMAGINARY(inumber);
+  let x = exports.IMREAL(inumber);
+  let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
     return errorObj.ERROR_VALUE;
@@ -1513,10 +1513,10 @@ exports.OCT2BIN = function (number, places) {
   }
 
   // Check if number is negative
-  var negative = (number.length === 10 && number.substring(0, 1) === '7') ? true : false;
+  let negative = (number.length === 10 && number.substring(0, 1) === '7') ? true : false;
 
   // Convert octal number to decimal
-  var decimal = (negative) ? parseInt(number, 8) - 1073741824 : parseInt(number, 8);
+  let decimal = (negative) ? parseInt(number, 8) - 1073741824 : parseInt(number, 8);
 
   // Return error if number is lower than -512 or greater than 511
   // if (decimal < -512 || decimal > 511) {
@@ -1529,7 +1529,7 @@ exports.OCT2BIN = function (number, places) {
   }
 
   // Convert decimal number to binary
-  var result = decimal.toString(2);
+  let result = decimal.toString(2);
   if (result.length >=10){
     return result.slice(result.length-10, result.length)
   }
@@ -1561,7 +1561,7 @@ exports.OCT2DEC = function(number) {
   }
 
   // Convert octal number to decimal
-  var decimal = parseInt(number, 8);
+  let decimal = parseInt(number, 8);
 
   // Return decimal number
   return (decimal >= 536870912) ? decimal - 1073741824 : decimal;
@@ -1574,7 +1574,7 @@ exports.OCT2HEX = function(number, places) {
   }
 
   // Convert octal number to decimal
-  var decimal = parseInt(number, 8);
+  let decimal = parseInt(number, 8);
 
   // Ignore places and return a 10-character octal number if number is negative
   if (decimal >= 536870912) {
@@ -1582,7 +1582,7 @@ exports.OCT2HEX = function(number, places) {
   }
 
   // Convert decimal number to hexadecimal
-  var result = decimal.toString(16);
+  let result = decimal.toString(16);
 
   // Return hexadecimal number using the minimum number of characters necessary if places is undefined
   if (places === undefined) {

@@ -13,7 +13,7 @@ class CalcBhv { // 对cell中的参数做转换，判断,多单元格处理等�
 
   //检测是否合法; 如果不合法的话范围错误，如果合法的话返回true
   check_valid() {
-    var text = this.f;
+    let text = this.f;
     if (!isHave(text)){
       return ""
     }
@@ -21,7 +21,7 @@ class CalcBhv { // 对cell中的参数做转换，判断,多单元格处理等�
     if (text[1] === '='){
       return errorObj.ERROR_NAME
     }
-    var params = text.match('=[a-z|A-Z]{2,100}'); // todo: 这个判定应该交给解析那一步来做
+    let params = text.match('=[a-z|A-Z]{2,100}'); // todo: 这个判定应该交给解析那一步来做
     if (params !== null && this.f.indexOf('(') <0 && this.f.indexOf(')')<0){
       return errorObj.ERROR_NAME
     }
@@ -34,12 +34,12 @@ class CalcBhv { // 对cell中的参数做转换，判断,多单元格处理等�
 
   //{}用''包起来 =MDETERM({3,6,1;1,1,0;3,10,2})   这样的大括号代表一个2维array
   trans_params(fml) {
-    var reg = new RegExp('\{(.*?)\}', 'g');
-    var arg = fml.match(reg);
+    let reg = new RegExp('\{(.*?)\}', 'g');
+    let arg = fml.match(reg);
     if (arg !== null) {
-      for (var i = 0; i < arg.length; i++) {
-        var param = arg[i];
-        var rep = "'" + param + "'";
+      for (let i = 0; i < arg.length; i++) {
+        let param = arg[i];
+        let rep = "'" + param + "'";
         fml = fml.replace(param, rep)
       }
     }
@@ -48,10 +48,10 @@ class CalcBhv { // 对cell中的参数做转换，判断,多单元格处理等�
 
   //参数转换
   pre_process_formula(rows) {
-    var xy = exp.expr2xy(this.name);
-    var fml = this.f;
+    let xy = exp.expr2xy(this.name);
+    let fml = this.f;
     if (isHave(rows)){ //如果有formatText(如日期会转为excel数字），将f设为对应值
-      var source = rows.getCell(xy[1], xy[0]);
+      let source = rows.getCell(xy[1], xy[0]);
       if (isHave(source) && isHave(source.formatText)){
         fml = source.formatText
       }

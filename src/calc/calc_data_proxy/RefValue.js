@@ -1,6 +1,6 @@
 "use strict";
 
-import getSanitizedSheetName from './getSanitizedSheetName.js';
+import getSanitizedSheetName from '../expression/getSanitizedSheetName.js';
 import error_cf from '../calc_utils/error_config.js'
 
 export class RefValue{
@@ -38,7 +38,7 @@ export class RefValue{
         };
     };
 
-    calc() {
+    solveExpression() {
         let self = this;
         let curCellFormulaProxy = this.formula;
         let resolved_ref = self.parseRef();

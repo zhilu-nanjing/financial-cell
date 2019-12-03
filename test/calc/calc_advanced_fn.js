@@ -1,6 +1,7 @@
-import * as formulajs from '../../src/calc/expression_fn';
+import * as formulajs from '../../src/calc/expression_fn/normal_fn';
 import {calc} from '../../src/calc'
 import assert from 'assert'
+
 describe('expression_fn integration', function() {
   describe('calculateWorkBook.import_functions()', function() {
     it('xlfn', function() {
@@ -155,7 +156,7 @@ describe('expression_fn integration', function() {
       workbook.Sheets = {};
       workbook.Sheets.Sheet1 = {};
       // workbook.Sheets.Sheet1.A5 = {f: '=ACCRINT(39508,39691,39569,0.1,1000,2,0)'};
-      // calc.calculateWorkBook(workbook);
+      // solveExpression.calculateWorkBook(workbook);
       // console.log(workbook.Sheets.Sheet1.A5.v)
       // assert(Math.abs(workbook.Sheets.Sheet1.A5.v-16.666667)<0.00001);
       workbook.Sheets.Sheet1.A5 = {f: '=ACCRINT(DATE(2008,3,5),39691,39569,0.1,1000,2,0,FALSE)'};
@@ -227,11 +228,11 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.B22 = {v: 91};
       workbook.Sheets.Sheet1.B23 = {v: 89};
       // workbook.Sheets.Sheet1.A5 = {f: '=AGGREGATE(14, 6, $A$13:$A$23, 3)'};
-      // calc.calculateWorkBook(workbook);
+      // solveExpression.calculateWorkBook(workbook);
       // console.log(workbook.Sheets.Sheet1.A5.v)
       // assert.equal(workbook.Sheets.Sheet1.A5.v, 72);
       // workbook.Sheets.Sheet1.A5 = {f: '=AGGREGATE(4, 6, $A$13:$A$23)'};
-      // calc.calculateWorkBook(workbook);
+      // solveExpression.calculateWorkBook(workbook);
       // console.log(workbook.Sheets.Sheet1.A5.v)
       // assert.equal(workbook.Sheets.Sheet1.A5.v, 96);
       workbook.Sheets.Sheet1.A5 = {f: '=AGGREGATE(15, 6, $A$13:$A$23)'};
@@ -716,15 +717,15 @@ describe('expression_fn integration', function() {
       // workbook.Sheets.Sheet1.D173 = {v: '是'};
       // workbook.Sheets.Sheet1.D174 = {v: '是'};
       // workbook.Sheets.Sheet1.F5 = {f: '=COUNTIFS(B171:D171,"=是")'};
-      // calc.calculateWorkBook(workbook);
+      // solveExpression.calculateWorkBook(workbook);
       // console.log(workbook.Sheets.Sheet1.F5.v)
       // assert.equal(workbook.Sheets.Sheet1.F5.v, 0);
       // workbook.Sheets.Sheet1.F5 = {f: '=COUNTIFS(B171:B174,"=是",C171:C174,"=是")'};
-      // calc.calculateWorkBook(workbook);
+      // solveExpression.calculateWorkBook(workbook);
       // console.log(workbook.Sheets.Sheet1.F5.v)
       // assert.equal(workbook.Sheets.Sheet1.F5.v, 2);
       // workbook.Sheets.Sheet1.F5 = {f: '=COUNTIFS(B174:D174,"=是",B172:D172,"=是")'};
-      // calc.calculateWorkBook(workbook);
+      // solveExpression.calculateWorkBook(workbook);
       // console.log(workbook.Sheets.Sheet1.F5.v)
       // assert.equal(workbook.Sheets.Sheet1.F5.v, 1);
       workbook.Sheets.Sheet1.A177 = {v: 1};
@@ -892,7 +893,7 @@ describe('expression_fn integration', function() {
       console.log(workbook.Sheets.Sheet1.F5.v)
       assert(Math.abs(workbook.Sheets.Sheet1.F5.v-558417.567360285)<0.00001);
       // workbook.Sheets.Sheet1.F5 = {f: '=DB(A214,A215,A216,7,7)'};
-      // calc.calculateWorkBook(workbook);
+      // solveExpression.calculateWorkBook(workbook);
       // console.log(workbook.Sheets.Sheet1.F5.v)
       // assert(Math.abs(workbook.Sheets.Sheet1.F5.v-158450.984738481)<0.00001);
     });
@@ -1420,7 +1421,7 @@ describe('expression_fn integration', function() {
       console.log(workbook.Sheets.Sheet1.F5.v)
       assert(Math.abs(workbook.Sheets.Sheet1.F5.v-0)<0.1);
       // workbook.Sheets.Sheet1.F5 = {f: '=HOUR("2012-4-21")'};
-      // calc.calculateWorkBook(workbook);
+      // solveExpression.calculateWorkBook(workbook);
       // console.log(workbook.Sheets.Sheet1.F5.v)
       // assert(Math.abs(workbook.Sheets.Sheet1.F5.v-0)<0.1);
     });
@@ -1559,7 +1560,7 @@ describe('expression_fn integration', function() {
       assert.equal(workbook.Sheets.Sheet1.F5.v, 2);
 
       // workbook.Sheets.Sheet1.F5 = {f: '=INFO("NUMFILE")'};
-      // calc.calculateWorkBook(workbook);
+      // solveExpression.calculateWorkBook(workbook);
       // console.log(workbook.Sheets.Sheet1.F5.v)
       // assert.equal(workbook.Sheets.Sheet1.F5.v, 2);
       workbook.Sheets.Sheet1.F5 = {f: '=INT(-8.9)'};
@@ -1652,7 +1653,7 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.A415 = {v: 3};
       workbook.Sheets.Sheet1.A416 = {v: 80000};
       // workbook.Sheets.Sheet1.F5 = {f: '=INTRATE(A406,A407,A408,A409,A410)'};
-      // calc.calculateWorkBook(workbook);
+      // solveExpression.calculateWorkBook(workbook);
       // console.log(workbook.Sheets.Sheet1.F5.v)
       // assert(Math.abs(workbook.Sheets.Sheet1.F5.v-0.05768)<0.0001);
       workbook.Sheets.Sheet1.F5 = {f: '=IPMT(A413/12, A414, A415*12, A416)'};
@@ -1941,15 +1942,15 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.E528 = {v: 41247};
       workbook.Sheets.Sheet1.E529 = {v: 41295};
       // workbook.Sheets.Sheet1.F5 = {f: '=NETWORKDAYS(E525,E526)'};
-      // calc.calculateWorkBook(workbook);
+      // solveExpression.calculateWorkBook(workbook);
       // console.log(workbook.Sheets.Sheet1.F5.v)
       // assert.equal(workbook.Sheets.Sheet1.F5.v, 110);
       // workbook.Sheets.Sheet1.F5 = {f: '=NETWORKDAYS(E525,E526,E527)'};
-      // calc.calculateWorkBook(workbook);
+      // solveExpression.calculateWorkBook(workbook);
       // console.log(workbook.Sheets.Sheet1.F5.v)
       // assert.equal(workbook.Sheets.Sheet1.F5.v, 109);
       // workbook.Sheets.Sheet1.F5 = {f: '=NETWORKDAYS(E525,E526,E527:E529)'};
-      // calc.calculateWorkBook(workbook);
+      // solveExpression.calculateWorkBook(workbook);
       // console.log(workbook.Sheets.Sheet1.F5.v)
       // assert.equal(workbook.Sheets.Sheet1.F5.v, 107);
       workbook.Sheets.Sheet1.F5 = {f: '=NETWORKDAYSINTL(DATE(2006,1,1),DATE(2006,1,31))'};
@@ -2000,10 +2001,10 @@ describe('expression_fn integration', function() {
       workbook.Sheets = {};
       workbook.Sheets.Sheet1 = {};
       // workbook.Sheets.Sheet1.F5 = {f: '=NOW()'};
-      // calc.calculateWorkBook(workbook);
+      // solveExpression.calculateWorkBook(workbook);
       // console.log(workbook.Sheets.Sheet1.F5.v)
       // workbook.Sheets.Sheet1.F5 = {f: '=TODAY()'};
-      // calc.calculateWorkBook(workbook);
+      // solveExpression.calculateWorkBook(workbook);
       // console.log(workbook.Sheets.Sheet1.F5.v)
       workbook.Sheets.Sheet1.F5 = {f: '=NOW()-0.5'};
       calc.calculateWorkBook(workbook);
@@ -2265,7 +2266,7 @@ describe('expression_fn integration', function() {
       workbook.Sheets = {};
       workbook.Sheets.Sheet1 = {};
       // workbook.Sheets.Sheet1.F5 = {f: '=ROMAN(499,0)'};
-      // calc.calculateWorkBook(workbook);
+      // solveExpression.calculateWorkBook(workbook);
       // console.log(workbook.Sheets.Sheet1.F5.v)
       // assert.equal(workbook.Sheets.Sheet1.F5.v, 'CDXCIX');
       workbook.Sheets.Sheet1.F5 = {f: '=ROMAN(499,1)'};

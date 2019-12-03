@@ -83,7 +83,7 @@ function parseCell() {
 
     let changeDataArgs = getChangeDataToCalc.call(this);
     try {
-        data.calc(data.rows, changeDataArgs.data);
+        data.solveExpression(data.rows, changeDataArgs.data);
     } catch(e) {
         console.error("公式模块报错：" + e);
     }
@@ -95,7 +95,7 @@ function parseCell() {
 
 // export function parseCell2(viewRange, state = false, src = '') {
 //     let {data} = this;
-//     let {calc, rows} = data;
+//     let {solveExpression, rows} = data;
 //     let workbook = [];
 //     workbook.Sheets = {};
 //     workbook.Sheets[data.name] = {};
@@ -132,7 +132,7 @@ function parseCell() {
 //     }
 //
 //     try {
-//         calc(workbook);
+//         solveExpression(workbook);
 //     } catch (e) {
 //         console.error(e);
 //     }
