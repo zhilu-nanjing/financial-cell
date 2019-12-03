@@ -83,7 +83,7 @@ function parseCell() {
 
     let changeDataArgs = getChangeDataToCalc.call(this);
     try {
-        data.solveExpression(data.rows, changeDataArgs.data);
+        data.calc(data.rows, changeDataArgs.data);
     } catch(e) {
         console.error("公式模块报错：" + e);
     }
@@ -92,52 +92,6 @@ function parseCell() {
         data.changeDataForCalc = null;
     }
 }
-
-// export function parseCell2(viewRange, state = false, src = '') {
-//     let {data} = this;
-//     let {solveExpression, rows} = data;
-//     let workbook = [];
-//     workbook.Sheets = {};
-//     workbook.Sheets[data.name] = {};
-//
-//     viewRange.each2((ri, ci) => {
-//         let cell = data.getCell(ri, ci);
-//         let expr = xy2expr(ci, ri);
-//         if (cell && cell.text) {
-//             cell.text = cell.text + "";
-//             if (cell.text.indexOf("MD.RTD") !== -1) {
-//                 workbook.Sheets[data.name][expr] = {v: "", f: ""};
-//             } else {
-//                 if (cell.text && cell.text.lastIndexOf("=") === 0) {
-//                     workbook.Sheets[data.name][expr] = {
-//                         v: '',
-//                         f: cell.text.replace(/ /g, '').replace(/\"/g, "\"").replace(/\"\"\"\"&/g, "\"'\"&")
-//                     };
-//                 } else {
-//                     workbook.Sheets[data.name][expr] = {
-//                         v: cell.text.replace(/ /g, '').toUpperCase().replace(/\"/g, "\""),
-//                         f: ''
-//                     };
-//                 }
-//             }
-//         }
-//         else {
-//             workbook.Sheets[data.name][expr] = {v: 0, f: 0};
-//         }
-//     });
-//
-//
-//     if (state) {
-//         workbook.Sheets[data.name]['A1'] = {v: '', f: `${src}`};
-//     }
-//
-//     try {
-//         solveExpression(workbook);
-//     } catch (e) {
-//         console.error(e);
-//     }
-//     return workbook;
-// }
 
 function specialStyle(text) {
     text = text + "";

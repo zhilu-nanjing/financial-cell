@@ -10,7 +10,6 @@ import CellProxy from "./cell_proxy";
 import CellRange from "./cell_range";
 import CellProp from "../model/cell_prop";
 import Cell from "../model/cell";
-let calcUtils = require('../calc/calc_utils/utils');
 
 export function isFormula(text) {
     // if (text && text[0] === "=") {
@@ -182,7 +181,6 @@ class Rows {
     }
 
     isEmpty(cell) {
-
         return cell && (cell.text || cell.formulas || cell.depend);
     }
 
@@ -1297,7 +1295,6 @@ class Rows {
                 console.time("setData");
                 if (rowsInit) {
                     this.init();
-                    this.workbook = calcUtils.Rows2Workbook(this, true); // jobs： 存放作为全局变量
                     sheet.toolbar.change('close', '');
                 }
                 console.timeEnd("setData");

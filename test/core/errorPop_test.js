@@ -11,6 +11,7 @@ import FormatProxy from "../../src/core/format_proxy";
 import {multipleCellsRender, specialWebsiteValue} from "../../src/core/special_formula_process";
 import CellRange from "../../src/core/cell_range";
 import PaintFormat from "../../src/model/paint_format";
+import PreAction from "../../src/model/pre_action";
 
 let assert = require('assert');
 
@@ -301,6 +302,19 @@ describe('qq', () => {
         });
     });
 
+    describe('  test  calc ', () => {
+        let changeDataForCalc = new PreAction({
+            type: 999,
+            action: "重新计算", ri: -1, ci: -1, oldCell: {}, newCell: data.rows.eachRange(new CellRange(0, 0, 10, 10))
+        }, data);
+        data.rows.setCell(0, 0, {"text": "=ABS(-1)", formulas: "=ABS(-1)"}, 'all_with_no_workbook');
+        data.calc(data.rows, changeDataForCalc);
+
+        let cell1 = data.rows.getCell(0, 0);
+        assert.equal(cell1.text, '1');
+        assert.equal(cell1.formulas, '=ABS(-1)');
+    });
+
     describe(' autofilter  ', () => {
         it(' number autofilter ', () => {
             let cell = {"text": "1", "formulas": "1"};
@@ -542,6 +556,7 @@ describe('qq', () => {
             assert.equal(pArr[5].cell.style, 0);
             assert.equal(pArr[6].cell.style, 1);
         });
+
 
         it(' 1行多列 * 1列多行 ', function () {
             data.rows.setData({

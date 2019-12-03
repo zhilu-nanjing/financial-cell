@@ -82,7 +82,7 @@ export default class CellProxy {
             isDate = false;
             ncell.type = 'na';
         } else if (value && value.search(str2Re(datePattern2), '') !== -1) {
-            if( isDate === true) { // jobs: todo: 正则表达式应该集中管理。而且这个正则表达式太复杂了，应该能简化。
+            if( isDate === true) {
                 nA = false;
                 isNumber = false;
                 isDate = true;
