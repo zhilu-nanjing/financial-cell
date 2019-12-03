@@ -302,7 +302,7 @@ describe('qq', () => {
         });
     });
 
-    describe('  test calc ', () => {
+    describe('  test  calc ', () => {
         let changeDataForCalc = new PreAction({
             type: 999,
             action: "重新计算", ri: -1, ci: -1, oldCell: {}, newCell: data.rows.eachRange(new CellRange(0, 0, 10, 10))
