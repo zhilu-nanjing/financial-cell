@@ -1,8 +1,8 @@
 import assert from 'assert';
 import { describe, it } from 'mocha';
-import { formulam } from '../../src/core/formula';
+import { allFnObj } from '../../src/calc/calc_cmd/formula';
 
-const gformulas = formulam;
+const gformulas = allFnObj;
 describe('cellFormulaProxy', () => {
   describe('#render()', () => {
     it('SUM: should return 36 when the value is [\'12\', \'12\', 12]', () => {

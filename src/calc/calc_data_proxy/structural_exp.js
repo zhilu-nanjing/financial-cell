@@ -1,10 +1,12 @@
 "use strict";
 import cf  from "../calc_utils/config"
-import {RawValue} from '../calc_data_proxy/RawValue.js';
-import {Range} from '../calc_data_proxy/Range.js';
-import {str_2_val}  from './str_2_val.js'
+import {RawValue} from './RawValue.js';
+import {Range} from './Range.js';
 import {errorObj, errorMsgArr}  from '../calc_utils/error_config'
 import {CellDate} from "../cell_value_type/cell_date";
+import {FORMULA_STATUS} from "../calc_utils/config";
+import { str_2_val } from './expression_builder';
+
 
 let exp_id = 0; // 全局变量
 export class StructuralExp {
@@ -44,8 +46,6 @@ export class StructuralExp {
             } else {
                 throw e;
             }
-        } finally {
-            formula.status = 'done';
         }
     }
 
@@ -120,7 +120,7 @@ export class StructuralExp {
         try {
             for (let i = 0; i < args.length; i++) { // 遍历所有的参数
                 if (args[i].name === 'RefValue') { // 属于引用的字符串
-                    sheet = args[i].cellFormulaProxy.sheet;
+                    sheet = args[i].cellFormulaProxy.belongSheet;
                     //未定义单元格f置为default_0
                     if (sheet[args[i].str_expression] === undefined) { // 判定空单元格，args[i].str_expression = "A28", sheet是一个obj, value 是 ｛v:,f:}这种形式的obj
                         sheet[args[i].str_expression] = { v: 'default_0' } // 未定义的值赋值，合理么？
@@ -201,18 +201,5 @@ export class StructuralExp {
         }
     }
 
-    push(buffer, position_i) {
-        let self = this;
-        if (buffer) {
-            let v = str_2_val(buffer, self.cellFormulaProxy, position_i);
-            if (((v === '=') && (self.last_arg === '>' || self.last_arg === '<')) || (self.last_arg === '<' && v === '>')) {
-                self.args[self.args.length - 1] += v;
-            } else {
-                self.args.push(v);
-            }
-            self.last_arg = v;
-            //console.log(self.id, '-->', v);
-        }
-    };
 };
 

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import {datePattern, str2Re} from "../utils/reg_pattern";
 import {formatNumberRender} from "../core/format";
-import {isHave, isNumber} from "../core/helper";
+import {isHave, isNumber} from "../helper/dataproxy_helper";
 
 
 export function formatDate(diff) {

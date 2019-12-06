@@ -1,5 +1,5 @@
-import {Calc} from '../../src/calc'
 import assert from 'assert'
+import { Calc } from '../../src/calc/calc_cmd/calc';
 
 describe('expression_fn integration', function() {
   describe('calculateWorkBook.import_functions()', function() {

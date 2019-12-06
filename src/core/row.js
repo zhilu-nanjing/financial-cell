@@ -1,4 +1,5 @@
-import helper, {isHave} from './helper';
+import helper from '../helper/dataproxy_helper';
+import {isHave} from '../helper/check_value';
 import {xy2expr} from '../utils/alphabet';
 import {changeFormula, cutStr, isAbsoluteValue, value2absolute} from "../core/operator";
 import {expr2xy} from "../utils/alphabet";

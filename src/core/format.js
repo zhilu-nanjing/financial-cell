@@ -1,5 +1,6 @@
 import {tf} from '../locale/locale';
-import {isHave, isNumber} from "./helper";
+import {isNumber} from "../helper/dataproxy_helper";
+import {isHave} from '../helper/check_value';
 
 const formatStringRender = v => v;
 

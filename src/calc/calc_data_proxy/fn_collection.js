@@ -86,4 +86,10 @@ export class MultiCollExpFn {
     }
     return new self.fnType2FnExecutor[fnType](foundExpFn) // 找到了函数
   }
+
+  getAllFnObj(){
+    let allFnObj = {}
+    Object.assign(allFnObj, this.raw_fn_coll.fnObj)
+    Object.assign(allFnObj, this.normal_fn_coll.fnObj)
+  }
 }

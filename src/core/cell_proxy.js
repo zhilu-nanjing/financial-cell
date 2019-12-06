@@ -1,4 +1,4 @@
-import {isHave} from "./helper";
+import {isHave} from "../helper/check_value";
 import {isFormula} from "./row";
 import {datePattern2, str2Re} from "../utils/reg_pattern";
 

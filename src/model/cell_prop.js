@@ -1,4 +1,4 @@
-import {isHave} from "../core/helper";
+import {isHave} from "../helper/check_value";
 import {expr2xy} from "../utils/alphabet";
 
 export default class CellProp {

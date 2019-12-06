@@ -17,7 +17,7 @@ import {findBracket, suggestContent} from './formula_editor';
 import {createEvent} from './event';
 import EditorText from "../core/editor_text";
 import {testValid} from "../utils/test";
-import {isHave} from "../core/helper";
+import {isHave} from "../helper/check_value";
 
 function resetTextareaSize() {
     const {
@@ -202,7 +202,7 @@ function inputEventHandler(evt, txt = '', formulas = '', state = "input") {
         if (this.chinese === false) return;
         let v = '';
         if (this.data.settings.showEditor) {
-            this.sheet.selector.hide();
+            this.belongSheet.selector.hide();
         } else {
             return;
         }
@@ -868,7 +868,7 @@ export default class Editor {
     // inputEventHandler(text = '', pos = 1, hide = false) {
     //     if (hide) {
     //         this.areaEl.hide();
-    //         this.sheet.selector.hide();
+    //         this.belongSheet.selector.hide();
     //         this.isCors = true;
     //     }
     //     this.setCursorPos(pos);

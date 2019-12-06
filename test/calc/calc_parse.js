@@ -1,11 +1,21 @@
 // 这里需要把公式解析做对
-import * as formulajs from '../../src/calc/expression_fn/normal_fn';
-import { Calc, calc } from '../../src/calc';
 import assert from 'assert'
-describe('expression_fn integration', function() {
-  describe('calculateWorkBook.import_functions()', function() {
-    it('minus', function() {
-      calc.import_functions(formulajs);
+import { Calc } from '../../src/calc/calc_cmd/calc';
+describe('复杂公式结构', function() {
+  it('minus', function() { // 检查simple_expression的判定是否正确
+    let workbook = {};
+    workbook.Sheets = {};
+    workbook.Sheets.Sheet1 = {};
+    workbook.Sheets.Sheet1.A1 = {f: 'asdfasf'}; // 没有带等号的
+    workbook.Sheets.Sheet1.A2 = {f: 'asdf-as'}; // 没有带等号，有减号
+    workbook.Sheets.Sheet1.A3 = {f: 'asdf+as'}; // 没有带等号，有加号
+    let calc = new Calc()
+    calc.calculateWorkbook(workbook);
+    console.log(workbook.Sheets.Sheet1.H614.v);
+    assert.equal(workbook.Sheets.Sheet1.H614.v, "asdf-as");
+  });
+
+  it('minus', function() { // 检查符号的判定
       let workbook = {};
       workbook.Sheets = {};
       workbook.Sheets.Sheet1 = {};
@@ -13,12 +23,12 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.A1 = {f: 'asdfasf'}; // 没有带等号的
       workbook.Sheets.Sheet1.A2 = {f: 'asdf-as'}; // 没有带等号，有减号
       workbook.Sheets.Sheet1.A3 = {f: 'asdf+as'}; // 没有带等号，有加号
-      calc.calculateWorkBook(workbook);
+      let calc = new Calc()
+      calc.calculateWorkbook(workbook);
       console.log(workbook.Sheets.Sheet1.H614.v);
       assert.equal(workbook.Sheets.Sheet1.H614.v, "asdf-as");
     });
-  });
-  it('circular', function() { // 应该出现循环依赖的错误
+  it('circular', function() { // 检查循环依赖的判定;
     let workbook = {};
     workbook.Sheets = {};
     workbook.Sheets.Sheet1 = {};
@@ -32,5 +42,4 @@ describe('expression_fn integration', function() {
     calc.calculateWorkbook(workbook);
     assert.equal(workbook.Sheets.Sheet1.A5.w, "#CIRCULA!");
   });
-
 });

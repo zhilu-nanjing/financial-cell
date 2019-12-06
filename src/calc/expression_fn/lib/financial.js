@@ -285,7 +285,7 @@ exports.CUMIPMT = function(rate, periods, value, start, end, type) {
     return errorObj.ERROR_NUM;
   }
 
-  // Return error if start < 1, end < 1, or start > end
+  // Return error if deal1Char < 1, end < 1, or deal1Char > end
   if (start < 1 || end < 1 || start > end) {
     return errorObj.ERROR_NUM;
   }
@@ -335,7 +335,7 @@ exports.CUMPRINC = function(rate, periods, value, start, end, type) {
     return errorObj.ERROR_NUM;
   }
 
-  // Return error if start < 1, end < 1, or start > end
+  // Return error if deal1Char < 1, end < 1, or deal1Char > end
   if (start < 1 || end < 1 || start > end) {
     return errorObj.ERROR_NUM;
   }

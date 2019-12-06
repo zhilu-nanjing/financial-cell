@@ -1,12 +1,14 @@
 /* global document */
 
-import {formulaCalc} from '../core/formula';
+import { Calc } from '../../src/calc/calc_cmd/calc';
 import Selector from './selector';
 import Scroll from './scroll';
 import Clipboard from './clipboard';
 import AutoFilter from './auto_filter';
 import {Merges} from './merge';
-import helper, {isHave, isNumber, useOne} from './helper';
+import {isNumber} from '../helper/dataproxy_helper';
+import {isHave} from '../helper/check_value';
+import * as helper from '../helper/dataproxy_helper';
 import {isFormula, Rows} from './row';
 import {Cols} from './col';
 import {Validations} from './validation';
@@ -344,7 +346,7 @@ function setStyleBorders({mode, style, color}) {
         const merges = [];
         for (let ri = sri; ri <= eri; ri += 1) {
             for (let ci = sci; ci <= eci; ci += 1) {
-                // jump merges -- start
+                // jump merges -- deal1Char
                 const mergeIndexes = [];
                 for (let ii = 0; ii < merges.length; ii += 1) {
                     const [mri, mci, rn, cn] = merges[ii];
@@ -686,7 +688,7 @@ export default class DataProxy {
     constructor(name, settings, methods) {
         this.settings = helper.merge(defaultSettings, settings || {});
         // save data begin
-        this.name = name || 'sheet';
+        this.name = name || 'belongSheet';
         this.methods = methods;
         this.freeze = [0, 0];
         this.styles = []; // Array<Style>
@@ -697,7 +699,7 @@ export default class DataProxy {
         this.hyperlinks = {};
         this.comments = {};
         this.showEquation = false;
-        this.calc = formulaCalc();
+        this.calc = new Calc();
         this.pasteDirectionsArr = [];
         this.changeDataForCalc = null;
 
@@ -805,7 +807,7 @@ export default class DataProxy {
         this.changeDataForCalc = this.getChangeDataToCalc();
         // this.history.undo(this.getData(), (d) => {
         //     this.setData(d);
-        // }, sheet);
+        // }, belongSheet);
     }
 
     historyList(item) {
@@ -1012,7 +1014,7 @@ export default class DataProxy {
                             text: cell.text,
                             style: this.addStyle(cstyle)
                         }, 'format');
-                        // this.rows.workbook.change(ri, ci, cell, deepCopy(cell), 'change');
+                        // this.rows.workbookObj.change(ri, ci, cell, deepCopy(cell), 'change');
                     } else if (property === 'font-bold' || property === 'font-italic'
                         || property === 'font-name' || property === 'font-size') {
                         const nfont = {};
@@ -1594,9 +1596,9 @@ export default class DataProxy {
         // let p1 = inputText.substring(0, pos);
         // let p2 = inputText.substring(pos, inputText.length);
         // inputText = p1 + src + p2;
-        // let workbook = parseCell2.call(table, this.viewRange(), true, inputText);
+        // let workbookObj = parseCell2.call(table, this.viewRange(), true, inputText);
         // return {
-        //     "text": workbook['Sheets'][name].A1.w ? workbook['Sheets'][name].A1.w : workbook['Sheets'][name].A1.v,
+        //     "text": workbookObj['Sheets'][name].A1.w ? workbookObj['Sheets'][name].A1.w : workbookObj['Sheets'][name].A1.v,
         //     "formulas": p1 + `${name}!` + src + p2
         // };
     }

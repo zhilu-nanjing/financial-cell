@@ -21,3 +21,15 @@ export function int_2_col_str(n) {
     }
     return columnName;
 }
+
+export function isEqual(v1, v2) {
+    v1 = v1 + '';
+    v2 = v2 + '';
+    v1 = v1.toUpperCase();
+    v2 = v2.toUpperCase();
+    if (v1 === v2) {
+        return true;
+    }
+    return false;
+}
+

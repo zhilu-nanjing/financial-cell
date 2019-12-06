@@ -14,7 +14,7 @@ function setSelectorToolbar(arr, name, prefix) {
     }
 
     setTimeout(() => {
-        item.financialCell.sheet.toolbar.moreResize();
+        item.financialCell.belongSheet.toolbar.moreResize();
         item.init = true;
     });
 }

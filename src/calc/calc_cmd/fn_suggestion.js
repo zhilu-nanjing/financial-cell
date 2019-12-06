@@ -1,4 +1,4 @@
-export const helpFormula = { // jobs: todo: 这个配置好长，放到utils/help_formula.js文件里面把
+export const helpFormula = {
     "MD.RTD": { // jobs: todo: MD.RTD函数还在维护么？有用么？  (好像没用了)
         "title": [
             {

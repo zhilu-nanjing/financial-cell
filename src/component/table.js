@@ -1,13 +1,13 @@
 import { stringAt} from '../utils/alphabet';
 import {getFontSizePxByPt} from '../core/font';
 import _cell from '../core/cell';
-import {formulam} from '../core/formula';
+import {allFnObj} from '../calc/calc_cmd/formula';
 import {isMinus} from "../utils/number_util";
 import {Draw, DrawBox, npx, thinLineWidth,} from '../canvas/draw';
 import {look} from "../config";
 // import {deepCopy, distinct} from "../core/operator";
 import {testValid} from "../utils/test";
-import {isHave} from "../core/helper";
+import {isHave} from "../helper/check_value";
 // import Worker from 'worker-loader!../external/Worker2.js';
 // gobal var
 const cellPaddingWidth = 5;
@@ -83,7 +83,7 @@ function parseCell() {
 
     let changeDataArgs = getChangeDataToCalc.call(this);
     try {
-        data.calc(data.rows, changeDataArgs.data);
+        data.calc.calculateRows(data.rows, changeDataArgs.data); // jobs; 调用calc模块进行计算
     } catch(e) {
         console.error("公式模块报错：" + e);
     }
@@ -410,7 +410,7 @@ class Table {
         if (cell === null) return;
         // console.log("62", cell.adapt);
 
-        return _cell.render(cell.text || '', formulam, (y, x) => (data.getCellTextOrDefault(x, y)));
+        return _cell.render(cell.text || '', allFnObj, (y, x) => (data.getCellTextOrDefault(x, y)));
     }
 
     getDrawBox(rindex, cindex) {

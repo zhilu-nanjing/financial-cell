@@ -23,7 +23,7 @@ class Spreadsheet {
         targetEl.appendChild(rootEl.el);
 
         this.sheet = new Sheet(rootEl, this.data);
-        this.data.sheet = this.sheet;
+        this.data.belongSheet = this.sheet;
     }
 
     setDataSettings(value) {
@@ -58,7 +58,7 @@ class Spreadsheet {
     }
 
     // getEditorStatus() {
-    //     let {editor} = this.sheet;
+    //     let {editor} = this.belongSheet;
     //     let { ri, ci, pos} = editor;
     //     let inputText = editor.editorText.getText();
     //
@@ -72,20 +72,20 @@ class Spreadsheet {
     // }
 
     // setEditorText(text = '', pos = 1) {
-    //     let {editor} = this.sheet;
+    //     let {editor} = this.belongSheet;
     //     text = text !== '' ? text : '=';
     //     editor.inputEventHandler(text, pos, true);
     // }
     //
     // setTextEnd(cell, ri, ci) {
-    //     let {editor, data} = this.sheet;
+    //     let {editor, data} = this.belongSheet;
     //     editor.setCellEnd({
     //         text: cell.text,
     //         formulas: cell.formulas
     //     });
     //     data.setCellAll(ri, ci, cell.formulas + "", cell.formulas + "", '');
     //
-    //     this.sheet.selectorEditorReset(ri, ci);
+    //     this.belongSheet.selectorEditorReset(ri, ci);
     //
     //     setTimeout(() => {
     //         editor.setCursorPos(cell.formulas.length);

@@ -1,32 +1,33 @@
 "use strict";
 
-import {col_str_2_int} from '../calc_utils/helper.js'
-import {getSanitizedSheetName} from '../expression/getSanitizedSheetName.js'
+import {col_str_2_int} from '../../helper/calc_helper.js'
+import {getSanitizedSheetName} from '../calc_utils/get_sheetname.js'
 import {ERROR_CIRCULAR} from '../calc_utils/error_config.js'
-import { int_2_col_str } from '../calc_utils/helper';
+import { int_2_col_str } from '../../helper/calc_helper';
+import { FORMULA_STATUS } from '../calc_utils/config';
 
 export class Range{
-    constructor(str_expression, formula, possition_i){
+    constructor(str_expression, formulaProxy, position_i){
         let range_expression, sheet_name, sheet;
-        this.start_pst = possition_i - str_expression.length;
-        this.end_pst = possition_i;
+        this.start_pst = position_i - str_expression.length;
+        this.end_pst = position_i;
 
         if (str_expression.indexOf('!') !== -1) {
             let aux = str_expression.split('!');
             sheet_name = getSanitizedSheetName(aux[0]);
             range_expression = aux[1];
-            this.range_start_pst = possition_i - aux[1].length
+            this.range_start_pst = position_i - aux[1].length
         }
         else {
-            sheet_name = formula.sheet_name;
+            sheet_name = formulaProxy.sheet_name;
             range_expression = str_expression;
             this.range_start_pst = this.start_pst
 
         }
-        this.sheet = formula.wb.Sheets[sheet_name];
+        this.sheet = formulaProxy.workbookProxy.Sheets[sheet_name];
         this.range_expression = range_expression;
         this.sheet_name = sheet_name;
-        this.formula = formula
+        this.formula = formulaProxy
 
     }
     solveExpression(){
@@ -53,10 +54,10 @@ export class Range{
                 let cell_name = int_2_col_str(j) + i;
                 let cell_full_name = sheet_name + '!' + cell_name;
                 if (formula.formula_ref[cell_full_name]) {
-                    if (formula.formula_ref[cell_full_name].status === 'new') {
-                        formula.formulaExecutor(formula.formula_ref[cell_full_name]);
+                    if (formula.formula_ref[cell_full_name].status === FORMULA_STATUS.new) {
+                        formula.formulaExecutor(formula.formula_ref[cell_full_name]); // todo: 这个语句需要修正
                     }
-                    else if (formula.formula_ref[cell_full_name].status === 'working') {
+                    else if (formula.formula_ref[cell_full_name].status === FORMULA_STATUS.working) {
                         throw new Error(ERROR_CIRCULAR);
                     }
                     if (sheet[cell_name].t === 'e') {

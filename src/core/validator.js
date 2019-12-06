@@ -1,5 +1,5 @@
 import { t } from '../locale/locale';
-import helper from './helper';
+import helper from '../helper/dataproxy_helper';
 
 const rules = {
   phone: /^[1-9]\d{10}$/,

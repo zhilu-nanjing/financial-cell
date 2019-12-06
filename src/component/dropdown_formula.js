@@ -1,7 +1,7 @@
 import Dropdown from './dropdown';
 import Icon from './icon';
 import { h } from './element';
-import { baseFormulas } from '../core/formula';
+import { baseFormulas } from '../calc/calc_cmd/formula';
 import { cssPrefix } from '../config';
 
 export default class DropdownFormula extends Dropdown {

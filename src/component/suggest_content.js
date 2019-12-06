@@ -1,6 +1,6 @@
 import {cssPrefix} from "../config";
 import {h} from "../component/element";
-import {helpFormula} from "../utils/help_formula";
+import {helpFormula} from "../calc/calc_cmd/fn_suggestion";
 import {bind} from "./event";
 
 function variableElement(content, txt, pos, className, s = "", s2 = "") {

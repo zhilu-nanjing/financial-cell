@@ -1,5 +1,5 @@
 import {deepCopy, distinct} from "../core/operator";
-import {isHave} from '../core/helper';
+import {isHave} from '../helper/check_value';
 import {expr2xy, xy2expr} from "../utils/alphabet";
 
 function getCellDepend(cells) {

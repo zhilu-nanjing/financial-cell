@@ -1,5 +1,5 @@
 /* global window */
-import {isHave} from "../core/helper";
+import {isHave} from "../helper/check_value";
 
 function dpr() {
     return window.devicePixelRatio || 1;       // 修改之后

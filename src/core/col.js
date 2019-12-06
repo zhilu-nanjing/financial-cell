@@ -1,4 +1,4 @@
-import helper from './helper';
+import helper from '../helper/dataproxy_helper';
 
 class Cols {
   constructor({

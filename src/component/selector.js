@@ -156,7 +156,7 @@ class SelectorElement {
             _selector.setMove(rect);
 
             sheet.selector.selectCell.setData(cellRange.sri, cellRange.sci);
-            // sheet.selectorMoveReset();
+            // belongSheet.selectorMoveReset();
 
             // 多个单元格
             // if (_cellRange.eri != _cellRange.sri || _cellRange.eci != _cellRange.sci) {
@@ -212,9 +212,9 @@ class SelectorElement {
             //
             // worker.addEventListener("message", function (event) {
             //     rows._ = event.data.rrows;
-            //     sheet.editor.display = true;
+            //     belongSheet.editor.display = true;
             //     rows.moveChange(arr, arr2, arr3);
-            //     sheet.selectorMoveReset();
+            //     belongSheet.selectorMoveReset();
             // });
             console.time("move");
             rows.moveChange(arr, arr2, arr3);
@@ -407,9 +407,9 @@ export default class Selector {
         this.tl = new SelectorElement(data, this, sheet);
         this.sheet = sheet;
 
-        // this.selectT = new SelectorElement(data, this, sheet);
-        // this.selectL = new SelectorElement(data, this, sheet);
-        // this.selectTl = new SelectorElement(data, this, sheet);
+        // this.selectT = new SelectorElement(data, this, belongSheet);
+        // this.selectL = new SelectorElement(data, this, belongSheet);
+        // this.selectTl = new SelectorElement(data, this, belongSheet);
 
         this.br.el.show();
         this.offset = null;
