@@ -140,7 +140,7 @@ function renderCell(rindex, cindex) {
         const font = Object.assign({}, style.font);
 
         font.size = getFontSizePxByPt(font.size);
-        let {ignore, subtractDays} = data.settings;
+        let {ignore, minus} = data.settings;
         let color = style.color;
         // console.log('style:', cellText);
         if (minus === true && isMinus(cellText)) {

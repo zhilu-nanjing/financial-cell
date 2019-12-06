@@ -41,7 +41,7 @@ export function buildButtonWithIcon(tooltipdata, iconName, change = () => {
 function bindDropdownChange() {
     this.ddFormat.change = it => this.change('format', it.key);
     this.ddFont.change = it => this.change('font-name', it.key);
-    this.ddFormula.change = it => this.change('cellFormulaProxy', it.key);
+    // this.ddFormula.change = it => this.change('cellFormulaProxy', it.key);
     this.ddFontSize.change = it => this.change('font-size', it.pt);
     this.ddTextColor.change = it => this.change('color', it);
     this.ddFillColor.change = it => this.change('bgcolor', it);
@@ -125,7 +125,7 @@ export default class Toolbar {
         const style = data.defaultStyle();
         this.ddFormat = new DropdownFormat();
         this.ddFont = new DropdownFont();
-        this.ddFormula = new DropdownFormula();
+        // this.ddFormula = new DropdownFormula();
         this.ddFontSize = new DropdownFontSize();
         this.ddTextColor = new DropdownColor('text-color', style.color);
         this.ddFillColor = new DropdownColor('fill-color', style.bgcolor);

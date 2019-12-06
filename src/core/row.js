@@ -1,4 +1,4 @@
-import helper from '../helper/dataproxy_helper';
+import {cloneDeep, rangeSum} from "../helper/dataproxy_helper";
 import {isHave} from '../helper/check_value';
 import {xy2expr} from '../utils/alphabet';
 import {changeFormula, cutStr, isAbsoluteValue, value2absolute} from "../core/operator";
@@ -122,7 +122,7 @@ class Rows {
     }
 
     sumHeight(min, max, exceptSet) {
-        return helper.rangeSum(min, max, (i) => {
+        return rangeSum(min, max, (i) => {
             if (exceptSet && exceptSet.has(i)) return 0;
             return this.getHeight(i);
         });
@@ -984,7 +984,7 @@ class Rows {
             }
         }
 
-        return helper.cloneDeep(ncell);
+        return cloneDeep(ncell);
     }
 
     updateCellReferenceByShift(bad, result, ri, ci, cb = () => {
