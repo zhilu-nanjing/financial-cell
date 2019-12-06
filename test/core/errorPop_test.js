@@ -313,7 +313,7 @@ describe('qq', () => {
                 oldCell: {},
                 newCell: data.rows.eachRange(new CellRange(0, 0, 10, 10))
             }, data);
-            // data.rows.setCell(0, 0, {"text": "=ABS(-1)", formulas: "=ABS(-1)"}, 'all_with_no_workbook'); // 符号还需要修复
+            // data.rows.setCell(0, 0, {"text": "=ABS(-1)", formulas: "=ABS(-1)"}, 'all_with_no_workbook'); // 负号还需要修复
 
             data.rows.setCell(0, 0, {
                 "text": "=ABS(1)",
