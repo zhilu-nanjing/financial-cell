@@ -200,6 +200,19 @@ export class StructuralExp {
             return arg.solveExpression();
         }
     }
+    push2ExpArgs(astNodeStr, position_i) {
+        let self = this
+        if (astNodeStr) {
+            let v = str_2_val(astNodeStr, self.cellFormulaProxy, position_i);
+            if (((v === '=') && (self.last_arg === '>' || self.last_arg === '<')) || (self.last_arg === '<' && v === '>')) {
+                self.args[self.args.length - 1] += v;
+            } else {
+                self.args.push(v);
+            }
+            self.last_arg = v;
+            //console.log(self.id, '-->', v);
+        }
+    };
 
 };
 

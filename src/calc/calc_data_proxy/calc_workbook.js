@@ -65,25 +65,27 @@ export class CalcWorkbookProxy { // 对workbook的数据代理
   find_all_need_calc_cell(preAction) { // todo: preAction.findAllNeedCalcCell 应该返回workbook中多个sheet的变化结果； 需要筛选出那些需要重新计算的formulas
     console.log('find_all_need_calc_cell');
     let wb = this.workbookObj;
-    let need_calc_cells = preAction.findAllNeedCalcCell(); // 获取所有需要计算的单元格
+    let to_calc_cell_names = preAction.findAllNeedCalcCell(); // 获取所有需要计算的单元格； 可能有很多null; 不存在多sheet的情况
     let formula_ref = {};
     let cells = [];
-    for (let sheet_name of Object.getOwnPropertyNames(wb.Sheets)) {
-      let sheet = wb.Sheets[sheet_name]; // 当前的sheet
-      for (let i = 0; i < need_calc_cells.length; i++) {
-        let cell_name = need_calc_cells[i];
-        let cell = sheet[cell_name];
-        let formula = formula_ref[sheet_name + '!' + cell_name] = new CellFormulaProxy(
-          this,
-          sheet,
-          sheet_name,
-          sheet[cell_name],
-          formula_ref,
-          cell_name,
-          'new',
-        );
-        cells.push(formula);
+    let sheet_name = Object.getOwnPropertyNames(wb.Sheets)[0] // todo: 之后要支持多sheet
+    let sheet = wb.Sheets[sheet_name]; // 当前的sheet
+    for (let i = 0; i < to_calc_cell_names.length; i++) {
+      let cell_name = to_calc_cell_names[i];
+      if(cell_name in sheet === false){ // 不包含这个sheet
+        continue
       }
+      let cell = sheet[cell_name];
+      let formula = formula_ref[sheet_name + '!' + cell_name] = new CellFormulaProxy(
+        this,
+        sheet,
+        sheet_name,
+        sheet[cell_name],
+        formula_ref,
+        cell_name,
+        'new',
+      );
+      cells.push(formula);
     }
     return cells;
   };

@@ -93,7 +93,7 @@ export class StructuralExpressionBuilder {
    */
   string(char) {
     if (char === '"') {
-      this.exp_obj.push(new RawValue(this.buffer));
+      this.exp_obj.push2ExpArgs(new RawValue(this.buffer));
       this.was_string = true;
       this.buffer = '';
       this.state = this.deal1Char;
@@ -126,24 +126,24 @@ export class StructuralExpressionBuilder {
     let fn_stack = this.fn_stack;
     let v, stack = this.fn_stack.pop();
     this.exp_obj = stack.exp;
-    this.exp_obj.push(this.buffer, );
+    this.exp_obj.push2ExpArgs(this.buffer, );
     v = this.exp_obj;
     this.buffer = '';
     this.exp_obj = fn_stack[fn_stack.length - 1].exp;
     if (stack.special) {
       stack.special.push(v);
-      this.exp_obj.push(stack.special, this.position_i);
+      this.exp_obj.push2ExpArgs(stack.special, this.position_i);
     } else {
-      this.exp_obj.push(v, this.position_i);
+      this.exp_obj.push2ExpArgs(v, this.position_i);
     }
   }
 
   add_operation(char) {
     if (!this.was_string) {
-      this.exp_obj.push(this.buffer, this.position_i);
+      this.exp_obj.push2ExpArgs(this.buffer, this.position_i);
     }
     this.was_string = false;
-    this.exp_obj.push(char, this.position_i);
+    this.exp_obj.push2ExpArgs(char, this.position_i);
     this.buffer = '';
   }
 
@@ -175,8 +175,9 @@ export class StructuralExpressionBuilder {
   parseExpression() {
     // 主执行语句在这里，上面是定义一系列方法
     let self = this;
-    for (; this.position_i < self.formulaProxy.formula_str.length; this.position_i++) {
-      self.state(self.formulaProxy.formula_str[self.position_i]); // 逐字符解析函数; self.state代表当前的解析状态
+    let toParseStr = self.formulaProxy.formula_str.slice(1) // 去掉首字符（'='）
+    for (; this.position_i < toParseStr.length; this.position_i++) {
+      self.state(toParseStr[self.position_i]); // 逐字符解析函数; self.state代表当前的解析状态
     }
     this.push2Args(this.buffer, this.position_i); // root_exp 是一个Exp实例，这个实例会引用一个Exp数组
     return this.root_exp;
