@@ -1,9 +1,9 @@
 "use strict";
 
 import {col_str_2_int,int_2_col_str} from '../../helper/calc_helper.js'
-import {RawValue} from '../calc_data_proxy/RawValue.js'
-import {Range} from '../calc_data_proxy/Range.js'
-import {RefValue} from '../calc_data_proxy/RefValue.js'
+import {RawValue} from '../calc_data_proxy/raw_value.js'
+import {Range} from '../calc_data_proxy/range_ref.js'
+import {RefValue} from '../calc_data_proxy/ref_value.js'
 
 export function raw_offset(cell_ref, rows, columns, height, width) {
     height = (height || new RawValue(1)).solveExpression();

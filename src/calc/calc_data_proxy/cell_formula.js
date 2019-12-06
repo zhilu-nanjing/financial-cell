@@ -1,9 +1,10 @@
 import checker from '../calc_utils/formula_check.js';
 import { errorObj } from '../calc_utils/error_config';
 import exp from '../../utils/alphabet';
-import { StructuralExpressionBuilder, SimpleExpressionBuilder } from './expression_builder';
 import { FORMULA_STATUS } from '../calc_utils/config';
 import { isHave } from '../../helper/check_value';
+import { SimpleExpressionBuilder } from '../calc_deal/simple_expression/deal_simple_expression';
+import { StructuralExpressionBuilder } from '../calc_deal/structural_expression/deal_structural_expression';
 
 class FormulaCalcBhv { // 对cell中的参数做转换，判断,多单元格处理等的类; 不对外暴露
   constructor(formulas_i) {
@@ -82,7 +83,7 @@ class FormulaCalcBhv { // 对cell中的参数做转换，判断,多单元格处�
 export class CellFormulaProxy{
   /**
    *
-   * @param workbookProxy 本workbook
+   * @param {CalcWorkbookProxy} workbookProxy 本workbook
    * @param sheet  本sheet
    * @param sheet_name 本sheet的名字
    * @param cell  本cell

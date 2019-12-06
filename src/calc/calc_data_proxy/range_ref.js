@@ -24,7 +24,7 @@ export class Range{
             this.range_start_pst = this.start_pst
 
         }
-        this.sheet = formulaProxy.workbookProxy.Sheets[sheet_name];
+        this.sheet = formulaProxy.workbookProxy.getSheet(sheet_name);
         this.range_expression = range_expression;
         this.sheet_name = sheet_name;
         this.formula = formulaProxy

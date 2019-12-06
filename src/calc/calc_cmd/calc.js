@@ -7,9 +7,14 @@ export class Calc { // 整个模块对外服务的类
   constructor() {
   }
 
+  /**
+   * @param {Rows} rows
+   * @param {PreAction} preAction
+   * @return {undefined}
+   */
   calculateRows(rows, preAction) { // 计算陶涛那边给到的rows
     let calcRowsProxy = new CalcRowsProxy(rows, preAction);
-    if (preAction.action === "重新计算") { // 重新计算这个需要变为常数
+    if (preAction.isRefresh() === true) { // 重新计算
       rows.workbook = calcRowsProxy.rows2workbook(); // 转化一次
     }
 

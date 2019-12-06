@@ -6,10 +6,19 @@ import { fnObjArray } from '../expression_fn/normal_fn';
 import * as rawFnObj from '../expression_fn/raw_fn';
 
 export class CalcWorkbookProxy { // 对workbook的数据代理
+  /**
+   *
+   * @param {Object} workbook
+   */
   constructor(workbook) {
     this.workbookObj = workbook;
     this.multiCollExpFn  = createDefaultFnCollection()
   }
+
+  getSheet(sheetName){
+    return this.workbookObj.Sheets[sheetName]
+  }
+
 
   calculateFormulas(formulas) { // 核心的计算引擎; formulas是数组，应该转化为cellFormula类。
     for (let i = formulas.length - 1; i >= 0; i--) { // 遍历所有需要计算的formulas; 从后向前遍历
@@ -91,6 +100,10 @@ export class CalcWorkbookProxy { // 对workbook的数据代理
   };
 }
 
+/**
+ *
+ * @return {MultiCollExpFn}
+ */
 export function createDefaultFnCollection() { // 创建默认的exp_fn collection类
   let normal_fn_coll = new FnCollection();
   normal_fn_coll.addFnObjArray(fnObjArray);

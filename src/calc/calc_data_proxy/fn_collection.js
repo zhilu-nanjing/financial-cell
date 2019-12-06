@@ -1,7 +1,7 @@
 // todo: 需要把FLOOR.MATH这样的公式解析为FLOOR_MATH这样的函数
 
-import { UserRawFnExecutor } from './UserRawFnExecutor';
-import { UserFnExecutor } from './UserFnExecutor';
+import { UserRawFnExecutor } from './exp_raw_fn_executor';
+import { UserFnExecutor } from './exp_fn_executor';
 
 export class FnCollection { // 封装的统一管理exp_fn的函数。
   constructor() {

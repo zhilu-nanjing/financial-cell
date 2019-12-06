@@ -112,7 +112,6 @@ class Spreadsheet {
 const spreadsheet = (el, options = {}) => new Spreadsheet(el, options);
 
 if (window) {
-    window.jsSpreadsheet = require('js-spreadsheet');
     window.drag = Drag;
     window.x = window.x || {};
     window.bugout = bugout;

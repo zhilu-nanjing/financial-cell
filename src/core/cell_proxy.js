@@ -47,7 +47,7 @@ export default class CellProxy {
         };
     }
 
-    getCellDataType(sarr, {isDate, isNumber}) {
+    getCellDataType(sarr, {isDate, isNumber}) { // todo; 之后这块逻辑会统一放到calc里面处理
         let ncell = this.cell;
         // let enter = false;
         let nA = true;
@@ -81,7 +81,7 @@ export default class CellProxy {
             isNumber = false;
             isDate = false;
             ncell.type = 'na';
-        } else if (value && value.search(str2Re(datePattern2), '') !== -1) {
+        } else if (value && value.search(str2Re(datePattern2), '') !== -1) { // jobs: 判断是否是日期
             if( isDate === true) {
                 nA = false;
                 isNumber = false;

@@ -1,11 +1,10 @@
 "use strict";
 import cf  from "../calc_utils/config"
-import {RawValue} from './RawValue.js';
-import {Range} from './Range.js';
+import {RawValue} from './raw_value.js';
+import {Range} from './range_ref.js';
 import {errorObj, errorMsgArr}  from '../calc_utils/error_config'
 import {CellDate} from "../cell_value_type/cell_date";
-import {FORMULA_STATUS} from "../calc_utils/config";
-import { str_2_val } from './expression_builder';
+import { str_2_val } from './exp_section';
 
 
 let exp_id = 0; // 全局变量

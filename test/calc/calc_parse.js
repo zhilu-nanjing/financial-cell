@@ -1,8 +1,8 @@
 // 这里需要把公式解析做对
 import assert from 'assert'
 import { Calc } from '../../src/calc/calc_cmd/calc';
-describe('复杂公式结构', function() {
-  it('minus', function() { // 检查simple_expression的判定是否正确
+describe('解析算法', function() {
+  it('SimpleExpression', function() { // 检查simple_expression的判定是否正确
     let workbook = {};
     workbook.Sheets = {};
     workbook.Sheets.Sheet1 = {};
