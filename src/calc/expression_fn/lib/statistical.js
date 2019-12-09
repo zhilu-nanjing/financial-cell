@@ -1,6 +1,6 @@
 import mathTrig from './math-trig'
 import text from './text'
-import {jStat} from 'jstat'
+import * as jStat from 'jstat'
 import utils from './utils'
 import {errorObj} from '../../calc_utils/error_config'
 import misc from './miscellaneous'

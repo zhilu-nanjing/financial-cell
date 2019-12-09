@@ -709,7 +709,7 @@ export default class DataProxy {
         this.multiPreAction = new MultiPreAction(this);
         this.selector = new Selector();
         this.scroll = new Scroll();
-        // this.history = new History(this);
+        // this.history = created History(this);
         this.clipboard = new Clipboard();
         this.moved = new Moved();
         this.autoFilter = new AutoFilter();
@@ -1014,7 +1014,7 @@ export default class DataProxy {
                             text: cell.text,
                             style: this.addStyle(cstyle)
                         }, 'format');
-                        // this.rows.workbookObj.change(ri, ci, cell, deepCopy(cell), 'change');
+                        // this.rows.name2SheetProxy.change(ri, ci, cell, deepCopy(cell), 'change');
                     } else if (property === 'font-bold' || property === 'font-italic'
                         || property === 'font-name' || property === 'font-size') {
                         const nfont = {};
@@ -1596,9 +1596,9 @@ export default class DataProxy {
         // let p1 = inputText.substring(0, pos);
         // let p2 = inputText.substring(pos, inputText.length);
         // inputText = p1 + src + p2;
-        // let workbookObj = parseCell2.call(table, this.viewRange(), true, inputText);
+        // let name2SheetProxy = parseCell2.call(table, this.viewRange(), true, inputText);
         // return {
-        //     "text": workbookObj['Sheets'][name].A1.w ? workbookObj['Sheets'][name].A1.w : workbookObj['Sheets'][name].A1.v,
+        //     "text": name2SheetProxy['Sheets'][name].A1.w ? name2SheetProxy['Sheets'][name].A1.w : name2SheetProxy['Sheets'][name].A1.v,
         //     "formulas": p1 + `${name}!` + src + p2
         // };
     }

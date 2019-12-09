@@ -2,16 +2,15 @@ import { StructuralExp } from '../../calc_data_proxy/structural_exp';
 import { RawValue } from '../../calc_data_proxy/raw_value';
 import { common_operations } from '../../calc_utils/config';
 
+/**
+ * @property
+ * @property {MultiCollExpFn} multiCollFn
+ */
 export class StructuralExpressionBuilder {
-  /**
-   *
-   * @param formulaProxy: CellFormulaProxy
-   */
-  constructor(formulaProxy) {
-    this.formulaProxy = formulaProxy;
-    this.multiCollFn = formulaProxy.workbookProxy.multiCollExpFn;
-    this.exp_obj = this.root_exp = new StructuralExp(formulaProxy);  // 封装公式实例
-
+  constructor(calcCell, multiCollFn) {
+    this.multiCollFn = multiCollFn;
+    this.calcCell = calcCell
+    this.exp_obj = this.root_exp = new StructuralExp(calcCell);  // 封装公式实例
     // 下面应该是状态
     this.buffer = '';
     this.was_string = false;
@@ -20,6 +19,7 @@ export class StructuralExpressionBuilder {
     }];
     this.position_i = 0;
     this.state = this.deal1Char;
+
   }
 
   /**
@@ -44,15 +44,15 @@ export class StructuralExpressionBuilder {
   }
 
   ini_parentheses() {
-    let o,
+    let structuralExp,
       trim_buffer = this.buffer.trim(), // buffer 是一个字符串，代表一个语义单元，例如average
       special = this.multiCollFn.getFnExecutorByName(trim_buffer); // 获取expression 函数
-    o = new StructuralExp(this.formulaProxy);
+    structuralExp = new StructuralExp(this.calcCell);
     this.fn_stack.push({
-      exp: o,
+      exp: structuralExp,
       special: special
     });
-    this.exp_obj = o;
+    this.exp_obj = structuralExp;
     this.buffer = '';
   }
 
@@ -100,17 +100,22 @@ export class StructuralExpressionBuilder {
       this.was_string = false;
       fn_stack[fn_stack.length - 1].exp.push2ExpArgs(this.buffer, this.position_i);
       fn_stack[fn_stack.length - 1].special.push(fn_stack[fn_stack.length - 1].exp);
-      fn_stack[fn_stack.length - 1].exp = this.exp_obj = new StructuralExp(this.formulaProxy);
+      fn_stack[fn_stack.length - 1].exp = this.exp_obj = new StructuralExp(this.calcCell);
       this.buffer = '';
     } else {
       this.buffer += char;
     }
   }
 
-  parseExpression() {
+  /**
+   *
+   * @param {CalcCell} calcCell
+   * @return {StructuralExp}
+   */
+  parseFormula() { // 实际的解析逻辑
     // 主执行语句在这里，上面是定义一系列方法
     let self = this;
-    let toParseStr = self.formulaProxy.formula_str.slice(1); // 去掉首字符（'='）
+    let toParseStr = this.calcCell.formulaString.slice(1); // 去掉首字符（'='）
     for (; this.position_i < toParseStr.length; this.position_i++) {
       self.state(toParseStr[self.position_i]); // 逐字符解析函数; self.state代表当前的解析状态
     }

@@ -1,7 +1,6 @@
 import { stringAt} from '../utils/alphabet';
 import {getFontSizePxByPt} from '../core/font';
 import _cell from '../core/cell';
-import {allFnObj} from '../calc/calc_cmd/formula';
 import {isMinus} from "../utils/number_util";
 import {Draw, DrawBox, npx, thinLineWidth,} from '../canvas/draw';
 import {look} from "../config";
@@ -42,7 +41,7 @@ function getDrawBox(rindex, cindex) {
 //     const {
 //         left, top, height
 //     } = data.cellRect(rindex, cindex);
-//     return new DrawBox(left, top, width, height, cellPaddingWidth);
+//     return created DrawBox(left, top, width, height, cellPaddingWidth);
 // }
 
 // function getCellTextStyle(rindex, cindex) {
@@ -389,11 +388,11 @@ class Table {
     constructor(el, data, editor) {
         this.el = el;
         this.draw = new Draw(el, data.viewWidth(), data.viewHeight());
-        // this.factory = new ApplicationFactory(data.methods, data.name, this);
+        // this.factory = created ApplicationFactory(data.methods, data.name, this);
         this.editor = editor;
         this.data = data;
         this.timer = null;
-        // this.worker = new Worker();
+        // this.worker = created Worker();
         this.autoAdaptList = [];
     }
 
@@ -410,7 +409,7 @@ class Table {
         if (cell === null) return;
         // console.log("62", cell.adapt);
 
-        return _cell.render(cell.text || '', allFnObj, (y, x) => (data.getCellTextOrDefault(x, y)));
+        return _cell.render(cell.text || '', data, (y, x) => (data.getCellTextOrDefault(x, y)));
     }
 
     getDrawBox(rindex, cindex) {

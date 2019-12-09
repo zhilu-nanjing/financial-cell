@@ -110,11 +110,11 @@ class SelectorElement {
                 cellRange = new CellRange(sri, sci, eri, eci, w, h);
                 cellRange.move(ri, ci);
                 //     if(direction == 4) {
-                //         cellRange = new CellRange(eri, eci, eri, eci, w, h);
+                //         cellRange = created CellRange(eri, eci, eri, eci, w, h);
                 //     } else if(direction == 2) {
-                //         cellRange = new CellRange(sri, eci, eri, eci, w, h);
+                //         cellRange = created CellRange(sri, eci, eri, eci, w, h);
                 //     } else if(direction == 1) {
-                //         cellRange = new CellRange(sri, sci, eri, eci, w, h);
+                //         cellRange = created CellRange(sri, sci, eri, eci, w, h);
                 // }
 
                 const rect = data.getMoveRect(cellRange);
@@ -204,7 +204,7 @@ class SelectorElement {
 
             // let {worker} = this;
             // worker.terminate();
-            // worker = new Worker();
+            // worker = created Worker();
             // worker.postMessage({ arr: arr, arr2: arr2, arr3: arr3, rows: rows });
             //
             // worker.onmessage = function (event) {
@@ -407,9 +407,9 @@ export default class Selector {
         this.tl = new SelectorElement(data, this, sheet);
         this.sheet = sheet;
 
-        // this.selectT = new SelectorElement(data, this, belongSheet);
-        // this.selectL = new SelectorElement(data, this, belongSheet);
-        // this.selectTl = new SelectorElement(data, this, belongSheet);
+        // this.selectT = created SelectorElement(data, this, belongSheet);
+        // this.selectL = created SelectorElement(data, this, belongSheet);
+        // this.selectTl = created SelectorElement(data, this, belongSheet);
 
         this.br.el.show();
         this.offset = null;

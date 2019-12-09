@@ -15,9 +15,8 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.A28 = {v: 11}; // formula的计算顺序与初次赋值时间从晚向前
       workbook.Sheets.Sheet1.A5 = {f: '=AVERAGE($A$28:$A$32)'};
       let calc = new Calc()
-      calc.calculateWorkbook(workbook);
-      console.log(workbook.Sheets.Sheet1.A5.v);
-      assert.equal(workbook.Sheets.Sheet1.A5.v, 11.8);
+      let updatedRes = calc.calculateWorkbook(workbook);
+      assert.equal(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","A5", "v"), 11.8);
     });
 
     it('-', function() {
@@ -28,52 +27,7 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.H614 = {f: '=2-1'};
       let calc = new Calc()
       calc.calculateWorkbook(workbook);
-      console.log(workbook.Sheets.Sheet1.H614.v);
-    });
-    it('COUPDAYBS', function() {
-
-      let workbook = {};
-      workbook.Sheets = {};
-      workbook.Sheets.Sheet1 = {};
-      workbook.Sheets.Sheet1.A185 = {v: 40568};
-      workbook.Sheets.Sheet1.A186 = {v: 40862};
-      workbook.Sheets.Sheet1.A187 = {v: 2};
-      workbook.Sheets.Sheet1.A188 = {v: 1};
-      workbook.Sheets.Sheet1.A11 = {f: '=COUPDAYBS(A185,A186,A187,A188)'};
-      let calc = new Calc()
-      calc.calculateWorkbook(workbook);
-      console.log(workbook.Sheets.Sheet1.A11.v);
-      assert.equal(workbook.Sheets.Sheet1.A11.v, 71);
-    });
-    it('COUPDAYS', function() {
-
-      let workbook = {};
-      workbook.Sheets = {};
-      workbook.Sheets.Sheet1 = {};
-      workbook.Sheets.Sheet1.A185 = {v: 40568};
-      workbook.Sheets.Sheet1.A186 = {v: 40862};
-      workbook.Sheets.Sheet1.A187 = {v: 2};
-      workbook.Sheets.Sheet1.A188 = {v: 1};
-      workbook.Sheets.Sheet1.A11 = {f: '=COUPDAYS(A185,A186,A187,A188)'};
-      let calc = new Calc()
-      calc.calculateWorkbook(workbook);
-      console.log(workbook.Sheets.Sheet1.A11.v);
-      assert.equal(workbook.Sheets.Sheet1.A11.v, 181);
-    });
-    it('COUPDAYSNC', function() {
-
-      let workbook = {};
-      workbook.Sheets = {};
-      workbook.Sheets.Sheet1 = {};
-      workbook.Sheets.Sheet1.A185 = {v: 40568};
-      workbook.Sheets.Sheet1.A186 = {v: 40862};
-      workbook.Sheets.Sheet1.A187 = {v: 2};
-      workbook.Sheets.Sheet1.A188 = {v: 1};
-      workbook.Sheets.Sheet1.A11 = {f: '=COUPDAYSNC(A185,A186,A187,A188)'};
-      let calc = new Calc()
-      calc.calculateWorkbook(workbook);
-      console.log(workbook.Sheets.Sheet1.A11.v);
-      assert.equal(workbook.Sheets.Sheet1.A11.v, 110);
+      assert.equal(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","H614", "v"), 1);
     });
     it('COUPNCD', function() {
 
@@ -87,7 +41,11 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.A11 = {f: '=COUPNCD(A185,A186,A187,A188)'};
       let calc = new Calc()
       calc.calculateWorkbook(workbook);
-      console.log(workbook.Sheets.Sheet1.A11.v);
+      let theCell = calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","A11", "v")
+      // todo: 会报错，不number，可能要修改；对函数要归类，某些函数的所有参数都是数字，这些函数的值会实现转化为数值。
+      // todo： 也可以使用类似flask的装饰器语法，来做字符转换
+      // 其他函数处理不同类型的时候就要各区所需了
+      assert.equal(theCell.toNumber(), 40678);
     });
     it('COUPNUM', function() {
 
@@ -101,8 +59,7 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.A11 = {f: '=COUPNUM(A185,A186,A187,A188)'};
       let calc = new Calc()
       calc.calculateWorkbook(workbook);
-      console.log(workbook.Sheets.Sheet1.A11.v);
-      assert.equal(workbook.Sheets.Sheet1.A11.v, 2);
+      assert.equal(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","A11", "v").toNumber(), 2);
     });
     it('COUPPCD', function() {
 
@@ -116,7 +73,7 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.A11 = {f: '=COUPPCD(A185,A186,A187,A188)'};
       let calc = new Calc()
       calc.calculateWorkbook(workbook);
-      console.log(workbook.Sheets.Sheet1.A11.v);
+      assert.equal(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","A11", "v").toNumber(), 40497);
     });
     it('VDB', function() {
 
@@ -129,11 +86,9 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.H811 = {f: '=VDB(B799,B800,B801,0,0.875,1.5)'};
       let calc = new Calc()
       calc.calculateWorkbook(workbook);
-      console.log(workbook.Sheets.Sheet1.H811.v);
-      assert.equal(workbook.Sheets.Sheet1.H811.v, 315);
+      assert.equal(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","H811", "v").toNumber(), 315);
     });
     it('YIELDDISC', function() {
-
       let workbook = {};
       workbook.Sheets = {};
       workbook.Sheets.Sheet1 = {};
@@ -145,8 +100,8 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.H845 = {f: '=YIELDDISC(C835,C836,C837,C838,C839)'};
       let calc = new Calc()
       calc.calculateWorkbook(workbook);
-      console.log(workbook.Sheets.Sheet1.H845.v);
-      assert(Math.abs(workbook.Sheets.Sheet1.H845.v-0.0528)<0.01);
+      assert.equal(Math.abs(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","H845", "v")-0.0528) < 0.01, true);
+
     });
     it('FACTORIAL', function() {
 
@@ -157,8 +112,9 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.H845 = {f: '=FACTORIAL(C835)'};
       let calc = new Calc()
       calc.calculateWorkbook(workbook);
-      console.log(workbook.Sheets.Sheet1.H845.v);
       assert.equal(workbook.Sheets.Sheet1.H845.v, 3628800);
+      assert.equal(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","H845", "v"), 3628800);
+
     });
     it('PRICE', function() {
 
@@ -174,8 +130,7 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.A613 = {v: 0};
       workbook.Sheets.Sheet1.H614 = {f: '=PRICE(A607,A608,A609,A610,A611,A612,A613)'};
       let calc = new Calc()
-      calc.calculateWorkbook(workbook);
-      console.log(workbook.Sheets.Sheet1.H614.v);
+      assert.equal(Math.abs(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","H614", "v")-94.634361) < 0.01, true);
     });
   });
 });

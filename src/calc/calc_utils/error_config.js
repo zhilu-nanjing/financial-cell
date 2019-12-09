@@ -10,6 +10,7 @@ export const ERROR_DATE_STR = '#DATE!';
 export const ERROR_CIRCULAR = '#CIRCULA!';
 export const ERROR_ERROR = '#ERROR!';
 export const ERROR_SYNTAX = "#SYNTAX" // 语法错误
+export const ERROR_NON_SOLVED = "NON_SOLVED"
 
 export const errorMsgArr = [ERROR_NULL, ERROR_DIV0, ERROR_VALUE, ERROR_REF, ERROR_NAME,
   ERROR_NUM, ERROR_NA, ERROR_GETTING_DATA, ERROR_DATE_STR, ERROR_CIRCULAR,
@@ -28,6 +29,7 @@ export const errorObj = {
   ERROR_CIRCULAR: new Error(ERROR_CIRCULAR),
   ERROR_ERROR: new Error(ERROR_ERROR),
   ERROR_SYNTAX: new Error(ERROR_SYNTAX),
+  ERROR_NON_SOLVED: new Error(ERROR_NON_SOLVED)
 };
 
 

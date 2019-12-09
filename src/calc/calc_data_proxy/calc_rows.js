@@ -1,17 +1,20 @@
 import exp from '../../utils/alphabet';
 import { isHave } from '../../helper/check_value';
 
+/**
+ * @property {PreAction} preAction
+ */
 export class CalcRowsProxy { // 代理对于rows的数据获取与数据更新
-  constructor(rows, tileArr) {
+  constructor(rows, preAction) {
     this.rows = rows;
-    this.tileArr = tileArr;
+    this.preAction = preAction;
   }
 
   // 变动数据传入workbook
   updateWorkbook(workbook) {
     let { data } = this.rows;
     let name = data['name'];
-    let need_calc_cells = this.tileArr.findAllNeedCalcCell();//找到需要变更的单元格
+    let need_calc_cells = this.preAction.findAllNeedCalcCell();//找到需要变更的单元格
     for (let i = 0; i < need_calc_cells.length; i++) {
       let cell_name = need_calc_cells[i];
       let zb = exp.expr2xy(cell_name);
@@ -32,8 +35,8 @@ export class CalcRowsProxy { // 代理对于rows的数据获取与数据更新
     let workbook = null;
     let { data } = rows;
     let name = data['name'];
-    if (isHave(rows.workbookObj)) {//如果是第一次加载（rows中没有workbook），则初始化workbook，否则更新workbook
-      workbook = rows.workbookObj;
+    if (isHave(rows.name2SheetProxy)) {//如果是第一次加载（rows中没有workbook），则初始化workbook，否则更新workbook
+      workbook = rows.name2SheetProxy;
     } else {
       workbook = {
         Sheets: {}

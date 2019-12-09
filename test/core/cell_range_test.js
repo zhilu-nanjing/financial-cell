@@ -5,7 +5,7 @@ import { CellRange } from '../../src/core/cell_range';
 
 describe('CellRange', () => {
   describe('#constructor()', () => {
-    it('should return { sri: 1, sci: 2, eri: 3, eci: 4, w: 0, h: 0 } when new CellRange(1,2,3,4)', () => {
+    it('should return { sri: 1, sci: 2, eri: 3, eci: 4, w: 0, h: 0 } when created CellRange(1,2,3,4)', () => {
       const cr = new CellRange(1, 2, 3, 4);
       assert.equal(cr.sri, 1);
       assert.equal(cr.sci, 2);
@@ -14,7 +14,7 @@ describe('CellRange', () => {
       assert.equal(cr.w, 0);
       assert.equal(cr.h, 0);
     });
-    it('should return { sri: 1, sci: 2, eri: 3, eci: 4, w: 5, h: 6 } when new CellRange(1,2,3,4, 5, 6)', () => {
+    it('should return { sri: 1, sci: 2, eri: 3, eci: 4, w: 5, h: 6 } when created CellRange(1,2,3,4, 5, 6)', () => {
       const cr = new CellRange(1, 2, 3, 4, 5, 6);
       assert.equal(cr.sri, 1);
       assert.equal(cr.sci, 2);
@@ -24,7 +24,7 @@ describe('CellRange', () => {
       assert.equal(cr.h, 6);
     });
   });
-  
+
   describe('#set()', () => {
     it('should return { sri: 1, sci: 2, eri: 3, eci: 4 } when set(1, 2, 3, 4)', () => {
       const cr = new CellRange(0, 0, 0, 0);
@@ -37,15 +37,15 @@ describe('CellRange', () => {
   });
 
   describe('#multiple()', () => {
-    it('should return true when new CellRange(1, 2, 1, 3)', () => {
+    it('should return true when created CellRange(1, 2, 1, 3)', () => {
       const cr = new CellRange(1, 2, 1, 3);
       assert.ok(cr.multiple());
     });
-    it('should return true when new CellRange(1, 1, 2, 1)', () => {
+    it('should return true when created CellRange(1, 1, 2, 1)', () => {
       const cr = new CellRange(1, 1, 2, 1);
       assert.ok(cr.multiple());
     });
-    it('should return false when new CellRange(1, 1, 1, 1)', () => {
+    it('should return false when created CellRange(1, 1, 1, 1)', () => {
       const cr = new CellRange(1, 1, 1, 1);
       assert.equal(false, cr.multiple());
     });

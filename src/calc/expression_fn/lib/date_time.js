@@ -1,9 +1,10 @@
 import {errorObj} from '../../calc_utils/error_config'
-import {CellDate, stamp2DayNum} from '../../cell_value_type/cell_date';
+import {CellVDateTime} from '../../cell_value_type/cell_value';
 import * as cf from '../../calc_utils/config'
 import utils from './utils'
+import { stamp2DayNum } from '../../../helper/calc_helper';
 
-let d1900 = new CellDate(1900, 0, 1);
+let d1900 = new CellVDateTime(1900, 0, 1);
 let WEEK_STARTS = [
   undefined,
   0,
@@ -75,7 +76,7 @@ exports.DATE = function(year, month, day) {
   if (year < 0 || month < 0 || day < 0) {
     return errorObj.ERROR_NUM;
   }
-  let date = new CellDate(year, month - 1, day); // 需要减去1才对
+  let date = new CellVDateTime(year, month - 1, day); // 需要减去1才对
   return date;
 };
 
@@ -83,7 +84,7 @@ exports.DATEVALUE = function(date_text) {
   if (typeof date_text !== 'string') {
     return errorObj.ERROR_VALUE;
   }
-  let date = CellDate.parse(date_text);
+  let date = CellVDateTime.parse(date_text);
   if (isNaN(date)) {
     return errorObj.ERROR_VALUE;
   }
@@ -130,8 +131,8 @@ exports.DAYS360 = function(start_date, end_date, method) {
     sd = start_date.getDate() === 31 ? 30 : start_date.getDate();
     ed = end_date.getDate() === 31 ? 30 : end_date.getDate();
   } else {
-    let smd = new CellDate(start_date.getFullYear(), sm + 1, 0).getDate();
-    let emd = new CellDate(end_date.getFullYear(), em + 1, 0).getDate();
+    let smd = new CellVDateTime(start_date.getFullYear(), sm + 1, 0).getDate();
+    let emd = new CellVDateTime(end_date.getFullYear(), em + 1, 0).getDate();
     sd = start_date.getDate() === smd ? 30 : start_date.getDate();
     if (end_date.getDate() === emd) {
       if (sd < 30) {
@@ -170,7 +171,7 @@ exports.EOMONTH = function(start_date, months) {
     return errorObj.ERROR_VALUE;
   }
   months = parseInt(months, 10);
-  return stamp2DayNum(new CellDate(start_date.getFullYear(), start_date.getMonth() + months + 1, 0));
+  return stamp2DayNum(new CellVDateTime(start_date.getFullYear(), start_date.getMonth() + months + 1, 0));
 };
 
 exports.HOUR = function(serial_number) {
@@ -225,7 +226,7 @@ exports.ISOWEEKNUM = function(date) {
 
   date.setHours(0, 0, 0);
   date.setDate(date.getDate() + 4 - (date.getDay() || 7));
-  let yearStart = new CellDate(date.getFullYear(), 0, 1);
+  let yearStart = new CellVDateTime(date.getFullYear(), 0, 1);
   return Math.ceil((((date - yearStart) / cf.MS_PER_DAY) + 1) / 7);
 };
 
@@ -297,7 +298,7 @@ exports.NETWORKDAYSINTL = function (start_date, end_date, weekend, holidays) {
     let total = days;
     let day = start_date;
     for (i = 0; i < days; i++) {
-      let d = (new CellDate().getTimezoneOffset() > 0) ? day.getUTCDay() : day.getDay();
+      let d = (new CellVDateTime().getTimezoneOffset() > 0) ? day.getUTCDay() : day.getDay();
       let dec = false;
       if (d === weekend[0] || d === weekend[1]) {
         dec = true;
@@ -357,7 +358,7 @@ exports.NETWORKDAYS.INTL = function (start_date, end_date, weekend, holidays) {
   let total = days;
   let day = start_date;
   for (i = 0; i < days; i++) {
-    let d = (new CellDate().getTimezoneOffset() > 0) ? day.getUTCDay() : day.getDay();
+    let d = (new CellVDateTime().getTimezoneOffset() > 0) ? day.getUTCDay() : day.getDay();
     let dec = false;
     if (d === weekend[0] || d === weekend[1]) {
       dec = true;
@@ -380,7 +381,7 @@ exports.NETWORKDAYS.INTL = function (start_date, end_date, weekend, holidays) {
 };
 
 exports.NOW = function() {
-  return new CellDate();
+  return new CellVDateTime();
 };
 
 exports.SECOND = function(serial_number) {
@@ -442,7 +443,7 @@ exports.WEEKNUM = function(serial_number, return_type) {
     return this.ISOWEEKNUM(serial_number);
   }
   let week_start = WEEK_STARTS[return_type];
-  let jan = new CellDate(serial_number.getFullYear(), 0, 1);
+  let jan = new CellVDateTime(serial_number.getFullYear(), 0, 1);
   let inc = jan.getDay() < week_start ? 1 : 0;
   jan -= Math.abs(jan.getDay() - week_start) * cf.MS_PER_DAY;
   return Math.floor(((serial_number - jan) / cf.MS_PER_DAY) / 7 + 1) + inc;
@@ -525,7 +526,7 @@ exports.YEAR = function(serial_number) {
 };
 
 function isLeapYear(year) {
-  return new CellDate(year, 1, 29).getMonth() === 1;
+  return new CellVDateTime(year, 1, 29).getMonth() === 1;
 }
 
 // TODO : Use DAYS ?
@@ -567,12 +568,12 @@ exports.YEARFRAC = function(start_date, end_date, basis) {
       // Actual/actual
       let feb29Between = function(date1, date2) {
         let year1 = date1.getFullYear();
-        let mar1year1 = new CellDate(year1, 2, 1);
+        let mar1year1 = new CellVDateTime(year1, 2, 1);
         if (isLeapYear(year1) && date1 < mar1year1 && date2 >= mar1year1) {
           return true;
         }
         let year2 = date2.getFullYear();
-        let mar1year2 = new CellDate(year2, 2, 1);
+        let mar1year2 = new CellVDateTime(year2, 2, 1);
         return (isLeapYear(year2) && date2 >= mar1year2 && date1 < mar1year2);
       };
       let ylength = 365;
@@ -585,7 +586,7 @@ exports.YEARFRAC = function(start_date, end_date, basis) {
         return daysBetween(start_date, end_date) / ylength;
       }
       let years = (ey - sy) + 1;
-      let days = (new CellDate(ey + 1, 0, 1) - new CellDate(sy, 0, 1)) / cf.MS_PER_DAY;
+      let days = (new CellVDateTime(ey + 1, 0, 1) - new CellVDateTime(sy, 0, 1)) / cf.MS_PER_DAY;
       let average = days / years;
       return daysBetween(start_date, end_date) / average;
     case 2:

@@ -8,7 +8,7 @@ function validDate(d){
 }
 
 // function ensureDate(d) {
-//   return (d instanceof Date)?d:new Date(d);
+//   return (d instanceof Date)?d:created Date(d);
 // }
 
 exports.ACCRINT = function(issue, first, settlement, rate, par, frequency, basis) {
@@ -122,12 +122,17 @@ exports.AMORLINC = function() {
 function get_days(settlement,maturity,frequency){
   let settlementDate = utils.parseDate(settlement)
   let maturityDate = utils.parseDate(maturity)
+  /**
+   * @type {CellVDateTime} settlementDate
+   * @type {CellVDateTime} maturityDate
+   */
+
   let month_SM=maturityDate.getFullYear()*12+maturityDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth()
   let times=parseInt(month_SM/(12/frequency))
-  let endday=utils.Copy(maturityDate)
+  let endday = utils.Copy(maturityDate)
   endday.setMonth(endday.getMonth()-times*12/frequency)
   let startday= utils.Copy(endday)
-  startday.setMonth(startday.getMonth()-12/frequency)
+  endday.setMonth(endday.getMonth()-12/frequency)
   return {"startday": startday, "endday":endday}
 }
 //TODO  COUP系列函数目前均未考虑参数输入不规范的报错情况
@@ -999,7 +1004,7 @@ exports.PRICE = function (settlement, maturity, rate, yld, redemption, frequency
     let P = PPART1+PPART2
     return P
   }
-  if(N = 1){
+  if(N == 1){
     let T1 = 100*rate/frequency +redemption
     let T2 = yld*(E-A)/frequency/E+1
     let T3 = 100*rate*A/frequency/E
@@ -1428,7 +1433,7 @@ exports.YIELD = function (settlement, maturity, rate, pr, redemption, frequency,
 
 // TODO 调用的parseDate转化日期不够准确,如39494应转为2008/2/16,实际转为2008/2/15 23:54造成basis==0,4时的误差
 exports.YIELDDISC = function(settlement, maturity,pr, redemption,basis) {
-  // throw new Error('YIELDDISC is not implemented');
+  // throw created Error('YIELDDISC is not implemented');
   let settlementDate = utils.parseDate(settlement);
   let maturityDate = utils.parseDate(maturity);
   if (utils.anyIsError(settlementDate, maturityDate)) {

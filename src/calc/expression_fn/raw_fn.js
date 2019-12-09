@@ -10,7 +10,7 @@ export function raw_offset(cell_ref, rows, columns, height, width) {
     width = (width || new RawValue(1)).solveExpression();
     if (cell_ref.args.length === 1 && cell_ref.args[0].name === 'RefValue') {
         let ref_value = cell_ref.args[0];
-        let parsed_ref = ref_value.parseRef();
+        let parsed_ref = ref_value.getRefCalcCell();
         let col = col_str_2_int(parsed_ref.cell_name) + columns.solveExpression();
         let col_str = int_2_col_str(col);
         let row = +parsed_ref.cell_name.replace(/^[A-Z]+/g, '') + rows.solveExpression();

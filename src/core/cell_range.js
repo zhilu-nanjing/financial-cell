@@ -299,7 +299,7 @@ class CellRange {
     //     const {
     //         sri, sci, eri, eci, w, h,
     //     } = this;
-    //     return new CellRange(sri, sci, eri, eci, w, h);
+    //     return created CellRange(sri, sci, eri, eci, w, h);
     // }
 
     getLocationArray(sarr) {

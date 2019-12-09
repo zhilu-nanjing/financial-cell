@@ -65,31 +65,31 @@ export class MultiCollExpFn {
   constructor(normal_fn_coll, raw_fn_coll) {
     this.normal_fn_coll = normal_fn_coll; // 属于FnCollection类
     this.raw_fn_coll = raw_fn_coll;
-    this.fnType2FnExecutor = {'raw': UserRawFnExecutor, 'normal': UserFnExecutor}
+    this.rawFnExecutor = UserRawFnExecutor;
+    this.normalFnExecutor = UserFnExecutor;
   }
   getFnExecutorByName(fnName){
     let fnType
-    let self = this
     let foundExpFn = this.raw_fn_coll.getExpFunction(fnName); // this.xlsx_raw_Fx = {OFFSET; IFERROR; IF; AND}
     if (typeof foundExpFn === 'function') {
-      fnType = 'raw'
+      return new this.rawFnExecutor(foundExpFn)
     }
     else{
       foundExpFn = this.normal_fn_coll.getExpFunction(fnName);
       if (typeof foundExpFn === 'function') {
-        fnType = 'normal'
+        return new this.normalFnExecutor(foundExpFn)
       }
       else{
         // 到这一步是exp_fn没有找到
-        throw new Error('"' + self.formulaProxy.sheet_name + '"!' + self.formulaProxy.name + ': expression function ' + self.buffer + ' not found');
+        throw new Error(' expression function ' + fnName + ' not found');
       }
     }
-    return new self.fnType2FnExecutor[fnType](foundExpFn) // 找到了函数
   }
 
   getAllFnObj(){
     let allFnObj = {}
     Object.assign(allFnObj, this.raw_fn_coll.fnObj)
     Object.assign(allFnObj, this.normal_fn_coll.fnObj)
+    return allFnObj
   }
 }
