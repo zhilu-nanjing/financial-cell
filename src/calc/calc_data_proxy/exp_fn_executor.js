@@ -18,6 +18,7 @@ export class UserFnExecutor{
         this.exp_fn = user_function;
         this.expFnParaConfig = this.exp_fn.paraConfig // // 这个是特意加到函数上的配置，这个警告可以忽略 [{"cellVString": "string", "cellVNumber": "number"}] 这样的配置
     }
+
     getParaArray(){
         let curArg, toTypeName, newParas = []
         let solvedArgs = self.args.map(f=>f.solveExpression()) // 求解参数

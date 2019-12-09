@@ -81,6 +81,9 @@ function parseCell() {
     let {data} = this;
 
     let changeDataArgs = getChangeDataToCalc.call(this);
+    if(!isHave(changeDataArgs.data)) {
+        return;
+    }
     try {
         data.calc.calculateRows(data.rows, changeDataArgs.data); // jobs; 调用calc模块进行计算
     } catch(e) {

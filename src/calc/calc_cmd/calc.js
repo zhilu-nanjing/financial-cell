@@ -22,7 +22,7 @@ export class Calc { // 整个模块对外服务的类
     }
 
     let workbook = rows.workbook;
-    let updatedCellArray = this.calcWorkbookProxy.calculateWorkbook(workbook)
+    let updatedCellArray = this.calculateWorkbook(workbook)
     calcRowsProxy.calcDoneToSetCells(workbook, rows); // todo: 把workbook的值再转化为rows的形式； 把需要计算的那些单元格的状态变为edited
     return updatedCellArray
   }
