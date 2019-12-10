@@ -200,4 +200,4 @@ exports.CHISQDISTRT = function(x, k) {
     return 1 -  jStat.chisquare.cdf(x, k);
 };
 
-//
+
