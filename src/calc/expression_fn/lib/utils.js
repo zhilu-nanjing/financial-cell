@@ -1,6 +1,6 @@
 import {errorObj} from '../../calc_utils/error_config'
-import {MS_PER_DAY} from '../../calc_utils/config'
-import {CellDate, d1900} from "../../cell_value_type/cell_date"
+import { d18991230, MS_PER_DAY } from '../../calc_utils/config';
+import {CellVDateTime} from "../../cell_value_type/cell_value"
 
 function flattenShallow(array) {
   if (!array || !array.reduce) { return array; }
@@ -142,7 +142,7 @@ exports.parseBool = function(bool) {
     }
   }
 
-  if (bool instanceof CellDate && !isNaN(bool)) {
+  if (bool instanceof Date && !isNaN(bool)) {
     return true;
   }
 
@@ -191,34 +191,37 @@ exports.parseMatrix = function(matrix) {
   return matrix;
 };
 
-exports.parseDate = function(date) {
+exports.parseDate = function(date) { // 解析为Date的形式
+  let theDate
   if (!isNaN(date)) {
-    if (date instanceof CellDate) {
-      return new CellDate(date);
+    if (date instanceof Date) {
+      theDate = date;
     }
     let d = parseInt(date, 10);
     if (d < 0) {
       return errorObj.ERROR_NUM;
     }
-    if (d <= 60) {
-      return new CellDate(d1900.getTime() + (d - 1) * MS_PER_DAY);
-    }
-    return new CellDate(d1900.getTime() + (d - 2) * MS_PER_DAY);
+    theDate = new Date(d18991230.getTime() + d  * MS_PER_DAY);
   }
   if (typeof date === 'string') {
-    date = new CellDate(date);
+    theDate = new Date(date);
     if (!isNaN(date)) {
-      return date;
+      theDate = date;
     }
+  }
+  if(theDate instanceof Date){
+    return theDate
   }
   return errorObj.ERROR_VALUE;
 };
+
+
 exports.Copy =  function (obj) {
   // Handle the 3 simple types, and null or undefined
   if (null == obj || "object" !== typeof obj) return obj;
-  // Handle CellDate
-  if (obj instanceof CellDate) {
-    let copy = new CellDate();
+  // Handle Date
+  if (obj instanceof Date) {
+    let copy = new Date();
     copy.setTime(obj.getTime());
     return copy;
   }
@@ -270,7 +273,7 @@ exports.ExcelDateToJSDate = function (date) {
   if (typeof date == 'string'){
     date = utils.parseDate(issue)
   }
-  return (date instanceof CellDate) ? date : new CellDate(Math.round((date - 25569)*MS_PER_DAY));
+  return (date instanceof Date) ? date : new Date(Math.round((date - 25569)*MS_PER_DAY));
 }
 //XW：end
 //XW：判定是否是数字

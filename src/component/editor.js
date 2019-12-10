@@ -202,7 +202,7 @@ function inputEventHandler(evt, txt = '', formulas = '', state = "input") {
         if (this.chinese === false) return;
         let v = '';
         if (this.data.settings.showEditor) {
-            this.belongSheet.selector.hide();
+            this.sheet.selector.hide();
         } else {
             return;
         }
@@ -437,13 +437,13 @@ function isDisplay() {
 }
 
 export default class Editor {
-    constructor(formulas, viewFn, rowHeight, rowWidth, data, sheet) {
+    constructor(fnNameArrayWithKey, viewFn, rowHeight, rowWidth, data, sheet) {
         this.viewFn = viewFn;
         this.rowHeight = rowHeight;
-        this.formulas = formulas;
+        this.formulas = fnNameArrayWithKey;
         this.sheet = sheet;
         this.display = true;
-        this.suggest = new Suggest(formulas, (it) => {
+        this.suggest = new Suggest(fnNameArrayWithKey, (it) => {
             suggestItemClick.call(this, it);
         }, data, this);
         this.suggestContent = new SuggestContent();

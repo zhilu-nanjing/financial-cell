@@ -165,7 +165,7 @@ function evalFormula(text, rule) {
     return text.toUpperCase().indexOf(rule.toUpperCase()) !== -1;
 }
 
-const cellRender = (data, sheetbook, y, x, src, formulaMap, getCellText, cellList = []) => {
+export function cellRender(data, sheetbook, y, x, src, formulaMap, getCellText, cellList = []){
     if (typeof src === 'undefined') {
         return "";
     }
@@ -223,9 +223,7 @@ const cellRender = (data, sheetbook, y, x, src, formulaMap, getCellText, cellLis
     return src;
 };
 
-export default {
-    render: cellRender,
-};
+export let render = cellRender
 export {
     infixExprToSuffixExpr,
 };

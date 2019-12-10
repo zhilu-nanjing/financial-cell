@@ -14,7 +14,7 @@ export function debugout() {
     self.realTimeLoggingOn = true; // log in real time (forwards to console.log)
     self.useTimestamps = false; // insert a timestamp in front of each log
     self.useLocalStorage = true; // store the output using window.localStorage() and continuously add to the same log each session
-    self.recordLogs = true; // set to false after you're done debugging to avoid the log eating up memory
+    self.recordLogs = true; // set to false after you're solved debugging to avoid the log eating up memory
     self.autoTrim = true; // to avoid the log eating up potentially endless memory
     self.maxLines = 2500; // if autoTrim is true, this many most recent lines are saved
     self.tailNumLines = 100; // how many lines tail() will retrieve

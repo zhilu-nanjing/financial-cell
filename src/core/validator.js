@@ -1,5 +1,5 @@
 import { t } from '../locale/locale';
-import helper from '../helper/dataproxy_helper';
+import  {arrayEquals} from '../helper/dataproxy_helper';
 
 const rules = {
   phone: /^[1-9]\d{10}$/,
@@ -42,7 +42,7 @@ export default class Validator {
       && this.operator === other.operator;
     if (flag) {
       if (Array.isArray(this.value)) {
-        flag = helper.arrayEquals(this.value, other.value);
+        flag = arrayEquals(this.value, other.value);
       } else {
         flag = this.value === other.value;
       }

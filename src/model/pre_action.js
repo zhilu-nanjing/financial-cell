@@ -44,13 +44,15 @@ export default class PreAction {
         this.newData = newData;
         this.data = data;
     }
+
     /**
      * 获取所有需要计算的单元格列表
      * @returns {Array}
      */
     isRefresh(){ // jobs; 我加的，判定是否是全量更新
-        return this.type === 999
+        return this.type === 999;
     }
+
     findAllNeedCalcCell() {
         let changeArr = [];
         let {oldCell, newCell, ri, ci} = this; // 应该得到多个sheet的变更结果

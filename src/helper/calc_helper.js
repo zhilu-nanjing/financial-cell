@@ -1,6 +1,8 @@
 "use strict";
 
-export function col_str_2_int(col_str) {
+import { d18991230, MS_PER_DAY } from '../calc/calc_utils/config';
+
+export function col_str_2_int(col_str) { // A -> 0 AA -> 26
     let r = 0;
     let colstr = col_str.replace(/[0-9]+$/, '');
     for (let i = colstr.length; i--;) {
@@ -33,3 +35,6 @@ export function isEqual(v1, v2) {
     return false;
 }
 
+export function stamp2DayNum(timeStamp) {
+    return (timeStamp - d18991230) / MS_PER_DAY ;
+}

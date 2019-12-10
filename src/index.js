@@ -63,7 +63,7 @@ class Spreadsheet {
     //     let inputText = editor.editorText.getText();
     //
     //     return  {
-    //         "status": editor.isDisplay(),
+    //         "cellStatus": editor.isDisplay(),
     //         "inputText": inputText,
     //         "ri": ri,
     //         "ci": ci,

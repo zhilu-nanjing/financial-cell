@@ -1,7 +1,6 @@
 import { stringAt} from '../utils/alphabet';
 import {getFontSizePxByPt} from '../core/font';
 import _cell from '../core/cell';
-import {allFnObj} from '../calc/calc_cmd/formula';
 import {isMinus} from "../utils/number_util";
 import {Draw, DrawBox, npx, thinLineWidth,} from '../canvas/draw';
 import {look} from "../config";
@@ -42,7 +41,7 @@ function getDrawBox(rindex, cindex) {
 //     const {
 //         left, top, height
 //     } = data.cellRect(rindex, cindex);
-//     return new DrawBox(left, top, width, height, cellPaddingWidth);
+//     return created DrawBox(left, top, width, height, cellPaddingWidth);
 // }
 
 // function getCellTextStyle(rindex, cindex) {
@@ -82,6 +81,9 @@ function parseCell() {
     let {data} = this;
 
     let changeDataArgs = getChangeDataToCalc.call(this);
+    if(!isHave(changeDataArgs.data)) {
+        return;
+    }
     try {
         data.calc.calculateRows(data.rows, changeDataArgs.data); // jobs; 调用calc模块进行计算
     } catch(e) {
@@ -140,7 +142,7 @@ function renderCell(rindex, cindex) {
         const font = Object.assign({}, style.font);
 
         font.size = getFontSizePxByPt(font.size);
-        let {ignore, subtractDays} = data.settings;
+        let {ignore, minus} = data.settings;
         let color = style.color;
         // console.log('style:', cellText);
         if (minus === true && isMinus(cellText)) {
@@ -389,11 +391,11 @@ class Table {
     constructor(el, data, editor) {
         this.el = el;
         this.draw = new Draw(el, data.viewWidth(), data.viewHeight());
-        // this.factory = new ApplicationFactory(data.methods, data.name, this);
+        // this.factory = created ApplicationFactory(data.methods, data.name, this);
         this.editor = editor;
         this.data = data;
         this.timer = null;
-        // this.worker = new Worker();
+        // this.worker = created Worker();
         this.autoAdaptList = [];
     }
 
@@ -410,7 +412,7 @@ class Table {
         if (cell === null) return;
         // console.log("62", cell.adapt);
 
-        return _cell.render(cell.text || '', allFnObj, (y, x) => (data.getCellTextOrDefault(x, y)));
+        return _cell.render(cell.text || '', data, (y, x) => (data.getCellTextOrDefault(x, y)));
     }
 
     getDrawBox(rindex, cindex) {

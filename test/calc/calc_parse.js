@@ -1,17 +1,32 @@
 // 这里需要把公式解析做对
 import assert from 'assert'
 import { Calc } from '../../src/calc/calc_cmd/calc';
+import {MS_PER_DAY} from '../../src/calc/calc_utils/config';
+
 describe('解析算法', function() {
+  it('学习js中的date', function() { // 检查simple_expression的判定是否正确
+    let d1900 = new Date(1900, 0, 1);
+    let a1 = new Date(d1900.getTime() + (0 -2) * MS_PER_DAY) // js 的date是从1970年开始的呀
+    let a2 = new Date(d1900.getTime() + (1 -2) * MS_PER_DAY)
+    let a3 = new Date(d1900.getTime() + (61.5 -2) * MS_PER_DAY)
+    console.log(a1, a2, a3)
+    let d18991230 = new Date(1989, 11, 30);
+    let a4 = new Date(d18991230.getTime() + (61.5) * MS_PER_DAY)
+    let a5 = new Date("1991/1s01/01")
+    console.log(a1, a2, a3)
+
+  });
+
   it('SimpleExpression', function() { // 检查simple_expression的判定是否正确
     let workbook = {};
     workbook.Sheets = {};
     workbook.Sheets.Sheet1 = {};
-    workbook.Sheets.Sheet1.A1 = {f: 'asdfasf'}; // 没有带等号的
-    workbook.Sheets.Sheet1.A2 = {f: 'asdf-as'}; // 没有带等号，有减号
-    workbook.Sheets.Sheet1.A3 = {f: 'asdf+as'}; // 没有带等号，有加号
+    // workbookProxy.Sheets.Sheet1.A1 = {f: 'asdfasf'}; // 没有带等号的
+    // workbookProxy.Sheets.Sheet1.A2 = {f: 'asdf-as'}; // 没有带等号，有减号
+    // workbookProxy.Sheets.Sheet1.A3 = {f: 'asdf+as'}; // 没有带等号，有加号
+    workbook.Sheets.Sheet1.A4 = {f:""} // 空字符串，看对不对
     let calc = new Calc()
     calc.calculateWorkbook(workbook);
-    console.log(workbook.Sheets.Sheet1.H614.v);
     assert.equal(workbook.Sheets.Sheet1.H614.v, "asdf-as");
   });
 

@@ -12,7 +12,7 @@ import ModalValidation from './modal_validation';
 import SortFilter from './sort_filter';
 import {xtoast} from './message';
 import {cssPrefix, offsetLeft, offsetTop} from '../config';
-import {formulas} from '../calc/calc_cmd/formula';
+import {fnNameArrayWithKey} from '../calc/calc_cmd/formula';
 import {getFontSizePxByPt} from "../core/font";
 // import {baseFormats, multiply} from "../core/format";
 import Advice from "../component/advice";
@@ -66,6 +66,9 @@ function selectorSet(multiple, ri, ci, indexesUpdated = true, moving = false) {
     const {
         table, selector, toolbar,
     } = this;
+    /**
+     * @type {Table} table
+     */
 
     if (multiple) {
         selector.setEnd(ri, ci, moving, true);
@@ -79,6 +82,9 @@ function selectorSet(multiple, ri, ci, indexesUpdated = true, moving = false) {
     clearTimeout(this.render_timer);
 
     this.render_timer = setTimeout(() => {
+        /**
+         * @type {Table} table
+         */
         table.render();
     }, 100);
 }
@@ -1581,7 +1587,7 @@ export default class Sheet {
         this.horizontalScrollbar = new Scrollbar(false);
         // editor
         this.editor = new Editor(
-            formulas,
+            fnNameArrayWithKey,
             () => this.getTableOffset(),
             data.rows.height,
             data.cols.width,
@@ -1600,7 +1606,7 @@ export default class Sheet {
         // selector
         this.selector = new Selector(data, this, true);
         this.selectorMoveEl = new Selector(data, this, false);
-        // this.editorProxy = new EditorProxy();
+        // this.editorProxy = created EditorProxy();
 
         this.advice = new Advice(data, this);
         // this.pasteDirectionsArr = [];

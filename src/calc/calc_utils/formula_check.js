@@ -1,7 +1,7 @@
 import helper from "../../helper/dataproxy_helper";
 //XW: end
 //XW:大括号参数判断,有大括号参数用''包起来作为一个参数
-exports.trans_params = function (cell) {
+export function trans_params (cell) {
   let reg = new RegExp('\{(.*?)\}', 'g');
   let arg = cell.f.match(reg);
   if (arg !== null){
@@ -13,18 +13,8 @@ exports.trans_params = function (cell) {
   }
   return cell
 };
-//XW:end
-//XW: 将空单元格置为default_0
-exports.trans_sheet = function (sheet) {
-  Object.keys(sheet).forEach(i => {
-    if (sheet[i].v === 0 && sheet[i].f === ""){
-      sheet[i].v = 'default_0'
-    }
-  });
-  return sheet
-};
 
-exports.recover_sheet = function (sheet) {
+export function recover_sheet(sheet) {
   Object.keys(sheet).forEach(i => {
     if (sheet[i].v === 'default_0'){
       if (!helper.isHave(sheet[i].f)) {
@@ -37,7 +27,7 @@ exports.recover_sheet = function (sheet) {
 };
 //XW: end
 //XW: 去除公式开头结尾的空格
-exports.strim = function (str){
+export function strim(str){
   let str1 = str.replace(/\s+$/,'');
   let str2 = str1.replace(/^\s+/,'');
   return str2;
@@ -45,7 +35,7 @@ exports.strim = function (str){
 //XW： end
 
 //xW: 公式参数转换
-exports.trans_formula = function(f){
+export function trans_formula(f){
   //特殊公式转换 FLOOR->FLOORMATH, vap-> vara等
   let trans_dict = {
     'FLOOR': 'FLOORMATH',
@@ -75,5 +65,5 @@ exports.trans_formula = function(f){
     }
   }
   return f
-};
+}
 //xW:end

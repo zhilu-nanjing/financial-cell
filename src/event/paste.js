@@ -202,7 +202,7 @@ function mountPaste(e, cb) {
 
 // function processImg(item) {
 //     let f = item.getAsFile();
-//     let reader = new FileReader();
+//     let reader = created FileReader();
 //     reader.onload = (evt) => {
 //         // let {x, y, overlayerEl, pasteDirectionsArr} = this;
 //         let img = h('img', 'paste-img');

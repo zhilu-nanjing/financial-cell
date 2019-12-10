@@ -1,47 +1,48 @@
 "use strict";
-import cf  from "../calc_utils/config"
+import {FORMULA_STATUS}  from "../calc_utils/config"
 import {RawValue} from './raw_value.js';
 import {Range} from './range_ref.js';
 import {errorObj, errorMsgArr}  from '../calc_utils/error_config'
-import {CellDate} from "../cell_value_type/cell_date";
+import {CellVDateTime, CellVEmpty, convertToCellV} from "../cell_value_type/cell_value";
 import { str_2_val } from './exp_section';
 
 
 let exp_id = 0; // 全局变量
+/**
+ * @property {CalcCell} calcCell
+ */
 export class StructuralExp {
     // 代表语法书上面的一个节点。这个几点的args是代表树枝，
     // 可以为RawValue，RefValue，LazyValue或字符或FormulaExp; 存在括号的时候，会把括号内的表达式构造为FormulaExp
-    constructor(cellFormulaProxy) {
-        let self = this;
-        self.id = ++exp_id;   // id 是一个递增序列，其中root_exp的id为1
-        self.args = [];
-        self.name = 'Expression';
-        self.cellFormulaProxy = cellFormulaProxy;
-        self.last_arg = "";
+    constructor(calcCell) {
+        this.id = ++exp_id;   // id 是一个递增序列，其中root_exp的id为1
+        this.args = [];
+        this.name = 'Expression';
+        this.calcCell = calcCell;
+        this.last_arg = "";
     }
 
     update_cell_value() {
         let self = this;
-        let formula = this.cellFormulaProxy;
-        let selfCell = formula.cell;
+        let curCellObj = this.calcCell.cellObj;
         try {
             if (Array.isArray(self.args) // 不合法的参数； 何时会出现这种情况？
               && self.args.length === 1
               && self.args[0] instanceof Range) {
                 throw errorObj.ERROR_VALUE;
             }
-            selfCell.v = self.solveExpression(); // 计算数值
+            curCellObj.v = self.solveExpression(); // 计算数值
 
-            if (typeof (selfCell.v) === 'string') {
-                selfCell.t = 's';
-            } else if (typeof (selfCell.v) === 'number') {
-                selfCell.t = 'n';
+            if (typeof (curCellObj.v) === 'string') {
+                curCellObj.t = 's';
+            } else if (typeof (curCellObj.v) === 'number') {
+                curCellObj.t = 'n';
             }
         } catch (e) {
             if (errorMsgArr.indexOf(e.message) !== -1) {
-                selfCell.t = 'e';
-                selfCell.w = e.message; // todo: 把.w 属性改为  .text属性， cell使用calcCell实例而不是单纯的obj
-                selfCell.v = e.message; // 出错的话，v属性应该没有用了把
+                curCellObj.t = 'e';
+                curCellObj.w = e.message; // todo: 把.w 属性改为  .text属性， cell使用calcCell实例而不是单纯的obj
+                curCellObj.v = e.message; // 出错的话，v属性应该没有用了把
             } else {
                 throw e;
             }
@@ -56,7 +57,7 @@ export class StructuralExp {
         return typeof obj.solveExpression === 'function'
     }
     convertDateToNumber(res){
-        if(res instanceof CellDate){
+        if(res instanceof CellVDateTime){
             return res.toNumber()
         }
         else {
@@ -84,7 +85,7 @@ export class StructuralExp {
                     args.splice(i - 1, 3, new RawValue(r));
                     i--;
                 } catch (e) { // 上面一旦出现错误，就直接跳出了
-                    console.log('[structural_exp.js] - ' + this.name + ': evaluating ' + this.cellFormulaProxy.cell.f + '\n' + e.message);
+                    console.log('[structural_exp.js] - ' + this.name + ': evaluating ' + this.calcCell.cellObj.f + '\n' + e.message);
                     throw e;
                 }
             }
@@ -96,7 +97,7 @@ export class StructuralExp {
             if (args[i] === '-') {
                 this.execCalcMethod(args[i+1])
                 if (i > 0 && typeof args[i - 1] === 'string') {
-                    args.splice(i, 2, new RawValue(-rightArg));// 替换2个原有arg
+                    args.splice(i, 2, new RawValue(-args[i+1]));// 替换2个原有arg
                 }
             }
 
@@ -110,19 +111,22 @@ export class StructuralExp {
         }
     }
 
-    solveExpression() { // 核心方法，做计算
+    /**
+     * 预处理refValue类型的数值
+     * @return {*|Error}
+     */
+    dealAllRefValue(){
         let self = this;
         let args = self.args.concat(); // 应该使用来做个浅复制
         let sheet
-        // console.log(args)
-        //XW: 对函数参数做转换、判断
         try {
             for (let i = 0; i < args.length; i++) { // 遍历所有的参数
                 if (args[i].name === 'RefValue') { // 属于引用的字符串
-                    sheet = args[i].cellFormulaProxy.belongSheet;
+                    sheet = args[i].calcCell.calcSheet;
                     //未定义单元格f置为default_0
-                    if (sheet[args[i].str_expression] === undefined) { // 判定空单元格，args[i].str_expression = "A28", sheet是一个obj, value 是 ｛v:,f:}这种形式的obj
-                        sheet[args[i].str_expression] = { v: 'default_0' } // 未定义的值赋值，合理么？
+                    let cellName = args[i].str_expression
+                    if (sheet.getCellByName(cellName) === undefined){ // 判定空单元格，args[i].str_expression = "A28", sheet是一个obj, value 是 ｛v:,f:}这种形式的obj
+                        sheet.addCalcCell(cellName, {v: new CellVEmpty()}, FORMULA_STATUS.solved)   // 未定义的值赋值
                     }
                     //=A0形式参数报错
                     if (args[i].str_expression.slice(1, args[i].str_expression.length) === '0') {
@@ -132,10 +136,23 @@ export class StructuralExp {
             }
         } catch (e) {
         }
-        //XW：end
+    }
+
+    solveExpression() { // 核心方法，做计算
+        let self = this;
+        let args = self.args.concat(); // 应该使用来做个浅复制
+        let sheet
+        this.dealAllRefValue()
         // 以下是依次执行各个运算符，最优先的运算符在最上面
         this.exec_minus(args); // 执行负号运算
         this.exec_plus(args); // 执行第一个加号
+        this.exeAllTwoArgOperator(args, self);
+        if (args.length === 1) {
+            return this.calcLastArg(args[0]) // 计算最后一个值
+        }
+    };
+
+    exeAllTwoArgOperator(args, self) {
         this.execOperatorWith2Args('^', args, function (a, b) {
             return Math.pow(+a, +b);
         });
@@ -149,7 +166,7 @@ export class StructuralExp {
             return (+a) * (+b);
         });
         this.execOperatorWith2Args('-', args, function (a, b) { // 执行减法
-            return a - b
+            return a - b;
         });
 
         this.execOperatorWith2Args('+', args, function (a, b) { // 执行加法
@@ -188,21 +205,23 @@ export class StructuralExp {
             }
             return a === b;
         });
-        if (args.length === 1) {
-            return this.calcLastArg(args[0]) // 计算最后一个值
-        }
-    };
+    }
+
     calcLastArg(arg){
-        if (typeof (arg.solveExpression) !== 'function') {
-            return arg;
+        if (typeof (arg.solveExpression) !== 'function' || arg.cellStatus === FORMULA_STATUS.solved) {
+            /**
+             * @type {CalcCell} arg
+             */
+            return arg.cellObj.v;
         } else {
-            return arg.solveExpression();
+            let res = arg.solveExpression()
+            return convertToCellV(res); // 确保返回的都是封装过的值
         }
     }
     push2ExpArgs(astNodeStr, position_i) {
         let self = this
         if (astNodeStr) {
-            let v = str_2_val(astNodeStr, self.cellFormulaProxy, position_i);
+            let v = str_2_val(astNodeStr, self.calcCell, position_i);
             if (((v === '=') && (self.last_arg === '>' || self.last_arg === '<')) || (self.last_arg === '<' && v === '>')) {
                 self.args[self.args.length - 1] += v;
             } else {

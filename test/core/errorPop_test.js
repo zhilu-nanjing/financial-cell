@@ -92,7 +92,7 @@ describe('qq', () => {
 
     describe('  paste  ', () => {
         it(' paste =D1 ', () => {
-            // let tableProxy = new TableProxy(data);
+            // let tableProxy = created TableProxy(data);
             // tableProxy.rows._ = {
             //     "13": {
             //         "cells": {

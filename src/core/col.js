@@ -1,4 +1,4 @@
-import helper from '../helper/dataproxy_helper';
+import {rangeSum} from '../helper/dataproxy_helper';
 
 class Cols {
   constructor({
@@ -48,7 +48,7 @@ class Cols {
   // }
 
   sumWidth(min, max) {
-    return helper.rangeSum(min, max, i => this.getWidth(i));
+    return rangeSum(min, max, i => this.getWidth(i));
   }
 
   totalWidth() {

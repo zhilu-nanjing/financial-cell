@@ -10,7 +10,7 @@ module.exports = merge(common, {
     mode: 'production',
     devtool: 'inline-source-map', // none
     plugins: [
-        // new BundleAnalyzerPlugin(),     // 视图
+        // created BundleAnalyzerPlugin(),     // 视图
         new CleanWebpackPlugin(['dist']),
         //  you should know that the HtmlWebpackPlugin by default will generate its own index.html
         new HtmlWebpackPlugin({

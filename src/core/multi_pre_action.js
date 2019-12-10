@@ -7,6 +7,7 @@ function operationItem(preAction) {
     this.redoItems = [];
 }
 
+// todo type管理
 export default class MultiPreAction {
     constructor(data) {
         this.undoItems = [];
