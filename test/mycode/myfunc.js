@@ -200,4 +200,41 @@ exports.CHISQDISTRT = function(x, k) {
     return 1 -  jStat.chisquare.cdf(x, k);
 };
 
+/**
+ *
+ * @param x {Number}probability
+ * @param k {Number}k
+ * @returns {*|Error}
+ * @constructor
+ */
+exports.CHISQINV = function(probability, k) {
+    probability = utils.parseNumber(probability);
+    k = utils.parseNumber(k);
+    if (utils.anyIsError(probability, k)) {
+        return errorObj.ERROR_VALUE;
+    }
+    return jStat.chisquare.inv(probability, k);
+};
 
+/**
+ *
+ * @param x {Number}probability
+ * @param k {Number}k
+ * @returns {*|Error}
+ * @constructor
+ */
+exports.CHISQINVRT = function(probability, k) {
+    if (!probability | !k) {
+        return errorObj.ERROR_NA;
+    }
+
+    if (probability < 0 || probability > 1 || k < 1 || k > Math.pow(10, 10)) {
+        return errorObj.ERROR_NUM;
+    }
+
+    if ((typeof probability !== 'number') || (typeof k !== 'number')) {
+        return errorObj.ERROR_VALUE;
+    }
+
+    return jStat.chisquare.inv(1.0 - probability, k);
+};

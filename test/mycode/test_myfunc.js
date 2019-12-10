@@ -30,6 +30,16 @@ describe('expression_fn integration', function () {
             console.log(res);
             assert(Math.abs(res-0.05)<0.0001)
         });
+        it('CHISQINV', function () {
+            let res = myfunc.CHISQINV(0.93,1)
+            console.log(res);
+            assert(Math.abs(res-3.2830)<0.0001)
+        });
+        it('CHISQINVRT', function () {
+            let res = myfunc.CHISQINVRT(0.050001,10)
+            console.log(res);
+            assert(Math.abs(res-18.306973)<0.0001)
+        });
     });
 });
 
