@@ -3,6 +3,10 @@ import * as error from '../../src/calc/calc_utils/error_config.js';
 import * as jStat from 'jstat'
 import {errorObj} from "../../src/calc/calc_utils/error_config";
 
+
+const MSECOND_NUM_PER_DAY = 3600 * 24 *1000
+const MONTH_NUM_PER_YEAR = 12
+
 /**
  *
  * @param {Number} settlement 有价证券的结算日
@@ -33,16 +37,16 @@ exports.YIELD = function (settlement, maturity, rate, price, redemption, frequen
     if (settlement >= maturity  ) {
         return error.num;
     }
-    let monthBetween = maturityDate.getFullYear()*12+maturityDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth()
-    let N =parseInt(monthBetween/(12/frequency))
+    let monthBetween = maturityDate.getFullYear()*MONTH_NUM_PER_YEAR+maturityDate.getMonth()-settlementDate.getFullYear()*MONTH_NUM_PER_YEAR-settlementDate.getMonth()
+    let N =parseInt(monthBetween/(MONTH_NUM_PER_YEAR/frequency))
     let endDay=utils.Copy(maturityDate)
-    endDay.setMonth(endDay.getMonth()-N*12/frequency)
+    endDay.setMonth(endDay.getMonth()-N*MONTH_NUM_PER_YEAR/frequency)
     let startDay= utils.Copy(endDay)
-    startDay.setMonth(startDay.getMonth()-12/frequency)
-    let DSC = (endDay-settlementDate)/ (1000 * 60 * 60 * 24)
-    let E = (endDay-startDay)/ (1000 * 60 * 60 * 24)
-    let A = (settlementDate-startDay)/ (1000 * 60 * 60 * 24)
-    let DSR = (maturityDate-settlementDate)/ (1000 * 60 * 60 * 24)
+    startDay.setMonth(startDay.getMonth()-MONTH_NUM_PER_YEAR/frequency)
+    let DSC = (endDay-settlementDate)/ (MSECOND_NUM_PER_DAY)
+    let E = (endDay-startDay)/ (MSECOND_NUM_PER_DAY)
+    let A = (settlementDate-startDay)/ (MSECOND_NUM_PER_DAY)
+    let DSR = (maturityDate-settlementDate)/ (MSECOND_NUM_PER_DAY)
     let price1
     let price2
     if(N < 1){
@@ -94,9 +98,9 @@ exports.YIELDMAT = function (settlement, maturity,issue, rate, price, basis) {
     if (settlement >= maturity || issue >= settlement ) {
         return error.num;
     }
-    let DSM = (maturityDate-settlementDate)/ (1000 * 60 * 60 * 24)
-    let DIM = (maturityDate-issueDate)/ (1000 * 60 * 60 * 24)
-    let A = (settlementDate-issueDate)/ (1000 * 60 * 60 * 24)
+    let DSM = (maturityDate-settlementDate)/ (MSECOND_NUM_PER_DAY)
+    let DIM = (maturityDate-issueDate)/ (MSECOND_NUM_PER_DAY)
+    let A = (settlementDate-issueDate)/ (MSECOND_NUM_PER_DAY)
     for (let yld = 0.01; yld <= 2; yld+=0.0001) {
         let priceMat = (100+(DIM/365*rate*100))/(1+(DSM/365*yld))-(A*rate*100/365)
         if(Math.abs(priceMat - price)<= 0.001 ){
@@ -109,15 +113,15 @@ exports.YIELDMAT = function (settlement, maturity,issue, rate, price, basis) {
 };
 /**TODO 结果的精确度可以再提高 by 旺旺 2019/12/9
  *
- * @param {Number}settlement
- * @param {Number}maturity
- * @param {Number}issue
- * @param {Number}first_coupon
- * @param {Number}rate
- * @param {Number}yld
- * @param {Number}redemption
- * @param {Number}frequency
- * @param {Number}basis
+ * @param {Number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {Number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {Number}issue 必需。 有价证券的发行日。
+ * @param {Number}first_coupon 必需。 有价证券的首期付息日。
+ * @param {Number}rate 必需。 有价证券的利率。
+ * @param {Number}yld 必需。 有价证券的年收益率。
+ * @param {Number}redemption 必需。 面值 ￥100 的有价证券的清偿价值。
+ * @param {Number}frequency 必需。 年付息次数。
+ * @param {Number}basis 可选。 要使用的日计数基准类型。
  * @returns {number|*}
  * @constructor
  */
@@ -138,16 +142,16 @@ exports.ODDFPRICE = function (settlement, maturity, issue,first_coupon,rate, yld
     if (first_coupon >= maturity || issue >= settlement || settlement >= first_coupon) {
         return error.num;
     }
-    let monthBetween = maturityDate.getFullYear()*12+maturityDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth()
-    let N =Math.ceil(monthBetween/(12/frequency))
+    let monthBetween = maturityDate.getFullYear()*MONTH_NUM_PER_YEAR+maturityDate.getMonth()-settlementDate.getFullYear()*MONTH_NUM_PER_YEAR-settlementDate.getMonth()
+    let N =Math.ceil(monthBetween/(MONTH_NUM_PER_YEAR/frequency))
     let endDay=utils.Copy(maturityDate)
-    endDay.setMonth(endDay.getMonth()-N*12/frequency)
+    endDay.setMonth(endDay.getMonth()-N*MONTH_NUM_PER_YEAR/frequency)
     let startDay= utils.Copy(endDay)
-    startDay.setMonth(startDay.getMonth()-12/frequency)
-    let DSC = (endDay-settlementDate)/ (1000 * 60 * 60 * 24)
-    let DFC = (first_couponDate - issueDate)/ (1000 * 60 * 60 * 24)
-    let E = (endDay-startDay)/ (1000 * 60 * 60 * 24)
-    let A = (settlementDate-startDay)/ (1000 * 60 * 60 * 24)
+    startDay.setMonth(startDay.getMonth()-MONTH_NUM_PER_YEAR/frequency)
+    let DSC = (endDay-settlementDate)/ (MSECOND_NUM_PER_DAY)
+    let DFC = (first_couponDate - issueDate)/ (MSECOND_NUM_PER_DAY)
+    let E = (endDay-startDay)/ (MSECOND_NUM_PER_DAY)
+    let A = (settlementDate-startDay)/ (MSECOND_NUM_PER_DAY)
     let price1
     let price2 = 0
         price1 = (redemption/Math.pow(1 + yld / frequency, N - 1 + DSC / E))+(100*rate*DFC/frequency/E/Math.pow(1 + yld / frequency,  DSC / E))- ((100 * rate * A) / (frequency * E))
@@ -202,8 +206,8 @@ exports.CHISQDISTRT = function(x, k) {
 
 /**
  *
- * @param x {Number}probability
- * @param k {Number}k
+ * @param x {Number}probability 必需。 与 χ2 分布相关联的概率。
+ * @param k {Number}k 必需。 自由度数。
  * @returns {*|Error}
  * @constructor
  */
@@ -218,8 +222,8 @@ exports.CHISQINV = function(probability, k) {
 
 /**
  *
- * @param x {Number}probability
- * @param k {Number}k
+ * @param x {Number}probability 必需。 与 χ2 分布相关联的概率。
+ * @param k {Number}k 必需。 自由度数。
  * @returns {*|Error}
  * @constructor
  */
@@ -237,4 +241,88 @@ exports.CHISQINVRT = function(probability, k) {
     }
 
     return jStat.chisquare.inv(1.0 - probability, k);
+};
+
+
+function variance(array) {
+        let avg = jStat.mean(array)
+        let sum = 0;
+        for (let i = 0; i < array.length; i++) {
+            sum += Math.pow((array[i] - avg), 2);
+        }
+        return sum/(array.length - 1);
+    };
+
+/**
+ *
+ * @param{arr} array1 必需。 第一个数组或数据区域。
+ * @param{arr}array2 必需。 第二个数组或数据区域。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+exports.FTEST = function (array1, array2) {
+    if (!array1 || !array2) {
+        return errorObj.ERROR_NA;
+    }
+
+    if (!(array1 instanceof Array) || !(array2 instanceof Array)) {
+        return errorObj.ERROR_NA;
+    }
+
+    if (array1.length < 2 || array2.length < 2) {
+        return errorObj.ERROR_DIV0;
+    }
+    let sum1 = jStat.variance(array1);
+    let sum2 = jStat.variance(array2);
+    if(sum1 >= sum2){
+        return 2*jStat.ftest(sum1/sum2,array1.length - 1,array2.length - 1);
+    }
+    if(sum2 > sum1){
+        return 2*jStat.ftest(sum2/sum1,array2.length - 1,array1.length - 1);
+    }
+
+};
+
+/**
+ *
+ * @param {arr} array1 必需。 第一个数组或数据区域。
+ * @param {arr}array2 必需。 第二个数组或数据区域。
+ * @param {Number}tails 必需。 指定分布尾数。 如果 tails = 1，则 T.TEST 使用单尾分布。 如果 tails = 2，则 T.TEST 使用双尾分布。
+ * @param {Number}type 必需。 要执行的 t 检验的类型。
+ * @returns {*|Error}
+ * @constructor
+ */
+exports.TTEST = function (array1, array2,tails,type) {
+    if (!array1 || !array2) {
+        return errorObj.ERROR_NA;
+    }
+
+    if (!(array1 instanceof Array) || !(array2 instanceof Array)) {
+        return errorObj.ERROR_NA;
+    }
+
+    if (array1.length < 2 || array2.length < 2) {
+        return errorObj.ERROR_DIV0;
+    }
+    let sum1 = variance(array1);
+    let sum2 = variance(array2);
+    let value = Math.abs(jStat.mean(array1) - jStat.mean(array2)) / Math.sqrt(sum1/array1.length + sum2/array2.length);
+    if(type === 2){
+        if(tails === 1){
+            return (1 - jStat.studentt.cdf(value , (array1.length + array2.length-2))) ;
+        }
+        if(tails === 2){
+            return (1 - jStat.studentt.cdf(value , (array1.length + array2.length-2)))*2 ;
+        }
+    }
+    if(type === 1){
+        let arrayNew = array1.concat(array2);
+        if(tails === 1){
+            return jStat.ttest( value, arrayNew, 1) ;
+        }
+        if(tails === 2){
+            return (1 - jStat.studentt.cdf(value , (arrayNew.length-1)))*2 ;
+        }
+
+    }
 };

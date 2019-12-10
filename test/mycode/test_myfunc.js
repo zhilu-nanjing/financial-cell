@@ -1,5 +1,6 @@
 import assert from 'assert'
 import * as myfunc from "./myfunc";
+import * as jStat from 'jstat'
 
 
 describe('expression_fn integration', function () {
@@ -40,6 +41,17 @@ describe('expression_fn integration', function () {
             console.log(res);
             assert(Math.abs(res-18.306973)<0.0001)
         });
+        it('FTEST', function () {
+            let res = myfunc.FTEST([6,7,9,15,21],[20,28,31,38,40])
+            console.log(res);
+            assert(Math.abs(res-0.64831785)<0.0001)
+        });
+        it('TTEST', function () {
+            let res = myfunc.TTEST([3,4,5,8,55,1,2,4,55],[6,19,3,22,14,55,5,22,1],2,2)
+            console.log(res);
+            assert(Math.abs(res-0.907069409)<0.0001)
+        });
+
     });
 });
 
