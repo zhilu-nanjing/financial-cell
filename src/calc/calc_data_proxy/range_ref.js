@@ -70,7 +70,7 @@ export class Range{
                 }
             }
         }
-        return matrix;
+        return matrix; // 得到一个二维数组
 
     }
 

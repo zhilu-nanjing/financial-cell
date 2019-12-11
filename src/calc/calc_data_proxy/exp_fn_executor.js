@@ -21,6 +21,7 @@ export class UserFnExecutor{
 
     getParaArray(){
         let curArg, toTypeName, newParas = []
+        let self = this
         let solvedArgs = self.args.map(f=>f.solveExpression()) // 求解参数
         if(typeof this.expFnParaConfig === "undefined"){ // 没有做定义
             newParas = solvedArgs.map(f=>f.toNumber()) // 默认是把所有的arg转化为数字

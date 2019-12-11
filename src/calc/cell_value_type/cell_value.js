@@ -1,5 +1,5 @@
 import * as cf from '../calc_utils/config';
-import {ERROR_VALUE} from '../calc_utils/error_config';
+import { ERROR_VALUE, reportError } from '../calc_utils/error_config';
 import { d18991230 } from '../calc_utils/config';
 
 
@@ -126,28 +126,72 @@ export class CellVString{
   }// 只支持2019/01/01这样的形式； Excel中不支持直接用字符串的方式输入日期
 
   toDate(){
-    let theDate =Date(this.theString)
+    let theDate = Date(this.theString)
     if(isNaN(theDate.getTime())){ // 无法正确转换
-      return ERROR_VALUE
+      return reportError(ERROR_VALUE)
     }
-    else{return  theDate}
+    else{return theDate}
   }
 }
 
-export function convertToCellV(originValue){ // 转换原始的值
+/**
+ * @property {Array} aArray
+ */
+export class CellVArray{
+  constructor(aArray){
+    this.aArray = aArray // 最多支持2维数组
+    this.isCellV = true
+    this.cellVTypeName = "CellVArray"
+  }
+  applyToAll(func){
+    return this.aArray.map(f =>{
+      if(f instanceof Array){
+        return f.map(func)
+      }
+      else {
+        return func(f)
+      }
+    })
+  }
+  toNumber(){
+    return this.applyToAll(aValue => {let res;
+    try{
+      let res = aValue.toNumber();
+    }
+    catch (e) {
+
+    }
+
+    }) // 转化为浮点数
+  }
+  toString(){
+    return  this.applyToAll(aValue => aValue.toString()) // 转化为字符串
+  }// 只支持2019/01/01这样的形式； Excel中不支持直接用字符串的方式输入日期
+  toDate(){
+    return  this.applyToAll(aValue => aValue.toDate())
+  }
+}
+
+
+
+export function convertToCellV(originValue){
   if(originValue instanceof Date){
     return new CellVDateTime(originValue)
   }
-  else if (originValue instanceof String){
+  else if (typeof originValue === "string"){
     return new CellVString(originValue)
-  }else if (typeof originValue === 'number' && !isNaN(originValue)){
+  }
+  else if (originValue instanceof Array){
+    return new CellVArray(originValue)
+  }
+  else if (typeof originValue === 'number' && !isNaN(originValue)){
     return new CellVNumber(originValue)
   }
   if(originValue.isCellV === true){
     return originValue // 不进行转换
   }
   else {
-    throw ERROR_VALUE // 无法返回cellV的类型
+    reportError(ERROR_VALUE) // 无法返回cellV的类型
   }
 }
 

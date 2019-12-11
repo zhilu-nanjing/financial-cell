@@ -122,7 +122,7 @@ exports.TYPE = function (value) {
   // }
   if (typeof(value) === 'string') {
     if (value.slice(0,1) == '{'){
-      let arr = utils.strToMatrix(value)
+      let arr = helper.strToMatrix(value)
       if (Array.isArray(arr)) {
         return 64;
       }

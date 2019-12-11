@@ -1,6 +1,7 @@
 import assert from 'assert'
 import { Calc } from '../../src/calc/calc_cmd/calc';
 
+// todo: 很多函数计算结果都有问题
 describe('expression_fn integration', function() {
   describe('calculateWorkBook.import_functions()', function() {
     it('AVERAGE', function() {
@@ -130,6 +131,7 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.A613 = {v: 0};
       workbook.Sheets.Sheet1.H614 = {f: '=PRICE(A607,A608,A609,A610,A611,A612,A613)'};
       let calc = new Calc()
+      calc.calculateWorkbook(workbook);
       assert.equal(Math.abs(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","H614", "v")-94.634361) < 0.01, true);
     });
   });

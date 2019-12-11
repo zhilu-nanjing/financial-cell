@@ -1,6 +1,6 @@
 import {errorObj} from '../../calc_utils/error_config'
 import dateTime from './date_time'
-import utils from './utils'
+import utils from '../../calc_utils/helper'
 
 // exports.validDate = function (d)
 function validDate(d){
@@ -156,7 +156,7 @@ exports.COUPDAYBS = function (settlement, maturity, frequency, basis) {
   return result / (1000 * 60 * 60 * 24)
 };
 //原代码
-// let maturityDate = utils.parseDate(maturity)
+// let maturityDate = utils.days_str2date(maturity)
 // let startday = utils.Copy(maturityDate)
 // startday.setMonth(startday.getMonth()-12/frequency) // todo 余数算法更好
 // while(startday >= settlementDate){

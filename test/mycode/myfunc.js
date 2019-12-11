@@ -1,7 +1,8 @@
-import * as utils from '../../src/calc/expression_fn/lib/utils.js';
+import * as utils from '../../src/calc/calc_utils/helper.js';
 import * as error from '../../src/calc/calc_utils/error_config.js';
-import * as jStat from 'jstat'
-import {errorObj} from "../../src/calc/calc_utils/error_config";
+import * as jStat from 'jstat';
+import { errorObj } from '../../src/calc/calc_utils/error_config';
+import { parseBool, days_str2date, parseNumber } from '../../src/calc/calc_utils/parse_helper';
 
 
 const MSECOND_NUM_PER_DAY = 3600 * 24 *1000
@@ -20,8 +21,8 @@ const MONTH_NUM_PER_YEAR = 12
  * @constructor
  */
 exports.YIELD = function (settlement, maturity, rate, price, redemption, frequency, basis) {
-    let settlementDate = utils.parseDate(settlement);
-    let maturityDate = utils.parseDate(maturity);
+    let settlementDate = days_str2date(settlement);
+    let maturityDate = days_str2date(maturity);
     if (utils.anyIsError(settlement, maturity)) {
         return error.value;
     }
@@ -83,9 +84,9 @@ exports.YIELD = function (settlement, maturity, rate, price, redemption, frequen
  * @constructor
  */
 exports.YIELDMAT = function (settlement, maturity,issue, rate, price, basis) {
-    let settlementDate = utils.parseDate(settlement);
-    let maturityDate = utils.parseDate(maturity);
-    let issueDate = utils.parseDate(issue)
+    let settlementDate = days_str2date(settlement);
+    let maturityDate = days_str2date(maturity);
+    let issueDate = days_str2date(issue)
     if (utils.anyIsError(settlement, maturity,issue)) {
         return error.value;
     }
@@ -126,10 +127,10 @@ exports.YIELDMAT = function (settlement, maturity,issue, rate, price, basis) {
  * @constructor
  */
 exports.ODDFPRICE = function (settlement, maturity, issue,first_coupon,rate, yld, redemption, frequency, basis) {
-    let settlementDate = utils.parseDate(settlement);
-    let maturityDate = utils.parseDate(maturity);
-    let issueDate = utils.parseDate(issue);
-    let first_couponDate = utils.parseDate(first_coupon);
+    let settlementDate = days_str2date(settlement);
+    let maturityDate = days_str2date(maturity);
+    let issueDate = days_str2date(issue);
+    let first_couponDate = days_str2date(first_coupon);
     if (utils.anyIsError(settlement, maturity,issue,first_coupon)) {
         return error.value;
     }
@@ -169,12 +170,12 @@ exports.ODDFPRICE = function (settlement, maturity, issue,first_coupon,rate, yld
  * @constructor
  */
 exports.CHISQDIST = function(x, k, cumulative) {
-    cumulative = utils.parseBool(cumulative)
+    cumulative = parseBool(cumulative)
     if (x < 0){
         return errorObj.ERROR_NUM
     }
-    x = utils.parseNumber(x);
-    k = utils.parseNumber(k);
+    x = parseNumber(x);
+    k = parseNumber(k);
     if (utils.anyIsError(x, k)) {
         return errorObj.ERROR_VALUE;
     }
@@ -212,8 +213,8 @@ exports.CHISQDISTRT = function(x, k) {
  * @constructor
  */
 exports.CHISQINV = function(probability, k) {
-    probability = utils.parseNumber(probability);
-    k = utils.parseNumber(k);
+    probability = parseNumber(probability);
+    k = parseNumber(k);
     if (utils.anyIsError(probability, k)) {
         return errorObj.ERROR_VALUE;
     }

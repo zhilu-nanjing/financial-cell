@@ -1,4 +1,4 @@
-import utils from './utils'
+import utils from '../../calc_utils/helper'
 import {errorObj} from '../../calc_utils/error_config'
 import numeral from 'numeral'
 

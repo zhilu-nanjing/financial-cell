@@ -12,7 +12,7 @@ let exp_id = 0; // 全局变量
  * @property {CalcCell} calcCell
  */
 export class StructuralExp {
-    // 代表语法书上面的一个节点。这个几点的args是代表树枝，
+    // 代表语法树上面的一个节点。这个几点的args是代表树枝，
     // 可以为RawValue，RefValue，LazyValue或字符或FormulaExp; 存在括号的时候，会把括号内的表达式构造为FormulaExp
     constructor(calcCell) {
         this.id = ++exp_id;   // id 是一个递增序列，其中root_exp的id为1
@@ -22,32 +22,6 @@ export class StructuralExp {
         this.last_arg = "";
     }
 
-    update_cell_value() {
-        let self = this;
-        let curCellObj = this.calcCell.cellObj;
-        try {
-            if (Array.isArray(self.args) // 不合法的参数； 何时会出现这种情况？
-              && self.args.length === 1
-              && self.args[0] instanceof Range) {
-                throw errorObj.ERROR_VALUE;
-            }
-            curCellObj.v = self.solveExpression(); // 计算数值
-
-            if (typeof (curCellObj.v) === 'string') {
-                curCellObj.t = 's';
-            } else if (typeof (curCellObj.v) === 'number') {
-                curCellObj.t = 'n';
-            }
-        } catch (e) {
-            if (errorMsgArr.indexOf(e.message) !== -1) {
-                curCellObj.t = 'e';
-                curCellObj.w = e.message; // todo: 把.w 属性改为  .text属性， cell使用calcCell实例而不是单纯的obj
-                curCellObj.v = e.message; // 出错的话，v属性应该没有用了把
-            } else {
-                throw e;
-            }
-        }
-    }
 
     isEmpty(value) {
         return value === undefined || value === null || value === "";
@@ -231,6 +205,31 @@ export class StructuralExp {
             //console.log(self.id, '-->', v);
         }
     };
+    update_cell_value() { // 这个方法是用来更新cellObj.v，而solve_expression只会获取运算结果而不会赋值
+        let self = this;
+        let curCellObj = this.calcCell.cellObj;
+        try {
+            if (Array.isArray(self.args) // 不合法的参数； 何时会出现这种情况？
+              && self.args.length === 1
+              && self.args[0] instanceof Range) {
+                throw errorObj.ERROR_VALUE;
+            }
+            curCellObj.v = self.solveExpression(); // 计算数值
 
-};
+            if (typeof (curCellObj.v) === 'string') {
+                curCellObj.t = 's';
+            } else if (typeof (curCellObj.v) === 'number') {
+                curCellObj.t = 'n';
+            }
+        } catch (e) {
+            if (errorMsgArr.indexOf(e.message) !== -1) {
+                curCellObj.t = 'e';
+                curCellObj.w = e.message; // todo: 把.w 属性改为  .text属性， cell使用calcCell实例而不是单纯的obj
+                curCellObj.v = e.message; // 出错的话，v属性应该没有用了把
+            } else {
+                throw e;
+            }
+        }
+    }
+}
 

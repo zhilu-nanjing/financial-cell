@@ -1,5 +1,5 @@
 import numeric from 'numeric'
-import utils from './utils'
+import utils from '../../calc_utils/helper'
 import {errorObj} from '../../calc_utils/error_config'
 import statistical from './statistical'
 import information from './information'

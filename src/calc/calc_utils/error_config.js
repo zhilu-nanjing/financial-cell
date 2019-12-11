@@ -11,6 +11,9 @@ export const ERROR_CIRCULAR = '#CIRCULA!';
 export const ERROR_ERROR = '#ERROR!';
 export const ERROR_SYNTAX = "#SYNTAX" // 语法错误
 export const ERROR_NON_SOLVED = "NON_SOLVED"
+export const PARSE_FAIL = "PARSE_FAIL"
+export const PARSE_FAIL_OBJ = {msg: "PARSE_FAIL"}
+
 
 export const errorMsgArr = [ERROR_NULL, ERROR_DIV0, ERROR_VALUE, ERROR_REF, ERROR_NAME,
   ERROR_NUM, ERROR_NA, ERROR_GETTING_DATA, ERROR_DATE_STR, ERROR_CIRCULAR,
@@ -32,5 +35,8 @@ export const errorObj = {
   ERROR_NON_SOLVED: new Error(ERROR_NON_SOLVED)
 };
 
-
+export function reportError(errorStr){
+  console.log(new Error(errorStr))
+  return  new Error(errorStr)
+}
 

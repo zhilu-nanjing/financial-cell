@@ -1,15 +1,16 @@
-import mathTrig from './math-trig'
-import text from './text'
-import * as jStat from 'jstat'
-import utils from './utils'
-import {errorObj} from '../../calc_utils/error_config'
-import misc from './miscellaneous'
-import evalExpression from './expression'
+import mathTrig from './math-trig';
+import text from './text';
+import * as jStat from 'jstat';
+import * as utils from '../../calc_utils/helper';
+import { errorObj } from '../../calc_utils/error_config';
+import misc from './miscellaneous';
+import evalExpression from './expression';
+import { parseBool, parseNumber, parseNumberArray } from '../../calc_utils/parse_helper';
 
 let SQRT2PI = 2.5066282746310002;
 
 exports.AVEDEV = function() {
-  let range = utils.parseNumberArray(utils.flatten(arguments));
+  let range = parseNumberArray(utils.flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
@@ -17,7 +18,7 @@ exports.AVEDEV = function() {
 };
 
 exports.AVERAGE = function() {
-  let range = utils.flattenNum(arguments);
+  let range = utils.flattenNum(arguments); // 这个arguments是通过function.call传递过来的
   if (range instanceof Error) {
     return range;
   }
@@ -63,7 +64,7 @@ exports.AVERAGEIF = function (range, criteria, average_range) {
   }
   average_range = average_range || range;
   range = utils.flatten(range);
-  average_range = utils.parseNumberArray(utils.flatten(average_range));
+  average_range = parseNumberArray(utils.flatten(average_range));
 
   if (average_range instanceof Error) {
     return average_range;
@@ -159,15 +160,15 @@ exports.BETA.DIST = function (x, alpha, beta, cumulative, A, B) {
   A = (A === undefined) ? 0 : A;
   B = (B === undefined) ? 1 : B;
 
-  x = utils.parseNumber(x);
-  alpha = utils.parseNumber(alpha);
-  beta = utils.parseNumber(beta);
-  A = utils.parseNumber(A);
-  B = utils.parseNumber(B);
+  x = parseNumber(x);
+  alpha = parseNumber(alpha);
+  beta = parseNumber(beta);
+  A = parseNumber(A);
+  B = parseNumber(B);
   if (utils.anyIsError(x, alpha, beta, A, B)) {
     return errorObj.ERROR_VALUE;
   }
-  cumulative = utils.parseBool(cumulative)
+  cumulative = parseBool(cumulative)
   x = (x - A) / (B - A);
   return cumulative ? jStat.beta.cdf(x, alpha, beta) : jStat.beta.pdf(x, alpha, beta)/2;
 };
@@ -176,11 +177,11 @@ exports.BETA.INV = function(probability, alpha, beta, A, B) {
   A = (A === undefined) ? 0 : A;
   B = (B === undefined) ? 1 : B;
 
-  probability = utils.parseNumber(probability);
-  alpha = utils.parseNumber(alpha);
-  beta = utils.parseNumber(beta);
-  A = utils.parseNumber(A);
-  B = utils.parseNumber(B);
+  probability = parseNumber(probability);
+  alpha = parseNumber(alpha);
+  beta = parseNumber(beta);
+  A = parseNumber(A);
+  B = parseNumber(B);
   if (utils.anyIsError(probability, alpha, beta, A, B)) {
     return errorObj.ERROR_VALUE;
   }
@@ -191,11 +192,11 @@ exports.BETA.INV = function(probability, alpha, beta, A, B) {
 exports.BINOM = {};
 
 exports.BINOM.DIST = function (successes, trials, probability, cumulative) {
-  successes = utils.parseNumber(successes);
-  trials = utils.parseNumber(trials);
-  probability = utils.parseNumber(probability);
-  cumulative = utils.parseBool(cumulative)
-  cumulative = utils.parseNumber(cumulative);
+  successes = parseNumber(successes);
+  trials = parseNumber(trials);
+  probability = parseNumber(probability);
+  cumulative = parseBool(cumulative)
+  cumulative = parseNumber(cumulative);
   if (utils.anyIsError(successes, trials, probability, cumulative)) {
     return errorObj.ERROR_VALUE;
   }
@@ -203,9 +204,9 @@ exports.BINOM.DIST = function (successes, trials, probability, cumulative) {
 };
 
 exports.BINOM.INV = function(trials, probability, alpha) {
-  trials = utils.parseNumber(trials);
-  probability = utils.parseNumber(probability);
-  alpha = utils.parseNumber(alpha);
+  trials = parseNumber(trials);
+  probability = parseNumber(probability);
+  alpha = parseNumber(alpha);
   if (utils.anyIsError(trials, probability, alpha)) {
     return errorObj.ERROR_VALUE;
   }
@@ -222,12 +223,12 @@ exports.BINOM.INV = function(trials, probability, alpha) {
 exports.CHISQ = {};
 
 exports.CHISQ.DIST = function(x, k, cumulative) {
-  cumulative = utils.parseBool(cumulative)
+  cumulative = parseBool(cumulative)
   if (x < 0){
     return errorObj.ERROR_NUM
   }
-  x = utils.parseNumber(x);
-  k = utils.parseNumber(k);
+  x = parseNumber(x);
+  k = parseNumber(k);
   if (utils.anyIsError(x, k)) {
     return errorObj.ERROR_VALUE;
   }
@@ -251,8 +252,8 @@ exports.CHISQ.DIST.RT = function(x, k) {
 };
 
 exports.CHISQ.INV = function(probability, k) {
-  probability = utils.parseNumber(probability);
-  k = utils.parseNumber(k);
+  probability = parseNumber(probability);
+  k = parseNumber(k);
   if (utils.anyIsError(probability, k)) {
     return errorObj.ERROR_VALUE;
   }
@@ -371,9 +372,9 @@ exports.COLUMNS = function(matrix) {
 exports.CONFIDENCE = {};
 
 exports.CONFIDENCE.NORM = function(alpha, sd, n) {
-  alpha = utils.parseNumber(alpha);
-  sd = utils.parseNumber(sd);
-  n = utils.parseNumber(n);
+  alpha = parseNumber(alpha);
+  sd = parseNumber(sd);
+  n = parseNumber(n);
   if (utils.anyIsError(alpha, sd, n)) {
     return errorObj.ERROR_VALUE;
   }
@@ -381,9 +382,9 @@ exports.CONFIDENCE.NORM = function(alpha, sd, n) {
 };
 
 exports.CONFIDENCE.T = function(alpha, sd, n) {
-  alpha = utils.parseNumber(alpha);
-  sd = utils.parseNumber(sd);
-  n = utils.parseNumber(n);
+  alpha = parseNumber(alpha);
+  sd = parseNumber(sd);
+  n = parseNumber(n);
   if (utils.anyIsError(alpha, sd, n)) {
     return errorObj.ERROR_VALUE;
   }
@@ -400,8 +401,8 @@ exports.IFS = function() {
   return errorObj.ERROR_NA;
 }
 exports.CORREL = function(array1, array2) {
-  array1 = utils.parseNumberArray(utils.flatten(array1));
-  array2 = utils.parseNumberArray(utils.flatten(array2));
+  array1 = parseNumberArray(utils.flatten(array1));
+  array2 = parseNumberArray(utils.flatten(array2));
   if (utils.anyIsError(array1, array2)) {
     return errorObj.ERROR_VALUE;
   }
@@ -505,8 +506,8 @@ exports.COUNTUNIQUE = function () {
 exports.COVARIANCE = {};
 
 exports.COVARIANCE.P = function(array1, array2) {
-  array1 = utils.parseNumberArray(utils.flatten(array1));
-  array2 = utils.parseNumberArray(utils.flatten(array2));
+  array1 = parseNumberArray(utils.flatten(array1));
+  array2 = parseNumberArray(utils.flatten(array2));
   if (utils.anyIsError(array1, array2)) {
     return errorObj.ERROR_VALUE;
   }
@@ -527,8 +528,8 @@ exports.COVARIANCE.S = function(array1, array2) {
   if (typeof array2 === "string") {
     array2 = utils.strToMatrix(array2);
   }
-  array1 = utils.parseNumberArray(utils.flatten(array1));
-  array2 = utils.parseNumberArray(utils.flatten(array2));
+  array1 = parseNumberArray(utils.flatten(array1));
+  array2 = parseNumberArray(utils.flatten(array2));
   if (utils.anyIsError(array1, array2)) {
     return errorObj.ERROR_VALUE;
   }
@@ -536,7 +537,7 @@ exports.COVARIANCE.S = function(array1, array2) {
 };
 
 exports.DEVSQ = function() {
-  let range = utils.parseNumberArray(utils.flatten(arguments));
+  let range = parseNumberArray(utils.flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
@@ -551,9 +552,9 @@ exports.DEVSQ = function() {
 exports.EXPON = {};
 
 exports.EXPON.DIST = function(x, lambda, cumulative) {
-  cumulative = utils.parseBool(cumulative)
-  x = utils.parseNumber(x);
-  lambda = utils.parseNumber(lambda);
+  cumulative = parseBool(cumulative)
+  x = parseNumber(x);
+  lambda = parseNumber(lambda);
   if (utils.anyIsError(x, lambda)) {
     return errorObj.ERROR_VALUE;
   }
@@ -563,9 +564,9 @@ exports.EXPON.DIST = function(x, lambda, cumulative) {
 exports.F = {};
 
 exports.F.DIST = function (x, d1, d2, cumulative) {
-  x = utils.parseNumber(x);
-  d1 = utils.parseNumber(d1);
-  d2 = utils.parseNumber(d2);
+  x = parseNumber(x);
+  d1 = parseNumber(d1);
+  d2 = parseNumber(d2);
   if (utils.anyIsError(x, d1, d2)) {
     return errorObj.ERROR_VALUE;
   }
@@ -659,7 +660,7 @@ exports.F.TEST = function (array1, array2) {
 };
 
 exports.FISHER = function(x) {
-  x = utils.parseNumber(x);
+  x = parseNumber(x);
   if (x instanceof Error) {
     return x;
   }
@@ -667,7 +668,7 @@ exports.FISHER = function(x) {
 };
 
 exports.FISHERINV = function(y) {
-  y = utils.parseNumber(y);
+  y = parseNumber(y);
   if (y instanceof Error) {
     return y;
   }
@@ -676,9 +677,9 @@ exports.FISHERINV = function(y) {
 };
 
 exports.FORECAST = function(x, data_y, data_x) {
-  x = utils.parseNumber(x);
-  data_y = utils.parseNumberArray(utils.flatten(data_y));
-  data_x = utils.parseNumberArray(utils.flatten(data_x));
+  x = parseNumber(x);
+  data_y = parseNumberArray(utils.flatten(data_y));
+  data_x = parseNumberArray(utils.flatten(data_x));
   if (utils.anyIsError(x, data_y, data_x)) {
     return errorObj.ERROR_VALUE;
   }
@@ -697,8 +698,8 @@ exports.FORECAST = function(x, data_y, data_x) {
 };
 
 exports.FREQUENCY = function(data, bins) {
-  data = utils.parseNumberArray(utils.flatten(data));
-  bins = utils.parseNumberArray(utils.flatten(bins));
+  data = parseNumberArray(utils.flatten(data));
+  bins = parseNumberArray(utils.flatten(bins));
   if (utils.anyIsError(data, bins)) {
     return errorObj.ERROR_VALUE;
   }
@@ -728,7 +729,7 @@ exports.FREQUENCY = function(data, bins) {
 
 
 exports.GAMMA = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -745,7 +746,7 @@ exports.GAMMA = function(number) {
 };
 
 exports.GAMMA.DIST = function(value, alpha, beta, cumulative) {
-  cumulative = utils.parseBool(cumulative)
+  cumulative = parseBool(cumulative)
   if (arguments.length !== 4) {
     return errorObj.ERROR_NA;
   }
@@ -778,7 +779,7 @@ exports.GAMMA.INV = function(probability, alpha, beta) {
 };
 
 exports.GAMMALN = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -802,7 +803,7 @@ exports.GAMMALN.PRECISE = function(x) {
 };
 
 exports.GAUSS = function(z) {
-  z = utils.parseNumber(z);
+  z = parseNumber(z);
   if (z instanceof Error) {
     return z;
   }
@@ -810,7 +811,7 @@ exports.GAUSS = function(z) {
 };
 
 exports.GEOMEAN = function() {
-  let args = utils.parseNumberArray(utils.flatten(arguments));
+  let args = parseNumberArray(utils.flatten(arguments));
   if (args instanceof Error) {
     return args;
   }
@@ -820,7 +821,7 @@ exports.GEOMEAN = function() {
 exports.GROWTH = function(known_y, known_x, new_x, use_const) {
   // Credits: Ilmari Karonen (http://stackoverflow.com/questions/14161990/how-to-implement-growth-function-in-javascript)
 
-  known_y = utils.parseNumberArray(known_y);
+  known_y = parseNumberArray(known_y);
   if (known_y instanceof Error) {
     return known_y;
   }
@@ -840,8 +841,8 @@ exports.GROWTH = function(known_y, known_x, new_x, use_const) {
     }
   }
 
-  known_x = utils.parseNumberArray(known_x);
-  new_x = utils.parseNumberArray(new_x);
+  known_x = parseNumberArray(known_x);
+  new_x = parseNumberArray(new_x);
   if (utils.anyIsError(known_x, new_x)) {
     return errorObj.ERROR_VALUE;
   }
@@ -890,7 +891,7 @@ exports.GROWTH = function(known_y, known_x, new_x, use_const) {
 };
 
 exports.HARMEAN = function() {
-  let range = utils.parseNumberArray(utils.flatten(arguments));
+  let range = parseNumberArray(utils.flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
@@ -905,11 +906,11 @@ exports.HARMEAN = function() {
 exports.HYPGEOM = {};
 
 exports.HYPGEOM.DIST = function(x, n, M, N, cumulative) {
-  cumulative = utils.parseBool(cumulative)
-  x = utils.parseNumber(x);
-  n = utils.parseNumber(n);
-  M = utils.parseNumber(M);
-  N = utils.parseNumber(N);
+  cumulative = parseBool(cumulative)
+  x = parseNumber(x);
+  n = parseNumber(n);
+  M = parseNumber(M);
+  N = parseNumber(N);
   if (utils.anyIsError(x, n, M, N)) {
     return errorObj.ERROR_VALUE;
   }
@@ -930,8 +931,8 @@ exports.HYPGEOM.DIST = function(x, n, M, N, cumulative) {
 };
 
 exports.INTERCEPT = function(known_y, known_x) {
-  known_y = utils.parseNumberArray(known_y);
-  known_x = utils.parseNumberArray(known_x);
+  known_y = parseNumberArray(known_y);
+  known_x = parseNumberArray(known_x);
   if (utils.anyIsError(known_y, known_x)) {
     return errorObj.ERROR_VALUE;
   }
@@ -942,7 +943,7 @@ exports.INTERCEPT = function(known_y, known_x) {
 };
 
 exports.KURT = function() {
-  let range = utils.parseNumberArray(utils.flatten(arguments));
+  let range = parseNumberArray(utils.flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
@@ -965,7 +966,7 @@ exports.LARGE = function(range, k) {
     }
   }
   range = arr;
-  k = utils.parseNumber(k);
+  k = parseNumber(k);
   if (utils.anyIsError(range, k)) {
     return range;
   }
@@ -975,8 +976,8 @@ exports.LARGE = function(range, k) {
 };
 
 exports.LINEST = function(data_y, data_x) {
-  data_y = utils.parseNumberArray(utils.flatten(data_y));
-  data_x = utils.parseNumberArray(utils.flatten(data_x));
+  data_y = parseNumberArray(utils.flatten(data_y));
+  data_x = parseNumberArray(utils.flatten(data_x));
   if (utils.anyIsError(data_y, data_x)) {
     return errorObj.ERROR_VALUE;
   }
@@ -999,8 +1000,8 @@ exports.LINEST = function(data_y, data_x) {
 // LOGEST returns are based on the following linear model:
 // ln y = x1 ln m1 + ... + xn ln mn + ln b
 exports.LOGEST = function(data_y, data_x) {
-  data_y = utils.parseNumberArray(utils.flatten(data_y));
-  data_x = utils.parseNumberArray(utils.flatten(data_x));
+  data_y = parseNumberArray(utils.flatten(data_y));
+  data_x = parseNumberArray(utils.flatten(data_x));
   if (utils.anyIsError(data_y, data_x)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1017,10 +1018,10 @@ exports.LOGEST = function(data_y, data_x) {
 exports.LOGNORM = {};
 
 exports.LOGNORM.DIST = function(x, mean, sd, cumulative) {
-  cumulative = utils.parseBool(cumulative)
-  x = utils.parseNumber(x);
-  mean = utils.parseNumber(mean);
-  sd = utils.parseNumber(sd);
+  cumulative = parseBool(cumulative)
+  x = parseNumber(x);
+  mean = parseNumber(mean);
+  sd = parseNumber(sd);
   if (utils.anyIsError(x, mean, sd)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1028,9 +1029,9 @@ exports.LOGNORM.DIST = function(x, mean, sd, cumulative) {
 };
 
 exports.LOGNORM.INV = function(probability, mean, sd) {
-  probability = utils.parseNumber(probability);
-  mean = utils.parseNumber(mean);
-  sd = utils.parseNumber(sd);
+  probability = parseNumber(probability);
+  mean = parseNumber(mean);
+  sd = parseNumber(sd);
   if (utils.anyIsError(probability, mean, sd)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1073,7 +1074,7 @@ exports.MODE = {};
 
 exports.MODE.MULT = function() {
   // Credits: Roönaän
-  let range = utils.parseNumberArray(utils.flatten(arguments));
+  let range = parseNumberArray(utils.flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
@@ -1098,7 +1099,7 @@ exports.MODE.MULT = function() {
 };
 
 exports.MODE.SNGL = function() {
-  let range = utils.parseNumberArray(utils.flatten(arguments));
+  let range = parseNumberArray(utils.flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
@@ -1110,10 +1111,10 @@ exports.MODE.SNGL = function() {
 exports.NEGBINOM = {};
 
 exports.NEGBINOM.DIST = function(k, r, p, cumulative) {
-  cumulative = utils.parseBool(cumulative)
-  k = utils.parseNumber(k);
-  r = utils.parseNumber(r);
-  p = utils.parseNumber(p);
+  cumulative = parseBool(cumulative)
+  k = parseNumber(k);
+  r = parseNumber(r);
+  p = parseNumber(p);
   if (utils.anyIsError(k, r, p)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1123,10 +1124,10 @@ exports.NEGBINOM.DIST = function(k, r, p, cumulative) {
 exports.NORM = {};
 
 exports.NORM.DIST = function(x, mean, sd, cumulative) {
-  cumulative = utils.parseBool(cumulative)
-  x = utils.parseNumber(x);
-  mean = utils.parseNumber(mean);
-  sd = utils.parseNumber(sd);
+  cumulative = parseBool(cumulative)
+  x = parseNumber(x);
+  mean = parseNumber(mean);
+  sd = parseNumber(sd);
   if (utils.anyIsError(x, mean, sd)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1139,9 +1140,9 @@ exports.NORM.DIST = function(x, mean, sd, cumulative) {
 };
 
 exports.NORM.INV = function(probability, mean, sd) {
-  probability = utils.parseNumber(probability);
-  mean = utils.parseNumber(mean);
-  sd = utils.parseNumber(sd);
+  probability = parseNumber(probability);
+  mean = parseNumber(mean);
+  sd = parseNumber(sd);
   if (utils.anyIsError(probability, mean, sd)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1151,8 +1152,8 @@ exports.NORM.INV = function(probability, mean, sd) {
 exports.NORM.S = {};
 
 exports.NORM.S.DIST = function(z, cumulative) {
-  cumulative = utils.parseBool(cumulative)
-  z = utils.parseNumber(z);
+  cumulative = parseBool(cumulative)
+  z = parseNumber(z);
   if (z instanceof Error) {
     return errorObj.ERROR_VALUE;
   }
@@ -1160,7 +1161,7 @@ exports.NORM.S.DIST = function(z, cumulative) {
 };
 
 exports.NORM.S.INV = function(probability) {
-  probability = utils.parseNumber(probability);
+  probability = parseNumber(probability);
   if (probability instanceof Error) {
     return errorObj.ERROR_VALUE;
   }
@@ -1168,8 +1169,8 @@ exports.NORM.S.INV = function(probability) {
 };
 
 exports.PEARSON = function(data_x, data_y) {
-  data_y = utils.parseNumberArray(utils.flatten(data_y));
-  data_x = utils.parseNumberArray(utils.flatten(data_x));
+  data_y = parseNumberArray(utils.flatten(data_y));
+  data_x = parseNumberArray(utils.flatten(data_x));
   if (utils.anyIsError(data_y, data_x)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1190,8 +1191,8 @@ exports.PEARSON = function(data_x, data_y) {
 exports.PERCENTILE = {};
 
 exports.PERCENTILE.EXC = function(array, k) {
-  array = utils.parseNumberArray(utils.flatten(array));
-  k = utils.parseNumber(k);
+  array = parseNumberArray(utils.flatten(array));
+  k = parseNumber(k);
   if (utils.anyIsError(array, k)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1210,8 +1211,8 @@ exports.PERCENTILE.EXC = function(array, k) {
 };
 
 exports.PERCENTILE.INC = function(array, k) {
-  array = utils.parseNumberArray(utils.flatten(array));
-  k = utils.parseNumber(k);
+  array = parseNumberArray(utils.flatten(array));
+  k = parseNumber(k);
   if (utils.anyIsError(array, k)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1228,9 +1229,9 @@ exports.PERCENTRANK = {};
 
 exports.PERCENTRANK.EXC = function(array, x, significance) {
   significance = (significance === undefined) ? 3 : significance;
-  array = utils.parseNumberArray(utils.flatten(array));
-  x = utils.parseNumber(x);
-  significance = utils.parseNumber(significance);
+  array = parseNumberArray(utils.flatten(array));
+  x = parseNumber(x);
+  significance = parseNumber(significance);
   if (utils.anyIsError(array, x, significance)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1259,9 +1260,9 @@ exports.PERCENTRANK.EXC = function(array, x, significance) {
 
 exports.PERCENTRANK.INC = function(array, x, significance) {
   significance = (significance === undefined) ? 3 : significance;
-  array = utils.parseNumberArray(utils.flatten(array));
-  x = utils.parseNumber(x);
-  significance = utils.parseNumber(significance);
+  array = parseNumberArray(utils.flatten(array));
+  x = parseNumber(x);
+  significance = parseNumber(significance);
   if (utils.anyIsError(array, x, significance)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1289,8 +1290,8 @@ exports.PERCENTRANK.INC = function(array, x, significance) {
 };
 
 exports.PERMUT = function(number, number_chosen) {
-  number = utils.parseNumber(number);
-  number_chosen = utils.parseNumber(number_chosen);
+  number = parseNumber(number);
+  number_chosen = parseNumber(number_chosen);
   if (utils.anyIsError(number, number_chosen)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1298,8 +1299,8 @@ exports.PERMUT = function(number, number_chosen) {
 };
 
 exports.PERMUTATIONA = function(number, number_chosen) {
-  number = utils.parseNumber(number);
-  number_chosen = utils.parseNumber(number_chosen);
+  number = parseNumber(number);
+  number_chosen = parseNumber(number_chosen);
   if (utils.anyIsError(number, number_chosen)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1307,7 +1308,7 @@ exports.PERMUTATIONA = function(number, number_chosen) {
 };
 
 exports.PHI = function(x) {
-  x = utils.parseNumber(x);
+  x = parseNumber(x);
   if (x instanceof Error) {
     return errorObj.ERROR_VALUE;
   }
@@ -1317,9 +1318,9 @@ exports.PHI = function(x) {
 exports.POISSON = {};
 
 exports.POISSON.DIST = function(x, mean, cumulative) {
-  cumulative = utils.parseBool(cumulative)
-  x = utils.parseNumber(x);
-  mean = utils.parseNumber(mean);
+  cumulative = parseBool(cumulative)
+  x = parseNumber(x);
+  mean = parseNumber(mean);
   if (utils.anyIsError(x, mean)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1332,10 +1333,10 @@ exports.PROB = function(range, probability, lower, upper) {
   }
   upper = (upper === undefined) ? lower : upper;
 
-  range = utils.parseNumberArray(utils.flatten(range));
-  probability = utils.parseNumberArray(utils.flatten(probability));
-  lower = utils.parseNumber(lower);
-  upper = utils.parseNumber(upper);
+  range = parseNumberArray(utils.flatten(range));
+  probability = parseNumberArray(utils.flatten(probability));
+  lower = parseNumber(lower);
+  upper = parseNumber(upper);
   if (utils.anyIsError(range, probability, lower, upper)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1360,8 +1361,8 @@ exports.PROB = function(range, probability, lower, upper) {
 exports.QUARTILE = {};
 
 exports.QUARTILE.EXC = function(range, quart) {
-  range = utils.parseNumberArray(utils.flatten(range));
-  quart = utils.parseNumber(quart);
+  range = parseNumberArray(utils.flatten(range));
+  quart = parseNumber(quart);
   if (utils.anyIsError(range, quart)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1378,8 +1379,8 @@ exports.QUARTILE.EXC = function(range, quart) {
 };
 
 exports.QUARTILE.INC = function(range, quart) {
-  range = utils.parseNumberArray(utils.flatten(range));
-  quart = utils.parseNumber(quart);
+  range = parseNumberArray(utils.flatten(range));
+  quart = parseNumber(quart);
   if (utils.anyIsError(range, quart)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1398,8 +1399,8 @@ exports.QUARTILE.INC = function(range, quart) {
 exports.RANK = {};
 
 exports.RANK.AVG = function(number, range, order) {
-  number = utils.parseNumber(number);
-  range = utils.parseNumberArray(utils.flatten(range));
+  number = parseNumber(number);
+  range = parseNumberArray(utils.flatten(range));
   if (utils.anyIsError(number, range)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1424,8 +1425,8 @@ exports.RANK.AVG = function(number, range, order) {
 };
 
 exports.RANK.EQ = function(number, range, order) {
-  number = utils.parseNumber(number);
-  range = utils.parseNumberArray(utils.flatten(range));
+  number = parseNumber(number);
+  range = parseNumberArray(utils.flatten(range));
   if (utils.anyIsError(number, range)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1476,8 +1477,8 @@ exports.ROWS = function(matrix) {
 };
 
 exports.RSQ = function(data_x, data_y) { // no need to flatten here, PEARSON will take care of that
-  data_x = utils.parseNumberArray(utils.flatten(data_x));
-  data_y = utils.parseNumberArray(utils.flatten(data_y));
+  data_x = parseNumberArray(utils.flatten(data_x));
+  data_y = parseNumberArray(utils.flatten(data_y));
   if (utils.anyIsError(data_x, data_y)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1485,7 +1486,7 @@ exports.RSQ = function(data_x, data_y) { // no need to flatten here, PEARSON wil
 };
 
 exports.SKEW = function() {
-  let range = utils.parseNumberArray(utils.flatten(arguments));
+  let range = parseNumberArray(utils.flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
@@ -1499,7 +1500,7 @@ exports.SKEW = function() {
 };
 
 exports.SKEW.P = function() {
-  let range = utils.parseNumberArray(utils.flatten(arguments));
+  let range = parseNumberArray(utils.flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
@@ -1517,8 +1518,8 @@ exports.SKEW.P = function() {
 };
 
 exports.SLOPE = function(data_y, data_x) {
-  data_y = utils.parseNumberArray(utils.flatten(data_y));
-  data_x = utils.parseNumberArray(utils.flatten(data_x));
+  data_y = parseNumberArray(utils.flatten(data_y));
+  data_x = parseNumberArray(utils.flatten(data_x));
   if (utils.anyIsError(data_y, data_x)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1535,8 +1536,8 @@ exports.SLOPE = function(data_y, data_x) {
 };
 
 exports.SMALL = function(range, k) {
-  range = utils.parseNumberArray(utils.flatten(range));
-  k = utils.parseNumber(k);
+  range = parseNumberArray(utils.flatten(range));
+  k = parseNumber(k);
   if (utils.anyIsError(range, k)) {
     return range;
   }
@@ -1546,9 +1547,9 @@ exports.SMALL = function(range, k) {
 };
 
 exports.STANDARDIZE = function(x, mean, sd) {
-  x = utils.parseNumber(x);
-  mean = utils.parseNumber(mean);
-  sd = utils.parseNumber(sd);
+  x = parseNumber(x);
+  mean = parseNumber(mean);
+  sd = parseNumber(sd);
   if (utils.anyIsError(x, mean, sd)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1579,8 +1580,8 @@ exports.STDEVPA = function() {
 
 
 exports.STEYX = function(data_y, data_x) {
-  data_y = utils.parseNumberArray(utils.flatten(data_y));
-  data_x = utils.parseNumberArray(utils.flatten(data_x));
+  data_y = parseNumberArray(utils.flatten(data_y));
+  data_x = parseNumberArray(utils.flatten(data_x));
   if (utils.anyIsError(data_y, data_x)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1608,9 +1609,9 @@ exports.TRANSPOSE = function(matrix) {
 exports.T = text.T;
 
 exports.T.DIST = function (x, df, cumulative) {
-  cumulative = utils.parseBool(cumulative)
-  x = utils.parseNumber(x);
-  df = utils.parseNumber(df);
+  cumulative = parseBool(cumulative)
+  x = parseNumber(x);
+  df = parseNumber(df);
   if (utils.anyIsError(x, df)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1657,8 +1658,8 @@ exports.T.INV = function (probability, df) {
   // }
   // let res = jStat.studentt.inv(probability, df);
   // return res
-  probability = utils.parseNumber(probability);
-  df = utils.parseNumber(df);
+  probability = parseNumber(probability);
+  df = parseNumber(df);
   if (probability <= 0 || probability > 1 || df < 1) {
     return errorObj.ERROR_NUM;
   }
@@ -1669,8 +1670,8 @@ exports.T.INV = function (probability, df) {
 };
 
 exports.T.INV['2T'] = function(probability, df) {
-  probability = utils.parseNumber(probability);
-  df = utils.parseNumber(df);
+  probability = parseNumber(probability);
+  df = parseNumber(df);
   if (probability <= 0 || probability > 1 || df < 1) {
     return errorObj.ERROR_NUM;
   }
@@ -1683,8 +1684,8 @@ exports.T.INV['2T'] = function(probability, df) {
 // The algorithm can be found here:
 // http://www.chem.uoa.gr/applets/AppletTtest/Appl_Ttest2.html
 exports.T.TEST = function(data_x, data_y) {
-  data_x = utils.parseNumberArray(utils.flatten(data_x));
-  data_y = utils.parseNumberArray(utils.flatten(data_y));
+  data_x = parseNumberArray(utils.flatten(data_x));
+  data_y = parseNumberArray(utils.flatten(data_y));
   if (utils.anyIsError(data_x, data_y)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1711,8 +1712,8 @@ exports.T.TEST = function(data_x, data_y) {
 };
 
 exports.TREND = function (data_y, data_x, new_data_x) {
-  data_y = utils.parseNumberArray(utils.flatten(data_y));
-  data_x = utils.parseNumberArray(utils.flatten(data_x));
+  data_y = parseNumberArray(utils.flatten(data_y));
+  data_x = parseNumberArray(utils.flatten(data_x));
   let linest = exports.LINEST(data_y, data_x);
   let m = linest[0];
   let b = linest[1];
@@ -1720,8 +1721,8 @@ exports.TREND = function (data_y, data_x, new_data_x) {
 };
 
 exports.TRIMMEAN = function (range, percent) {
-  range = utils.parseNumberArray(utils.flatten(range));
-  percent = utils.parseNumber(percent);
+  range = parseNumberArray(utils.flatten(range));
+  percent = parseNumber(percent);
   if (utils.anyIsError(range, percent)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1812,11 +1813,11 @@ exports.WEIBULL = {};
 
 exports.WEIBULL.DIST = function(x, alpha, beta, cumulative) {
   //XW:参数判断
-  cumulative = utils.parseBool(cumulative)
+  cumulative = parseBool(cumulative)
   //XW：end
-  x = utils.parseNumber(x);
-  alpha = utils.parseNumber(alpha);
-  beta = utils.parseNumber(beta);
+  x = parseNumber(x);
+  alpha = parseNumber(alpha);
+  beta = parseNumber(beta);
   if (utils.anyIsError(x, alpha, beta)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1826,8 +1827,8 @@ exports.WEIBULL.DIST = function(x, alpha, beta, cumulative) {
 exports.Z = {};
 
 exports.Z.TEST = function (range, x, sd) {
-  range = utils.parseNumberArray(utils.flatten(range));
-  x = utils.parseNumber(x);
+  range = parseNumberArray(utils.flatten(range));
+  x = parseNumber(x);
   if (utils.anyIsError(range, x)) {
     return errorObj.ERROR_VALUE;
   }

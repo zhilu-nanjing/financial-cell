@@ -1,7 +1,7 @@
 import {errorObj} from '../../calc_utils/error_config'
 import {jStat} from 'jstat'
 import text  from './text'
-import utils from './utils'
+import utils from '../../calc_utils/helper'
 import bessel from 'bessel'
 
 function isValidBinaryNumber(number) {

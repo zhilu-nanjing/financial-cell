@@ -51,6 +51,23 @@ describe('expression_fn integration', function () {
             console.log(res);
             assert(Math.abs(res-0.907069409)<0.0001)
         });
+        it('helper_ttest', function () {
+            let array1 = [123,123,12,12,1212],
+              array2 = [123,123,12,12,12], tails = 1;
+            // type = 1 成对t检验
+            let array3 = array1.map((curValue,index) => array2[index] - curValue)
+            const res = jStat.ttest(0, array3, tails)
+            console.log(res)
+
+            // type =2 同方差t检验, tail = 2
+            const res2_tail2 = jStat.anovaftest( array1, array2)
+            const res2_tail1 = res2_tail2/2
+            console.log(res2)
+
+
+
+
+        })
 
     });
 });

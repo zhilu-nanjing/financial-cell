@@ -44,13 +44,13 @@ export const MARK_OBJ= { // todo: 需要把这个常数放到config里面
   space: " ", // 代表可以忽略的空白，或者为交集运算符
 };
 
-export const multiChartOperator ={
+export const MULTI_CHAR_OPERATOR ={
   notEqual: "<>",
   greaterEqual: ">=",
   lessEqual: "<=",
 }
 
-export const singleChartOperator ={
+export const SINGLE_CHAR_OPERATOR ={
   percent: "%", // 单元运算符
   star : '*', //双元运算符
   plus: '+', //双元运算符
@@ -62,15 +62,16 @@ export const singleChartOperator ={
   equal: "=", // 双元运算符是否等于
 }
 
-export const preDefinedConst={
+export const PRE_DEFINED_CONST={
   true: "TRUE",
   false:"FALSE"
 }
 
-export const moneyUnitObj = {
+export const MONEY_UNIT_OBJ = {
   dollar:"$",
-  rmb: "￥",
 }
+
+export const FORCE_STR_MARK ="'"
 
 // 这个日期作为日期的起点
 export const d18991230 = new Date(1899, 11, 30); // js中0代表1月，11代表12月
