@@ -5,12 +5,31 @@ import * as jStat from 'jstat'
 
 describe('expression_fn integration', function () {
     describe('func', function () {
+        it('COUPDAYBS', function () {
+            let res = myfunc.COUPDAYBS(40861, 40862, 2, 1)
+            console.log(res);
+            assert.equal(res, 183)
+        });
+        it('COUPDAYS', function () {
+            let res = myfunc.COUPDAYS(40861, 40862, 2, 1)
+            console.log(res);
+            assert.equal(res, 184)
+        });
+        it('COUPDAYSNC', function () {
+            let res = myfunc.COUPDAYSNC(40861, 40862, 2, 1)
+            console.log(res);
+            assert.equal(res, 1)
+        });
+        it('COUPNCD', function () {
+            let res = myfunc.COUPNCD(40861, 40862, 2, 1)
+            console.log(res);
+            assert(Math.abs(res - 40862) < 0.01)
+        });
         it('YIELD', function () {
             let res = myfunc.YIELD(33000, 44000, 0.066, 88.88, 100, 4, 0)
             console.log(res);
             assert(Math.abs(res - 0.0753666) < 0.01)
         });
-
         it('YIELDMAT', function () {
             let res = myfunc.YIELDMAT(39630,39661,39569,0.1,99)
             console.log(res);
@@ -47,9 +66,19 @@ describe('expression_fn integration', function () {
             assert(Math.abs(res-0.64831785)<0.0001)
         });
         it('TTEST', function () {
-            let res = myfunc.TTEST([3,4,5,8,55,1,2,4,55],[6,19,3,22,14,55,5,22,1],2,2)
+            let res = myfunc.TTEST([3,4,5,8,55,1,2,4,55],[6,19,3,22,14,55,5,22,1],2,1)
             console.log(res);
-            assert(Math.abs(res-0.907069409)<0.0001)
+            assert(Math.abs(res-0.9199744)<0.0001)
+        });
+        it('DURATION', function () {
+            let res = myfunc.DURATION(40401,40885,0.06,0.07,4,1)
+            console.log(res);
+            assert(Math.abs(res-1.271)<0.001)
+        });
+        it('MDURATION', function () {
+            let res = myfunc.MDURATION(40401,40885,0.06,0.07,4,1)
+            console.log(res);
+            assert(Math.abs(res-1.249)<0.001)
         });
         it('helper_ttest', function () {
             let array1 = [123,123,12,12,1212],

@@ -7,6 +7,7 @@ import { parseBool, days_str2date, parseNumber } from '../../src/calc/calc_utils
 
 const MSECOND_NUM_PER_DAY = 3600 * 24 *1000
 const MONTH_NUM_PER_YEAR = 12
+const DAYS_NUM_PER_YEAR =365
 
 /**
  *
@@ -309,21 +310,59 @@ exports.TTEST = function (array1, array2,tails,type) {
     let sum2 = variance(array2);
     let value = Math.abs(jStat.mean(array1) - jStat.mean(array2)) / Math.sqrt(sum1/array1.length + sum2/array2.length);
     if(type === 2){
+        let arrayNew = array1.concat(array2);
         if(tails === 1){
-            return (1 - jStat.studentt.cdf(value , (array1.length + array2.length-2))) ;
+            return jStat.anovaftest( array1, array2)/2 ;
         }
         if(tails === 2){
-            return (1 - jStat.studentt.cdf(value , (array1.length + array2.length-2)))*2 ;
+            return jStat.anovaftest( array1, array2) ;
         }
     }
     if(type === 1){
-        let arrayNew = array1.concat(array2);
-        if(tails === 1){
-            return jStat.ttest( value, arrayNew, 1) ;
-        }
-        if(tails === 2){
-            return (1 - jStat.studentt.cdf(value , (arrayNew.length-1)))*2 ;
-        }
-
+        let array3 = array1.map((curValue,index) => array2[index] - curValue)
+        return jStat.ttest(0, array3, tails)
     }
 };
+
+export function DURATION(settlement, maturity, coupon, yld, frequency, basis){
+    let settlementDate = days_str2date(settlement);
+    let maturityDate = days_str2date(maturity);
+    if (basis<0 || basis > 4){
+        return errorObj.ERROR_NUM
+    }
+    if (settlement >= maturity){
+        return errorObj.ERROR_NUM
+    }
+    let monthBetween = maturityDate.getFullYear()*MONTH_NUM_PER_YEAR+maturityDate.getMonth()-settlementDate.getFullYear()*MONTH_NUM_PER_YEAR-settlementDate.getMonth()
+    let N =parseInt(monthBetween/(MONTH_NUM_PER_YEAR/frequency))
+    let endDay=utils.Copy(maturityDate)
+    endDay.setMonth(endDay.getMonth()-N*MONTH_NUM_PER_YEAR/frequency)
+    let startDay= utils.Copy(endDay)
+    startDay.setMonth(startDay.getMonth()-MONTH_NUM_PER_YEAR/frequency)
+    let DSC = (endDay-settlementDate)/ (MSECOND_NUM_PER_DAY)
+    let E = (endDay-startDay)/ (MSECOND_NUM_PER_DAY)
+    let A = (settlementDate-startDay)/ (MSECOND_NUM_PER_DAY)
+    let DSR = (maturityDate-settlementDate)/ (MSECOND_NUM_PER_DAY)
+    let presentValue = 0
+    for (let i =1;i<=N +1 ;i++){
+        presentValue = presentValue + (coupon*100/frequency)/Math.pow(1 + yld / frequency, (DSC+(i-1)*E) / E)
+    }
+    presentValue = presentValue + 100/Math.pow(1 + yld / frequency, DSR / E)
+    let dur = 0
+    for (let i =1;i<=N +1 ;i++){
+        dur = dur + (DSC+(i-1)*E)/DAYS_NUM_PER_YEAR*((coupon*100/frequency)/Math.pow(1 + yld / frequency, (DSC+(i-1)*E) / E))/presentValue
+    }
+    return dur + DSR/DAYS_NUM_PER_YEAR*(100/Math.pow(1 + yld / frequency, DSR / E))/presentValue
+}
+
+export function MDURATION(settlement, maturity, coupon, yld, frequency, basis){
+    let settlementDate = days_str2date(settlement);
+    let maturityDate = days_str2date(maturity);
+    if (basis<0 || basis > 4){
+        return errorObj.ERROR_NUM
+    }
+    if (settlement >= maturity){
+        return errorObj.ERROR_NUM
+    }
+    return DURATION(settlement, maturity, coupon, yld, frequency, basis)/(1+yld/frequency)
+}
