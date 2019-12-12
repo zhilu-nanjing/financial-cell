@@ -8,7 +8,7 @@ const MSECOND_NUM_PER_DAY = 3600 * 24 *1000
 const MONTH_NUM_PER_YEAR = 12
 const DAYS_NUM_PER_YEAR =365
 const DAYS_NUM_PER_YEAR_US =360
-const DAYS_NUM_PER_LEAP_YEAR =360
+const DAYS_NUM_PER_LEAP_YEAR =366
 const DAYS_NUM_PER_MONTH_US =30
 
 /**
@@ -21,13 +21,20 @@ const DAYS_NUM_PER_MONTH_US =30
 function get_Startdays_and_Enddays(settlement,maturity,frequency) {
     let settlementDate = days_str2date(settlement)
     let maturityDate = days_str2date(maturity)
-    let monthBetween = maturityDate.getFullYear() * 12 + maturityDate.getMonth() - settlementDate.getFullYear() * 12 - settlementDate.getMonth()
-    let N = parseInt(monthBetween / (12 / frequency))
+    let n
+    for(n = 0; n < Number.POSITIVE_INFINITY;n++ ){
+        let test = utils.Copy(maturityDate)
+        test.setMonth(test.getMonth() - n * 12 / frequency)
+        if(test<settlementDate){
+            break
+        }
+    }
+    let N = n - 1
     let endDay = utils.Copy(maturityDate)
     endDay.setMonth(endDay.getMonth() - N * 12 / frequency)
     let startDay = utils.Copy(endDay)
     startDay.setMonth(endDay.getMonth() - 12 / frequency)
-    return {"startDay": startDay, "endDay": endDay}
+    return {"startDay": startDay, "endDay": endDay,"N": N}
 }
 
 /**
@@ -124,11 +131,7 @@ export function COUPNUM(settlement, maturity, frequency, basis) {
     if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
         return errorObj.ERROR_NUM
     }
-    let settlementDate = days_str2date(settlement)
-    let maturityDate = days_str2date(maturity)
-    let monthBetween=maturityDate.getFullYear()*12+maturityDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth()
-    let N=parseInt(monthBetween/(MONTH_NUM_PER_YEAR/frequency))
-    return N+1
+    return get_Startdays_and_Enddays(settlement, maturity, frequency).N
 };
 
 
@@ -175,8 +178,8 @@ export function COUPNCD(settlement, maturity, frequency, basis) {
 function get_depreciation(cost, salvage, period,life,factor){
     let total_depreciation = 0;
     let current_depreciation = 0;
-    let i = 1
-    for (; i <= period; i++) {
+    let i
+    for (i = 1; i <= period; i++) {
         current_depreciation = Math.min((cost - total_depreciation) * (factor / life), (cost - salvage - total_depreciation));
         total_depreciation += current_depreciation;
     }
@@ -220,11 +223,11 @@ export function VDB(cost, salvage, life, Start_period,End_period,factor,No_switc
 
 /**
  *
- * @param settlement
- * @param maturity
- * @param pr
- * @param redemption
- * @param basis
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}price 必需。 有价证券的价格（按面值为 ￥100 计算）。
+ * @param {number}redemption 必需。 面值 ￥100 的有价证券的清偿价值。
+ * @param {number}basis 可选。 要使用的日计数基准类型。
  * @returns {*|Error|number}
  * @constructor
  */
@@ -240,28 +243,65 @@ export function YIELDDISC(settlement, maturity,price, redemption,basis) {
     if (redemption <= 0){
         return errorObj.ERROR_NUM
     }
-    let ylddisc = (settlementDate,maturityDate, maturity,price, redemption,daysnumbers) =>{
-        return (redemption-price)/price/(maturityDate-settlementDate)*DAYS_NUM_PER_LEAP_YEAR*MSECOND_NUM_PER_DAY;
-    }
+    let ylddisc = (daysnumbers) =>{
+        return (redemption-price)/price/(maturityDate-settlementDate)*daysnumbers*MSECOND_NUM_PER_DAY;
+     }
     if (basis===1){
         let year=settlementDate.getFullYear()
         if (0 === year%4 && (year%100 !==0 || year%400 === 0)){
-            return ylddisc (settlementDate,maturityDate, maturity,price, redemption,DAYS_NUM_PER_LEAP_YEAR)
+            return ylddisc (DAYS_NUM_PER_LEAP_YEAR)
         }
         else{
-            return ylddisc (settlementDate,maturityDate, maturity,price, redemption,DAYS_NUM_PER_YEAR)
+            return ylddisc (DAYS_NUM_PER_YEAR)
         }
     }
     if (basis===2){
-        return ylddisc (settlementDate,maturityDate, maturity,price, redemption,DAYS_NUM_PER_YEAR_US)
+        return ylddisc (DAYS_NUM_PER_YEAR_US)
     }
     if (basis===3){
-        return ylddisc (settlementDate,maturityDate, maturity,price, redemption,DAYS_NUM_PER_YEAR)
+        return ylddisc (DAYS_NUM_PER_YEAR)
     }
     if (basis===0||basis===4){
-        let monthsBetween=maturityDate.getFullYear()*MONTH_NUM_PER_YEAR+maturityDate.getMonth()-settlementDate.getFullYear()*MONTH_NUM_PER_YEAR-settlementDate.getMonth()-1
-        let daysBetween=monthsBetween*(DAYS_NUM_PER_MONTH_US+1)-settlementDate.getDay()+maturityDate.getDay()
+        let monthsBetween = maturityDate.getFullYear()*MONTH_NUM_PER_YEAR+maturityDate.getMonth()-settlementDate.getFullYear()*MONTH_NUM_PER_YEAR-settlementDate.getMonth()-1
+        let daysBetween = monthsBetween*DAYS_NUM_PER_MONTH_US+DAYS_NUM_PER_MONTH_US-settlementDate.getDate()+maturityDate.getDate()
         return (redemption-price)/price/daysBetween*DAYS_NUM_PER_YEAR_US
+    }
+};
+
+
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}rate 必需。 有价证券的年息票利率。
+ * @param {number}yld 必需。 有价证券的年收益率。
+ * @param {number}redemption 必需。 面值 ￥100 的有价证券的清偿价值。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4。
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function PRICE(settlement, maturity, rate, yld, redemption, frequency, basis) {
+    if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
+        return errorObj.ERROR_NUM
+    }
+    let N =get_Startdays_and_Enddays(settlement,maturity,frequency).N
+    let DSC = COUPDAYSNC(settlement, maturity,frequency, basis)
+    let E = COUPDAYS(settlement, maturity,frequency, basis)
+    let A = COUPDAYBS(settlement, maturity,frequency, basis)
+    if(N > 1){
+        let PRICE_PART1=redemption/Math.pow(1+yld/frequency,N-1+DSC/E)-((100*rate*A)/(frequency*E))
+        let PRICE_PART2 = 0
+        for(let k = 1;k<=N;k++){
+            PRICE_PART2 = PRICE_PART2+(100*rate)/frequency/(Math.pow(1+yld/frequency,k-1+DSC/E))
+        }
+        return PRICE_PART1+PRICE_PART2
+    }
+    if(N === 1){
+        let T1 = 100*rate/frequency +redemption
+        let T2 = yld*(E-A)/frequency/E+1
+        let T3 = 100*rate*A/frequency/E
+        return   T1/T2-T3
     }
 };
 
@@ -277,59 +317,36 @@ export function YIELDDISC(settlement, maturity,price, redemption,basis) {
  * @returns {number|*}
  * @constructor
  */
-exports.YIELD = function (settlement, maturity, rate, price, redemption, frequency, basis) {
-    let settlementDate = days_str2date(settlement);
-    let maturityDate = days_str2date(maturity);
-    if (utils.anyIsError(settlement, maturity)) {
-        return error.value;
+export function YIELD(settlement, maturity, rate, price, redemption, frequency, basis) {
+    if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
+        return errorObj.ERROR_NUM
     }
     if(rate <= 0){
-        return error.num;
+        return errorObj.ERROR_NUM;
     }
     if (price <= 0) {
-        return error.num;
+        return errorObj.ERROR_NUM;
     }
     if (redemption <= 0){
-        return error.num
+        return errorObj.ERROR_NUM
     }
-    if (settlement >= maturity  ) {
-        return error.num;
-    }
-    let monthBetween = maturityDate.getFullYear()*MONTH_NUM_PER_YEAR+maturityDate.getMonth()-settlementDate.getFullYear()*MONTH_NUM_PER_YEAR-settlementDate.getMonth()
-    let N =parseInt(monthBetween/(MONTH_NUM_PER_YEAR/frequency))
-    let endDay=utils.Copy(maturityDate)
-    endDay.setMonth(endDay.getMonth()-N*MONTH_NUM_PER_YEAR/frequency)
-    let startDay= utils.Copy(endDay)
-    startDay.setMonth(startDay.getMonth()-MONTH_NUM_PER_YEAR/frequency)
-    let DSC = (endDay-settlementDate)/ (MSECOND_NUM_PER_DAY)
-    let E = (endDay-startDay)/ (MSECOND_NUM_PER_DAY)
-    let A = (settlementDate-startDay)/ (MSECOND_NUM_PER_DAY)
-    let DSR = (maturityDate-settlementDate)/ (MSECOND_NUM_PER_DAY)
-    let price1
-    let price2
+    let N =get_Startdays_and_Enddays(settlement,maturity,frequency).N
+    let E = COUPDAYS(settlement, maturity,frequency, basis)
+    let A = COUPDAYBS(settlement, maturity,frequency, basis)
+    let DSR = E - A
     if(N < 1){
-        let yld = ((redemption/100+rate/frequency)-(price/100+(A*rate/E/frequency)))*frequency*E/(price/100+(A*rate/E/frequency))/DSR
-        return yld
+        return  ((redemption/100+rate/frequency)-(price/100+(A*rate/E/frequency)))*frequency*E/(price/100+(A*rate/E/frequency))/DSR
     }
     else if(N >= 1) {
         for (let yld = 0.01; yld <= 2; yld+=0.0001) {
-            price1 = redemption / Math.pow(1 + yld / frequency, N - 1 + DSC / E) - ((100 * rate * A) / (frequency * E))
-            price2 = (100 * rate) / (frequency * Math.pow(1 + yld / frequency, DSC / E))
-            for (let k = 2; k <= N; k++) {
-                price2 = price2 + (100 * rate) / (frequency * Math.pow(1 + yld / frequency, k - 1 + DSC / E))
-            }
-            let expectPrice = price1 + price2
-            if(Math.abs(expectPrice - price)<= 0.1 ){
+            if(Math.abs(PRICE(settlement, maturity, rate, yld, redemption, frequency, basis) - price)<= 0.1 ){
                 return yld
-            }
-            else {
-                console.log("yld",yld)
             }
         }
     }
 };
 
-/**TODO 结果的精确度可以再提高 by 旺旺 2019/12/9
+/**
  *
  * @param {Number}settlement 有价证券的结算日
  * @param {Number}maturity 有价证券的到期日
@@ -340,36 +357,33 @@ exports.YIELD = function (settlement, maturity, rate, price, redemption, frequen
  * @returns {number|*}
  * @constructor
  */
-exports.YIELDMAT = function (settlement, maturity,issue, rate, price, basis) {
+export function YIELDMAT(settlement, maturity,issue, rate, price, basis) {
     let settlementDate = days_str2date(settlement);
     let maturityDate = days_str2date(maturity);
     let issueDate = days_str2date(issue)
     if (utils.anyIsError(settlement, maturity,issue)) {
-        return error.value;
+        return errorObj.ERROR_NUM;
     }
     if(rate <= 0){
-        return error.num;
+        return errorObj.ERROR_NUM;
     }
     if (price <= 0) {
-        return error.num;
+        return errorObj.ERROR_NUM;
     }
     if (settlement >= maturity || issue >= settlement ) {
-        return error.num;
+        return errorObj.ERROR_NUM;
     }
     let DSM = (maturityDate-settlementDate)/ (MSECOND_NUM_PER_DAY)
     let DIM = (maturityDate-issueDate)/ (MSECOND_NUM_PER_DAY)
     let A = (settlementDate-issueDate)/ (MSECOND_NUM_PER_DAY)
     for (let yld = 0.01; yld <= 2; yld+=0.0001) {
-        let priceMat = (100+(DIM/365*rate*100))/(1+(DSM/365*yld))-(A*rate*100/365)
-        if(Math.abs(priceMat - price)<= 0.001 ){
+        let priceMat = (100+(DIM/DAYS_NUM_PER_YEAR*rate*100))/(1+(DSM/DAYS_NUM_PER_YEAR*yld))-(A*rate*100/DAYS_NUM_PER_YEAR)
+        if(Math.abs(priceMat - price)<= 0.01 ){
             return yld
-        }
-        else {
-            console.log("yld",yld)
         }
     }
 };
-/**TODO 结果的精确度可以再提高 by 旺旺 2019/12/9
+/**
  *
  * @param {Number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
  * @param {Number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
@@ -384,40 +398,33 @@ exports.YIELDMAT = function (settlement, maturity,issue, rate, price, basis) {
  * @constructor
  */
 exports.ODDFPRICE = function (settlement, maturity, issue,first_coupon,rate, yld, redemption, frequency, basis) {
-    let settlementDate = days_str2date(settlement);
-    let maturityDate = days_str2date(maturity);
     let issueDate = days_str2date(issue);
     let first_couponDate = days_str2date(first_coupon);
     if (utils.anyIsError(settlement, maturity,issue,first_coupon)) {
-        return error.value;
+        return errorObj.ERROR_NUM;
     }
     if(rate <= 0){
-        return error.num;
+        return errorObj.ERROR_NUM;
     }
     if (redemption <= 0){
-        return error.num
+        return errorObj.ERROR_NUM
     }
     if (first_coupon >= maturity || issue >= settlement || settlement >= first_coupon) {
-        return error.num;
+        return errorObj.ERROR_NUM;
     }
-    let monthBetween = maturityDate.getFullYear()*MONTH_NUM_PER_YEAR+maturityDate.getMonth()-settlementDate.getFullYear()*MONTH_NUM_PER_YEAR-settlementDate.getMonth()
-    let N =Math.ceil(monthBetween/(MONTH_NUM_PER_YEAR/frequency))
-    let endDay=utils.Copy(maturityDate)
-    endDay.setMonth(endDay.getMonth()-N*MONTH_NUM_PER_YEAR/frequency)
-    let startDay= utils.Copy(endDay)
-    startDay.setMonth(startDay.getMonth()-MONTH_NUM_PER_YEAR/frequency)
-    let DSC = (endDay-settlementDate)/ (MSECOND_NUM_PER_DAY)
+    let N =get_Startdays_and_Enddays(settlement,maturity,frequency).N
+    let DSC = COUPDAYSNC(settlement, maturity,frequency, basis)
+    let E = COUPDAYS(settlement, maturity,frequency, basis)
+    let A = COUPDAYBS(settlement, maturity,frequency, basis)
     let DFC = (first_couponDate - issueDate)/ (MSECOND_NUM_PER_DAY)
-    let E = (endDay-startDay)/ (MSECOND_NUM_PER_DAY)
-    let A = (settlementDate-startDay)/ (MSECOND_NUM_PER_DAY)
-    let price1
-    let price2 = 0
-        price1 = (redemption/Math.pow(1 + yld / frequency, N - 1 + DSC / E))+(100*rate*DFC/frequency/E/Math.pow(1 + yld / frequency,  DSC / E))- ((100 * rate * A) / (frequency * E))
+    let PRICE_PART2 = 0
+    let PRICE_PART1 = (redemption/Math.pow(1 + yld / frequency, N - 1 + DSC / E))+(100*rate*DFC/frequency/E/Math.pow(1 + yld / frequency,  DSC / E))- ((100 * rate * A) / (frequency * E))
     for (let k = 2; k <= N; k++) {
-        price2 = price2 + (100 * rate) / (frequency * Math.pow(1 + yld / frequency, k - 1 + DSC / E))
+        PRICE_PART2 = PRICE_PART2 + (100 * rate) / (frequency * Math.pow(1 + yld / frequency, k - 1 + DSC / E))
     }
-    return price1 + price2
+    return PRICE_PART1 + PRICE_PART2
     }
+
 /**
  *
  * @param {Number}x 必需。 用来计算分布的数值
@@ -426,7 +433,7 @@ exports.ODDFPRICE = function (settlement, maturity, issue,first_coupon,rate, yld
  * @returns {*|Error}
  * @constructor
  */
-exports.CHISQDIST = function(x, k, cumulative) {
+export function CHISQDIST(x, k, cumulative) {
     cumulative = parseBool(cumulative)
     if (x < 0){
         return errorObj.ERROR_NUM
@@ -446,7 +453,7 @@ exports.CHISQDIST = function(x, k, cumulative) {
  * @returns {*|Error|number}
  * @constructor
  */
-exports.CHISQDISTRT = function(x, k) {
+export function CHISQDISTRT(x, k) {
     if (!x || !k) {
         return errorObj.ERROR_NA;
     }
@@ -469,7 +476,7 @@ exports.CHISQDISTRT = function(x, k) {
  * @returns {*|Error}
  * @constructor
  */
-exports.CHISQINV = function(probability, k) {
+export  function CHISQINV(probability, k) {
     probability = parseNumber(probability);
     k = parseNumber(k);
     if (utils.anyIsError(probability, k)) {
@@ -485,7 +492,7 @@ exports.CHISQINV = function(probability, k) {
  * @returns {*|Error}
  * @constructor
  */
-exports.CHISQINVRT = function(probability, k) {
+export function CHISQINVRT(probability, k) {
     if (!probability | !k) {
         return errorObj.ERROR_NA;
     }
@@ -501,7 +508,11 @@ exports.CHISQINVRT = function(probability, k) {
     return jStat.chisquare.inv(1.0 - probability, k);
 };
 
-
+/**
+ *
+ * @param {array}array 数组
+ * @returns {number}
+ */
 function variance(array) {
         let avg = jStat.mean(array)
         let sum = 0;
@@ -518,15 +529,13 @@ function variance(array) {
  * @returns {*|Error|number}
  * @constructor
  */
-exports.FTEST = function (array1, array2) {
+export function FTEST(array1, array2) {
     if (!array1 || !array2) {
         return errorObj.ERROR_NA;
     }
-
     if (!(array1 instanceof Array) || !(array2 instanceof Array)) {
         return errorObj.ERROR_NA;
     }
-
     if (array1.length < 2 || array2.length < 2) {
         return errorObj.ERROR_DIV0;
     }
@@ -550,23 +559,17 @@ exports.FTEST = function (array1, array2) {
  * @returns {*|Error}
  * @constructor
  */
-exports.TTEST = function (array1, array2,tails,type) {
+export function TTEST(array1, array2,tails,type) {
     if (!array1 || !array2) {
         return errorObj.ERROR_NA;
     }
-
     if (!(array1 instanceof Array) || !(array2 instanceof Array)) {
         return errorObj.ERROR_NA;
     }
-
     if (array1.length < 2 || array2.length < 2) {
         return errorObj.ERROR_DIV0;
     }
-    let sum1 = variance(array1);
-    let sum2 = variance(array2);
-    let value = Math.abs(jStat.mean(array1) - jStat.mean(array2)) / Math.sqrt(sum1/array1.length + sum2/array2.length);
     if(type === 2){
-        let arrayNew = array1.concat(array2);
         if(tails === 1){
             return jStat.anovaftest( array1, array2)/2 ;
         }
@@ -580,45 +583,65 @@ exports.TTEST = function (array1, array2,tails,type) {
     }
 };
 
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}coupon 必需。 有价证券的年息票利率。
+ * @param {number}yld 必需。 有价证券的年收益率。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4。
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {*|Error|number}
+ * @constructor
+ */
 export function DURATION(settlement, maturity, coupon, yld, frequency, basis){
+    if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
+        return errorObj.ERROR_NUM
+    }
+    if(coupon < 0){
+        return errorObj.ERROR_NUM;
+    }
+    if (yld < 0) {
+        return errorObj.ERROR_NUM;
+    }
     let settlementDate = days_str2date(settlement);
     let maturityDate = days_str2date(maturity);
-    if (basis<0 || basis > 4){
-        return errorObj.ERROR_NUM
-    }
-    if (settlement >= maturity){
-        return errorObj.ERROR_NUM
-    }
-    let monthBetween = maturityDate.getFullYear()*MONTH_NUM_PER_YEAR+maturityDate.getMonth()-settlementDate.getFullYear()*MONTH_NUM_PER_YEAR-settlementDate.getMonth()
-    let N =parseInt(monthBetween/(MONTH_NUM_PER_YEAR/frequency))
-    let endDay=utils.Copy(maturityDate)
-    endDay.setMonth(endDay.getMonth()-N*MONTH_NUM_PER_YEAR/frequency)
-    let startDay= utils.Copy(endDay)
-    startDay.setMonth(startDay.getMonth()-MONTH_NUM_PER_YEAR/frequency)
-    let DSC = (endDay-settlementDate)/ (MSECOND_NUM_PER_DAY)
-    let E = (endDay-startDay)/ (MSECOND_NUM_PER_DAY)
-    let A = (settlementDate-startDay)/ (MSECOND_NUM_PER_DAY)
-    let DSR = (maturityDate-settlementDate)/ (MSECOND_NUM_PER_DAY)
+    let N =get_Startdays_and_Enddays(settlement,maturity,frequency).N
+    let DSC = COUPDAYSNC(settlement, maturity,frequency, basis)
+    let E = COUPDAYS(settlement, maturity,frequency, basis)
+    let DSM = (maturityDate-settlementDate)/ (MSECOND_NUM_PER_DAY)
     let presentValue = 0
     for (let i =1;i<=N +1 ;i++){
         presentValue = presentValue + (coupon*100/frequency)/Math.pow(1 + yld / frequency, (DSC+(i-1)*E) / E)
     }
-    presentValue = presentValue + 100/Math.pow(1 + yld / frequency, DSR / E)
+    presentValue = presentValue + 100/Math.pow(1 + yld / frequency, DSM / E)
     let dur = 0
     for (let i =1;i<=N +1 ;i++){
         dur = dur + (DSC+(i-1)*E)/DAYS_NUM_PER_YEAR*((coupon*100/frequency)/Math.pow(1 + yld / frequency, (DSC+(i-1)*E) / E))/presentValue
     }
-    return dur + DSR/DAYS_NUM_PER_YEAR*(100/Math.pow(1 + yld / frequency, DSR / E))/presentValue
+    return dur + DSM/DAYS_NUM_PER_YEAR*(100/Math.pow(1 + yld / frequency, DSM / E))/presentValue
 }
 
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}coupon 必需。 有价证券的年息票利率。
+ * @param {number}yld 必需。 有价证券的年收益率。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4。
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {*|Error|number}
+ * @constructor
+ */
 export function MDURATION(settlement, maturity, coupon, yld, frequency, basis){
-    let settlementDate = days_str2date(settlement);
-    let maturityDate = days_str2date(maturity);
-    if (basis<0 || basis > 4){
+    if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
         return errorObj.ERROR_NUM
     }
-    if (settlement >= maturity){
-        return errorObj.ERROR_NUM
+    if(coupon < 0){
+        return errorObj.ERROR_NUM;
+    }
+    if (yld < 0) {
+        return errorObj.ERROR_NUM;
     }
     return DURATION(settlement, maturity, coupon, yld, frequency, basis)/(1+yld/frequency)
 }
