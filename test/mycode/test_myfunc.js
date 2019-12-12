@@ -39,6 +39,16 @@ describe('expression_fn integration', function () {
             console.log(aCellVDateTime.toNumber())
             assert(Math.abs(aCellVDateTime.toNumber() - 40678) < 0.01)
         });
+        it('VDB', function () {
+            let res = myfunc.VDB(2400, 300, 120, 6,18,)
+            console.log(res);
+            assert(Math.abs(res - 396.306) < 0.001)
+        });
+        it('YIELDDISC', function () {
+            let res = myfunc.YIELDDISC(39494, 39508, 99.795, 100, 2)
+            console.log(res);
+            assert(Math.abs(res - 0.052822) < 0.01)
+        });
         it('YIELD', function () {
             let res = myfunc.YIELD(33000, 44000, 0.066, 88.88, 100, 4, 0)
             console.log(res);

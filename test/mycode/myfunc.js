@@ -8,6 +8,8 @@ const MSECOND_NUM_PER_DAY = 3600 * 24 *1000
 const MONTH_NUM_PER_YEAR = 12
 const DAYS_NUM_PER_YEAR =365
 const DAYS_NUM_PER_YEAR_US =360
+const DAYS_NUM_PER_LEAP_YEAR =360
+const DAYS_NUM_PER_MONTH_US =30
 
 /**
  *
@@ -159,6 +161,108 @@ export function COUPNCD(settlement, maturity, frequency, basis) {
         return errorObj.ERROR_NUM
     }
     return get_Startdays_and_Enddays(settlement, maturity, frequency).endDay
+};
+
+/**
+ *
+ * @param {number}cost 必需。 资产原值。
+ * @param {number}salvage 必需。 折旧末尾时的值（有时也称为资产残值）。 该值可以是 0。
+ * @param {number}period 必需。 您要计算折旧的期间。
+ * @param {number}life 必需。 资产的折旧期数（有时也称作资产的使用寿命）。
+ * @param {number}factor 可选。 余额递减速率。 如果省略影响因素，则假定为 2（双倍余额递减法）。
+ * @returns {number}
+ */
+function get_depreciation(cost, salvage, period,life,factor){
+    let total_depreciation = 0;
+    let current_depreciation = 0;
+    let i = 1
+    for (; i <= period; i++) {
+        current_depreciation = Math.min((cost - total_depreciation) * (factor / life), (cost - salvage - total_depreciation));
+        total_depreciation += current_depreciation;
+    }
+    let new_current_depreciation=(period-i+1)*Math.min((cost - total_depreciation) * (factor / life), (cost - salvage - total_depreciation))
+    return total_depreciation + new_current_depreciation
+}
+
+/**
+ *
+ * @param {number}cost 必需。 资产原值。
+ * @param {number}salvage 必需。 折旧末尾时的值（有时也称为资产残值）。 该值可以是 0。
+ * @param {number}life 必需。 资产的折旧期数（有时也称作资产的使用寿命）。
+ * @param {number}Start_period 必需。 您要计算折旧的起始时期。 Start_period 必须与 life 使用相同的单位。
+ * @param {number}End_period 必需。 您要计算折旧的终止时期。 End_period 必须与 life 使用相同的单位。
+ * @param {number}factor 可选。 余额递减速率。 如果省略影响因素，则假定为 2（双倍余额递减法）。
+ * @param {boolean}No_switch 可选。 逻辑值，指定当折旧值大于余额递减计算值时，是否转用直线折旧法。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function VDB(cost, salvage, life, Start_period,End_period,factor,No_switch) {
+    let factorNum = (factor === undefined) ? 2 : factor;
+    let costNum = parseNumber(cost);
+    let salvageNum = parseNumber(salvage);
+    let lifeNum = parseNumber(life);
+    let Start_periodNum = parseNumber(Start_period);
+    let End_periodNum = parseNumber(End_period);
+    if (utils.anyIsError(costNum, salvageNum, lifeNum, Start_periodNum,End_periodNum, factorNum)) {
+        return errorObj.ERROR_VALUE;
+    }
+    if (costNum < 0 || salvageNum < 0 || lifeNum < 0 || Start_periodNum < 0 || factorNum <= 0) {
+        return errorObj.ERROR_NUM;
+    }
+    if (Start_periodNum > lifeNum) {
+        return errorObj.ERROR_NUM;
+    }
+    if (salvageNum >= costNum) {
+        return 0;
+    }
+    return get_depreciation(costNum,salvageNum,End_periodNum,lifeNum,factorNum)-get_depreciation(costNum,salvageNum,Start_periodNum,lifeNum,factorNum)
+};
+
+/**
+ *
+ * @param settlement
+ * @param maturity
+ * @param pr
+ * @param redemption
+ * @param basis
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function YIELDDISC(settlement, maturity,price, redemption,basis) {
+    let settlementDate = days_str2date(settlement);
+    let maturityDate = days_str2date(maturity);
+    if(COUP_PARAMETER_TEST(settlement, maturity, 1, basis) === 0){
+        return errorObj.ERROR_NUM
+    }
+    if (price <= 0) {
+        return errorObj.ERROR_NUM;
+    }
+    if (redemption <= 0){
+        return errorObj.ERROR_NUM
+    }
+    let ylddisc = (settlementDate,maturityDate, maturity,price, redemption,daysnumbers) =>{
+        return (redemption-price)/price/(maturityDate-settlementDate)*DAYS_NUM_PER_LEAP_YEAR*MSECOND_NUM_PER_DAY;
+    }
+    if (basis===1){
+        let year=settlementDate.getFullYear()
+        if (0 === year%4 && (year%100 !==0 || year%400 === 0)){
+            return ylddisc (settlementDate,maturityDate, maturity,price, redemption,DAYS_NUM_PER_LEAP_YEAR)
+        }
+        else{
+            return ylddisc (settlementDate,maturityDate, maturity,price, redemption,DAYS_NUM_PER_YEAR)
+        }
+    }
+    if (basis===2){
+        return ylddisc (settlementDate,maturityDate, maturity,price, redemption,DAYS_NUM_PER_YEAR_US)
+    }
+    if (basis===3){
+        return ylddisc (settlementDate,maturityDate, maturity,price, redemption,DAYS_NUM_PER_YEAR)
+    }
+    if (basis===0||basis===4){
+        let monthsBetween=maturityDate.getFullYear()*MONTH_NUM_PER_YEAR+maturityDate.getMonth()-settlementDate.getFullYear()*MONTH_NUM_PER_YEAR-settlementDate.getMonth()-1
+        let daysBetween=monthsBetween*(DAYS_NUM_PER_MONTH_US+1)-settlementDate.getDay()+maturityDate.getDay()
+        return (redemption-price)/price/daysBetween*DAYS_NUM_PER_YEAR_US
+    }
 };
 
 /**
