@@ -132,7 +132,7 @@ function get_days(settlement,maturity,frequency){
   let endday = utils.Copy(maturityDate)
   endday.setMonth(endday.getMonth()-times*12/frequency)
   let startday= utils.Copy(endday)
-  endday.setMonth(endday.getMonth()-12/frequency)
+    startday.setMonth(endday.getMonth()-12/frequency)
   return {"startday": startday, "endday":endday}
 }
 //TODO  COUP系列函数目前均未考虑参数输入不规范的报错情况

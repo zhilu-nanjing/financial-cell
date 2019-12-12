@@ -4,10 +4,162 @@ import * as jStat from 'jstat';
 import { errorObj } from '../../src/calc/calc_utils/error_config';
 import { parseBool, days_str2date, parseNumber } from '../../src/calc/calc_utils/parse_helper';
 
-
 const MSECOND_NUM_PER_DAY = 3600 * 24 *1000
 const MONTH_NUM_PER_YEAR = 12
 const DAYS_NUM_PER_YEAR =365
+const DAYS_NUM_PER_YEAR_US =360
+
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4。
+ * @returns {{startDay: *, endDay: *}}
+ */
+function get_Startdays_and_Enddays(settlement,maturity,frequency) {
+    let settlementDate = days_str2date(settlement)
+    let maturityDate = days_str2date(maturity)
+    let monthBetween = maturityDate.getFullYear() * 12 + maturityDate.getMonth() - settlementDate.getFullYear() * 12 - settlementDate.getMonth()
+    let N = parseInt(monthBetween / (12 / frequency))
+    let endDay = utils.Copy(maturityDate)
+    endDay.setMonth(endDay.getMonth() - N * 12 / frequency)
+    let startDay = utils.Copy(endDay)
+    startDay.setMonth(endDay.getMonth() - 12 / frequency)
+    return {"startDay": startDay, "endDay": endDay}
+}
+
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4。
+ * @returns {{startDay: *, endDay: *}}
+ */
+function COUP_PARAMETER_TEST(settlement, maturity, frequency, basis){
+    if ([0,1,2,3,4].indexOf(basis)===-1) {
+        return 0;
+    }
+    if ([1,2,4].indexOf(frequency)===-1){
+        return 0;
+    }
+    if (typeof(settlement)!='number'||typeof(maturity)!='number'){
+        return 0;
+    }
+    if (settlement >= maturity) {
+        return 0;
+    }
+}
+
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function COUPDAYBS(settlement, maturity, frequency, basis) {
+    if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
+        return errorObj.ERROR_NUM
+    }
+    let settlementDate = days_str2date(settlement)
+    return (settlementDate - get_Startdays_and_Enddays(settlement, maturity, frequency).startDay)/ MSECOND_NUM_PER_DAY
+};
+
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function COUPDAYS(settlement, maturity, frequency, basis) {
+    if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
+        return errorObj.ERROR_NUM
+    }
+    if ([0,2,4].indexOf(basis)>=0) {
+        return DAYS_NUM_PER_YEAR_US/frequency;
+    }
+    if (basis===3 ) {
+        return DAYS_NUM_PER_YEAR/frequency;
+    }
+    if (basis===1) {
+        return (get_Startdays_and_Enddays(settlement, maturity, frequency).endDay - get_Startdays_and_Enddays(settlement, maturity, frequency).startDay )/ MSECOND_NUM_PER_DAY
+    }
+};
+
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function COUPDAYSNC(settlement, maturity, frequency, basis) {
+    if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
+        return errorObj.ERROR_NUM
+    }
+    let settlementDate = days_str2date(settlement)
+    return (get_Startdays_and_Enddays(settlement, maturity, frequency).endDay - settlementDate) / MSECOND_NUM_PER_DAY
+};
+
+
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function COUPNUM(settlement, maturity, frequency, basis) {
+    if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
+        return errorObj.ERROR_NUM
+    }
+    let settlementDate = days_str2date(settlement)
+    let maturityDate = days_str2date(maturity)
+    let monthBetween=maturityDate.getFullYear()*12+maturityDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth()
+    let N=parseInt(monthBetween/(MONTH_NUM_PER_YEAR/frequency))
+    return N+1
+};
+
+
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function COUPPCD(settlement, maturity, frequency, basis) {
+    if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
+        return errorObj.ERROR_NUM
+    }
+    return get_Startdays_and_Enddays(settlement, maturity, frequency).startDay
+};
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function COUPNCD(settlement, maturity, frequency, basis) {
+    if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
+        return errorObj.ERROR_NUM
+    }
+    return get_Startdays_and_Enddays(settlement, maturity, frequency).endDay
+};
 
 /**
  *

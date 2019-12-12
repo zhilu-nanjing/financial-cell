@@ -1,7 +1,7 @@
 import assert from 'assert'
 import * as myfunc from "./myfunc";
 import * as jStat from 'jstat'
-
+import {CellVDateTime} from '../../src/calc/cell_value_type/cell_value.js';
 
 describe('expression_fn integration', function () {
     describe('func', function () {
@@ -23,7 +23,21 @@ describe('expression_fn integration', function () {
         it('COUPNCD', function () {
             let res = myfunc.COUPNCD(40861, 40862, 2, 1)
             console.log(res);
-            assert(Math.abs(res - 40862) < 0.01)
+            let aCellVDateTime = new CellVDateTime(res)
+            console.log(aCellVDateTime.toNumber())
+            assert(Math.abs(aCellVDateTime.toNumber() - 40862) < 0.01)
+        });
+        it('COUPNUM', function () {
+            let res = myfunc.COUPDAYSNC(40861, 40862, 2, 1)
+            console.log(res);
+            assert.equal(res, 1)
+        });
+        it('COUPPCD', function () {
+            let res = myfunc.COUPPCD(40861, 40862, 2, 1)
+            console.log(res);
+            let aCellVDateTime = new CellVDateTime(res)
+            console.log(aCellVDateTime.toNumber())
+            assert(Math.abs(aCellVDateTime.toNumber() - 40678) < 0.01)
         });
         it('YIELD', function () {
             let res = myfunc.YIELD(33000, 44000, 0.066, 88.88, 100, 4, 0)
