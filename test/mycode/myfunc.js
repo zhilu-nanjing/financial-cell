@@ -472,7 +472,7 @@ exports.ODDFPRICE = function (settlement, maturity, issue,first_coupon,rate, yld
 }
 /**
  *
- * @param {Number}x 必需。 用来计算分布的数值//
+ * @param {Number}x 必需。 用来计算分布的数值
  * @param {Number}k 必需。 自由度数,即样本个数
  * @param {Boolean}cumulative 必需。 决定函数形式的逻辑值
  * @returns {*|Error}
