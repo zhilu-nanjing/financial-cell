@@ -15,6 +15,7 @@ export const PARSE_FAIL = "PARSE_FAIL"
 export const PARSE_FAIL_OBJ = {msg: "PARSE_FAIL"}
 
 
+
 export const errorMsgArr = [ERROR_NULL, ERROR_DIV0, ERROR_VALUE, ERROR_REF, ERROR_NAME,
   ERROR_NUM, ERROR_NA, ERROR_GETTING_DATA, ERROR_DATE_STR, ERROR_CIRCULAR,
   ERROR_ERROR, ERROR_SYNTAX];
@@ -38,5 +39,9 @@ export const errorObj = {
 export function reportError(errorStr){
   console.log(new Error(errorStr))
   return  new Error(errorStr)
+}
+
+export function reportConvertFail(instance){
+  return {msg: "CONVERT_FAIL", instance: instance}
 }
 

@@ -1,152 +1,10 @@
-import { errorObj, PARSE_FAIL, PARSE_FAIL_OBJ } from './error_config';
-import { d18991230, MS_PER_DAY } from './config';
-
-
-const ALL_DIGIT_PATTERN = /^\d+$/
-const ALL_DIGIT_PATTERN_STR = `^\\d+$`
-
-
-////////////////////////////////////  新函数 ///////////////////////////////////////////////////////
-/**
- *@property {String} toParseStr
- */
-export class Str2NumberParser{ // 把字符串转化为数字的类
-  constructor(aStr){
-    this.toParseStr = aStr
-  }
-  /**
-   *
-   * @param allowZeroNum 在起始位置允许出现的0的数量； 如果为-1，代表可以是任意多的0
-   * @return {RegExp}
-   */
-  getIntPattern(allowZeroNum = -1) {
-    let reStr;
-    console.assert(Number.isInteger(allowZeroNum)) // 确认是整数
-    if(allowZeroNum >= 0){
-      reStr =  `^0{0,${allowZeroNum}}[1-9]\\d*$`
-    }
-    else{
-      reStr =  ALL_DIGIT_PATTERN_STR // 纯数字即可
-    }
-    return new RegExp(reStr)
-  }
-
-  isIntWithCommaPattern(theStr = this.toParseStr){// 判断是否符合整数的样式; 如果是的话需要过滤逗号
-    // 000,123 --> 不行， 0001,123 --> 可以
-    return /^0*[1-9]\d*(,\d{3})+$/.test(theStr)
-  }
-
-  isFloatWithCommaPattern(theStr = this.toParseStr){// 判断是否符合整数的样式; 如果是的话需要过滤逗号
-    // 000,123 --> 不行， 0001,123 --> 可以
-    return /^0*[1-9]\d*(,\d{3})+(\.\d+)?$/.test(theStr)
-  }
-
-
-  isIntPattern(allowZeroNum = -1, theStr = this.toParseStr){ // 判断是否符合整数的样式
-    return this.getIntPattern(allowZeroNum).test(theStr)
-  }
-
-  isDecimalPart(theStr){
-    return theStr!== "" && this.isIntPattern(-1, theStr) === false
-  }
-
-  isFloatPattern(theStr){
-    return /^\d*(\.\d+)?$/.test(theStr)
-  }
-
-  parseAllDigitStr2Int(allowZeroNum  = -1, theStr = this.toParseStr){
-    if(theStr === "0"){
-      return 0
-    }
-    if(this.isIntWithCommaPattern(theStr)){
-      return parseInt(theStr.replace(",",""))
-    }
-    if(this.isIntPattern(allowZeroNum)){
-      return parseInt(theStr)
-    }
-    return PARSE_FAIL_OBJ
-  }
-
-  parseScientificNotion2Float(theStr = this.toParseStr){
-    // 解析科学计数法, Excel限制数字最大为1e307，这里没有显示
-    // 0001.2e12 -> 1.2e+12 ; 1.2e-12 -> 1.2e-12
-    let splitByE = theStr.split(/[eE]/)
-    if(splitByE.length!==2 ){
-      return PARSE_FAIL_OBJ
-    }
-    if(this.isFloatWithCommaPattern(splitByE[0])){
-      theStr = theStr.replace(/,/g,"")
-    }
-    else if(this.isFloatPattern(splitByE[0]) === false){
-      return PARSE_FAIL_OBJ} // 不符合要求
-    let powerPart = splitByE[1]
-    if(['+',"-"].indexOf(powerPart[0]) > -1){
-      powerPart = powerPart.slice(1)
-    }
-    if(this.isIntPattern(-1, powerPart) === false){
-      return PARSE_FAIL_OBJ
-    }
-    return parseFloat(theStr)
-  }
-
-  parseStr2Float(allowZeroNum  = -1, theStr = this.toParseStr){ // 字符串转化为浮点数; 如果是空格的话会返回false
-    let splitByDotArray = theStr.split(".")
-    if(splitByDotArray.length > 2){
-      return PARSE_FAIL_OBJ
-    }
-    // 判断整数部分
-    if(this.isFloatWithCommaPattern(splitByDotArray[0])){
-      splitByDotArray[0] = splitByDotArray[0].replace(/,/g,"")
-    }else if(this.isIntPattern(allowZeroNum, theStr) === false){
-      return PARSE_FAIL_OBJ
-    }
-
-    // 判断小数部分
-    if(splitByDotArray.length === 2 && this.isDecimalPart(splitByDotArray[1]) === false){
-      return PARSE_FAIL_OBJ
-        }
-    return parseFloat(theStr)
-    }
-
-    easyParse2Number(){
-    let res = this.parseScientificNotion2Float()
-      if(res.msg!== PARSE_FAIL){
-        return res
-      }
-      res = this.parseAllDigitStr2Int()
-      if(res.msg!== PARSE_FAIL){
-        return res
-      }
-      res = this.parseStr2Float()
-      return res
-    }
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import { errorObj } from './error_config';
+import { d18991230,d18991230MS, MS_PER_DAY } from './config';
 
 
 ////////////////////////////////////  老函数 ///////////////////////////////////////////////////////
 export function days_str2date(date) { // "20156" -> Date()
-  let theDate
+  let theDate;
   if (!isNaN(date)) {
     if (date instanceof Date) {
       theDate = date;
@@ -155,7 +13,7 @@ export function days_str2date(date) { // "20156" -> Date()
     if (d < 0) {
       return errorObj.ERROR_NUM;
     }
-    theDate = new Date(d18991230.getTime() + d  * MS_PER_DAY);
+    theDate = new Date(d18991230MS + d * MS_PER_DAY);
   }
   if (typeof date === 'string') {
     theDate = new Date(date);
@@ -163,17 +21,19 @@ export function days_str2date(date) { // "20156" -> Date()
       theDate = date;
     }
   }
-  if(theDate instanceof Date){
-    return theDate
+  if (theDate instanceof Date) {
+    return theDate;
   }
   return errorObj.ERROR_VALUE;
 }
+
 //XW:{}中参数解析,将{1,2,3；4,5,6}这样的参数解析为数组结构
 export function str2int(arg) {
-  if(!isNaN(parseInt(arg))){
-    return parseInt(arg)
+  if (!isNaN(parseInt(arg))) {
+    return parseInt(arg);
   }
-  return arg.replace('"', '').replace('"', '') // todo: 这个replace是对的么？
+  return arg.replace('"', '')
+    .replace('"', ''); // todo: 这个replace是对的么？
 }
 
 //XW：end

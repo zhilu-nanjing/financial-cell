@@ -112,19 +112,6 @@ export class StructuralExp {
         }
     }
 
-    solveExpression() { // 核心方法，做计算
-        let self = this;
-        let args = self.args.concat(); // 应该使用来做个浅复制
-        let sheet
-        this.dealAllRefValue()
-        // 以下是依次执行各个运算符，最优先的运算符在最上面
-        this.exec_minus(args); // 执行负号运算
-        this.exec_plus(args); // 执行第一个加号
-        this.exeAllTwoArgOperator(args, self);
-        if (args.length === 1) {
-            return this.calcLastArg(args[0]) // 计算最后一个值
-        }
-    };
 
     exeAllTwoArgOperator(args, self) {
         this.execOperatorWith2Args('^', args, function (a, b) {
@@ -180,6 +167,19 @@ export class StructuralExp {
             return a === b;
         });
     }
+    push2ExpArgs(astNodeStr, position_i) {
+        let self = this
+        if (astNodeStr) {
+            let v = str_2_val(astNodeStr, self.calcCell, position_i); // 核心方法
+            if (((v === '=') && (self.last_arg === '>' || self.last_arg === '<')) || (self.last_arg === '<' && v === '>')) {
+                self.args[self.args.length - 1] += v;
+            } else {
+                self.args.push(v);
+            }
+            self.last_arg = v;
+            //console.log(self.id, '-->', v);
+        }
+    };
 
     calcLastArg(arg){
         if (typeof (arg.solveExpression) !== 'function' || arg.cellStatus === FORMULA_STATUS.solved) {
@@ -192,19 +192,20 @@ export class StructuralExp {
             return convertToCellV(res); // 确保返回的都是封装过的值
         }
     }
-    push2ExpArgs(astNodeStr, position_i) {
-        let self = this
-        if (astNodeStr) {
-            let v = str_2_val(astNodeStr, self.calcCell, position_i);
-            if (((v === '=') && (self.last_arg === '>' || self.last_arg === '<')) || (self.last_arg === '<' && v === '>')) {
-                self.args[self.args.length - 1] += v;
-            } else {
-                self.args.push(v);
-            }
-            self.last_arg = v;
-            //console.log(self.id, '-->', v);
+
+    solveExpression() { // 核心方法
+        let self = this;
+        let args = self.args.concat(); // 应该使用来做个浅复制
+        this.dealAllRefValue()
+        // 以下是依次执行各个运算符，最优先的运算符在最上面
+        this.exec_minus(args); // 执行负号运算
+        this.exec_plus(args); // 执行第一个加号
+        this.exeAllTwoArgOperator(args, self);
+        if (args.length === 1) {
+            return this.calcLastArg(args[0]) // 计算最后一个值; 返回的都是CellV
         }
     };
+
     update_cell_value() { // 这个方法是用来更新cellObj.v，而solve_expression只会获取运算结果而不会赋值
         let self = this;
         let curCellObj = this.calcCell.cellObj;

@@ -290,6 +290,7 @@ export function PRICE(settlement, maturity, rate, yld, redemption, frequency, ba
     let E = COUPDAYS(settlement, maturity,frequency, basis)
     let A = COUPDAYBS(settlement, maturity,frequency, basis)
     if(N > 1){
+        let a = redemption/Math.pow(1+yld/frequency,N -1+DSC/E)
         let PRICE_PART1=redemption/Math.pow(1+yld/frequency,N -1+DSC/E)-((100*rate*A)/(frequency*E))
         let PRICE_PART2 = 0
         for(let k = 1;k<=N;k++){

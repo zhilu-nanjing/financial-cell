@@ -11,7 +11,12 @@ describe('expression_fn integration', function () {
             assert.equal(res, 183)
         });
         it('COUPDAYS', function () {
-            let res = myfunc.COUPDAYS(40861, 40862, 2, 1)
+            let res1 = myfunc.COUPDAYS(40861, 40862, 2, 1)
+            let res2 = myfunc.COUPDAYS(40861, 40862, 2, 2)
+            let res3 = myfunc.COUPDAYS(40861, 40862, 2, 3)
+            let res4 = myfunc.COUPDAYS(40861, 40862, 2, 4)
+
+
             console.log(res);
             assert.equal(res, 184)
         });
@@ -51,6 +56,8 @@ describe('expression_fn integration', function () {
         });
         it('PRICE', function () {
             let res = myfunc.PRICE(39493, 43054, 0.0575, 0.065, 100,2,0)
+            // let res1 = myfunc.PRICE(43230, 43282, 0.05, 0.06, 100,2,0)
+
             console.log(res);
             assert(Math.abs(res - 94.634) < 0.001)
         });

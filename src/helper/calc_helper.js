@@ -1,6 +1,6 @@
 "use strict";
 
-import { d18991230, MS_PER_DAY } from '../calc/calc_utils/config';
+import { d18991230MS, MS_PER_DAY } from '../calc/calc_utils/config';
 
 export function col_str_2_int(col_str) { // A -> 0 AA -> 26
     let r = 0;
@@ -36,5 +36,9 @@ export function isEqual(v1, v2) {
 }
 
 export function stamp2DayNum(timeStamp) {
-    return (timeStamp - d18991230) / MS_PER_DAY ;
+    return (timeStamp - d18991230MS) / MS_PER_DAY ;
+}
+
+export function compareFloat(a, b, toleration = 0.001) {
+    return Math.abs(a - b) < toleration;
 }
