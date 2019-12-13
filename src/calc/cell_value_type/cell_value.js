@@ -24,7 +24,7 @@ export class CellVDateTime{ // 单元格值的值属性
     return this.dateInstance.toLocaleDateString("Chinese")
   }
   toNumber(){ // 转化为数字，逻辑与Excel保持一致
-    let diff = (this.dateInstance - d18991230MS) - this.dateInstance.getTimezoneOffset() * 60 * 1000;
+    let diff = (this.dateInstance - d18991230MS);
     return diff / cf.MS_PER_DAY;
   }
   toDate(){

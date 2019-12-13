@@ -437,13 +437,16 @@ exports.ODDFPRICE = function (settlement, maturity, issue,first_coupon,rate, yld
     let DSC = COUPDAYSNC(settlement, maturity, frequency, basis)
     let E = COUPDAYS(settlement, maturity, frequency, basis)
     let A = COUPDAYBS(settlement, maturity, frequency, basis)
-    let DFC = DAYSBETWEEN_AFTER_BASIS_TEST(first_couponDate, issueDate, basis)
+    let DFC = DAYSBETWEEN_AFTER_BASIS_TEST(utils.Copy(first_couponDate).setMonth(first_couponDate.getMonth() + 12 / frequency), first_couponDate, basis)
     let NC = parseInt((first_couponDate.getFullYear()*12+first_couponDate.getMonth()-issueDate.getFullYear()*12-issueDate.getMonth())/(12/frequency))
     let NQ = parseInt((first_couponDate.getFullYear()*12+first_couponDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth())/(12/frequency))-1
+    let k
     if (N / frequency < 10) {
         let PRICE_PART2 = 0
-        let PRICE_PART1 = (redemption / Math.pow(1 + yld / frequency, N - 1 + DSC / E)) + (100 * rate * DFC / frequency / E / Math.pow(1 + yld / frequency, DSC / E)) - ((100 * rate * A) / (frequency * E))
-        for (let k = 2; k <= N; k++) {
+        let PRICE_PART1 = (redemption / Math.pow(1 + yld / frequency, N - 1 + DSC / E)) +
+            (100 * rate * DFC / frequency / E / Math.pow(1 + yld / frequency, DSC / E))
+            - ((100 * rate * A) / (frequency * E))
+        for ( k = 2; k <= N; k++) {
             PRICE_PART2 = PRICE_PART2 + (100 * rate) / (frequency * Math.pow(1 + yld / frequency, k - 1 + DSC / E))
         }
         return PRICE_PART1 + PRICE_PART2
@@ -454,9 +457,17 @@ exports.ODDFPRICE = function (settlement, maturity, issue,first_coupon,rate, yld
         }
         let aa = 0
         for(k =1;k<=NC;k++){
-           aa = aa + aa
+           aa = aa + 1
         }
-
+        let bb = 0
+        for(k =1;k<=N;k++){
+            bb = bb + Math.pow(1+yld/frequency,k - NQ + DSC/E)
+        }
+        let cc = 0
+        for(k =1;k<=NC;k++){
+            cc = cc + 1
+        }
+        return PRICE(aa,bb,cc)
     }
 }
 /**
