@@ -52,7 +52,7 @@ describe('expression_fn integration', function () {
         it('PRICE', function () {
             let res = myfunc.PRICE(39493, 43054, 0.0575, 0.065, 100,2,0)
             console.log(res);
-            assert(Math.abs(res - 94.634) < 0.001)
+            assert(Math.abs(res - 94.63436) < 0.001)
         });
         it('YIELD', function () {
             let res = myfunc.YIELD(45000, 48555, 0.09, 99, 100, 4, 0)

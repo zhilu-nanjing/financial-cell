@@ -21,15 +21,24 @@ const DAYS_NUM_PER_MONTH_US =30
 function get_Startdays_and_Enddays(settlement,maturity,frequency) {
     let settlementDate = days_str2date(settlement)
     let maturityDate = days_str2date(maturity)
-    let n
-    for(n = 0; n < Number.POSITIVE_INFINITY;n++ ){
-        let test = utils.Copy(maturityDate)
-        test.setMonth(test.getMonth() - n * 12 / frequency)
-        if(test<settlementDate){
-            break
-        }
+    let N = parseInt((maturityDate.getFullYear()*12+maturityDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth())/(12/frequency))
+    let testDate = utils.Copy(maturityDate)
+    testDate.setMonth(testDate.getMonth() - N* 12 / frequency)
+    if(testDate>=settlementDate){
+        N = N + 1
     }
-    let N = n - 1 +1
+    else{
+        N
+    }
+    // let n
+    // for(n = 0; n < Number.POSITIVE_INFINITY;n++ ){
+    //     let test = utils.Copy(maturityDate)
+    //     test.setMonth(test.getMonth() - n * 12 / frequency)
+    //     if(test<settlementDate){
+    //         break
+    //     }
+    // }
+    // let N = n - 1 +1
     let endDay = utils.Copy(maturityDate)
     endDay.setMonth(endDay.getMonth() - (N-1) * 12 / frequency)
     let startDay = utils.Copy(endDay)
