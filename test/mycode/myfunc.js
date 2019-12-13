@@ -29,9 +29,9 @@ function get_Startdays_and_Enddays(settlement,maturity,frequency) {
             break
         }
     }
-    let N = n - 1
+    let N = n - 1 +1
     let endDay = utils.Copy(maturityDate)
-    endDay.setMonth(endDay.getMonth() - N * 12 / frequency)
+    endDay.setMonth(endDay.getMonth() - (N-1) * 12 / frequency)
     let startDay = utils.Copy(endDay)
     startDay.setMonth(endDay.getMonth() - 12 / frequency)
     return {"startDay": startDay, "endDay": endDay,"N": N}
@@ -131,7 +131,7 @@ export function COUPNUM(settlement, maturity, frequency, basis) {
     if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
         return errorObj.ERROR_NUM
     }
-    return get_Startdays_and_Enddays(settlement, maturity, frequency).N
+    return get_Startdays_and_Enddays(settlement, maturity, frequency).N - 1
 };
 
 
@@ -175,7 +175,7 @@ export function COUPNCD(settlement, maturity, frequency, basis) {
  * @param {number}factor 可选。 余额递减速率。 如果省略影响因素，则假定为 2（双倍余额递减法）。
  * @returns {number}
  */
-function get_depreciation(cost, salvage, period,life,factor){
+function getDepreciation(cost, salvage, period,life,factor){
     let total_depreciation = 0;
     let current_depreciation = 0;
     let i
@@ -203,7 +203,7 @@ export function VDB(cost, salvage, life, Start_period,End_period,factor,No_switc
     let factorNum = (factor === undefined) ? 2 : factor;
     let costNum = parseNumber(cost);
     let salvageNum = parseNumber(salvage);
-    let lifeNum = parseNumber(life);
+    let lifeNum = parseNumber(life); // 这种
     let Start_periodNum = parseNumber(Start_period);
     let End_periodNum = parseNumber(End_period);
     if (utils.anyIsError(costNum, salvageNum, lifeNum, Start_periodNum,End_periodNum, factorNum)) {
@@ -218,7 +218,7 @@ export function VDB(cost, salvage, life, Start_period,End_period,factor,No_switc
     if (salvageNum >= costNum) {
         return 0;
     }
-    return get_depreciation(costNum,salvageNum,End_periodNum,lifeNum,factorNum)-get_depreciation(costNum,salvageNum,Start_periodNum,lifeNum,factorNum)
+    return getDepreciation(costNum,salvageNum,End_periodNum,lifeNum,factorNum)-getDepreciation(costNum,salvageNum,Start_periodNum,lifeNum,factorNum)
 };
 
 /**
@@ -290,7 +290,7 @@ export function PRICE(settlement, maturity, rate, yld, redemption, frequency, ba
     let E = COUPDAYS(settlement, maturity,frequency, basis)
     let A = COUPDAYBS(settlement, maturity,frequency, basis)
     if(N > 1){
-        let PRICE_PART1=redemption/Math.pow(1+yld/frequency,N-1+DSC/E)-((100*rate*A)/(frequency*E))
+        let PRICE_PART1=redemption/Math.pow(1+yld/frequency,N -1+DSC/E)-((100*rate*A)/(frequency*E))
         let PRICE_PART2 = 0
         for(let k = 1;k<=N;k++){
             PRICE_PART2 = PRICE_PART2+(100*rate)/frequency/(Math.pow(1+yld/frequency,k-1+DSC/E))
@@ -611,12 +611,12 @@ export function DURATION(settlement, maturity, coupon, yld, frequency, basis){
     let E = COUPDAYS(settlement, maturity,frequency, basis)
     let DSM = (maturityDate-settlementDate)/ (MSECOND_NUM_PER_DAY)
     let presentValue = 0
-    for (let i =1;i<=N +1 ;i++){
+    for (let i =1;i<=N  ;i++){
         presentValue = presentValue + (coupon*100/frequency)/Math.pow(1 + yld / frequency, (DSC+(i-1)*E) / E)
     }
     presentValue = presentValue + 100/Math.pow(1 + yld / frequency, DSM / E)
     let dur = 0
-    for (let i =1;i<=N +1 ;i++){
+    for (let i =1;i<=N  ;i++){
         dur = dur + (DSC+(i-1)*E)/DAYS_NUM_PER_YEAR*((coupon*100/frequency)/Math.pow(1 + yld / frequency, (DSC+(i-1)*E) / E))/presentValue
     }
     return dur + DSM/DAYS_NUM_PER_YEAR*(100/Math.pow(1 + yld / frequency, DSM / E))/presentValue

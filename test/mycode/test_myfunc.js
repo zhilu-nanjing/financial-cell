@@ -67,7 +67,7 @@ describe('expression_fn integration', function () {
         it('ODDFPRICE', function () {
             let res = myfunc.ODDFPRICE(39763,44256,39736,39873,0.0785,0.0625,100,2,1)
             console.log(res);
-            assert(Math.abs(res-113.5977)<1)
+            assert(Math.abs(res-113.5977)<0.001)
         });
         it('CHISQDIST', function () {
             let res = myfunc.CHISQDIST(2,3,false)
