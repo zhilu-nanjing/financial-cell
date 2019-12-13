@@ -24,21 +24,12 @@ function get_Startdays_and_Enddays(settlement,maturity,frequency) {
     let N = parseInt((maturityDate.getFullYear()*12+maturityDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth())/(12/frequency))
     let testDate = utils.Copy(maturityDate)
     testDate.setMonth(testDate.getMonth() - N* 12 / frequency)
-    if(testDate>=settlementDate){
+    if(testDate >= settlementDate){
         N = N + 1
     }
     else{
         N
     }
-    // let n
-    // for(n = 0; n < Number.POSITIVE_INFINITY;n++ ){
-    //     let test = utils.Copy(maturityDate)
-    //     test.setMonth(test.getMonth() - n * 12 / frequency)
-    //     if(test<settlementDate){
-    //         break
-    //     }
-    // }
-    // let N = n - 1 +1
     let endDay = utils.Copy(maturityDate)
     endDay.setMonth(endDay.getMonth() - (N-1) * 12 / frequency)
     let startDay = utils.Copy(endDay)
@@ -54,7 +45,7 @@ function get_Startdays_and_Enddays(settlement,maturity,frequency) {
  * @returns {{startDay: *, endDay: *}}
  */
 function COUP_PARAMETER_TEST(settlement, maturity, frequency, basis){
-    if ([0,1,2,3,4].indexOf(basis)===-1) {
+    if ([0,1,2,3,4].indexOf(basis)===-1 & basis !== undefined) {
         return 0;
     }
     if ([1,2,4].indexOf(frequency)===-1){
@@ -70,6 +61,22 @@ function COUP_PARAMETER_TEST(settlement, maturity, frequency, basis){
 
 /**
  *
+ * @param {number}dateafter 较大的日子
+ * @param {number}datebefore 较小的日子
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {number}
+ * @constructor
+ */
+function DAYSBETWEEN_AFTER_BASIS_TEST(dateafter,datebefore,basis) {
+    if ([1, 2, 3].indexOf(basis) >= 0) {
+        return (dateafter - datebefore) / (MSECOND_NUM_PER_DAY)
+    } else {
+        let monthsBetween = dateafter.getFullYear() * MONTH_NUM_PER_YEAR + dateafter.getMonth() - datebefore.getFullYear() * MONTH_NUM_PER_YEAR - datebefore.getMonth() - 1
+        return monthsBetween * DAYS_NUM_PER_MONTH_US + DAYS_NUM_PER_MONTH_US - datebefore.getDate() + dateafter.getDate()
+    }
+}
+/**
+ *
  * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
  * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
  * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4
@@ -82,7 +89,8 @@ export function COUPDAYBS(settlement, maturity, frequency, basis) {
         return errorObj.ERROR_NUM
     }
     let settlementDate = days_str2date(settlement)
-    return (settlementDate - get_Startdays_and_Enddays(settlement, maturity, frequency).startDay)/ MSECOND_NUM_PER_DAY
+    let startDay = get_Startdays_and_Enddays(settlement, maturity, frequency).startDay
+    return DAYSBETWEEN_AFTER_BASIS_TEST(settlementDate,startDay,basis)
 };
 
 /**
@@ -98,14 +106,14 @@ export function COUPDAYS(settlement, maturity, frequency, basis) {
     if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
         return errorObj.ERROR_NUM
     }
-    if ([0,2,4].indexOf(basis)>=0) {
-        return DAYS_NUM_PER_YEAR_US/frequency;
-    }
     if (basis===3 ) {
         return DAYS_NUM_PER_YEAR/frequency;
     }
     if (basis===1) {
         return (get_Startdays_and_Enddays(settlement, maturity, frequency).endDay - get_Startdays_and_Enddays(settlement, maturity, frequency).startDay )/ MSECOND_NUM_PER_DAY
+    }
+    else {
+        return DAYS_NUM_PER_YEAR_US/frequency;
     }
 };
 
@@ -123,7 +131,8 @@ export function COUPDAYSNC(settlement, maturity, frequency, basis) {
         return errorObj.ERROR_NUM
     }
     let settlementDate = days_str2date(settlement)
-    return (get_Startdays_and_Enddays(settlement, maturity, frequency).endDay - settlementDate) / MSECOND_NUM_PER_DAY
+    let endDay = get_Startdays_and_Enddays(settlement, maturity, frequency).endDay
+    return DAYSBETWEEN_AFTER_BASIS_TEST(endDay,settlementDate,basis)
 };
 
 
@@ -140,7 +149,7 @@ export function COUPNUM(settlement, maturity, frequency, basis) {
     if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
         return errorObj.ERROR_NUM
     }
-    return get_Startdays_and_Enddays(settlement, maturity, frequency).N - 1
+    return get_Startdays_and_Enddays(settlement, maturity, frequency).N
 };
 
 
@@ -185,15 +194,15 @@ export function COUPNCD(settlement, maturity, frequency, basis) {
  * @returns {number}
  */
 function getDepreciation(cost, salvage, period,life,factor){
-    let total_depreciation = 0;
-    let current_depreciation = 0;
+    let totalDepreciation = 0;
+    let currentDepreciation = 0;
     let i
     for (i = 1; i <= period; i++) {
-        current_depreciation = Math.min((cost - total_depreciation) * (factor / life), (cost - salvage - total_depreciation));
-        total_depreciation += current_depreciation;
+        currentDepreciation = Math.min((cost - totalDepreciation) * (factor / life), (cost - salvage - totalDepreciation));
+        totalDepreciation += currentDepreciation;
     }
-    let new_current_depreciation=(period-i+1)*Math.min((cost - total_depreciation) * (factor / life), (cost - salvage - total_depreciation))
-    return total_depreciation + new_current_depreciation
+    let newDepreciation=(period-i+1)*Math.min((cost - totalDepreciation) * (factor / life), (cost - salvage - totalDepreciation))
+    return totalDepreciation + newDepreciation
 }
 
 /**
@@ -208,26 +217,26 @@ function getDepreciation(cost, salvage, period,life,factor){
  * @returns {*|Error|number}
  * @constructor
  */
-export function VDB(cost, salvage, life, Start_period,End_period,factor,No_switch) {
+export function VDB(cost, salvage, life, start_period,end_period,factor,No_switch) {
     let factorNum = (factor === undefined) ? 2 : factor;
     let costNum = parseNumber(cost);
     let salvageNum = parseNumber(salvage);
     let lifeNum = parseNumber(life); // 这种
-    let Start_periodNum = parseNumber(Start_period);
-    let End_periodNum = parseNumber(End_period);
-    if (utils.anyIsError(costNum, salvageNum, lifeNum, Start_periodNum,End_periodNum, factorNum)) {
+    let startPeriod = parseNumber(start_period);
+    let endPeriod = parseNumber(end_period);
+    if (utils.anyIsError(costNum, salvageNum, lifeNum, startPeriod,endPeriod, factorNum)) {
         return errorObj.ERROR_VALUE;
     }
-    if (costNum < 0 || salvageNum < 0 || lifeNum < 0 || Start_periodNum < 0 || factorNum <= 0) {
+    if (costNum < 0 || salvageNum < 0 || lifeNum < 0 || startPeriod < 0 || factorNum <= 0) {
         return errorObj.ERROR_NUM;
     }
-    if (Start_periodNum > lifeNum) {
+    if (startPeriod > lifeNum) {
         return errorObj.ERROR_NUM;
     }
     if (salvageNum >= costNum) {
         return 0;
     }
-    return getDepreciation(costNum,salvageNum,End_periodNum,lifeNum,factorNum)-getDepreciation(costNum,salvageNum,Start_periodNum,lifeNum,factorNum)
+    return getDepreciation(costNum,salvageNum,endPeriod,lifeNum,factorNum)-getDepreciation(costNum,salvageNum,startPeriod,lifeNum,factorNum)
 };
 
 /**
@@ -270,7 +279,7 @@ export function YIELDDISC(settlement, maturity,price, redemption,basis) {
     if (basis===3){
         return ylddisc (DAYS_NUM_PER_YEAR)
     }
-    if (basis===0||basis===4){
+    else{
         let monthsBetween = maturityDate.getFullYear()*MONTH_NUM_PER_YEAR+maturityDate.getMonth()-settlementDate.getFullYear()*MONTH_NUM_PER_YEAR-settlementDate.getMonth()-1
         let daysBetween = monthsBetween*DAYS_NUM_PER_MONTH_US+DAYS_NUM_PER_MONTH_US-settlementDate.getDate()+maturityDate.getDate()
         return (redemption-price)/price/daysBetween*DAYS_NUM_PER_YEAR_US
@@ -382,9 +391,9 @@ export function YIELDMAT(settlement, maturity,issue, rate, price, basis) {
     if (settlement >= maturity || issue >= settlement ) {
         return errorObj.ERROR_NUM;
     }
-    let DSM = (maturityDate-settlementDate)/ (MSECOND_NUM_PER_DAY)
-    let DIM = (maturityDate-issueDate)/ (MSECOND_NUM_PER_DAY)
-    let A = (settlementDate-issueDate)/ (MSECOND_NUM_PER_DAY)
+    let DSM = DAYSBETWEEN_AFTER_BASIS_TEST(maturityDate,settlementDate,basis)
+    let DIM = DAYSBETWEEN_AFTER_BASIS_TEST(maturityDate,issueDate,basis)
+    let A = DAYSBETWEEN_AFTER_BASIS_TEST(settlementDate,issueDate,basis)
     for (let yld = 0.01; yld <= 2; yld+=0.0001) {
         let priceMat = (100+(DIM/DAYS_NUM_PER_YEAR*rate*100))/(1+(DSM/DAYS_NUM_PER_YEAR*yld))-(A*rate*100/DAYS_NUM_PER_YEAR)
         if(Math.abs(priceMat - price)<= 0.01 ){
@@ -407,33 +416,48 @@ export function YIELDMAT(settlement, maturity,issue, rate, price, basis) {
  * @constructor
  */
 exports.ODDFPRICE = function (settlement, maturity, issue,first_coupon,rate, yld, redemption, frequency, basis) {
+    let settlementDate = days_str2date(settlement);
+    let maturityDate = days_str2date(maturity);
     let issueDate = days_str2date(issue);
     let first_couponDate = days_str2date(first_coupon);
-    if (utils.anyIsError(settlement, maturity,issue,first_coupon)) {
+    if (utils.anyIsError(settlement, maturity, issue, first_coupon)) {
         return errorObj.ERROR_NUM;
     }
-    if(rate <= 0){
+    if (rate <= 0) {
         return errorObj.ERROR_NUM;
     }
-    if (redemption <= 0){
+    if (redemption <= 0) {
         return errorObj.ERROR_NUM
     }
     if (first_coupon >= maturity || issue >= settlement || settlement >= first_coupon) {
         return errorObj.ERROR_NUM;
     }
-    let N =get_Startdays_and_Enddays(settlement,maturity,frequency).N
-    let DSC = COUPDAYSNC(settlement, maturity,frequency, basis)
-    let E = COUPDAYS(settlement, maturity,frequency, basis)
-    let A = COUPDAYBS(settlement, maturity,frequency, basis)
-    let DFC = (first_couponDate - issueDate)/ (MSECOND_NUM_PER_DAY)
-    let PRICE_PART2 = 0
-    let PRICE_PART1 = (redemption/Math.pow(1 + yld / frequency, N - 1 + DSC / E))+(100*rate*DFC/frequency/E/Math.pow(1 + yld / frequency,  DSC / E))- ((100 * rate * A) / (frequency * E))
-    for (let k = 2; k <= N; k++) {
-        PRICE_PART2 = PRICE_PART2 + (100 * rate) / (frequency * Math.pow(1 + yld / frequency, k - 1 + DSC / E))
+    let N = get_Startdays_and_Enddays(settlement, maturity, frequency).N
+    let DSC = COUPDAYSNC(settlement, maturity, frequency, basis)
+    let E = COUPDAYS(settlement, maturity, frequency, basis)
+    let A = COUPDAYBS(settlement, maturity, frequency, basis)
+    let DFC = DAYSBETWEEN_AFTER_BASIS_TEST(first_couponDate, issueDate, basis)
+    let NC = parseInt((first_couponDate.getFullYear()*12+first_couponDate.getMonth()-issueDate.getFullYear()*12-issueDate.getMonth())/(12/frequency))
+    let NQ = parseInt((first_couponDate.getFullYear()*12+first_couponDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth())/(12/frequency))-1
+    if (N / frequency < 10) {
+        let PRICE_PART2 = 0
+        let PRICE_PART1 = (redemption / Math.pow(1 + yld / frequency, N - 1 + DSC / E)) + (100 * rate * DFC / frequency / E / Math.pow(1 + yld / frequency, DSC / E)) - ((100 * rate * A) / (frequency * E))
+        for (let k = 2; k <= N; k++) {
+            PRICE_PART2 = PRICE_PART2 + (100 * rate) / (frequency * Math.pow(1 + yld / frequency, k - 1 + DSC / E))
+        }
+        return PRICE_PART1 + PRICE_PART2
     }
-    return PRICE_PART1 + PRICE_PART2
-    }
+    else{
+        let PRICE = (a,b,c) =>{
+            return redemption/Math.pow(1+yld/frequency,N + NQ + DSC/E)+(100*rate/frequency)*(a/Math.pow(1+yld/frequency, NQ + DSC/E)+1/b-c);
+        }
+        let aa = 0
+        for(k =1;k<=NC;k++){
+           aa = aa + aa
+        }
 
+    }
+}
 /**
  *
  * @param {Number}x 必需。 用来计算分布的数值
@@ -618,17 +642,25 @@ export function DURATION(settlement, maturity, coupon, yld, frequency, basis){
     let N =get_Startdays_and_Enddays(settlement,maturity,frequency).N
     let DSC = COUPDAYSNC(settlement, maturity,frequency, basis)
     let E = COUPDAYS(settlement, maturity,frequency, basis)
-    let DSM = (maturityDate-settlementDate)/ (MSECOND_NUM_PER_DAY)
+    let DSM = DAYSBETWEEN_AFTER_BASIS_TEST(maturityDate,settlementDate,basis)
     let presentValue = 0
     for (let i =1;i<=N  ;i++){
         presentValue = presentValue + (coupon*100/frequency)/Math.pow(1 + yld / frequency, (DSC+(i-1)*E) / E)
     }
     presentValue = presentValue + 100/Math.pow(1 + yld / frequency, DSM / E)
     let dur = 0
-    for (let i =1;i<=N  ;i++){
-        dur = dur + (DSC+(i-1)*E)/DAYS_NUM_PER_YEAR*((coupon*100/frequency)/Math.pow(1 + yld / frequency, (DSC+(i-1)*E) / E))/presentValue
+    if ([1,3].indexOf(basis)>=0) {
+        for (let i = 1; i <= N; i++) {
+            dur = dur + (DSC + (i - 1) * E) / DAYS_NUM_PER_YEAR * ((coupon * 100 / frequency) / Math.pow(1 + yld / frequency, (DSC + (i - 1) * E) / E)) / presentValue
+        }
+        return dur + DSM / DAYS_NUM_PER_YEAR * (100 / Math.pow(1 + yld / frequency, DSM / E)) / presentValue
     }
-    return dur + DSM/DAYS_NUM_PER_YEAR*(100/Math.pow(1 + yld / frequency, DSM / E))/presentValue
+    else{
+        for (let i = 1; i <= N; i++) {
+            dur = dur + (DSC + (i - 1) * E) / DAYS_NUM_PER_YEAR_US * ((coupon * 100 / frequency) / Math.pow(1 + yld / frequency, (DSC + (i - 1) * E) / E)) / presentValue
+        }
+        return dur + DSM / DAYS_NUM_PER_YEAR_US * (100 / Math.pow(1 + yld / frequency, DSM / E)) / presentValue
+    }
 }
 
 /**
