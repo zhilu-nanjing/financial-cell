@@ -1,11 +1,39 @@
 // 这里需要把公式解析做对
-import assert from 'assert'
+import assert from 'assert';
 import { Calc } from '../../src/calc/calc_cmd/calc';
-import {MS_PER_DAY} from '../../src/calc/calc_utils/config';
+import { MS_PER_DAY } from '../../src/calc/calc_utils/config';
+import { compareFloat } from '../../src/helper/calc_helper';
+import { CellVDateTime, CellVNumber } from '../../src/calc/cell_value_type/cell_value';
 
-function compareFloat(a, b){
-  return Math.abs(a-b) < 0.001
-}
+it('preSpace', function() { // structuralExpression 在去掉空格之前的解析逻辑
+  let workbook = {};
+  workbook.Sheets = {};
+  workbook.Sheets.Sheet1 = {};
+  workbook.Sheets.Sheet1.A1 = {f: '= {average(A1:A2)}'}; // 不支持数组公式
+  // workbook.Sheets.Sheet1.B1 = {f: '=FLOOR.MATH(-8.1,2)'}; // 负号运算符
+  let calc = new Calc()
+  calc.calculateWorkbook(workbook);
+  assert.equal(workbook.Sheets.Sheet1.A1.v.toString(), "asdf-as");
+});
+
+it('minus', function() { // 检查符号的判定
+  let workbook = {};
+  workbook.Sheets = {};
+  workbook.Sheets.Sheet1 = {};
+  workbook.Sheets.Sheet1.B1 = {f: '=FLOOR.MATH(-8.1,2)'}; // 负号运算符
+  let calc = new Calc()
+  calc.calculateWorkbook(workbook);
+  console.log(workbook.Sheets.Sheet1.H614.v);
+  assert.equal(workbook.Sheets.Sheet1.H614.v, "asdf-as");
+});
+
+it('date', function() { // 检查符号的判定
+  let dayNum = 300
+  let v = new CellVNumber(dayNum).toDate()
+  console.log(v)
+});
+
+
 describe('新的解析算法', function() {
   it('学习js中的date', function() { // 检查simple_expression的判定是否正确
     let d1900 = new Date(1900, 0, 1);
@@ -27,25 +55,23 @@ describe('新的解析算法', function() {
     workbook.Sheets.Sheet1.A1 = {f:""} // 空字符串，看对不对
     workbook.Sheets.Sheet1.A2 = {f:"'2019/1/1 12:12:12.12"}; // 强制字符串
     workbook.Sheets.Sheet1.A3 = {f:'2019/1/1 12:12:12.12'};
+    workbook.Sheets.Sheet1.B3 = {f:'2019年1月1日 12:12:12.12'};
     workbook.Sheets.Sheet1.A4 = {f:'00001,123,123.56e12'};
     workbook.Sheets.Sheet1.A5 = {f:'$  123,123e12'};
     workbook.Sheets.Sheet1.A6 = {f:'   123,123e12  %  '};
     workbook.Sheets.Sheet1.A7 = {f:'   123,123123e12  %  '}; // 无法解析
 
-
-
     let calc = new Calc()
     calc.calculateWorkbook(workbook);
     assert.equal(workbook.Sheets.Sheet1.A1.v.toNumber(), 0);
     assert.equal(workbook.Sheets.Sheet1.A2.v.toString(), "2019/1/1 12:12:12.12");
-    assert.equal(compareFloat(workbook.Sheets.Sheet1.A3.v.toNumber()  , 43466.5084736111), true);
+    assert(compareFloat(workbook.Sheets.Sheet1.A3.v.toNumber()  , 43466.5084736111));
+    assert(compareFloat(workbook.Sheets.Sheet1.B3.v.toNumber()  , 43466.5084736111));
     assert.equal(workbook.Sheets.Sheet1.A4.v.toNumber(), 1123123.56e12);
     assert.equal(workbook.Sheets.Sheet1.A5.v.toNumber(), 1.23123e17);
     assert.equal(workbook.Sheets.Sheet1.A6.v.toNumber(), 1231230000000000);
     assert.equal(workbook.Sheets.Sheet1.A7.v.toString(), '   123,123123e12  %  ');
     console.log(workbook.Sheets.Sheet1)
-
-
     // assert.equal(workbook.Sheets.Sheet1.H614.v, "asdf-as");
   });
 

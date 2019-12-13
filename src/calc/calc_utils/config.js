@@ -74,4 +74,12 @@ export const MONEY_UNIT_OBJ = {
 export const FORCE_STR_MARK ="'"
 
 // 这个日期作为日期的起点
-export const d18991230 = new Date(1899, 11, 30); // js中0代表1月，11代表12月
+export const d18991230 = new Date(1899, 11, 30); // js中0代表1月，11代表12月; 有误差
+
+export const d18991230MS = -2209161600000 - 8 * 3600 * 1000 // 东八区
+export const d18991230STR = "1899/12/30"
+export const ALL_DIGIT_PATTERN_STR = `^\\d+$`;
+export const INT_WITH_COMMA_PATTERN = /^0*[1-9]\d*(,\d{3})+$/;
+export const FLOAT_WITH_COMMA_PATTERN = /^0*[1-9]\d*(,\d{3})+(\.\d+)?$/;
+export const CLEAN_FLOAT_PATTERN = /^\d*(\.\d+)?$/;
+export const E_PATTERN = /[eE]/;

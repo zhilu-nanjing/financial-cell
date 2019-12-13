@@ -1,9 +1,8 @@
 import * as cf from '../calc_utils/config';
-import { ERROR_VALUE, reportError } from '../calc_utils/error_config';
-import { d18991230 } from '../calc_utils/config';
+import { ERROR_VALUE, reportConvertFail, reportError} from '../calc_utils/error_config';
+import { d18991230MS } from '../calc_utils/config';
 
-
-
+// 如果格式转化失败，会调用reportConvertFail方法来汇报错误
 /**
  * 代表一个日期概念
  * @property {Date} dateInstance
@@ -21,11 +20,11 @@ export class CellVDateTime{ // 单元格值的值属性
     console.assert( other instanceof CellVDateTime)
     return this.toNumber() - other.toNumber()
   }
-  toString(format = "YYYY-MM-DD"){ // todo: 适配各种时间样式
+  toString(){
     return this.dateInstance.toLocaleDateString("Chinese")
   }
   toNumber(){ // 转化为数字，逻辑与Excel保持一致
-    let diff = (this.dateInstance - d18991230) + ((d18991230.getTimezoneOffset() - this.dateInstance.getTimezoneOffset()) * 60 * 1000);
+    let diff = (this.dateInstance - d18991230MS) - this.dateInstance.getTimezoneOffset() * 60 * 1000;
     return diff / cf.MS_PER_DAY;
   }
   toDate(){
@@ -45,24 +44,22 @@ export class CellVDateTime{ // 单元格值的值属性
  * 代表一个Error
  */
 export class CellVError {
-  constructor(errName) {
-    this.errName = errName;
-    this.err = Error(errName);
+  constructor(errInstance) {
+    this.err = errInstance;
     this.isCellV = true
     this.cellVTypeName = "CellVError"
-
   }
 
   toNumber() {
-    return this.err;
+    return this.err; // 报错
   }
 
   toString() {
-    return this.err;
+    return this.err.message; // 把error信息拿到
   }
 
-  toDate(){
-    return this.err;
+  toDate() {
+    return this.err; // 报错
   }
 
 }
@@ -85,7 +82,7 @@ export class CellVEmpty {
   }
 
   toDate(){
-    return new Date(0)
+    return d18991230
   }
 }
 
@@ -102,10 +99,16 @@ export class CellVNumber{
     return this.number
   }
   toString(){
-    return String(this.number) // 转化为字符串
+    return String(parseFloat(this.number.toPrecision(6))) // 转化为字符串,保留6位有效数字，去掉末尾的0
   }
+
+  toStringWithDecimal(decimal_num = 2){
+    return this.number.toFixed(decimal_num)// 转化为字符串,保留decimal_num那么位小数
+  }
+
   toDate(){ // 转化日期
-    return new Date(d18991230.getTime() + this.number  * cf.MS_PER_DAY) // 转化为毫秒数
+    let a =  this.number  * cf.MS_PER_DAY
+    return new Date(d18991230MS + a) // 转化为毫秒数
   }
 }
 
@@ -119,7 +122,11 @@ export class CellVString{
     this.cellVTypeName = "CellVString"
   }
   toNumber(){
-    return parseFloat(this.theString) // 转化为浮点数
+    let theRes = parseFloat(this.theString) // 转化为浮点数
+    if(isNaN(theRes)){
+      return reportConvertFail(this)
+    }
+    return theRes
   }
   toString(){
     return this.theString // 转化为字符串
@@ -128,7 +135,7 @@ export class CellVString{
   toDate(){
     let theDate = Date(this.theString)
     if(isNaN(theDate.getTime())){ // 无法正确转换
-      return reportError(ERROR_VALUE)
+      return reportConvertFail(this)
     }
     else{return theDate}
   }
@@ -156,12 +163,11 @@ export class CellVArray{
   toNumber(){
     return this.applyToAll(aValue => {let res;
     try{
-      let res = aValue.toNumber();
+      return  aValue.toNumber();
     }
     catch (e) {
-
+      return reportConvertFail(this)
     }
-
     }) // 转化为浮点数
   }
   toString(){
