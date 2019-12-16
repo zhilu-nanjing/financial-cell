@@ -23,14 +23,14 @@ exports.INFO = function() {
 };
 
 ///////////// Jobs： ISBLANK函数能够处理Error，因此要这么写。 后面的ISERR与ISERROR都需要改写。
-export const ISBLANK = new AllowErrorExpFunction(isBlank) // 函数名字都会大写
-
 function isBlank(arg){
   if(arg.hasOwnProperty("cellVTypeName")){
     return ["CellVEmpty", "CellVError"].includes(arg.cellVTypeName)
   }
   return false
 }
+export const ISBLANK = new AllowErrorExpFunction(isBlank) // 函数名字都会大写
+
 exports.ISERR = function(value) { // 是否是错误1
   return errorMsgArr.indexOf(value) >= 0 ||
     (typeof value === 'number' && (isNaN(value) || !isFinite(value)));

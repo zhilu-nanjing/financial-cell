@@ -137,3 +137,9 @@ export class AllowErrorExpFunction extends BaseExpFunction{
         return true
     }
 }
+
+export function easySolve(func, args){
+    let userFnExecutor = new UserFnExecutor(func, args)
+    return userFnExecutor.solveExpression()
+
+}
