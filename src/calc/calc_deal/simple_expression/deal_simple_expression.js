@@ -2,7 +2,7 @@ import { FORMULA_STATUS } from '../../calc_utils/config';
 import { ERROR_NON_SOLVED, PARSE_FAIL } from '../../calc_utils/error_config';
 import { CellVEmpty, convertToCellV } from '../../cell_value_type/cell_value';
 import { CalcCell } from '../../calc_data_proxy/cell_formula';
-import {
+import {BoolParser,
   DateTimeParser,
   ForceString,
   MoneyParser,
@@ -15,7 +15,7 @@ export class SimpleExpressionBuilder { // 解析不含等号的那些表达式
    *
    */
   constructor(calcCell) {
-    this.parseArray = [ForceString, DateTimeParser, MoneyParser, NumberParser]; // 需要遍历的解析器
+    this.parseArray = [ForceString, BoolParser, DateTimeParser, MoneyParser, NumberParser]; // 需要遍历的解析器
     this.rootExp = new SimpleExpression(this.calcCell); // 出是话是一个空的
     this.calcCell = calcCell;
   }

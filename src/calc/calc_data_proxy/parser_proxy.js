@@ -146,6 +146,26 @@ export class ForceString {
 
 }
 
+export class BoolParser{ // 解析布尔值; 如果首尾有空格不会解析为布尔值
+  constructor(calcCell, strToParse) {
+    this.strToParse = strToParse;
+    this.calcCell = calcCell; //这里没有用到
+  }
+  parseString() { // asdf+as ;
+    let upperCaseStr = this.strToParse.toUpperCase()
+    if(upperCaseStr === "TRUE"){
+      return true
+    }
+    else if(upperCaseStr === "FALSE"){
+      return false
+    }
+    else {
+      return PARSE_FAIL_OBJ
+    }
+  }
+
+}
+
 export class DateTimeParser { // todo： 暂时不支持Jan-1这样的形式的日期字符的解析（Excel支持的）
   /**
    * @param {CalcCell} calcCell
@@ -172,13 +192,13 @@ export class DateTimeParser { // todo： 暂时不支持Jan-1这样的形式的�
         if (dateRes.msg === PARSE_FAIL) {
           return PARSE_FAIL_OBJ;
         }
-        let DateTimeRes = this.dealTimeString(dateRes, this.strToParse.slice(lastSpacePst + 1));
+        let DateTimeRes = this.dealTimeString(dateRes.toLocaleDateString(), this.strToParse.slice(lastSpacePst + 1));
         if (DateTimeRes.msg === PARSE_FAIL) {
           return PARSE_FAIL_OBJ;
         }
         return DateTimeRes;
       } else { // 只存在time
-        let DateTimeRes = this.dealTimeString(d18991230MS, this.strToParse.slice(lastSpacePst + 1));
+        let DateTimeRes = this.dealTimeString(d18991230STR, this.strToParse.slice(lastSpacePst + 1));
         if (DateTimeRes.msg === PARSE_FAIL) {
           return PARSE_FAIL_OBJ;
         }

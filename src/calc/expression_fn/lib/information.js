@@ -1,4 +1,5 @@
 import {errorObj, errorMsgArr} from '../../calc_utils/error_config'
+import {AllowErrorExpFunction} from '../../calc_data_proxy/exp_fn_executor';
 
 // TODO
 exports.CELL = function() {
@@ -21,9 +22,16 @@ exports.INFO = function() {
  throw new Error('INFO is not implemented');
 };
 
-exports.ISBLANK = function(value) {
-  return value === null;
-};
+///////////// Jobs： ISBLANK函数能够处理Error，因此要这么写。
+export const ISBLANK = new AllowErrorExpFunction(isBlank) // 函数名字都会大写
+
+function isBlank(arg){
+  if(arg.hasOwnProperty("cellVTypeName")){
+    return ["CellVEmpty", "CellVError"].includes(arg.cellVTypeName)
+  }
+  return false
+}
+
 
 exports.ISBINARY = function (number) {
   return (/^[01]{1,10}$/).test(number);

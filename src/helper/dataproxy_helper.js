@@ -4,7 +4,7 @@ export function cloneDeep(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
 
-// export function isEqual(v1, v2) {
+// export function isEqualWithUpperCase(v1, v2) {
 //     v1 = v1 + "";
 //     v2 = v2 + "";
 //     v1 = v1.toUpperCase();

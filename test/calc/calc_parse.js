@@ -2,8 +2,8 @@
 import assert from 'assert';
 import { Calc } from '../../src/calc/calc_cmd/calc';
 import { MS_PER_DAY } from '../../src/calc/calc_utils/config';
-import { compareFloat } from '../../src/helper/calc_helper';
 import { CellVDateTime, CellVNumber } from '../../src/calc/cell_value_type/cell_value';
+import { compareFloat } from '../../src/calc/calc_utils/helper';
 
 it('preSpace', function() { // structuralExpression 在去掉空格之前的解析逻辑
   let workbook = {};
@@ -28,7 +28,7 @@ it('minus', function() { // 检查符号的判定
 });
 
 it('date', function() { // 检查符号的判定
-  let dayNum = 300
+  let dayNum = 400
   let v = new CellVNumber(dayNum).toDate()
   console.log(v)
 });
@@ -60,34 +60,76 @@ describe('新的解析算法', function() {
     workbook.Sheets.Sheet1.A5 = {f:'$  123,123e12'};
     workbook.Sheets.Sheet1.A6 = {f:'   123,123e12  %  '};
     workbook.Sheets.Sheet1.A7 = {f:'   123,123123e12  %  '}; // 无法解析
+    workbook.Sheets.Sheet1.A8 = {f:'trUe'}; // 转化为true
+
 
     let calc = new Calc()
     calc.calculateWorkbook(workbook);
     assert.equal(workbook.Sheets.Sheet1.A1.v.toNumber(), 0);
     assert.equal(workbook.Sheets.Sheet1.A2.v.toString(), "2019/1/1 12:12:12.12");
-    assert(compareFloat(workbook.Sheets.Sheet1.A3.v.toNumber()  , 43466.5084736111));
+    let num = workbook.Sheets.Sheet1.A3.v.toNumber()
+    assert(compareFloat( num, 43466.5084736111));
     assert(compareFloat(workbook.Sheets.Sheet1.B3.v.toNumber()  , 43466.5084736111));
     assert.equal(workbook.Sheets.Sheet1.A4.v.toNumber(), 1123123.56e12);
     assert.equal(workbook.Sheets.Sheet1.A5.v.toNumber(), 1.23123e17);
     assert.equal(workbook.Sheets.Sheet1.A6.v.toNumber(), 1231230000000000);
     assert.equal(workbook.Sheets.Sheet1.A7.v.toString(), '   123,123123e12  %  ');
+    assert.equal(workbook.Sheets.Sheet1.A8.v.toNumber(), 1);
+
     console.log(workbook.Sheets.Sheet1)
     // assert.equal(workbook.Sheets.Sheet1.H614.v, "asdf-as");
   });
 
-  it('minus', function() { // 检查符号的判定
+  it('负号优先计算', function() { // 检查符号的判定
       let workbook = {};
       workbook.Sheets = {};
       workbook.Sheets.Sheet1 = {};
-      workbook.Sheets.Sheet1.B1 = {f: '=FLOOR.MATH(-8.1,2)'}; // 负号运算符
-      workbook.Sheets.Sheet1.A1 = {f: 'asdfasf'}; // 没有带等号的
-      workbook.Sheets.Sheet1.A2 = {f: 'asdf-as'}; // 没有带等号，有减号
-      workbook.Sheets.Sheet1.A3 = {f: 'asdf+as'}; // 没有带等号，有加号
-      let calc = new Calc()
+    // workbook.Sheets.Sheet1.B1 = {f: '=FLOOR.MATH(-25-8.1*2,2)'}; // 负号运算符
+    workbook.Sheets.Sheet1.B6 = {f: '1'}; // 负号运算符
+    workbook.Sheets.Sheet1.C6 = {f: '2'}; // 负号运算符
+    workbook.Sheets.Sheet1.B2 = {f: '=-(1+B6)^C6'}; // 负号运算符优先计算结果为4
+    workbook.Sheets.Sheet1.B3 = {f: '=-((1+B6)^C6)'}; // 为-4
+
+
+    let calc = new Calc()
       calc.calculateWorkbook(workbook);
-      console.log(workbook.Sheets.Sheet1.H614.v);
-      assert.equal(workbook.Sheets.Sheet1.H614.v, "asdf-as");
-    });
+      // console.log(workbook.Sheets.Sheet1.B1.v);
+      // assert.equal(workbook.Sheets.Sheet1.B1.v, -42);
+      assert.equal(workbook.Sheets.Sheet1.B2.v, 4);
+    assert.equal(workbook.Sheets.Sheet1.B3.v, -4);
+
+  });
+  it('连续双引号', function() { // 检查连续双引号的判定; done
+    let workbook = {};
+    workbook.Sheets = {};
+    workbook.Sheets.Sheet1 = {};
+    workbook.Sheets.Sheet1.B1 = {f: '=""""""'};
+    workbook.Sheets.Sheet1.B2 = {f: '="""we"""'};
+
+    let calc = new Calc()
+    calc.calculateWorkbook(workbook);
+    console.log(workbook.Sheets.Sheet1.B1.v);
+    assert.equal(workbook.Sheets.Sheet1.B1.v.toString(), '""');
+    assert.equal(workbook.Sheets.Sheet1.B2.v.toString(), '"we"');
+  });
+  it('rawArray', function() { // 检查连续双引号的判定; done
+    let workbook = {};
+    workbook.Sheets = {};
+    workbook.Sheets.Sheet1 = {};
+    workbook.Sheets.Sheet1.A1 = {f: '=AVERAGE({1,3}+{3,2})'};
+    workbook.Sheets.Sheet1.A2 = {f: '=AVERAGE({1,3}  +  {3,2} * {1,3})'};
+    workbook.Sheets.Sheet1.A3 = {f: '=AVERAGE({1,3}  +  {3,2} * 2)'};
+
+    let calc = new Calc()
+    calc.calculateWorkbook(workbook);
+    assert.equal(workbook.Sheets.Sheet1.A1.v.toNumber(), 4.5);
+    assert.equal(workbook.Sheets.Sheet1.A2.v.toNumber(), 6.5);
+    assert.equal(workbook.Sheets.Sheet1.A3.v.toNumber(), 7);
+
+  });
+
+
+
   it('circular', function() { // 检查循环依赖的判定;
     let workbook = {};
     workbook.Sheets = {};

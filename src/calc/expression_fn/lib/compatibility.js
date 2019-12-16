@@ -1,7 +1,7 @@
-import mathTrig from './math-trig'
-import statistical from './statistical'
-import engineering from './engineering'
-import dateTime from './date_time'
+import * as mathTrig from './math-trig'
+import * as statistical from './statistical'
+import * as engineering from './engineering'
+import * as dateTime from './date_time'
 
 function set(fn, root) {
   if (root) {

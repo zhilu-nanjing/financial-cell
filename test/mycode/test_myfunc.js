@@ -2,6 +2,8 @@ import assert from 'assert'
 import * as myfunc from "./myfunc";
 import * as jStat from 'jstat'
 import {CellVDateTime} from '../../src/calc/cell_value_type/cell_value.js';
+import BigNumber from "bignumber.js"
+
 
 describe('expression_fn integration', function () {
     describe('func', function () {

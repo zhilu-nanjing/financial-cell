@@ -1,6 +1,8 @@
 import { errorObj } from './error_config';
-import { MS_PER_DAY } from './config';
-import { parse, str2int, parseNumber } from './parse_helper';
+import { parse, parseNumber, str2int } from './parse_helper';
+
+
+////////////////////////////////////////老函数
 
 function flattenShallow(array) {
   if (!array || !array.reduce) { return array; }
@@ -126,25 +128,6 @@ export function strToMatrix(str) {
   matrix.push(arr)
   return matrix
 }
-//XW: end
-//XW：excel日期转js日期
-export function ExcelDateToJSDate(date) {
-  if (typeof date == 'string'){
-    date = helper.parseDate(issue)
-  }
-  return (date instanceof Date) ? date : new Date(Math.round((date - 25569)*MS_PER_DAY));
-}
-//XW：end
-//XW：判定是否是数字
-export function isNumber(val) {
-  let regPos = /^\d+(\.\d+)?$/; //非负浮点数
-  let regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
-  if(regPos.test(val) || regNeg.test(val)) {
-    return true;
-  } else {
-    return false;
-  }
-}
 export function anyIsError() {
   let n = arguments.length;
   while (n--) {
@@ -194,4 +177,8 @@ export function initial(array, idx) {
     return array;
   }
   return array.slice(0, array.length - idx);
+}
+
+export function compareFloat(a, b, toleration = 0.001) {
+  return Math.abs(a - b) < toleration;
 }

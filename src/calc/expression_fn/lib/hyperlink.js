@@ -1,4 +1,7 @@
 import {errorObj} from '../../calc_utils/error_config'
+
+// todo: 这里的函数需要进行修复。
+
 //XW: 自定义函数
 exports.PQUERY = function () {
   if (arguments.length !== 5) {
@@ -61,6 +64,7 @@ exports.PQUERY = function () {
   return '*悬浮查看*!' + JSON.stringify(items);
 };
 
+// 超链接函数是一个特殊的函数
 exports.HYPERLINK = function () {
   console.log(arguments);
   if (!arguments || !arguments[0] || !arguments[1]) {

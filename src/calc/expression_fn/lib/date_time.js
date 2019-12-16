@@ -1,10 +1,8 @@
-import {errorObj} from '../../calc_utils/error_config'
-import {CellVDateTime} from '../../cell_value_type/cell_value';
-import * as cf from '../../calc_utils/config'
-import utils from '../../calc_utils/helper'
-import { stamp2DayNum } from '../../../helper/calc_helper';
+import { errorObj } from '../../calc_utils/error_config';
+import * as cf from '../../calc_utils/config';
+import { d18991230MS, MS_PER_DAY } from '../../calc_utils/config';
+import utils from '../../calc_utils/helper';
 
-let d1900 = new CellVDateTime(1900, 0, 1);
 let WEEK_STARTS = [
   undefined,
   0,
@@ -79,6 +77,10 @@ exports.DATE = function(year, month, day) {
   let date = new Date(year, month - 1, day); // 需要减去1才对
   return date;
 };
+
+export function stamp2DayNum(timeStamp) {
+  return (timeStamp - d18991230MS) / MS_PER_DAY;
+}
 
 exports.DATEVALUE = function(date_text) {
   if (typeof date_text !== 'string') {

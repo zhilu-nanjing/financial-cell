@@ -1,10 +1,8 @@
 "use strict";
-
-import {col_str_2_int} from '../../helper/calc_helper.js'
 import {getSanitizedSheetName} from '../calc_utils/get_sheetname.js'
 import {ERROR_CIRCULAR} from '../calc_utils/error_config.js'
-import { int_2_col_str } from '../../helper/calc_helper';
 import { FORMULA_STATUS } from '../calc_utils/config';
+import { ColIndexProxy } from './col_index';
 
 /**
  * @property {CalcCell} calcCell
@@ -42,14 +40,14 @@ export class Range{
         let max_row;
         // the max is 1048576, but TLE
         max_row = parseInt(str_max_row === '' ? '500000' : str_max_row, 10);
-        let min_col = col_str_2_int(arr[0]);
-        let max_col = col_str_2_int(arr[1]);
+        let min_col = new ColIndexProxy(arr[0]).colNum;
+        let max_col = new ColIndexProxy(arr[0]).colNum;
         let matrix = [];
         for (let i = min_row; i <= max_row; i++) { // 这里的i是row index， j 是col index
             let row = [];
             matrix.push(row);
             for (let j = min_col; j <= max_col; j++) {
-                let cell_name = int_2_col_str(j) + i;
+                let cell_name = new ColIndexProxy(j).colStr + i;
                 let refCalcCell = this.calcCell.workbookProxy.getCellByName(sheet_name, cell_name)
                 if (refCalcCell) { // 之前就已经存在这个cell了
                     if (refCalcCell.cellStatus === FORMULA_STATUS.created) {
@@ -71,7 +69,6 @@ export class Range{
             }
         }
         return matrix; // 得到一个二维数组
-
     }
 
 }

@@ -1,11 +1,9 @@
 "use strict";
-import {FORMULA_STATUS}  from "../calc_utils/config"
-import {RawValue} from './raw_value.js';
-import {Range} from './range_ref.js';
-import {errorObj, errorMsgArr}  from '../calc_utils/error_config'
-import {CellVDateTime, CellVEmpty, convertToCellV} from "../cell_value_type/cell_value";
-import { str_2_val } from './exp_section';
-
+import { FORMULA_STATUS, MARK_OBJ } from '../calc_utils/config';
+import { RawValue } from './raw_value.js';
+import { Range } from './range_ref.js';
+import { errorMsgArr, errorObj, ERROR_SYNTAX } from '../calc_utils/error_config';
+import { CellVDateTime, CellVEmpty, convertToCellV } from '../cell_value_type/cell_value';
 
 let exp_id = 0; // 全局变量
 /**
@@ -16,12 +14,11 @@ export class StructuralExp {
     // 可以为RawValue，RefValue，LazyValue或字符或FormulaExp; 存在括号的时候，会把括号内的表达式构造为FormulaExp
     constructor(calcCell) {
         this.id = ++exp_id;   // id 是一个递增序列，其中root_exp的id为1
-        this.args = [];
+        this.args = []; // 一个表达式下面的多个平行的节点。例如“1+average(A1:A5)-23 * 123” 有4个平行节点
         this.name = 'Expression';
         this.calcCell = calcCell;
         this.last_arg = "";
     }
-
 
     isEmpty(value) {
         return value === undefined || value === null || value === "";
@@ -69,9 +66,10 @@ export class StructuralExp {
     exec_minus(args) { // =1.1^-12；=1.1*-12 在负号之前有其他运算符
         for (let i = args.length; i--;) {
             if (args[i] === '-') {
-                this.execCalcMethod(args[i+1])
-                if (i > 0 && typeof args[i - 1] === 'string') {
-                    args.splice(i, 2, new RawValue(-args[i+1]));// 替换2个原有arg
+                // 首个字符就是负号或者在负号之前有其他运算符(args[i - 1] === 'string')
+                if(i === 0 || (i > 0 && typeof args[i - 1] === 'string')) {
+                    let nextSolution = this.execCalcMethod(args[i+1])
+                    args.splice(i, 2, new RawValue( -nextSolution));// 替换2个原有arg
                 }
             }
 
@@ -167,21 +165,11 @@ export class StructuralExp {
             return a === b;
         });
     }
-    push2ExpArgs(astNodeStr, position_i) {
-        let self = this
-        if (astNodeStr) {
-            let v = str_2_val(astNodeStr, self.calcCell, position_i); // 核心方法
-            if (((v === '=') && (self.last_arg === '>' || self.last_arg === '<')) || (self.last_arg === '<' && v === '>')) {
-                self.args[self.args.length - 1] += v;
-            } else {
-                self.args.push(v);
-            }
-            self.last_arg = v;
-            //console.log(self.id, '-->', v);
-        }
-    };
 
     calcLastArg(arg){
+        if(typeof arg === "string"){ // 所有的operator都已经处理完毕，因此这里arg不应该存在string 类型
+            return  new Error(ERROR_SYNTAX)
+        }
         if (typeof (arg.solveExpression) !== 'function' || arg.cellStatus === FORMULA_STATUS.solved) {
             /**
              * @type {CalcCell} arg
@@ -200,7 +188,7 @@ export class StructuralExp {
         // 以下是依次执行各个运算符，最优先的运算符在最上面
         this.exec_minus(args); // 执行负号运算
         this.exec_plus(args); // 执行第一个加号
-        this.exeAllTwoArgOperator(args, self);
+        this.exeAllTwoArgOperator(args, self); // 负号在这一步会有问题
         if (args.length === 1) {
             return this.calcLastArg(args[0]) // 计算最后一个值; 返回的都是CellV
         }

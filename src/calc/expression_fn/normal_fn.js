@@ -1,3 +1,4 @@
+
 import * as compatibility from './lib/compatibility'
 import * as database from './lib/database'
 import * as engineering from './lib/engineering'
@@ -10,7 +11,7 @@ import * as information from './lib/information'
 import * as lookup_reference from './lib/lookup_reference'
 import * as statistical from './lib/statistical'
 import * as miscellaneous from './lib/miscellaneous'
-import * as custom from './lib/custom'
+import * as hyperlink from './lib/hyperlink'
 export let fnObjArray = [
   compatibility,
   database,
@@ -24,6 +25,6 @@ export let fnObjArray = [
   lookup_reference,
   statistical,
   miscellaneous,
-  custom,
+  hyperlink,
 ];
 

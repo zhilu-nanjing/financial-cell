@@ -1,6 +1,7 @@
-import {errorObj} from '../../calc_utils/error_config'
-import dateTime from './date_time'
-import utils from '../../calc_utils/helper'
+import { errorObj } from '../../calc_utils/error_config';
+import * as dateTime from './date_time';
+import * as utils from '../../calc_utils/helper';
+import { dayNum2Date, parseNumber } from '../../calc_utils/parse_helper';
 
 // exports.validDate = function (d)
 function validDate(d){
@@ -13,7 +14,7 @@ function validDate(d){
 
 exports.ACCRINT = function(issue, first, settlement, rate, par, frequency, basis) {
   if (typeof issue=='string'){
-    issue = utils.parseDate(issue)
+    issue = dayNum2Date(issue)
   }
   //XW: 参数错误报错
   try{
@@ -120,8 +121,8 @@ exports.AMORLINC = function() {
 // exports.get_days = function(settlement,maturity,frequency)测试时使用
 //获取债券结息日(购买日)所在付息期间的起始时间
 function get_days(settlement,maturity,frequency){
-  let settlementDate = utils.parseDate(settlement)
-  let maturityDate = utils.parseDate(maturity)
+  let settlementDate = dayNum2Date(settlement)
+  let maturityDate = dayNum2Date(maturity)
   /**
    * @type {CellVDateTime} settlementDate
    * @type {CellVDateTime} maturityDate
@@ -151,7 +152,7 @@ exports.COUPDAYBS = function (settlement, maturity, frequency, basis) {
   if (settlement >= maturity) {
     return errorObj.ERROR_NUM;
   }
-  let settlementDate = utils.parseDate(settlement)
+  let settlementDate = dayNum2Date(settlement)
   let result = settlementDate - get_days(settlement, maturity, frequency).startday
   return result / (1000 * 60 * 60 * 24)
 };
@@ -209,7 +210,7 @@ exports.COUPDAYSNC = function (settlement, maturity, frequency, basis) {
   if (settlement >= maturity) {
     return errorObj.ERROR_NUM;
   }
-  let settlementDate = utils.parseDate(settlement)
+  let settlementDate = dayNum2Date(settlement)
   let result = get_days(settlement, maturity, frequency).endday - settlementDate
   return result / (1000 * 60 * 60 * 24)
 };
@@ -247,8 +248,8 @@ exports.COUPNUM = function (settlement, maturity, frequency, basis) {
   if (settlement >= maturity) {
     return errorObj.ERROR_NUM;
   }
-  let settlementDate = utils.parseDate(settlement)
-  let maturityDate = utils.parseDate(maturity)
+  let settlementDate = dayNum2Date(settlement)
+  let maturityDate = dayNum2Date(maturity)
   let month_SM=maturityDate.getFullYear()*12+maturityDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth()
   let times=parseInt(month_SM/(12/frequency))
   return times+1
@@ -278,9 +279,9 @@ exports.CUMIPMT = function(rate, periods, value, start, end, type) {
   // Credits: Hannes Stiebitzhofer for the translations of function and variable names
   // Requires exports.FV() and exports.PMT() from exports.js [http://stoic.com/exports/]
 
-  rate = utils.parseNumber(rate);
-  periods = utils.parseNumber(periods);
-  value = utils.parseNumber(value);
+  rate = parseNumber(rate);
+  periods = parseNumber(periods);
+  value = parseNumber(value);
   if (utils.anyIsError(rate, periods, value)) {
     return errorObj.ERROR_VALUE;
   }
@@ -328,9 +329,9 @@ exports.CUMPRINC = function(rate, periods, value, start, end, type) {
   // Credits: algorithm inspired by Apache OpenOffice
   // Credits: Hannes Stiebitzhofer for the translations of function and variable names
 
-  rate = utils.parseNumber(rate);
-  periods = utils.parseNumber(periods);
-  value = utils.parseNumber(value);
+  rate = parseNumber(rate);
+  periods = parseNumber(periods);
+  value = parseNumber(value);
   if (utils.anyIsError(rate, periods, value)) {
     return errorObj.ERROR_VALUE;
   }
@@ -377,11 +378,11 @@ exports.DB = function(cost, salvage, life, period, month) {
   // Initialize month
   month = (month === undefined) ? 12 : month;
 
-  cost = utils.parseNumber(cost);
-  salvage = utils.parseNumber(salvage);
-  life = utils.parseNumber(life);
-  period = utils.parseNumber(period);
-  month = utils.parseNumber(month);
+  cost = parseNumber(cost);
+  salvage = parseNumber(salvage);
+  life = parseNumber(life);
+  period = parseNumber(period);
+  month = parseNumber(month);
   if (utils.anyIsError(cost, salvage, life, period, month)) {
     return errorObj.ERROR_VALUE;
   }
@@ -437,11 +438,11 @@ exports.DDB = function(cost, salvage, life, period, factor) {
   // Initialize factor
   factor = (factor === undefined) ? 2 : factor;
 
-  cost = utils.parseNumber(cost);
-  salvage = utils.parseNumber(salvage);
-  life = utils.parseNumber(life);
-  period = utils.parseNumber(period);
-  factor = utils.parseNumber(factor);
+  cost = parseNumber(cost);
+  salvage = parseNumber(salvage);
+  life = parseNumber(life);
+  period = parseNumber(period);
+  factor = parseNumber(factor);
   if (utils.anyIsError(cost, salvage, life, period, factor)) {
     return errorObj.ERROR_VALUE;
   }
@@ -492,8 +493,8 @@ exports.DISC = function (settlement,maturity,pr,redemption,basis) {
 exports.DOLLARDE = function(dollar, fraction) {
   // Credits: algorithm inspired by Apache OpenOffice
 
-  dollar = utils.parseNumber(dollar);
-  fraction = utils.parseNumber(fraction);
+  dollar = parseNumber(dollar);
+  fraction = parseNumber(fraction);
   if (utils.anyIsError(dollar, fraction)) {
     return errorObj.ERROR_VALUE;
   }
@@ -528,8 +529,8 @@ exports.DOLLARDE = function(dollar, fraction) {
 exports.DOLLARFR = function(dollar, fraction) {
   // Credits: algorithm inspired by Apache OpenOffice
 
-  dollar = utils.parseNumber(dollar);
-  fraction = utils.parseNumber(fraction);
+  dollar = parseNumber(dollar);
+  fraction = parseNumber(fraction);
   if (utils.anyIsError(dollar, fraction)) {
     return errorObj.ERROR_VALUE;
   }
@@ -560,8 +561,8 @@ exports.DOLLARFR = function(dollar, fraction) {
 // TODO
 //XW：待实现
 exports.DURATION = function (settlement, maturity, coupon, yld, frequency, basis) {
-  settlement = utils.parseDate(settlement);
-  maturity = utils.parseDate(maturity);
+  settlement = dayNum2Date(settlement);
+  maturity = dayNum2Date(maturity);
   if (!validDate(maturity) || !validDate(settlement)) {
     return errorObj.ERROR_VALUE;
   }
@@ -575,8 +576,8 @@ exports.DURATION = function (settlement, maturity, coupon, yld, frequency, basis
 //XW：end
 
 exports.EFFECT = function(rate, periods) {
-  rate = utils.parseNumber(rate);
-  periods = utils.parseNumber(periods);
+  rate = parseNumber(rate);
+  periods = parseNumber(periods);
   if (utils.anyIsError(rate, periods)) {
     return errorObj.ERROR_VALUE;
   }
@@ -599,11 +600,11 @@ exports.FV = function(rate, periods, payment, value, type) {
   value = value || 0;
   type = type || 0;
 
-  rate = utils.parseNumber(rate);
-  periods = utils.parseNumber(periods);
-  payment = utils.parseNumber(payment);
-  value = utils.parseNumber(value);
-  type = utils.parseNumber(type);
+  rate = parseNumber(rate);
+  periods = parseNumber(periods);
+  payment = parseNumber(payment);
+  value = parseNumber(value);
+  type = parseNumber(type);
   if (utils.anyIsError(rate, periods, payment, value, type)) {
     return errorObj.ERROR_VALUE;
   }
@@ -624,11 +625,11 @@ exports.FV = function(rate, periods, payment, value, type) {
 };
 
 exports.FVSCHEDULE = function (principal, schedule) {
-  principal = utils.parseNumber(principal);
+  principal = parseNumber(principal);
   if (typeof schedule === 'string'){
     schedule = utils.strToMatrix(schedule)
   }
-  schedule = utils.parseNumberArray(utils.flatten(schedule));
+  schedule = parseNumberArray(utils.flatten(schedule));
   if (utils.anyIsError(principal, schedule)) {
     return errorObj.ERROR_VALUE;
   }
@@ -670,12 +671,12 @@ exports.IPMT = function(rate, period, periods, present, future, type) {
   future = future || 0;
   type = type || 0;
 
-  rate = utils.parseNumber(rate);
-  period = utils.parseNumber(period);
-  periods = utils.parseNumber(periods);
-  present = utils.parseNumber(present);
-  future = utils.parseNumber(future);
-  type = utils.parseNumber(type);
+  rate = parseNumber(rate);
+  period = parseNumber(period);
+  periods = parseNumber(periods);
+  present = parseNumber(present);
+  future = parseNumber(future);
+  type = parseNumber(type);
   if (utils.anyIsError(rate, period, periods, present, future, type)) {
     return errorObj.ERROR_VALUE;
   }
@@ -708,8 +709,8 @@ exports.IRR = function(values, guess) {
 
   guess = guess || 0;
 
-  values = utils.parseNumberArray(utils.flatten(values));
-  guess = utils.parseNumber(guess);
+  values = parseNumberArray(utils.flatten(values));
+  guess = parseNumber(guess);
   if (utils.anyIsError(values, guess)) {
     return errorObj.ERROR_VALUE;
   }
@@ -777,10 +778,10 @@ exports.IRR = function(values, guess) {
 };
 
 exports.ISPMT = function(rate, period, periods, value) {
-  rate = utils.parseNumber(rate);
-  period = utils.parseNumber(period);
-  periods = utils.parseNumber(periods);
-  value = utils.parseNumber(value);
+  rate = parseNumber(rate);
+  period = parseNumber(period);
+  periods = parseNumber(periods);
+  value = parseNumber(value);
   if (utils.anyIsError(rate, period, periods, value)) {
     return errorObj.ERROR_VALUE;
   }
@@ -805,9 +806,9 @@ exports.MDURATION = function (settlement, maturity, coupon, yld, frequency, basi
 //xW:end
 
 exports.MIRR = function(values, finance_rate, reinvest_rate) {
-  values = utils.parseNumberArray(utils.flatten(values));
-  finance_rate = utils.parseNumber(finance_rate);
-  reinvest_rate = utils.parseNumber(reinvest_rate);
+  values = parseNumberArray(utils.flatten(values));
+  finance_rate = parseNumber(finance_rate);
+  reinvest_rate = parseNumber(reinvest_rate);
   if (utils.anyIsError(values, finance_rate, reinvest_rate)) {
     return errorObj.ERROR_VALUE;
   }
@@ -833,8 +834,8 @@ exports.MIRR = function(values, finance_rate, reinvest_rate) {
 };
 
 exports.NOMINAL = function(rate, periods) {
-  rate = utils.parseNumber(rate);
-  periods = utils.parseNumber(periods);
+  rate = parseNumber(rate);
+  periods = parseNumber(periods);
   if (utils.anyIsError(rate, periods)) {
     return errorObj.ERROR_VALUE;
   }
@@ -855,11 +856,11 @@ exports.NPER = function(rate, payment, present, future, type) {
   type = (type === undefined) ? 0 : type;
   future = (future === undefined) ? 0 : future;
 
-  rate = utils.parseNumber(rate);
-  payment = utils.parseNumber(payment);
-  present = utils.parseNumber(present);
-  future = utils.parseNumber(future);
-  type = utils.parseNumber(type);
+  rate = parseNumber(rate);
+  payment = parseNumber(payment);
+  present = parseNumber(present);
+  future = parseNumber(future);
+  type = parseNumber(type);
   if (utils.anyIsError(rate, payment, present, future, type)) {
     return errorObj.ERROR_VALUE;
   }
@@ -871,7 +872,7 @@ exports.NPER = function(rate, payment, present, future, type) {
 };
 
 exports.NPV = function() {
-  let args = utils.parseNumberArray(utils.flatten(arguments));
+  let args = parseNumberArray(utils.flatten(arguments));
   if (args instanceof Error) {
     return args;
   }
@@ -912,9 +913,9 @@ exports.ODDLYIELD = function() {
 };
 //XW：end
 exports.PDURATION = function(rate, present, future) {
-  rate = utils.parseNumber(rate);
-  present = utils.parseNumber(present);
-  future = utils.parseNumber(future);
+  rate = parseNumber(rate);
+  present = parseNumber(present);
+  future = parseNumber(future);
   if (utils.anyIsError(rate, present, future)) {
     return errorObj.ERROR_VALUE;
   }
@@ -934,11 +935,11 @@ exports.PMT = function(rate, periods, present, future, type) {
   future = future || 0;
   type = type || 0;
 
-  rate = utils.parseNumber(rate);
-  periods = utils.parseNumber(periods);
-  present = utils.parseNumber(present);
-  future = utils.parseNumber(future);
-  type = utils.parseNumber(type);
+  rate = parseNumber(rate);
+  periods = parseNumber(periods);
+  present = parseNumber(present);
+  future = parseNumber(future);
+  type = parseNumber(type);
   if (utils.anyIsError(rate, periods, present, future, type)) {
     return errorObj.ERROR_VALUE;
   }
@@ -962,11 +963,11 @@ exports.PPMT = function(rate, period, periods, present, future, type) {
   future = future || 0;
   type = type || 0;
 
-  rate = utils.parseNumber(rate);
-  periods = utils.parseNumber(periods);
-  present = utils.parseNumber(present);
-  future = utils.parseNumber(future);
-  type = utils.parseNumber(type);
+  rate = parseNumber(rate);
+  periods = parseNumber(periods);
+  present = parseNumber(present);
+  future = parseNumber(future);
+  type = parseNumber(type);
   if (utils.anyIsError(rate, periods, present, future, type)) {
     return errorObj.ERROR_VALUE;
   }
@@ -975,8 +976,8 @@ exports.PPMT = function(rate, period, periods, present, future, type) {
 };
 //XW：函数实现
 exports.PRICE = function (settlement, maturity, rate, yld, redemption, frequency, basis) {
-  let settlementDate = utils.parseDate(settlement)
-  let maturityDate = utils.parseDate(maturity)
+  let settlementDate = dayNum2Date(settlement)
+  let maturityDate = dayNum2Date(maturity)
   if (utils.anyIsError(settlementDate, maturityDate)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1015,8 +1016,8 @@ exports.PRICE = function (settlement, maturity, rate, yld, redemption, frequency
 
 // TODO
 exports.PRICEDISC = function (settlement, maturity, discount, redemption, basis) {
-  settlement = utils.parseDate(settlement);
-  maturity = utils.parseDate(maturity);
+  settlement = dayNum2Date(settlement);
+  maturity = dayNum2Date(maturity);
   if (utils.anyIsError(settlement, maturity)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1032,9 +1033,9 @@ exports.PRICEDISC = function (settlement, maturity, discount, redemption, basis)
 
 // TODO
 exports.PRICEMAT = function (settlement, maturity, issue, rate, yld, basis) {
-  settlement = utils.parseDate(settlement);
-  maturity = utils.parseDate(maturity);
-  issue = utils.parseDate(issue);
+  settlement = dayNum2Date(settlement);
+  maturity = dayNum2Date(maturity);
+  issue = dayNum2Date(issue);
   if (utils.anyIsError(settlement, maturity)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1056,11 +1057,11 @@ exports.PV = function(rate, periods, payment, future, type) {
   future = future || 0;
   type = type || 0;
 
-  rate = utils.parseNumber(rate);
-  periods = utils.parseNumber(periods);
-  payment = utils.parseNumber(payment);
-  future = utils.parseNumber(future);
-  type = utils.parseNumber(type);
+  rate = parseNumber(rate);
+  periods = parseNumber(periods);
+  payment = parseNumber(payment);
+  future = parseNumber(future);
+  type = parseNumber(type);
   if (utils.anyIsError(rate, periods, payment, future, type)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1080,12 +1081,12 @@ exports.RATE = function(periods, payment, present, future, type, guess) {
   future = (future === undefined) ? 0 : future;
   type = (type === undefined) ? 0 : type;
 
-  periods = utils.parseNumber(periods);
-  payment = utils.parseNumber(payment);
-  present = utils.parseNumber(present);
-  future = utils.parseNumber(future);
-  type = utils.parseNumber(type);
-  guess = utils.parseNumber(guess);
+  periods = parseNumber(periods);
+  payment = parseNumber(payment);
+  present = parseNumber(present);
+  future = parseNumber(future);
+  type = parseNumber(type);
+  guess = parseNumber(guess);
   if (utils.anyIsError(periods, payment, present, future, type, guess)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1119,8 +1120,8 @@ exports.RATE = function(periods, payment, present, future, type, guess) {
 };
 //XW：函数实现
 exports.RECEIVED = function (settlement, maturity, investment, discount, basis) {
-  settlement = utils.parseDate(settlement);
-  maturity = utils.parseDate(maturity);
+  settlement = dayNum2Date(settlement);
+  maturity = dayNum2Date(maturity);
   if (utils.anyIsError(settlement, maturity)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1139,9 +1140,9 @@ exports.RECEIVED = function (settlement, maturity, investment, discount, basis) 
 //XW：end
 
 exports.RRI = function(periods, present, future) {
-  periods = utils.parseNumber(periods);
-  present = utils.parseNumber(present);
-  future = utils.parseNumber(future);
+  periods = parseNumber(periods);
+  present = parseNumber(present);
+  future = parseNumber(future);
   if (utils.anyIsError(periods, present, future)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1156,9 +1157,9 @@ exports.RRI = function(periods, present, future) {
 };
 
 exports.SLN = function(cost, salvage, life) {
-  cost = utils.parseNumber(cost);
-  salvage = utils.parseNumber(salvage);
-  life = utils.parseNumber(life);
+  cost = parseNumber(cost);
+  salvage = parseNumber(salvage);
+  life = parseNumber(life);
   if (utils.anyIsError(cost, salvage, life)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1174,10 +1175,10 @@ exports.SLN = function(cost, salvage, life) {
 
 exports.SYD = function(cost, salvage, life, period) {
   // Return error if any of the parameters is not a number
-  cost = utils.parseNumber(cost);
-  salvage = utils.parseNumber(salvage);
-  life = utils.parseNumber(life);
-  period = utils.parseNumber(period);
+  cost = parseNumber(cost);
+  salvage = parseNumber(salvage);
+  life = parseNumber(life);
+  period = parseNumber(period);
   if (utils.anyIsError(cost, salvage, life, period)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1200,9 +1201,9 @@ exports.SYD = function(cost, salvage, life, period) {
 };
 
 exports.TBILLEQ = function(settlement, maturity, discount) {
-  settlement = utils.parseDate(settlement);
-  maturity = utils.parseDate(maturity);
-  discount = utils.parseNumber(discount);
+  settlement = dayNum2Date(settlement);
+  maturity = dayNum2Date(maturity);
+  discount = parseNumber(discount);
   if (utils.anyIsError(settlement, maturity, discount)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1227,9 +1228,9 @@ exports.TBILLEQ = function(settlement, maturity, discount) {
 };
 
 exports.TBILLPRICE = function(settlement, maturity, discount) {
-  settlement = utils.parseDate(settlement);
-  maturity = utils.parseDate(maturity);
-  discount = utils.parseNumber(discount);
+  settlement = dayNum2Date(settlement);
+  maturity = dayNum2Date(maturity);
+  discount = parseNumber(discount);
   if (utils.anyIsError(settlement, maturity, discount)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1254,9 +1255,9 @@ exports.TBILLPRICE = function(settlement, maturity, discount) {
 };
 
 exports.TBILLYIELD = function(settlement, maturity, price) {
-  settlement = utils.parseDate(settlement);
-  maturity = utils.parseDate(maturity);
-  price = utils.parseNumber(price);
+  settlement = dayNum2Date(settlement);
+  maturity = dayNum2Date(maturity);
+  price = parseNumber(price);
   if (utils.anyIsError(settlement, maturity, price)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1296,12 +1297,11 @@ exports.get_total = get_total
 
 exports.VDB = function(cost, salvage, life, Start_period,End_period,factor,No_switch) {
   let factorNum = (factor === undefined) ? 2 : factor;
-  let costNum = utils.parseNumber(cost);
-  let salvageNum = utils.parseNumber(salvage);
-  let lifeNum = utils.parseNumber(life);
-  let Start_periodNum = utils.parseNumber(Start_period);
-  let End_periodNum = utils.parseNumber(End_period);
-  factorNum = utils.parseNumber(factor);
+  let costNum = cost
+  let salvageNum = salvage
+  let lifeNum = life
+  let Start_periodNum = Start_period
+  let End_periodNum = End_period
   if (utils.anyIsError(costNum, salvageNum, lifeNum, Start_periodNum,End_periodNum, factorNum)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1323,9 +1323,9 @@ exports.VDB = function(cost, salvage, life, Start_period,End_period,factor,No_sw
 exports.XIRR = function(values, dates, guess) {
   // Credits: algorithm inspired by Apache OpenOffice
 
-  values = utils.parseNumberArray(utils.flatten(values));
+  values = parseNumberArray(utils.flatten(values));
   dates = utils.parseDateArray(utils.flatten(dates));
-  guess = utils.parseNumber(guess);
+  guess = parseNumber(guess);
   if (utils.anyIsError(values, dates, guess)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1391,8 +1391,8 @@ exports.XIRR = function(values, dates, guess) {
 };
 
 exports.XNPV = function(rate, values, dates) {
-  rate = utils.parseNumber(rate);
-  values = utils.parseNumberArray(utils.flatten(values));
+  rate = parseNumber(rate);
+  values = parseNumberArray(utils.flatten(values));
   dates = utils.parseDateArray(utils.flatten(dates));
   if (utils.anyIsError(rate, values, dates)) {
     return errorObj.ERROR_VALUE;
@@ -1407,8 +1407,8 @@ exports.XNPV = function(rate, values, dates) {
 
 // XW：待实现
 exports.YIELD = function (settlement, maturity, rate, pr, redemption, frequency, basis) {
-  settlement = utils.parseDate(settlement);
-  maturity = utils.parseDate(maturity);
+  settlement = dayNum2Date(settlement);
+  maturity = dayNum2Date(maturity);
   if (utils.anyIsError(settlement, maturity)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1434,8 +1434,8 @@ exports.YIELD = function (settlement, maturity, rate, pr, redemption, frequency,
 // TODO 调用的parseDate转化日期不够准确,如39494应转为2008/2/16,实际转为2008/2/15 23:54造成basis==0,4时的误差
 exports.YIELDDISC = function(settlement, maturity,pr, redemption,basis) {
   // throw created Error('YIELDDISC is not implemented');
-  let settlementDate = utils.parseDate(settlement);
-  let maturityDate = utils.parseDate(maturity);
+  let settlementDate = dayNum2Date(settlement);
+  let maturityDate = dayNum2Date(maturity);
   if (utils.anyIsError(settlementDate, maturityDate)) {
     return errorObj.ERROR_VALUE;
   }

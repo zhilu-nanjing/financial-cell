@@ -81,7 +81,7 @@ export class MultiCollExpFn {
       }
       else{
         // 到这一步是exp_fn没有找到
-        throw new Error(' expression function ' + fnName + ' not found');
+        return  new Error(' expression function ' + fnName + ' not found');
       }
     }
   }
