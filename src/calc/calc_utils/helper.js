@@ -49,26 +49,27 @@ export function numbers() {
     return typeof el === 'number';
   });
 }
-export function flattenNum(args) { // todo: 这个应该是转化参数用的
+export function flattenNum(args) { // todo: 这个函数有点复杂，需要优化
   try{
     if (args.length === 1 && args[0][0] === 'default_0'){
       return errorObj.ERROR_DIV0
     }
     let arr = []
     for( let i=0;i<args.length;i++){
-      let p = parse(args[i])
-      if (p === undefined){
+      let arg = parse(args[i])
+
+      if (arg === undefined){
         return errorObj.ERROR_NAME
       }
-      if (p instanceof Error){
-        return p
-      }else if(p !== 'pass'){
-        if (p instanceof Array){
-          for (let n=0; n < p.length;n++){
-            arr.push(p[n])
+      if (arg instanceof Error){
+        return arg
+      }else if(arg !== 'pass'){
+        if (arg instanceof Array){
+          for (let n=0; n < arg.length;n++){
+            arr.push(arg[n])
           }
         }else{
-          arr.push(p)
+          arr.push(arg)
         }
       }
     }

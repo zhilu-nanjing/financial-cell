@@ -1,15 +1,15 @@
 // 关于矩阵的定义与算法都在这里
+import { INVALID_MATRIX, NOT_NUMBER, NOT_SUPPORT, SHAPE_DIFF } from '../calc_utils/config';
+import { ERROR_SYNTAX, PARSE_FAIL } from '../calc_utils/error_config';
+import { RawValueParser, Str2NumberParser } from './base_parser';
+import { CellVError } from '../cell_value_type/cell_value';
+import {TwoArgOperatorColl} from './two_arg_operator';
 
-
-INVALID_MATRIX = 'INVALID_MATRIX';
-NOT_NUMBER = 'NOT_NUMBER';
-SHAPE_DIFF = 'SHARPE_DIFF';
-NOT_SUPPORT = "NOT_SUPPORT"
-
-class MatrixValue { // 二维数组
+export class MatrixValue { // 二维数组
   constructor(aArray) { // 使用
     this.aArray = aArray;
     this.shape = this.getShape(aArray);
+    this.twoArgOperator = new TwoArgOperatorColl()
   }
 
   applyEachElement(func) {
@@ -104,40 +104,58 @@ class MatrixValue { // 二维数组
     let otherMat = this.convertArgToMatrix(other);
     let thisMat = this.getACopy();
     thisMat.growToLargeShape(otherMat);
-    let resRowNum = min([thisMat.shape[0], otherMat.shape[0]]);
-    let resColNum = min([thisMat.shape[1], otherMat.shape[1]]);
+    let resRowNum = Math.min(thisMat.shape[0], otherMat.shape[0]);
+    let resColNum = Math.min(thisMat.shape[1], otherMat.shape[1]);
     let resArray = Array(resRowNum);
     for (let ri = 0; ri < resRowNum; ri++) {
+      resArray[ri] = Array(0)
       for (let ci = 0; ci < resColNum; ci++) {
-        resArray[ri][ci] = func(thisMat.getElement(ri, ci), otherMat.getElement(ri, ci));
+        resArray[ri].push(func(thisMat.getElement(ri, ci), otherMat.getElement(ri, ci)));
       }
     }
     return resArray;
   }
+  exeElementWiseOperator(other, operator) {
+    let theFunc =  this.twoArgOperator.getFunc(operator)
+    if (theFunc instanceof Error){
+      return theFunc
+    }
+    return this.exeElementWiseFunc(other, theFunc);
+  }
 
-  exeElementWiseOperator(other, operator){
-    if(operator === "+"){
-      return this.exeElementWiseOperator(other, (a,b) => a + b)
-    }
-    else if(operator === "-") {
-      return this.exeElementWiseOperator(other, (a, b) => a - b)
-    }
-    else if(operator === "*"){
-      return this.exeElementWiseOperator(other, (a,b) => a * b)
-    }
-    else if(operator === "/"){
-        return this.exeElementWiseOperator(other, (a,b) => a / b)
-    }
-    else if(operator === "^"){
-        return this.exeElementWiseOperator(other, (a,b) => a / b)
-    }
-      else if(operator === "&"){
-        return this.exeElementWiseOperator(other, (a,b) => String(a) + String(b))
+
+}
+
+/**
+ * 直接写出来的数组，例如：{1,3,4}
+ */
+export class RawArray {
+  constructor(rawStr) { // "1,3" 或 1,3;3,4
+    this.rawStr = rawStr;
+    this.cellVError = null;
+    this.solution = null
+  }
+
+  parse2Array() {
+    let rowStrArray = this.rawStr.split(';');
+    return  rowStrArray.map((rowStr) => {
+        let elementStrArray = rowStr.split(',');
+        let elementArray = elementStrArray.map((elementStr) => {
+          let res = new RawValueParser(elementStr).parse2NumberOrString();
+          this.cellVError = res === PARSE_FAIL ? new CellVError(new Error(ERROR_SYNTAX)) : this.cellVError; // 解析出错时返回错误
+          return res;
+        })
+        return elementArray;
       }
-      else{
-        return new Error(NOT_SUPPORT)
-    }
-    }
+    );
+  }
 
-
+  solveExpression() { // 得到结果
+    let res = this.parse2Array()
+    if(this.cellVError instanceof CellVError){
+      return this.cellVError
+    }
+    this.solution = res
+    return res
+  }
 }

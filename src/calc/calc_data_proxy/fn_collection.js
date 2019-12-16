@@ -28,7 +28,7 @@ export class FnCollection { // 封装的统一管理exp_fn的函数。
       if(typeof curFunc === "function"){
         this.fnObj[toAddFnName] = toAddFnObj[fnName];
       }
-      else {
+      else if(typeof curFunc === "object"){
         this.addFnObj(toAddFnObj[fnName], ignoreDuplicate, fnName + "."); // fnName加一个点作为前缀
       }
     }

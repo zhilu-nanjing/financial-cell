@@ -94,3 +94,7 @@ export const TO_PARA_TYPE = { // 可以转换成的数据类型
   string: 'string',
   number: 'number'
 };
+export const INVALID_MATRIX = 'INVALID_MATRIX';
+export const NOT_NUMBER = 'NOT_NUMBER';
+export const SHAPE_DIFF = 'SHARPE_DIFF';
+export const NOT_SUPPORT = 'NOT_SUPPORT';

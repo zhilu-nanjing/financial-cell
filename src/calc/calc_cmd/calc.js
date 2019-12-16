@@ -34,3 +34,8 @@ export class Calc { // 整个模块对外服务的类
     return calcCellArray // 发生更新的单元格列表
   }
 }
+
+export function easyCalcWorkbook(workbook) {
+  let aCalc = new Calc()
+  aCalc.calculateWorkbook(workbook)
+}

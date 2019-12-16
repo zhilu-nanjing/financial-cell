@@ -12,7 +12,7 @@ export class UserFnExecutor{
     constructor(user_function, args = []){// 这个就类似于一个装饰器
         this.name = 'UserFn';
         this.args = args; // 这个是表达式函数的参数，在创建以后会赋值过来
-        if (typeof user_function === "function"){ // 兼容函数
+        if (typeof user_function === "function"){ // 默认使用BaseExpFunction来封装
             this.exp_fn = new BaseExpFunction(user_function)
         }
         else{
@@ -58,7 +58,7 @@ export class BaseExpFunction{ // 默认行为; 如果不符合默认行为的函
         // 对参数进行类型转化
         let newArg, errorArg = this.errorArg;
         if(typeof this.expFnArgConfig === "undefined"){ // 没有类型转换方式配置
-            newArgs = solvedArgs.map(arg=> {newArg = this.convertToStringAndNumber(arg);
+            newArgs = solvedArgs.map(arg=> {newArg = this.defaultConvert(arg);
                 if(newArg instanceof  Error === true){errorArg = newArg}
                 return newArg}) // 默认是把所有的arg转化为数字
         }
@@ -108,10 +108,12 @@ export class BaseExpFunction{ // 默认行为; 如果不符合默认行为的函
         return newArg
     }
 
+    defaultConvert(arg){
+        return this.convertToStringAndNumber(arg)
+    }
 
     convertToStringAndNumber(arg){ // 这个是函数参数默认转换方式
-        let cellVType = arg.cellVTypeName
-        if(["string","number"].includes(typeof cellVType)){
+        if(["string","number"].includes(typeof arg)){
             return arg
         }
         else {
@@ -137,6 +139,22 @@ export class AllowErrorExpFunction extends BaseExpFunction{
         return true
     }
 }
+
+export class StringExpFunction extends BaseExpFunction{
+    getExpFnArgConfig() {
+        return [TO_PARA_TYPE.string, TO_PARA_TYPE.string] // 参数需要都转换为string 类型
+    }
+}
+
+export class NotConvertEmptyExpFunction extends BaseExpFunction{ // 空类型不转换，其他按照默认行为来
+    defaultConvert(arg){
+    if(arg.cellVTypeName === 'CellVEmpty'){
+        return arg
+    }
+        return this.convertToStringAndNumber(arg)
+    }
+}
+
 
 export function easySolve(func, args){
     let userFnExecutor = new UserFnExecutor(func, args)

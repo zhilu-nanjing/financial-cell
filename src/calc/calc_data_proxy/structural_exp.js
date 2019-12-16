@@ -3,7 +3,14 @@ import { FORMULA_STATUS, MARK_OBJ } from '../calc_utils/config';
 import { RawValue } from './raw_value.js';
 import { Range } from './range_ref.js';
 import { errorMsgArr, errorObj, ERROR_SYNTAX } from '../calc_utils/error_config';
-import { CellVDateTime, CellVEmpty, convertToCellV } from '../cell_value_type/cell_value';
+import {
+    CellVArray,
+    CellVDateTime,
+    CellVEmpty,
+    convertToCellV
+} from '../cell_value_type/cell_value';
+import { TwoArgOperatorColl } from './two_arg_operator';
+import {MatrixValue} from './matrix_math';
 
 let exp_id = 0; // 全局变量
 /**
@@ -18,6 +25,7 @@ export class StructuralExp {
         this.name = 'Expression';
         this.calcCell = calcCell;
         this.last_arg = "";
+        this.twoArgOperator = new TwoArgOperatorColl()
     }
 
     isEmpty(value) {
@@ -48,15 +56,32 @@ export class StructuralExp {
         }
     }
 
-    execOperatorWith2Args(op, args, fn) { // fn含有两个参数，因为运算符有优先级顺序，所以需要依次执行
-        for (let i = 0; i < args.length; i++) { // todo: 后面会修改args，这样不是很恰当
-            if (args[i] === op) {
+    exeOperatorForArrayAndSingle(a,b,op){
+        let arg, newArg
+        let hasMatrix = false
+        for(arg of [a,b]) { // 有任何一个是矩阵，会执行矩阵运算
+            if (arg instanceof Array || arg instanceof MatrixValue || arg instanceof CellVArray) {
+                // newArg = new CellVArray(arg)
+                hasMatrix = true
+                break
+            }
+        }
+        if(hasMatrix){
+            return new CellVArray(a).exeElementOperator(new CellVArray(b), op) // 都转换为cellVArray
+        }
+        return this.twoArgOperator.exeOperator(a,b,op)
+
+    }
+
+    execOperatorsWith2Args(operators, args) { // 优先级一样的运算符按照从左到右的顺序运算
+        for (let i = 0; i < args.length; i++) {
+            if (operators.includes(args[i])) {
                 try {
-                    let r = fn(this.execCalcMethod(args[i-1]), this.execCalcMethod(args[i+1]));// 这里存在递归
+                    let r = this.exeOperatorForArrayAndSingle(this.execCalcMethod(args[i-1]), this.execCalcMethod(args[i+1]),args[i]);// 这里存在递归
                     args.splice(i - 1, 3, new RawValue(r));
                     i--;
                 } catch (e) { // 上面一旦出现错误，就直接跳出了
-                    console.log('[structural_exp.js] - ' + this.name + ': evaluating ' + this.calcCell.cellObj.f + '\n' + e.message);
+                    console.log(e);
                     throw e;
                 }
             }
@@ -110,60 +135,13 @@ export class StructuralExp {
         }
     }
 
-
-    exeAllTwoArgOperator(args, self) {
-        this.execOperatorWith2Args('^', args, function (a, b) {
-            return Math.pow(+a, +b);
-        });
-        this.execOperatorWith2Args('/', args, function (a, b) {
-            if (b === 0) {
-                throw errorObj.ERROR_DIV0;
-            }
-            return (+a) / (+b);
-        });
-        this.execOperatorWith2Args('*', args, function (a, b) {
-            return (+a) * (+b);
-        });
-        this.execOperatorWith2Args('-', args, function (a, b) { // 执行减法
-            return a - b;
-        });
-
-        this.execOperatorWith2Args('+', args, function (a, b) { // 执行加法
-            return (+a) + (+b);
-        });
-        this.execOperatorWith2Args('&', args, function (a, b) {
-            return '' + a + b;
-        });
-        this.execOperatorWith2Args('<', args, function (a, b) {
-            return a < b;
-        });
-        this.execOperatorWith2Args('>', args, function (a, b) {
-            return a > b;
-        });
-        this.execOperatorWith2Args('>=', args, function (a, b) {
-            return a >= b;
-        });
-        this.execOperatorWith2Args('<=', args, function (a, b) {
-            return a <= b;
-        });
-        this.execOperatorWith2Args('<>', args, function (a, b) {
-            if (self.isEmpty(a) && self.isEmpty(b)) {
-                return false;
-            }
-            return a !== b;
-        });
-        this.execOperatorWith2Args('=', args, function (a, b) {
-            if (self.isEmpty(a) && self.isEmpty(b)) {
-                return true;
-            }
-            if ((a === null && b === 0) || (a === 0 && b === null)) {
-                return true;
-            }
-            if (typeof a === 'string' && typeof b === 'string' && a.toLowerCase() === b.toLowerCase()) {
-                return true;
-            }
-            return a === b;
-        });
+    // :,%这两个运算符在解析的时候就执行了
+    exeAllTwoArgOperator(args) { // 根据优先级顺序来计算
+        this.execOperatorsWith2Args(['^'], args);
+        this.execOperatorsWith2Args(['/',"*"], args);
+        this.execOperatorsWith2Args(['+','-'], args);
+        this.execOperatorsWith2Args(['&'], args);
+        this.execOperatorsWith2Args(['<','>','>=','<=','<>','='], args);
     }
 
     calcLastArg(arg){
@@ -188,7 +166,7 @@ export class StructuralExp {
         // 以下是依次执行各个运算符，最优先的运算符在最上面
         this.exec_minus(args); // 执行负号运算
         this.exec_plus(args); // 执行第一个加号
-        this.exeAllTwoArgOperator(args, self); // 负号在这一步会有问题
+        this.exeAllTwoArgOperator(args); // 负号在这一步会有问题
         if (args.length === 1) {
             return this.calcLastArg(args[0]) // 计算最后一个值; 返回的都是CellV
         }

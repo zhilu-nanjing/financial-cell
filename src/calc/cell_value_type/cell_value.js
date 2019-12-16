@@ -1,12 +1,14 @@
 import * as cf from '../calc_utils/config';
 import { d18991230MS, d18991230STR } from '../calc_utils/config';
 import {
+  ERROR_NA,
   ERROR_VALUE,
   PARSE_FAIL_OBJ,
   reportConvertFail,
   reportError
 } from '../calc_utils/error_config';
 import { dayNum2Date } from '../calc_utils/parse_helper';
+import { MatrixValue } from '../calc_data_proxy/matrix_math';
 
 export const CellVTypeObj = {
   CellVDateTime: "CellVDateTime",
@@ -244,10 +246,23 @@ export class CellVBool{
  */
 export class CellVArray{
   constructor(aArray){
-    this.aArray = aArray // 最多支持2维数组
+    if(aArray instanceof Array){
+      this.aArray = aArray // 最多支持2维数组
+    }
+    else if(aArray instanceof MatrixValue || aArray instanceof CellVArray){
+      this.aArray = aArray.aArray //属性
+    }
+    else if(["number", "string"].includes(typeof aArray) ){ // 单个数字与字符串
+      this.aArray = [[aArray]]
+    }
+    else {
+      throw new Error(ERROR_VALUE)
+    }
+    this.matrixValue = new MatrixValue(this.aArray)
     this.isCellV = true
     this.cellVTypeName = CellVTypeObj.CellVArray
   }
+
   applyToAll(func){
     return this.aArray.map(f =>{
       if(f instanceof Array){
@@ -274,8 +289,26 @@ export class CellVArray{
   toDate(){
     return  this.applyToAll(aValue => aValue.toDate())
   }
+
+  convertAValueToNumberOrString(aValue){
+    if(aValue.isCellV){
+      return aValue.toNumberOrString()
+    }
+    else if(typeof aValue === "number" || typeof aValue === "string") {
+      return aValue
+    }
+    else {
+      return new Error(ERROR_NA)
+    }
+
+  }
+
   toNumberOrString(){
-    return this.applyToAll(aValue => aValue.toNumberOrString())
+    return this.applyToAll(aValue => this.convertAValueToNumberOrString(aValue)
+    )
+  }
+  exeElementOperator(other,operator){
+    return this.matrixValue.exeElementWiseOperator(other.matrixValue, operator)
   }
 }
 
@@ -296,6 +329,9 @@ export function convertToCellV(originValue){
   }
   else if (typeof originValue === 'boolean'){ // 布尔类型
     return new CellVBool(originValue)
+  }
+  else if (originValue instanceof Error){ // 错误类型
+    return new CellVError(originValue)
   }
   if(originValue.isCellV === true){
     return originValue // 不进行转换
