@@ -44,13 +44,17 @@ export class BaseExpFunction{ // 默认行为; 如果不符合默认行为的函
     }
 
     expresionFunc(args){ // 需要实现这个方法
-        return this.user_function(args)
+        return this.user_function(...args)
     }
 
-    updateArgArray(){
+    updateArgArray(args){
         let curArg, toTypeName, newArgs = []
         let self = this
-        let solvedArgs = self.args.map(f=>f.solveExpression()) // 求解参数
+        let solvedArgs = args.map(f=>{
+            if(typeof  f.solveExpression === "function"){
+                return f.solveExpression()
+            }else {return f}
+            }) // 求解参数
         // 对参数进行类型转化
         let newArg, errorArg = this.errorArg;
         if(typeof this.expFnArgConfig === "undefined"){ // 没有类型转换方式配置
@@ -116,9 +120,9 @@ export class BaseExpFunction{ // 默认行为; 如果不符合默认行为的函
     }
 
 // todo: ['ISBLANK','ISERROR',"ifError"]处理error不返回所碰到的错误
-    solveExpresion(){ // 核心的对外接口
+    solveExpression(args){ // 核心的对外接口
         let self = this;
-            let newArgArray = self.updateArgArray()// 每个arg元素需要调用他的solveExpression方法
+            let newArgArray = self.updateArgArray(args)// 每个arg元素需要调用他的solveExpression方法
             if(isNaN(this.errorArg) || this.isAllowErrorArg){ // 参数中没有错误的处理
                 return this.expresionFunc(newArgArray)
             }

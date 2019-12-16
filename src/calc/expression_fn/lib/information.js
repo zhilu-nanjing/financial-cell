@@ -22,7 +22,7 @@ exports.INFO = function() {
  throw new Error('INFO is not implemented');
 };
 
-///////////// Jobs： ISBLANK函数能够处理Error，因此要这么写。
+///////////// Jobs： ISBLANK函数能够处理Error，因此要这么写。 后面的ISERR与ISERROR都需要改写。
 export const ISBLANK = new AllowErrorExpFunction(isBlank) // 函数名字都会大写
 
 function isBlank(arg){
@@ -31,12 +31,6 @@ function isBlank(arg){
   }
   return false
 }
-
-
-exports.ISBINARY = function (number) {
-  return (/^[01]{1,10}$/).test(number);
-};
-
 exports.ISERR = function(value) { // 是否是错误1
   return errorMsgArr.indexOf(value) >= 0 ||
     (typeof value === 'number' && (isNaN(value) || !isFinite(value)));
@@ -45,6 +39,12 @@ exports.ISERR = function(value) { // 是否是错误1
 exports.ISERROR = function(value) { // 是否是错误2
   return exports.ISERR(value) || value === errorObj.ERROR_NA;
 };
+
+
+exports.ISBINARY = function (number) {
+  return (/^[01]{1,10}$/).test(number);
+};
+
 
 exports.ISEVEN = function(number) {
   return (Math.floor(Math.abs(number)) & 1) ? false : true;
