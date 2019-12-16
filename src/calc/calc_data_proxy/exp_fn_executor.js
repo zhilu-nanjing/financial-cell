@@ -141,5 +141,4 @@ export class AllowErrorExpFunction extends BaseExpFunction{
 export function easySolve(func, args){
     let userFnExecutor = new UserFnExecutor(func, args)
     return userFnExecutor.solveExpression()
-
 }

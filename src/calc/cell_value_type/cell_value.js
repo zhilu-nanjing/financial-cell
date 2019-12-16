@@ -8,6 +8,17 @@ import {
 } from '../calc_utils/error_config';
 import { dayNum2Date } from '../calc_utils/parse_helper';
 
+export const CellVTypeObj = {
+  CellVDateTime: "CellVDateTime",
+  CellVError:"CellVError",
+  CellVEmpty:"CellVEmpty",
+  CellVNumber:"CellVNumber",
+  CellVString:"CellVString",
+  CellVHyperLink:"CellVHyperLink",
+  CellVBool:"CellVBool",
+  CellVArray:"CellVArray",
+}
+
 // 如果格式转化失败，会调用reportConvertFail方法来汇报错误
 /**
  * 代表一个日期概念
@@ -17,7 +28,7 @@ export class CellVDateTime{ // 单元格值的值属性
   constructor(aDate){ // 加法, 加入天数
     this.dateInstance = aDate
     this.isCellV = true
-    this.cellVTypeName = "CellVDateTime"
+    this.cellVTypeName = CellVTypeObj.CellVDateTime
   };
 
 
@@ -57,7 +68,7 @@ export class CellVError {
   constructor(errInstance) {
     this.err = errInstance; //
     this.isCellV = true
-    this.cellVTypeName = "CellVError"
+    this.cellVTypeName = CellVTypeObj.CellVError
   }
 
   toNumber() {
@@ -88,7 +99,7 @@ export class CellVError {
 export class CellVEmpty {
   constructor() {
     this.isCellV = true
-    this.cellVTypeName = "CellVEmpty"
+    this.cellVTypeName = CellVTypeObj.CellVEmpty
   }
 
   toString() {
@@ -115,7 +126,7 @@ export class CellVNumber{
   constructor(aNum){
     this.number = aNum
     this.isCellV = true
-    this.cellVTypeName = "CellVNumber"
+    this.cellVTypeName = CellVTypeObj.CellVNumber
   }
   toNumber(){
     return this.number
@@ -144,7 +155,7 @@ export class CellVString{
   constructor(aString){
     this.theString = aString
     this.isCellV = true
-    this.cellVTypeName = "CellVString"
+    this.cellVTypeName = CellVTypeObj.CellVString
   }
   toNumber(){
     let theRes = parseFloat(this.theString) // 转化为浮点数
@@ -170,7 +181,7 @@ export class CellVString{
 export class CellVHyperLink{
   constructor(linkStr, showStr = ""){
     this.isCellV = true
-    this.cellVTypeName = "CellVHyperLink"
+    this.cellVTypeName = CellVTypeObj.CellVHyperLink
     this.linkStr = linkStr
     if(showStr === ""){
       this.showStr = linkStr
@@ -208,7 +219,7 @@ export class CellVBool{
   constructor(aBool){
     this.aBool = aBool
     this.isCellV = true
-    this.cellVTypeName = "CellVBool"
+    this.cellVTypeName = CellVTypeObj.CellVBool
 
 
   }
@@ -235,7 +246,7 @@ export class CellVArray{
   constructor(aArray){
     this.aArray = aArray // 最多支持2维数组
     this.isCellV = true
-    this.cellVTypeName = "CellVArray"
+    this.cellVTypeName = CellVTypeObj.CellVArray
   }
   applyToAll(func){
     return this.aArray.map(f =>{
