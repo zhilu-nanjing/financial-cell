@@ -1,5 +1,4 @@
 import * as utils from '../../src/calc/calc_utils/helper.js';
-import * as error from '../../src/calc/calc_utils/error_config.js';
 import * as jStat from 'jstat';
 import { errorObj } from '../../src/calc/calc_utils/error_config';
 import { parseBool, days_str2date, parseNumber } from '../../src/calc/calc_utils/parse_helper';
@@ -24,7 +23,7 @@ function get_Startdays_and_Enddays(settlement,maturity,frequency) {
     let N = parseInt((maturityDate.getFullYear()*12+maturityDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth())/(12/frequency))
     let testDate = utils.Copy(maturityDate)
     testDate.setMonth(testDate.getMonth() - N* 12 / frequency)
-    if(testDate >= settlementDate){
+    if(testDate > settlementDate){
         N = N + 1
     }
     else{
@@ -71,7 +70,8 @@ function DAYSBETWEEN_AFTER_BASIS_TEST(dateafter,datebefore,basis) {
     if ([1, 2, 3].indexOf(basis) >= 0) {
         return (dateafter - datebefore) / (MSECOND_NUM_PER_DAY)
     } else {
-        let monthsBetween = dateafter.getFullYear() * MONTH_NUM_PER_YEAR + dateafter.getMonth() - datebefore.getFullYear() * MONTH_NUM_PER_YEAR - datebefore.getMonth() - 1
+        let monthsBetween = dateafter.getFullYear() * MONTH_NUM_PER_YEAR + dateafter.getMonth()
+            - datebefore.getFullYear() * MONTH_NUM_PER_YEAR - datebefore.getMonth() - 1
         return monthsBetween * DAYS_NUM_PER_MONTH_US + DAYS_NUM_PER_MONTH_US - datebefore.getDate() + dateafter.getDate()
     }
 }
@@ -110,7 +110,8 @@ export function COUPDAYS(settlement, maturity, frequency, basis) {
         return DAYS_NUM_PER_YEAR/frequency;
     }
     if (basis===1) {
-        return (get_Startdays_and_Enddays(settlement, maturity, frequency).endDay - get_Startdays_and_Enddays(settlement, maturity, frequency).startDay )/ MSECOND_NUM_PER_DAY
+        return (get_Startdays_and_Enddays(settlement, maturity, frequency).endDay
+            - get_Startdays_and_Enddays(settlement, maturity, frequency).startDay )/ MSECOND_NUM_PER_DAY
     }
     else {
         return DAYS_NUM_PER_YEAR_US/frequency;
@@ -280,7 +281,8 @@ export function YIELDDISC(settlement, maturity,price, redemption,basis) {
         return ylddisc (DAYS_NUM_PER_YEAR)
     }
     else{
-        let monthsBetween = maturityDate.getFullYear()*MONTH_NUM_PER_YEAR+maturityDate.getMonth()-settlementDate.getFullYear()*MONTH_NUM_PER_YEAR-settlementDate.getMonth()-1
+        let monthsBetween = maturityDate.getFullYear()*MONTH_NUM_PER_YEAR+maturityDate.getMonth()
+            -settlementDate.getFullYear()*MONTH_NUM_PER_YEAR-settlementDate.getMonth()-1
         let daysBetween = monthsBetween*DAYS_NUM_PER_MONTH_US+DAYS_NUM_PER_MONTH_US-settlementDate.getDate()+maturityDate.getDate()
         return (redemption-price)/price/daysBetween*DAYS_NUM_PER_YEAR_US
     }
@@ -418,7 +420,6 @@ export function YIELDMAT(settlement, maturity,issue, rate, price, basis) {
  */
 exports.ODDFPRICE = function (settlement, maturity, issue,first_coupon,rate, yld, redemption, frequency, basis) {
     let settlementDate = days_str2date(settlement);
-    let maturityDate = days_str2date(maturity);
     let issueDate = days_str2date(issue);
     let first_couponDate = days_str2date(first_coupon);
     if (utils.anyIsError(settlement, maturity, issue, first_coupon)) {
@@ -434,40 +435,35 @@ exports.ODDFPRICE = function (settlement, maturity, issue,first_coupon,rate, yld
         return errorObj.ERROR_NUM;
     }
     let N = get_Startdays_and_Enddays(settlement, maturity, frequency).N
+    let N1 = get_Startdays_and_Enddays(first_coupon, maturity, frequency).N
     let DSC = COUPDAYSNC(settlement, maturity, frequency, basis)
     let E = COUPDAYS(settlement, maturity, frequency, basis)
     let A = COUPDAYBS(settlement, maturity, frequency, basis)
-    let DFC = DAYSBETWEEN_AFTER_BASIS_TEST(utils.Copy(first_couponDate).setMonth(first_couponDate.getMonth() + 12 / frequency), first_couponDate, basis)
-    let NC = parseInt((first_couponDate.getFullYear()*12+first_couponDate.getMonth()-issueDate.getFullYear()*12-issueDate.getMonth())/(12/frequency))
-    let NQ = parseInt((first_couponDate.getFullYear()*12+first_couponDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth())/(12/frequency))-1
-    let k
-    if (N / frequency < 10) {
+    let firstPayday_after_firstcoupondate = utils.Copy(first_couponDate)
+    firstPayday_after_firstcoupondate.setMonth(firstPayday_after_firstcoupondate.getMonth() + 12 / frequency)
+    let DFC = DAYSBETWEEN_AFTER_BASIS_TEST(firstPayday_after_firstcoupondate, first_couponDate, basis)
+    let NQ = get_Startdays_and_Enddays(settlement,first_coupon,frequency).N -1
+    if (DAYSBETWEEN_AFTER_BASIS_TEST(first_couponDate,issueDate,basis) <= E) {
         let PRICE_PART2 = 0
         let PRICE_PART1 = (redemption / Math.pow(1 + yld / frequency, N - 1 + DSC / E)) +
             (100 * rate * DFC / frequency / E / Math.pow(1 + yld / frequency, DSC / E))
             - ((100 * rate * A) / (frequency * E))
-        for ( k = 2; k <= N; k++) {
+        for ( let k = 2; k <= N; k++) {
             PRICE_PART2 = PRICE_PART2 + (100 * rate) / (frequency * Math.pow(1 + yld / frequency, k - 1 + DSC / E))
         }
         return PRICE_PART1 + PRICE_PART2
     }
     else{
-        let PRICE = (a,b,c) =>{
-            return redemption/Math.pow(1+yld/frequency,N + NQ + DSC/E)+(100*rate/frequency)*(a/Math.pow(1+yld/frequency, NQ + DSC/E)+1/b-c);
+        let PRICE = (a) =>{
+            return redemption/Math.pow(1+yld/frequency,N1 + NQ + DSC/E)
+                +(100*rate/frequency)*((NQ +DSC/E)/Math.pow(1+yld/frequency, NQ + DSC/E)
+                    -DAYSBETWEEN_AFTER_BASIS_TEST(settlementDate,issueDate,basis)/E)+a;
         }
         let aa = 0
-        for(k =1;k<=NC;k++){
-           aa = aa + 1
+        for(let j =1;j<=N1;j++){
+            aa = aa + 100*rate/frequency/Math.pow(1+yld/frequency,j + NQ + DSC/E)
         }
-        let bb = 0
-        for(k =1;k<=N;k++){
-            bb = bb + Math.pow(1+yld/frequency,k - NQ + DSC/E)
-        }
-        let cc = 0
-        for(k =1;k<=NC;k++){
-            cc = cc + 1
-        }
-        return PRICE(aa,bb,cc)
+        return PRICE(aa)
     }
 }
 /**
@@ -663,13 +659,15 @@ export function DURATION(settlement, maturity, coupon, yld, frequency, basis){
     let dur = 0
     if ([1,3].indexOf(basis)>=0) {
         for (let i = 1; i <= N; i++) {
-            dur = dur + (DSC + (i - 1) * E) / DAYS_NUM_PER_YEAR * ((coupon * 100 / frequency) / Math.pow(1 + yld / frequency, (DSC + (i - 1) * E) / E)) / presentValue
+            dur = dur + (DSC + (i - 1) * E) / DAYS_NUM_PER_YEAR * ((coupon * 100 / frequency)
+                / Math.pow(1 + yld / frequency, (DSC + (i - 1) * E) / E)) / presentValue
         }
         return dur + DSM / DAYS_NUM_PER_YEAR * (100 / Math.pow(1 + yld / frequency, DSM / E)) / presentValue
     }
     else{
         for (let i = 1; i <= N; i++) {
-            dur = dur + (DSC + (i - 1) * E) / DAYS_NUM_PER_YEAR_US * ((coupon * 100 / frequency) / Math.pow(1 + yld / frequency, (DSC + (i - 1) * E) / E)) / presentValue
+            dur = dur + (DSC + (i - 1) * E) / DAYS_NUM_PER_YEAR_US * ((coupon * 100 / frequency)
+                / Math.pow(1 + yld / frequency, (DSC + (i - 1) * E) / E)) / presentValue
         }
         return dur + DSM / DAYS_NUM_PER_YEAR_US * (100 / Math.pow(1 + yld / frequency, DSM / E)) / presentValue
     }
