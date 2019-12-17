@@ -1,13 +1,13 @@
 function Resize(options, self) {
 
     this.register = function (el) {
-        var directionsArr = [];
-        var directions = ['nw', 'w', 'ws', 's', 'se', 'e', 'ne', 'n'];
+        let directionsArr = [];
+        let directions = ['nw', 'w', 'ws', 's', 'se', 'e', 'ne', 'n'];
         //增加元素
         directions.forEach(str => {
             //direction ws
 
-            var div = document.createElement('div');
+            let div = document.createElement('div');
             div.style.display = "block";
             div.className = 'direction ' + str;
             //注册事件
@@ -17,7 +17,7 @@ function Resize(options, self) {
         });
 
         for(let i = 0; i < 4; i++) {
-            var line = document.createElement('div');
+            let line = document.createElement('div');
             line.style.display = "block";
             line.className = `line${i+1}`;
             el.appendChild(line);
@@ -25,7 +25,7 @@ function Resize(options, self) {
         }
 
 
-        var border = document.createElement('div');
+        let border = document.createElement('div');
         border.className = 'border';
         el.appendChild(border);
 
@@ -33,18 +33,17 @@ function Resize(options, self) {
         //注册事件
 
         directions.forEach(str => {
-            var isDown = false;
-            var obj = el.querySelector("." + str);
+            let obj = el.querySelector("." + str);
             obj.onmousedown = function (e) {
 
-                if (e.button != 0) {
+                if (e.button !== 0) {
                     return;
                 }
 
-                var ox = e.clientX;
-                var oy = e.clientY;
+                let ox = e.clientX;
+                let oy = e.clientY;
 
-                var data = {
+                let data = {
                     ox: ox,
                     oy: oy,
                     ow: el.offsetWidth,
@@ -58,33 +57,33 @@ function Resize(options, self) {
                     options.onBegin.call(el,data)
                 }
 
-                var isResize = true;
+                let isResize = true;
                 window.onmousemove = function (event) {
                     if (!isResize) {
                         return;
                     }
-                    var x = event.clientX;
-                    var y = event.clientY;
+                    let x = event.clientX;
+                    let y = event.clientY;
 
                     //计算 width和height 差值
 
-                    var width = x - data.ox;
-                    var height = y - data.oy;
+                    let width = x - data.ox;
+                    let height = y - data.oy;
 
 
                     data.width = width;
                     data.height = height;
 
-                    var fun = mappers[str];
+                    let fun = mappers[str];
                     if (fun) {
                         fun.call(obj, data, event);
                     }
 
                     event.stopPropagation();
-                }
+                };
                 window.onmouseup = function (ee) {
                     isResize = false;
-                    ee.stopPropagation()
+                    ee.stopPropagation();
 
                     if (options && options.onEnd) {
                         options.onEnd.call(el)
@@ -137,7 +136,7 @@ function Resize(options, self) {
             el.style.height = h + 'px';
         }
 
-        var mappers = {
+        let mappers = {
             s: function (data) {
                 setHeight(data.oh + data.height);
             },
@@ -145,11 +144,11 @@ function Resize(options, self) {
                 setWidth(data.ow + data.width)
             },
             w: function (data) {
-                var value = data.width;
+                let value = data.width;
 
 
-                var l = data.ol + value;
-                var w = data.ow + Math.abs(value);
+                let l = data.ol + value;
+                let w = data.ow + Math.abs(value);
 
                 if (value > 0) {
                     w = data.ow - value;
@@ -161,10 +160,10 @@ function Resize(options, self) {
                 }
             },
             n: function (data) {
-                var value = data.height;
+                let value = data.height;
 
-                var t = data.ot + value;
-                var h = data.oh + Math.abs(value);
+                let t = data.ot + value;
+                let h = data.oh + Math.abs(value);
 
                 if (value > 0) {
                     h = data.oh - value;
@@ -190,7 +189,7 @@ function Resize(options, self) {
                 mappers.n(data);
                 mappers.e(data);
             }
-        }
+        };
 
         // el.querySelector()
         return directionsArr;

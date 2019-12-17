@@ -66,7 +66,7 @@ function sheetCopy() {
                     rows._[i].cells[j].formulas = "";
                 }
 
-                let text = rows._[i].cells[j].formulas != "" ? rows._[i].cells[j].formulas : rows._[i].cells[j].text;
+                let text = rows._[i].cells[j].formulas !== "" ? rows._[i].cells[j].formulas : rows._[i].cells[j].text;
                 if(rows._[i].cells[j].formulas && cutStr(rows._[i].cells[j].formulas, false, true).length > 0) {
                     let hidden = h('reference', '');
                     hidden.html(text);
@@ -94,10 +94,9 @@ function sheetCopy() {
 function parseDom(node) {
     let tmpNode = document.createElement("div");
     tmpNode.appendChild(node.cloneNode(true));
-    let str = tmpNode.innerHTML;
 
-    return str;
-};
+    return  tmpNode.innerHTML;
+}
 
 export {
     mountCopy,

@@ -20,11 +20,11 @@ export default {
         textwrap: '自动换行',
         freeze: '冻结',
         autofilter: '自动筛选',
-        add: '显示公式',
+        add: '清除公式',
         calc: '开始计算',
         formula: '函数',
         more: '更多',
-        throwFormula: '清除公式',
+        throwFormula: '显示公式',
         comeBack: '返回',
     },
     revision: {

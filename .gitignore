@@ -27,7 +27,7 @@ eggs/
 lib64/
 test/test.js
 test/helper_test.js
-
+src/plug-in
 parts/
 
 var/
@@ -50,6 +50,7 @@ pip-delete-this-directory.txt
 # Unit test / coverage reports
 htmlcov/
 .tox/
+yarn.lock
 .coverage
 .coverage.*
 .cache

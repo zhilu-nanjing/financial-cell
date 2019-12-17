@@ -1,7 +1,7 @@
-import {expr2xy, xy2expr} from './alphabet';
+import {expr2xy, xy2expr} from '../utils/alphabet';
 import {look, look2} from "../config";
-// import XLSX_CALC from "calc"
-// var formulajs = require('formulajs');
+// import XLSX_CALC from "solveExpression"
+// var expression_fn = require('expression_fn');
 // Converting infix expression to a suffix expression
 // src: AVERAGE(SUM(A1,A2), B1) + 50 + B20
 // return: [A1, A2], SUM[, B1],AVERAGE,50,+,B20,+
@@ -147,7 +147,7 @@ const evalSuffixExpr = (srcStack, formulaMap, cellRender, cellList) => {
                 return 0;
             }
             cellList.push(srcStack[i]);
-            let s = evalSubExpr(srcStack[i], cellRender)
+            let s = evalSubExpr(srcStack[i], cellRender);
             stack.push(evalSubExpr(srcStack[i], cellRender));
         }
         // console.log('stack:', stack);
@@ -159,18 +159,18 @@ function evalFormula(text, rule) {
     if (typeof text !== 'string') {
         return false;
     }
-    if (text.toUpperCase().indexOf(rule.toUpperCase()) == -1) {
-        return false;
-    }
-    return true;
+    // if (text.toUpperCase().indexOf(rule.toUpperCase()) === -1) {
+    //     return false;
+    // }
+    return text.toUpperCase().indexOf(rule.toUpperCase()) !== -1;
 }
 
-const cellRender = (data, sheetbook, y, x, src, formulaMap, getCellText, cellList = []) => {
+export function cellRender(data, sheetbook, y, x, src, formulaMap, getCellText, cellList = []){
     if (typeof src === 'undefined') {
         return "";
     }
 
-    if (typeof src === 'string' && look.indexOf(src.split("!")[0]) != -1) {
+    if (typeof src === 'string' && look.indexOf(src.split("!")[0]) !== -1) {
         let len = src.length;
         if(src.split(" ")[0]) {
             len = src.split(" ")[0].length;
@@ -204,10 +204,10 @@ const cellRender = (data, sheetbook, y, x, src, formulaMap, getCellText, cellLis
             return src.toUpperCase();
         } else if (src.substring(1) && sheetbook && sheetbook.Sheets && sheetbook.Sheets[data.name] && sheetbook.Sheets[data.name][xy2expr(x, y)]) {
             // sheetbook.Sheets.Sheet1[xy2expr(x, y)].f = src.substring(1).toUpperCase();
-            // XLSX_CALC.import_functions(formulajs);
+            // XLSX_CALC.import_functions(expression_fn);
             // XLSX_CALC(sheetbook);
 
-            if ((sheetbook.Sheets[data.name][xy2expr(x, y)].f && sheetbook.Sheets[data.name][xy2expr(x, y)].f.search(/\((\+|\-|\*|\/)/) != -1) || sheetbook.Sheets[data.name][xy2expr(x, y)].v == undefined || sheetbook.Sheets[data.name][xy2expr(x, y)].v === "") {
+            if ((sheetbook.Sheets[data.name][xy2expr(x, y)].f && sheetbook.Sheets[data.name][xy2expr(x, y)].f.search(/\((\+|\-|\*|\/)/) !== -1) || sheetbook.Sheets[data.name][xy2expr(x, y)].v === undefined || sheetbook.Sheets[data.name][xy2expr(x, y)].v === "") {
                 return "#ERROR!";
             }
             sheetbook.Sheets[data.name][xy2expr(x, y)].v = sheetbook.Sheets[data.name][xy2expr(x, y)].v + "";
@@ -223,9 +223,7 @@ const cellRender = (data, sheetbook, y, x, src, formulaMap, getCellText, cellLis
     return src;
 };
 
-export default {
-    render: cellRender,
-};
+export let render = cellRender
 export {
     infixExprToSuffixExpr,
 };

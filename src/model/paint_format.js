@@ -1,6 +1,5 @@
 import CellProp from "./cell_prop";
-import {isHave} from "../core/helper";
-import {xy2expr} from "../core/alphabet";
+import {xy2expr} from "../utils/alphabet";
 
 function getType(dType, sType) {
     if (dType === 1 && sType === 1) {
@@ -67,7 +66,7 @@ export default class PaintFormat {
         //     let index = 0;
         //     dstRange.each((i, j) => {
         //         let {cell} = darr[index];
-        //         let cellProp = new CellProp(i, j, cell);
+        //         let cellProp = created CellProp(i, j, cell);
         //         pArr.push(cellProp);
         //
         //         index += 1;
@@ -82,7 +81,7 @@ export default class PaintFormat {
         //
         //     dstRange.each((i, j) => {
         //         let {cell} = _darr[0][index];
-        //         let cellProp = new CellProp(i, j, cell);
+        //         let cellProp = created CellProp(i, j, cell);
         //         pArr.push(cellProp);
         //
         //         if (index === dci) {
@@ -107,7 +106,7 @@ export default class PaintFormat {
         //         }
         //
         //         let {cell} = _darr[rowIndex][0];
-        //         let cellProp = new CellProp(i, j, cell);
+        //         let cellProp = created CellProp(i, j, cell);
         //         pArr.push(cellProp);
         //
         //         recordRi = i;
@@ -115,7 +114,7 @@ export default class PaintFormat {
         // }else if (type === 4 || type === 2) {   // 4: 1行多列 * 1列多行    6: 1列多行 * 1行多列
         //     dstRange.each((i, j) => {
         //         let {cell} = darr[0];
-        //         let cellProp = new CellProp(i, j, cell);
+        //         let cellProp = created CellProp(i, j, cell);
         //         pArr.push(cellProp);
         //     });
         // } else if (type === 5) {
@@ -127,7 +126,7 @@ export default class PaintFormat {
         //         }
         //
         //         let {cell} = darr[index];
-        //         let cellProp = new CellProp(i, j, cell);
+        //         let cellProp = created CellProp(i, j, cell);
         //         pArr.push(cellProp);
         //
         //         if (index === dci) {
@@ -150,7 +149,7 @@ export default class PaintFormat {
         //         }
         //
         //         let {cell} = darr[rowIndex];
-        //         let cellProp = new CellProp(i, j, cell);
+        //         let cellProp = created CellProp(i, j, cell);
         //         pArr.push(cellProp);
         //
         //         recordRi = i;

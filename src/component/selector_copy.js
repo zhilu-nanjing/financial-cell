@@ -4,12 +4,16 @@ import {CellRange} from '../core/cell_range';
 import {mouseMoveUp} from "../component/event";
 import {lockCells} from "../component/formula_editor";
 import {cuttingByPos} from "../core/operator";
-import {expr2xy} from "../core/alphabet";
+import {expr2xy} from "../utils/alphabet";
 import {cuttingByPosEnd, isAbsoluteValue} from "../core/operator";
 import SelectorMove from "./selector_move";
 
 const selectorHeightBorderWidth = 2 * 2 - 1;
 let startZIndex = 10;
+
+function  find(str, cha) {
+    return str.lastIndexOf(cha);
+}
 
 class SelectorElement {
     constructor(data, selector, sheet) {
@@ -51,11 +55,6 @@ class SelectorElement {
         startZIndex += 1;
     }
 
-    find(str, cha, num) {
-        let x = str.lastIndexOf(cha);
-        return x;
-    }
-
     moveEvent(evt) {
         let {data, _selector, sheet} = this;
         let _move_selectors = null;
@@ -72,13 +71,12 @@ class SelectorElement {
             }
 
             let {ri, ci} = data.getCellRectByXY(e.layerX, e.layerY);
-            if (ri != -1 && ci != -1) {
+            if (ri !== -1 && ci !== -1) {
                 let { pos} = this.sheet.editor;
                 let inputText = this.sheet.editor.editorText.getText();
                 let _erpx = cuttingByPos(inputText, pos - 1, true);
                 if (inputText.length > pos - 1) {
-                    let c = cuttingByPosEnd(inputText, pos - 1);
-                    _erpx += c;
+                    _erpx += cuttingByPosEnd(inputText, pos - 1);
                 }
                 for (let i = 0; i < selectors.length; i++) {
                     let selector = selectors[i];
@@ -86,7 +84,7 @@ class SelectorElement {
 
                     if (erpx === _erpx && className === _selector.className + " clear_selector") {
                         _move_selectors = _move_selectors ? _move_selectors : selector;
-                        if (erpx.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) != -1) {
+                        if (erpx.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) !== -1) {
                             let arr = erpx.split(":");
                             let e1 = expr2xy(arr[0]);
                             let e2 = expr2xy(arr[1]);
@@ -100,11 +98,11 @@ class SelectorElement {
                         }
                         break;
                     } else if (erpx !== _erpx && className === _selector.className + " clear_selector") {
-                        p = p != -1 ? p :this.find(inputText, selector.erpx, selector.index);
+                        p = p !== -1 ? p : find(inputText, selector.erpx);
                         this.sheet.editor.setCursorPos(p + selector.erpx.length);
                         _move_selectors = _move_selectors ? _move_selectors : selector;
 
-                        if (selector.erpx.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) != -1) {
+                        if (selector.erpx.search(/^[A-Za-z]+\d+:[A-Za-z]+\d+$/) !== -1) {
                             let arr = erpx.split(":");
                             let e1 = expr2xy(arr[0]);
                             let e2 = expr2xy(arr[1]);
@@ -120,11 +118,11 @@ class SelectorElement {
                     }
                 }
                 if (_move_selectors) {
-                    _move_selectors.selector.setCss(_move_selectors.color, false)
+                    _move_selectors.selector.setCss(_move_selectors.color, false);
                     lockCells.call(this.sheet, evt, _move_selectors, isAbsoluteValue(_move_selectors.erpx), p);
                 }
             }
-        }, (e) => {
+        }, () => {
             // 加这个的原因是  e.layerX, e.layerY， 如果不加的话 会点到单元格内的 xy坐标进行结算
             let {selectors} = this.sheet;
             sheet.container.css('pointer-events', 'auto');
@@ -134,7 +132,7 @@ class SelectorElement {
             }
             p = -1;
             if (_move_selectors && _move_selectors.selector)
-                _move_selectors.selector.setCss(_move_selectors.color, true)
+                _move_selectors.selector.setCss(_move_selectors.color, true);
             _move_selectors = null;
         });
     }
@@ -460,11 +458,11 @@ export default class SelectorCopy {
         this.tl.setBoxinner(pointer);
     }
 
-    reset() {
-        // console.log('::::', this.data);
-        const {eri, eci} = this.data.selector.range;
-        this.setEnd(eri, eci);
-    }
+    // reset() {
+    //     // console.log('::::', this.data);
+    //     const {eri, eci} = this.data.selector.range;
+    //     this.setEnd(eri, eci);
+    // }
 
     showAutofill(ri, ci) {
         if (ri === -1 && ci === -1) return;
@@ -539,13 +537,6 @@ export default class SelectorCopy {
 
     showClipboard() {
         const coffset = this.data.getClipboardRect();
-        setAllClipboardOffset.call(this, coffset);
-        ['br', 'l', 't', 'tl'].forEach((property) => {
-            this[property].showClipboard();
-        });
-    }
-
-    showClipboard2(coffset) {
         setAllClipboardOffset.call(this, coffset);
         ['br', 'l', 't', 'tl'].forEach((property) => {
             this[property].showClipboard();

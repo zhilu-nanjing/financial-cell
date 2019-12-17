@@ -1,6 +1,4 @@
-import {expr2xy, xy2expr} from './alphabet';
-import {deepCopy} from "./operator";
-import {isHave} from "./helper";
+import {expr2xy, xy2expr} from '../utils/alphabet';
 
 class CellRange {
     constructor(sri, sci, eri, eci, w = 0, h = 0) {
@@ -71,46 +69,46 @@ class CellRange {
         return 4;
     }
 
-    each2(cb, rowFilter = () => true) {
-        let {
-            sri, sci, eri, eci,
-        } = this;
-        let extraRiValue = eri;
-        let extraCiValue = eci;
+    // each2(cb, rowFilter = () => true) {
+    //     let {
+    //         sri, sci, eri, eci,
+    //     } = this;
+    //     let extraRiValue = eri;
+    //     let extraCiValue = eci;
+    //
+    //     if (sri - extraRiValue <= 0) {
+    //         sri = 0;
+    //     } else {
+    //         sri = sri - extraRiValue;
+    //     }
+    //
+    //     if (sci - extraCiValue <= 0) {
+    //         sci = 0;
+    //     } else {
+    //         sci = sci - extraCiValue;
+    //     }
+    //
+    //     for (let i = sri; i <= eri + extraRiValue; i += 1) {
+    //         if (rowFilter(i)) {
+    //             for (let j = sci; j <= eci + extraCiValue; j += 1) {
+    //                 cb(i, j, eri, eci);
+    //             }
+    //         }
+    //     }
+    // }
 
-        if (sri - extraRiValue <= 0) {
-            sri = 0;
-        } else {
-            sri = sri - extraRiValue;
-        }
-
-        if (sci - extraCiValue <= 0) {
-            sci = 0;
-        } else {
-            sci = sci - extraCiValue;
-        }
-
-        for (let i = sri; i <= eri + extraRiValue; i += 1) {
-            if (rowFilter(i)) {
-                for (let j = sci; j <= eci + extraCiValue; j += 1) {
-                    cb(i, j, eri, eci);
-                }
-            }
-        }
-    }
-
-    eachGivenRange(cb, mri, mci) {
-        let sri = 0;
-        let sci = 0;
-        let eri = mri;
-        let eci = mci;
-
-        for (let i = sri; i <= eri; i += 1) {
-            for (let j = sci; j <= eci; j += 1) {
-                cb(i, j, eri, eci);
-            }
-        }
-    }
+    // eachGivenRange(cb, mri, mci) {
+    //     let sri = 0;
+    //     let sci = 0;
+    //     let eri = mri;
+    //     let eci = mci;
+    //
+    //     for (let i = sri; i <= eri; i += 1) {
+    //         for (let j = sci; j <= eci; j += 1) {
+    //             cb(i, j, eri, eci);
+    //         }
+    //     }
+    // }
 
     move(ri, ci) {
         let d = this.eri - this.sri;        // 格子的长 单位 格
@@ -291,20 +289,18 @@ class CellRange {
 
     includeByRiCi(ri, ci) {
         const {
-            sri, sci, eri, eci, w, h,
+            sri, sci, eri, eci,
         } = this;
-        if(sri <= ri && eri >= ri && sci <= ci && eci >= ci) {
-            return true;
-        }
-        return false;
+
+        return sri <= ri && eri >= ri && sci <= ci && eci >= ci;
     }
 
-    clone() {
-        const {
-            sri, sci, eri, eci, w, h,
-        } = this;
-        return new CellRange(sri, sci, eri, eci, w, h);
-    }
+    // clone() {
+    //     const {
+    //         sri, sci, eri, eci, w, h,
+    //     } = this;
+    //     return created CellRange(sri, sci, eri, eci, w, h);
+    // }
 
     getLocationArray(sarr) {
         let darr = [];

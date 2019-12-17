@@ -41,7 +41,7 @@ export function buildButtonWithIcon(tooltipdata, iconName, change = () => {
 function bindDropdownChange() {
     this.ddFormat.change = it => this.change('format', it.key);
     this.ddFont.change = it => this.change('font-name', it.key);
-    this.ddFormula.change = it => this.change('formula', it.key);
+    // this.ddFormula.change = it => this.change('cellFormulaProxy', it.key);
     this.ddFontSize.change = it => this.change('font-size', it.pt);
     this.ddTextColor.change = it => this.change('color', it);
     this.ddFillColor.change = it => this.change('bgcolor', it);
@@ -89,8 +89,9 @@ function moreResize(widthFn = this.widthFn) {
         el, btns, moreEl, ddMore, btns2,
     } = this;
     const {moreBtns, contentEl} = ddMore;
-    el.css('width', `${ widthFn() - 60}px`);
+    el.css('width', `${widthFn() - 60}px`);
     const elBox = el.box();
+    console.log("92: ", elBox);
 
     let sumWidth = 160;
     let sumWidth2 = 12;
@@ -124,7 +125,7 @@ export default class Toolbar {
         const style = data.defaultStyle();
         this.ddFormat = new DropdownFormat();
         this.ddFont = new DropdownFont();
-        this.ddFormula = new DropdownFormula();
+        // this.ddFormula = new DropdownFormula();
         this.ddFontSize = new DropdownFontSize();
         this.ddTextColor = new DropdownColor('text-color', style.color);
         this.ddFillColor = new DropdownColor('fill-color', style.bgcolor);
@@ -141,7 +142,7 @@ export default class Toolbar {
             buildButton(`${t('toolbar.undo')}`).child(this.undoEl.el),
             buildButton(`${t('toolbar.redo')}`).child(this.redoEl.el),
             this.paintformatEl = buildButtonWithIcon(`${t('toolbar.paintformat')}`, 'paintformat', () => toggleChange.call(this, 'paintformat')),
-            this.clearformatEl = buildButtonWithIcon(`${t('toolbar.clearformat')}`, 'clearformat', () => this.change('clearformat')),
+            // this.clearformatEl = buildButtonWithIcon(`${t('toolbar.clearformat')}`, 'clearformat', () => this.change('clearformat')),
             buildDivider(),
             buildButton(`${t('toolbar.format')}`).child(this.ddFormat.el),
             buildDivider(),
@@ -167,7 +168,7 @@ export default class Toolbar {
             // this.chartEl = buildButtonWithIcon('Insert chart', 'chart'),
             this.freezeEl = buildButtonWithIcon(`${t('toolbar.freeze')}`, 'freeze', () => toggleChange.call(this, 'freeze')),
             this.addEl = buildButtonWithIcon(`${t('toolbar.add')}`, 'add', () => toggleChange.call(this, 'add')),
-            this.closeEl = buildButtonWithIcon(`${t('toolbar.calc')}`, 'close', () => toggleChange.call(this, 'close')),
+            this.closeEl = buildButtonWithIcon(`${t('toolbar.solveExpression')}`, 'close', () => toggleChange.call(this, 'close')),
             this.autofilterEl = buildButtonWithIcon(`${t('toolbar.autofilter')}`, 'autofilter', () => toggleChange.call(this, 'autofilter')),
             this.throwFormulaEl = buildButtonWithIcon(`${t('toolbar.throwFormula')}`, 'chevron-right', () => toggleChange.call(this, 'throwFormula')),
             // buildButton(`${t('toolbar.date_formula')}`).child(this.ddFormula.el),
@@ -187,6 +188,11 @@ export default class Toolbar {
         bind(window, 'resize', () => {
             moreResize.call(this, data.settings.view.width);
         });
+    }
+
+    moreResize() {
+        let {data} = this;
+        moreResize.call(this, data.settings.view.width);
     }
 
     paintformatActive() {

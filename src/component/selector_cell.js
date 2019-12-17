@@ -7,7 +7,6 @@ export default class SelectorCell {
     constructor(data) {
         this.el = h('div', `${cssPrefix}-selector-cell`);
         this.data = data;
-        // this.direction = 1;     // 1 左上 2 右上 3左下 4右下
         this._ = new CellRange(0, 0, 0, 0);
     }
 
@@ -23,7 +22,6 @@ export default class SelectorCell {
         let {data} = this;
         let {merges} = data;
 
-        console.log(this._);
         let enter = false;
         merges.each(range => {
             if (range.includeByRiCi(ri, ci)) {

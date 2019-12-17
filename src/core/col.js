@@ -1,4 +1,4 @@
-import helper from './helper';
+import {rangeSum} from '../helper/dataproxy_helper';
 
 class Cols {
   constructor({
@@ -42,13 +42,13 @@ class Cols {
     col.width = width;
   }
 
-  setStyle(ci, style) {
-    const col = this.getOrNew(ci);
-    col.style = style;
-  }
+  // setStyle(ci, style) {
+  //   const col = this.getOrNew(ci);
+  //   col.style = style;
+  // }
 
   sumWidth(min, max) {
-    return helper.rangeSum(min, max, i => this.getWidth(i));
+    return rangeSum(min, max, i => this.getWidth(i));
   }
 
   totalWidth() {
@@ -56,7 +56,6 @@ class Cols {
   }
 }
 
-export default {};
 export {
   Cols,
 };

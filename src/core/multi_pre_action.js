@@ -1,7 +1,13 @@
-import {xy2expr} from "./alphabet";
+import {xy2expr} from "../utils/alphabet";
 import PreAction from "../model/pre_action";
 import {testValid} from "../utils/test";
 
+function operationItem(preAction) {
+    this.undoItems.push(preAction);
+    this.redoItems = [];
+}
+
+// todo type管理
 export default class MultiPreAction {
     constructor(data) {
         this.undoItems = [];
@@ -11,59 +17,46 @@ export default class MultiPreAction {
 
     addStep({type, action, ri, ci, expr, cellRange, cells, height, width, property, value, oldData}, {oldCell, newCell, oldMergesData, newMergesData, oldStep}) {
         let preAction = "";
-        switch (type) {
-            case 1:
-                preAction = new PreAction({
-                    type,
-                    action, ri, ci, expr, oldCell, newCell
-                }, this.data);
-                this.undoItems.push(preAction);
-                this.redoItems = [];
-                break;
-            case 2:
-            case 5:
-            case 11:
-            case 12:
-            case 6:
-                preAction = new PreAction({
-                    type, oldMergesData, property, value, newMergesData,
-                    action, cellRange,  oldCell, newCell: cells
-                }, this.data);
-                this.undoItems.push(preAction);
-                this.redoItems = [];
-                break;
-            case 13:
-                preAction = new PreAction({
-                    type, oldData, newData: oldStep.oldData,
-                    action,
-                }, this.data);
-                this.undoItems.push(preAction); // jobs: todo: this.undoItems.push(preAction),this.redoItems = [],break; 这三个语句是重复的可以直接包装成一个methold
-                this.redoItems = [];
-                break;
-            case 3:
-                preAction = new PreAction({
-                    type,
-                    action, height, ri, oldStep
-                }, this.data);
-                this.undoItems.push(preAction);
-                this.redoItems = [];
-                break;
-            case 4:
-                preAction = new PreAction({
-                    type,
-                    action, width, ci, oldStep
-                }, this.data);
-                this.undoItems.push(preAction);
-                this.redoItems = [];
-                break;
+
+        if(type === 1) {
+            preAction = new PreAction({
+                type,
+                action, ri, ci, expr, oldCell, newCell
+            }, this.data);
+            operationItem.call(this, preAction);
+        } else if(type === 2 || type === 5 || type === 11 || type === 12 || type === 6) {
+            preAction = new PreAction({
+                type, oldMergesData, property, value, newMergesData,
+                action, cellRange,  oldCell, newCell: cells
+            }, this.data);
+            operationItem.call(this, preAction);
+        } else if(type === 13) {
+            preAction = new PreAction({
+                type, oldData, newData: oldStep.oldData,
+                action,
+            }, this.data);
+            operationItem.call(this, preAction);
+        } else if(type === 3) {
+            preAction = new PreAction({
+                type,
+                action, height, ri, oldStep
+            }, this.data);
+            operationItem.call(this, preAction);
+        } else if(type === 4) {
+            preAction = new PreAction({
+                type,
+                action, width, ci, oldStep
+            }, this.data);
+            operationItem.call(this, preAction);
         }
+
         testValid.call(this);
     }
 
-    getStepType(type, {ri, ci, expr, text, range, cellRange, property, value, merges}) {
+    // 删掉了一个merges
+    getStepType(type, {ri, ci, expr, text, range, cellRange, property, value}) {
         let str = "";
         let {rows, cols} = this.data;
-        // let cells = [];
 
         if(type === 1) {
             str = `在${expr}中键入"${text}"`;
@@ -185,13 +178,10 @@ export default class MultiPreAction {
 
     eachRange(range) {
         let {rows} = this.data;
-        let cells = rows.eachRange(range);
 
-        return cells;
+        return rows.eachRange(range);
     }
 
-    // todo: actionItems,actionType
-    // todo: 所有的历史操作对应MultiPreAction, 单个历史操作 PreAction  单个叫xxx, 多个multixxx
     does(actionItems, actionType) {
         if (!this.data.settings.showEditor) {
             return;

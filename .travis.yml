@@ -9,7 +9,7 @@ cache:
 
 branches:
   only:
-  - master
+  - dev
 
 install:
  - npm install -g istanbul

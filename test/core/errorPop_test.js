@@ -2,15 +2,16 @@ import {describe, it} from 'mocha';
 import DataProxy from "../../src/core/data_proxy";
 import Recast from "../../src/core/recast";
 import {cutStr, deepCopy, splitStr} from "../../src/core/operator";
-import EditorText from "../../src/component/editor_text";
-import {calcDecimals, changeFormat, dateDiff, formatDate} from '../../src/component/date';
-import {isHave} from "../../src/core/helper";
+import EditorText from "../../src/core/editor_text";
+import {calcDecimals, changeFormat, dateDiff, formatDate} from '../../src/utils/date';
+import {isHave} from "../../src/helper/dataproxy_helper";
 import {copyPasteTemplate} from "../util/templates";
 import {formatNumberRender} from "../../src/core/format";
 import FormatProxy from "../../src/core/format_proxy";
-import {multipleCellsRender, specialWebsiteValue} from "../../src/component/special_formula_process";
+import {multipleCellsRender, specialWebsiteValue} from "../../src/core/special_formula_process";
 import CellRange from "../../src/core/cell_range";
 import PaintFormat from "../../src/model/paint_format";
+import PreAction from "../../src/model/pre_action";
 
 let assert = require('assert');
 
@@ -91,7 +92,7 @@ describe('qq', () => {
 
     describe('  paste  ', () => {
         it(' paste =D1 ', () => {
-            // let tableProxy = new TableProxy(data);
+            // let tableProxy = created TableProxy(data);
             // tableProxy.rows._ = {
             //     "13": {
             //         "cells": {
@@ -234,7 +235,7 @@ describe('qq', () => {
             // assert.equal(args.text, "www.baidu.com");
             // assert.equal(args.type, 2);
             //
-            // let wb = {
+            // let workbookProxy = {
             //     "A1": {
             //         "v": "1",
             //         "f": "1"
@@ -244,7 +245,7 @@ describe('qq', () => {
             //         "f": "2"
             //     }
             // }
-            // args = specialWebsiteValue('*MULTIPLECELLS*!' + JSON.stringify(wb), "=ADD()");
+            // args = specialWebsiteValue('*MULTIPLECELLS*!' + JSON.stringify(workbookProxy), "=ADD()");
             //
             // assert.equal(args.state, true);
             // assert.equal(args.type, 1);
@@ -299,6 +300,31 @@ describe('qq', () => {
             assert.equal(args.inputText, '=$A1+A2');
             assert.equal(args.pos, 4);
         });
+    });
+
+    describe('  test  calc ', () => {
+        it(' 计算 ', () => {
+
+            let changeDataForCalc = new PreAction({
+                type: 999,
+                action: "重新计算",
+                ri: -1,
+                ci: -1,
+                oldCell: {},
+                newCell: data.rows.eachRange(new CellRange(0, 0, 10, 10))
+            }, data);
+            // data.rows.setCell(0, 0, {"text": "=ABS(-1)", formulas: "=ABS(-1)"}, 'all_with_no_workbook'); // 负号还需要修复
+
+            data.rows.setCell(0, 0, {
+                "text": "=ABS(1)",
+                formulas: "=ABS(1)"
+            }, 'all_with_no_workbook');
+            data.calc.calculateRows(data.rows, changeDataForCalc);
+
+            let cell1 = data.rows.getCell(0, 0);
+            assert.equal(cell1.text, '1');
+            assert.equal(cell1.formulas, '=ABS(1)');
+        })
     });
 
     describe(' autofilter  ', () => {
@@ -542,6 +568,7 @@ describe('qq', () => {
             assert.equal(pArr[5].cell.style, 0);
             assert.equal(pArr[6].cell.style, 1);
         });
+
 
         it(' 1行多列 * 1列多行 ', function () {
             data.rows.setData({

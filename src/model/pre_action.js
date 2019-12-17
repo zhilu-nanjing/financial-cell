@@ -1,6 +1,6 @@
 import {deepCopy, distinct} from "../core/operator";
-import {isHave} from '../core/helper';
-import {expr2xy, xy2expr} from "../core/alphabet";
+import {isHave} from '../helper/check_value';
+import {expr2xy, xy2expr} from "../utils/alphabet";
 
 function getCellDepend(cells) {
     let arr = [];
@@ -33,7 +33,7 @@ export default class PreAction {
         this.height = height;
         this.width = width;
         this.oldCell = oldCell;
-        this.newCell = newCell;
+        this.newCell = newCell; // 一个Object记录，更新的值
         this.oldMergesData = oldMergesData;
         this.newMergesData = newMergesData;
         this.property = property;
@@ -45,15 +45,22 @@ export default class PreAction {
         this.data = data;
     }
 
+    /**
+     * 获取所有需要计算的单元格列表
+     * @returns {Array}
+     */
+    isRefresh(){ // jobs; 我加的，判定是否是全量更新
+        return this.type === 999;
+    }
+
     findAllNeedCalcCell() {
         let changeArr = [];
-        let {oldCell, newCell, ri, ci} = this;
+        let {oldCell, newCell, ri, ci} = this; // 应该得到多个sheet的变更结果
         changeArr.push(...getCellDepend(oldCell));
         changeArr.push(...getCellDepend(newCell));
         if (ri !== -1 && ci !== -1) {
             changeArr.push(xy2expr(ci, ri));
         }
-
         changeArr = distinct(changeArr);
         return changeArr;
     }
