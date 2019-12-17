@@ -60,6 +60,8 @@ describe('新的解析算法', function() {
     workbook.Sheets.Sheet1.A6 = {f:'   123,123e12  %  '};
     workbook.Sheets.Sheet1.A7 = {f:'   123,123123e12  %  '}; // 无法解析
     workbook.Sheets.Sheet1.A8 = {f:'trUe'}; // 转化为true
+    workbook.Sheets.Sheet1.A9 = {f:'75.91%'}; // 无法解析
+
 
 
     let calc = new Calc()
@@ -74,6 +76,8 @@ describe('新的解析算法', function() {
     assert.equal(workbook.Sheets.Sheet1.A6.v.toNumber(), 1231230000000000);
     assert.equal(workbook.Sheets.Sheet1.A7.v.toString(), '   123,123123e12  %  ');
     assert.equal(workbook.Sheets.Sheet1.A8.v.toNumber(), 1);
+    assert.equal(workbook.Sheets.Sheet1.A9.v.toNumber(), 0.7591);
+
 
     console.log(workbook.Sheets.Sheet1)
     // assert.equal(workbook.Sheets.Sheet1.H614.v, "asdf-as");

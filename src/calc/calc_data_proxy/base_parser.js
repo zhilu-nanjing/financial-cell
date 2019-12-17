@@ -49,7 +49,7 @@ export class Str2NumberParser { // 把字符串转化为数字的类
   }
 
   isDecimalPart(theStr) {
-    return theStr !== '' && this.isIntPattern(-1, theStr) === false;
+    return theStr !== '' && this.isIntPattern(-1, theStr);
   }
 
   isFloatPattern(theStr) {
@@ -99,7 +99,7 @@ export class Str2NumberParser { // 把字符串转化为数字的类
     // 判断整数部分
     if (this.isFloatWithCommaPattern(splitByDotArray[0])) {
       splitByDotArray[0] = splitByDotArray[0].replace(/,/g, '');
-    } else if (this.isIntPattern(allowZeroNum, theStr) === false) {
+    } else if (this.isIntPattern(allowZeroNum, splitByDotArray[0]) === false) {
       return PARSE_FAIL_OBJ;
     }
 

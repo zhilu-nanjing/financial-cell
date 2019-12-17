@@ -9,6 +9,7 @@ import { StructuralExpressionBuilder } from '../calc_deal/structural_expression/
 import {FORMULA_STATUS} from '../calc_utils/config';
 import {convertToCellV} from '../cell_value_type/cell_value';
 
+
 /**
  * 用来代表一个计算引擎中的cell
  * @property {string} name

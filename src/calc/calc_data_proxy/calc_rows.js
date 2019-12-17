@@ -52,7 +52,6 @@ export class CalcRowsProxy { // 代理对于rows的数据获取与数据更新
             let cell_name = exp.xy2expr(ci, ri);
             if (isHave(cell)) {
               workbook.Sheets[name][cell_name] = {
-                v: cell.text, // todo: cell.text不应该直接赋值给v，因为text只是字符串。
                 f: cell.formulas
               };
             }
@@ -75,7 +74,8 @@ export class CalcRowsProxy { // 代理对于rows的数据获取与数据更新
           if (!isHave(cell)) {
             cell = {};
           }
-          cell.text = sheet[i].v;
+          cell.v = sheet[i].v
+          cell.text = sheet[i].v.toString(); //复制text属性
           cell.formulas = sheet[i].f;
           if (cell.formulas === '' && cell.text === 0) {//未定义单元格置为空
             cell.text = '';

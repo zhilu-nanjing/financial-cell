@@ -35,21 +35,9 @@ export class StructuralExp {
     hasCalcMethod(obj) {
         return typeof obj.solveExpression === 'function'
     }
-    convertDateToNumber(res){
-        if(res instanceof CellVDateTime){
-            return res.toNumber()
-        }
-        else {
-            return res
-        }
-    }
-    execCalcMethod(obj, isConvertDateToNumber = true){
+    execCalcMethod(obj){
         if(this.hasCalcMethod(obj)){
-            let res = obj.solveExpression()
-            if(isConvertDateToNumber){
-                res = this.convertDateToNumber(res)
-            }
-            return res
+            return obj.solveExpression()
         }
         else {
             throw errorObj.ERROR_SYNTAX

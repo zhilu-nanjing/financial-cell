@@ -161,7 +161,7 @@ export class CellVString{
   }
   toNumber(){
     let theRes = parseFloat(this.theString) // 转化为浮点数
-    return isNaN(theRes)? PARSE_FAIL_OBJ:res
+    return isNaN(theRes)? PARSE_FAIL_OBJ:theRes
   }
   toString(){
     return this.theString // 转化为字符串

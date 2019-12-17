@@ -1,5 +1,6 @@
 "use strict";
 import { TO_PARA_TYPE } from '../calc_utils/config';
+import { ERROR_VALUE } from '../calc_utils/error_config';
 const NOT_CONVERT = "NOT_CONVERT"; // 不转换
 
 
@@ -120,11 +121,15 @@ export class BaseExpFunction{ // 默认行为; 如果不符合默认行为的函
             return arg.toNumberOrString() // 转换; 如果遇到其他的一些数据类型会报错
         }
     }
+    checkFuncArg(newArgArray){ // 默认状态没有额外检查
+        return null
+    }
 
 // todo: ['ISBLANK','ISERROR',"ifError"]处理error不返回所碰到的错误
     solveExpression(args){ // 核心的对外接口
         let self = this;
             let newArgArray = self.updateArgArray(args)// 每个arg元素需要调用他的solveExpression方法
+            this.checkFuncArg(newArgArray)
             if(isNaN(this.errorArg) || this.isAllowErrorArg){ // 参数中没有错误的处理
                 return this.expresionFunc(newArgArray)
             }
@@ -154,6 +159,18 @@ export class NotConvertEmptyExpFunction extends BaseExpFunction{ // 空类型不
         return this.convertToStringAndNumber(arg)
     }
 }
+
+export class OnlyNumberExpFunction extends BaseExpFunction{ // 空类型不转换，其他按照默认行为来
+    checkFuncArg(newArgArray){
+        for(let arg of newArgArray){
+            if(typeof arg !== "number"){
+                this.errorArg = new Error(ERROR_VALUE)
+            }
+        }
+    }
+
+}
+
 
 
 export function easySolve(func, args){

@@ -20,15 +20,16 @@ describe('expression_fn integration', function() {
       assert.equal(workbook.Sheets.Sheet1.A5.v.toNumber(), 11.8);
     });
 
-    it('-', function() {
-
+    it('带比分比的计算', function() {
       let workbook = {};
       workbook.Sheets = {};
       workbook.Sheets.Sheet1 = {};
-      workbook.Sheets.Sheet1.H614 = {f: '=2-1'};
+      workbook.Sheets.Sheet1.A1 = {f: '75.91%'};
+      workbook.Sheets.Sheet1.A2 = {f: '=H7*$A$1'};
+      workbook.Sheets.Sheet1.H7 = {f: '6753'};
       let calc = new Calc()
       calc.calculateWorkbook(workbook);
-      assert.equal(workbook.Sheets.Sheet1.H614.v.toNumber(), 1);
+      assert.equal(workbook.Sheets.Sheet1.A2.v.toNumber(), 5126.2023);
     });
     it('COUPNCD', function() {
 
@@ -114,8 +115,19 @@ describe('expression_fn integration', function() {
       calc.calculateWorkbook(workbook);
       assert.equal(workbook.Sheets.Sheet1.H845.v, 3628800);
       assert.equal(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","H845", "v"), 3628800);
+    });
+    it('ABS', function() {
+
+      let workbook = {};
+      workbook.Sheets = {};
+      workbook.Sheets.Sheet1 = {};
+      workbook.Sheets.Sheet1.A1 = {v: -10};
+      workbook.Sheets.Sheet1.A2 = {f: '=ABS(A1)'};
+      easyCalcWorkbook(workbook);
+      assert.equal(workbook.Sheets.Sheet1.A2.v.toNumber(), 10);
 
     });
+
     it('PRICE', function() { // 等到旺旺修复
 
       let workbook = {};

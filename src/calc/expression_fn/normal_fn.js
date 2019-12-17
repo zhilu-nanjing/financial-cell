@@ -27,4 +27,3 @@ export let fnObjArray = [
   miscellaneous,
   hyperlink,
 ];
-

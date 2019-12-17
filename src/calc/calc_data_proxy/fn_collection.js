@@ -1,7 +1,7 @@
 // todo: 需要把FLOOR.MATH这样的公式解析为FLOOR_MATH这样的函数
 
 import { UserRawFnExecutor } from './exp_raw_fn_executor';
-import { UserFnExecutor } from './exp_fn_executor';
+import { BaseExpFunction, UserFnExecutor } from './exp_fn_executor';
 
 export class FnCollection { // 封装的统一管理exp_fn的函数。
   constructor() {
@@ -25,7 +25,7 @@ export class FnCollection { // 封装的统一管理exp_fn的函数。
         }
       }
       let curFunc = toAddFnObj[fnName];
-      if(typeof curFunc === "function"){
+      if( (typeof curFunc === "function")||(curFunc instanceof BaseExpFunction)){
         this.fnObj[toAddFnName] = toAddFnObj[fnName];
       }
       else if(typeof curFunc === "object"){
@@ -52,7 +52,6 @@ export class FnCollection { // 封装的统一管理exp_fn的函数。
       return {'isEmpty': true}
     }
     let expFunction = this.fnObj[fnName];
-    console.assert(typeof expFunction === 'function');
     return expFunction
   }
 
@@ -68,16 +67,21 @@ export class MultiCollExpFn {
     this.rawFnExecutor = UserRawFnExecutor;
     this.normalFnExecutor = UserFnExecutor;
   }
+  isValidExpFn(foundExpFn){
+    return typeof foundExpFn === 'function' || foundExpFn instanceof BaseExpFunction
+  }
+
   getFnExecutorByName(fnName){
     let fnType
     let foundExpFn = this.raw_fn_coll.getExpFunction(fnName); // this.xlsx_raw_Fx = {OFFSET; IFERROR; IF; AND}
-    if (typeof foundExpFn === 'function') {
+    if (this.isValidExpFn(foundExpFn)) {
       return new this.rawFnExecutor(foundExpFn)
+
     }
     else{
       foundExpFn = this.normal_fn_coll.getExpFunction(fnName);
-      if (typeof foundExpFn === 'function') {
-        return new this.normalFnExecutor(foundExpFn)
+      if (this.isValidExpFn(foundExpFn)) {
+        return new this.normalFnExecutor(foundExpFn) // UserFnExecutor
       }
       else{
         // 到这一步是exp_fn没有找到

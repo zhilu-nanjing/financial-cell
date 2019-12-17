@@ -211,7 +211,7 @@ export class StructuralExpressionBuilder {
       this.initParentheses();
     } else if (char === ')') { // 右括号 --> 进入end_parentheses状态
       this.endParentheses();
-    } else if (Object.values(SINGLE_CHAR_OPERATOR).includes(char)) { // 运算符 --> 进入add_operation状态
+    } else if (char!=="%" && Object.values(SINGLE_CHAR_OPERATOR).includes(char)) { // 百分号会push2ExpArgs中解析，在运算符 --> 进入add_operation状态
       this.initOperator(char);
     } else if (char === ',' && this.stackProxy.isLastFnExecutorValid()) { // 逗号且fn_stack存在special属性， 此时应该要结束掉逗号前的哪个参数
       this.endFnArg()
