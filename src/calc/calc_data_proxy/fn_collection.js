@@ -71,8 +71,9 @@ export class MultiCollExpFn {
     return typeof foundExpFn === 'function' || foundExpFn instanceof BaseExpFunction
   }
 
-  getFnExecutorByName(fnName){
+  getFnExecutorByName(fnName, isToUpperCase = true){
     let fnType
+    fnName = isToUpperCase? fnName.toUpperCase(): fnName // 转换为大写
     let foundExpFn = this.raw_fn_coll.getExpFunction(fnName); // this.xlsx_raw_Fx = {OFFSET; IFERROR; IF; AND}
     if (this.isValidExpFn(foundExpFn)) {
       return new this.rawFnExecutor(foundExpFn)

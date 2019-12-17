@@ -124,13 +124,17 @@ describe('新的解析算法', function() {
     workbook.Sheets.Sheet1 = {};
     // workbook.Sheets.Sheet1.A1 = {f: '=AVERAGE({1,3}+{3,2})'};
     // workbook.Sheets.Sheet1.A2 = {f: '=AVERAGE({1,3}  +  {3,2} * {1,3})'};
-    workbook.Sheets.Sheet1.A3 = {f: '=AVERAGE({1,3}  +  {3,2} * 2)'};
+    // workbook.Sheets.Sheet1.A3 = {f: '=AVERAGE({1,3}  +  {3,2} * 2)'};
+    workbook.Sheets.Sheet1.A4 = {f: '=average({1,2;3,4}*2)'};
+
 
     let calc = new Calc()
     calc.calculateWorkbook(workbook);
     // assert.equal(workbook.Sheets.Sheet1.A1.v.toNumber(), 4.5);
     // assert.equal(workbook.Sheets.Sheet1.A2.v.toNumber(), 6.5);
-    assert.equal(workbook.Sheets.Sheet1.A3.v.toNumber(), 7);
+    // assert.equal(workbook.Sheets.Sheet1.A3.v.toNumber(), 7);
+    assert.equal(workbook.Sheets.Sheet1.A4.v.toNumber(), 5);
+
 
   });
 
