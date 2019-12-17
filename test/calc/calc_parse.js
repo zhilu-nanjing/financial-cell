@@ -40,10 +40,14 @@ describe('新的解析算法', function() {
     let workbook = {};
     workbook.Sheets = {};
     workbook.Sheets.Sheet1 = {};
-    workbook.Sheets.Sheet1.B1 = {f: '=FLOOR.MATH(-8.1,2)'}; // 负号运算符
     let calc = new Calc()
     calc.calculateWorkbook(workbook);
-    assert.equal(workbook.Sheets.Sheet1.B1.v.toNumber(), -10);
+
+    workbook.Sheets.Sheet1.B1 = {f: '=FLOOR.MATH(-8.1,2)'}; // 负号运算符
+    workbook.Sheets.Sheet1.B2 = {f: '=B1+1'}; // 负号运算符
+
+    let updatedRes = calc.updateByMultiSheetObj(workbook.Sheets)
+    assert.equal(updatedRes.Sheet1.B1.v.toNumber(), -10);
   });
 
 
@@ -54,7 +58,7 @@ describe('新的解析算法', function() {
     workbook.Sheets.Sheet1.A1 = {f:""} // 空字符串，看对不对
     workbook.Sheets.Sheet1.A2 = {f:"'2019/1/1 12:12:12.12"}; // 强制字符串
     workbook.Sheets.Sheet1.A3 = {f:'2019/1/1 12:12:12.12'};
-    workbook.Sheets.Sheet1.B3 = {f:'2019年1月1日 12:12:12.12'};
+    workbook.Sheets.Sheet1.B3 = {f:'2019年1月10日 12:12:12.12'};
     workbook.Sheets.Sheet1.A4 = {f:'00001,123,123.56e12'};
     workbook.Sheets.Sheet1.A5 = {f:'$  123,123e12'};
     workbook.Sheets.Sheet1.A6 = {f:'   123,123e12  %  '};
@@ -68,9 +72,8 @@ describe('新的解析算法', function() {
     calc.calculateWorkbook(workbook);
     assert.equal(workbook.Sheets.Sheet1.A1.v.toNumber(), 0);
     assert.equal(workbook.Sheets.Sheet1.A2.v.toString(), "2019/1/1 12:12:12.12");
-    let num = workbook.Sheets.Sheet1.A3.v.toNumber()
-    assert(compareFloat( num, 43466.5084736111));
-    assert(compareFloat(workbook.Sheets.Sheet1.B3.v.toNumber()  , 43466.5084736111));
+    assert(compareFloat(workbook.Sheets.Sheet1.A3.v.toNumber(), 43466.5084736111));
+    assert(compareFloat(workbook.Sheets.Sheet1.B3.v.toNumber()  , 43475.508472222));
     assert.equal(workbook.Sheets.Sheet1.A4.v.toNumber(), 1123123.56e12);
     assert.equal(workbook.Sheets.Sheet1.A5.v.toNumber(), 1.23123e17);
     assert.equal(workbook.Sheets.Sheet1.A6.v.toNumber(), 1231230000000000);

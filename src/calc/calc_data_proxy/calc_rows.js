@@ -10,7 +10,7 @@ export class CalcRowsProxy { // 代理对于rows的数据获取与数据更新
     this.preAction = preAction;
   }
 
-  // 变动数据传入workbook
+  // 变动数据传入workbook，这块需要转移
   updateWorkbook(workbook) {
     let { data } = this.rows;
     let name = data['name'];
@@ -29,7 +29,7 @@ export class CalcRowsProxy { // 代理对于rows的数据获取与数据更新
     return workbook;
   }
 
-  rows2workbook() { // 把rows中的数据转化为workbook的形式
+  rows2workbook() { // 初始化，把rows中的数据转化为workbook的形式
     let rows = this.rows
     let cells = rows._;
     let workbook = null;
@@ -60,6 +60,10 @@ export class CalcRowsProxy { // 代理对于rows的数据获取与数据更新
     return workbook;
   }
 
+  updateRowsByCalcCellArray(calcCellArray, rows){
+    calcCellArray.map((calcCell) => {rows.setCell(...calcCell.getRiCi(),calcCell.getCellObjForRendering())})
+  }
+
 
   //workbook填入rows
   calcDoneToSetCells(workbook, rows) {
@@ -77,9 +81,6 @@ export class CalcRowsProxy { // 代理对于rows的数据获取与数据更新
           cell.v = sheet[i].v
           cell.text = sheet[i].v.toString(); //复制text属性
           cell.formulas = sheet[i].f;
-          if (cell.formulas === '' && cell.text === 0) {//未定义单元格置为空
-            cell.text = '';
-          }
           rows.setCell(arg[1], arg[0], cell);
         }
       });

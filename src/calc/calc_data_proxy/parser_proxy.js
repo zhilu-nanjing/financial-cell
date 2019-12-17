@@ -140,7 +140,7 @@ export class DateTimeParser { // todo： 暂时不支持Jan-1这样的形式的�
       return PARSE_FAIL_OBJ;
     }
     let theDayInt;
-    if (splitArray.length === 3) {
+    if (splitArray.length === 4) { // ["2019","1","10",""]
       theDayInt = parseInt(splitArray[2]);
     } else {
       theDayInt = 1;

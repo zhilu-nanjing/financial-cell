@@ -1,13 +1,11 @@
-import { isValueValid } from '../../helper/dataproxy_helper';
-import * as checker from '../calc_utils/formula_check';
 import { CalcCell } from './cell_formula';
 import { FnCollection, MultiCollExpFn } from './fn_collection';
 import { fnObjArray } from '../expression_fn/normal_fn';
 import * as rawFnObj from '../expression_fn/raw_fn';
 import { SimpleExpressionBuilder } from '../calc_deal/simple_expression/deal_simple_expression';
 import { StructuralExpressionBuilder } from '../calc_deal/structural_expression/deal_structural_expression';
-import {FORMULA_STATUS} from '../calc_utils/config';
-import {convertToCellV} from '../cell_value_type/cell_value';
+import { EmptyMultiSheetObj, FORMULA_STATUS } from '../calc_utils/config';
+import { convertToCellV } from '../cell_value_type/cell_value';
 
 
 /**
@@ -21,6 +19,16 @@ export class CalcSheet {
     this.name = name
     this.workbookProxy = workbookProxy
     this.name2CellProxy = this.createName2CellProxy(name2CellObj)
+  }
+
+  updateACell(cellName, cellObj){
+    let theCell = this.getCellByName(cellName)
+    if(typeof theCell === "undefined"){
+      this.addCalcCell(cellName, cellObj)
+    }
+    else{
+      theCell.updateByCellObj(cellObj)
+    }
   }
 
   createName2CellProxy(name2CellObj){
@@ -83,16 +91,94 @@ export class CalcWorkbookProxy { // 对workbook的数据代理
    */
   constructor(workbookObj) {
     this.name2SheetProxy = this.createName2SheetProxy(workbookObj); // 实例化sheet与cell
-    this.multiCollExpFn  = createDefaultFnCollection()
+    this.multiCollExpFn  = createDefaultFnCollection() // todo: sheetname也需要变化
   }
 
-  updateByWorkbookObj(workbookObj){
+  getFirstSheet(){
+    return Object.values(this.name2SheetProxy)[0]
+  }
+
+  updateACell(cellName, cellObj, sheetName){
+    let theSheet = this.ensureGetSheet(sheetName);
+    /**
+     * @type {CalcSheet} theSheet
+     */
+    theSheet.updateACell(cellName, cellObj)
+  }
+
+  updateByName2CellObj(name2CellObj, sheetName){
+    let theSheet = this.ensureGetSheet(sheetName);
+    for(let cellName of Object.getOwnPropertyNames(name2CellObj)){
+      theSheet.updateACell(cellName, name2CellObj[cellName])
+    }
+    let calcCellArray = this.getCalcCellArrayByNames(Object.getOwnPropertyNames(name2CellObj))
+    this.calculateFormulas(calcCellArray)
+    return calcCellArray
+  }
+
+  /**
+   *
+   * @param {Object}MultiSheetObj {sheet1: A1: {v: "=1"}} 这样的形式
+   */
+  updateByMultiSheetObj(MultiSheetObj){
+    let sheet2CalcArray = {}
+    for(let sheetName of Object.getOwnPropertyNames(MultiSheetObj)){
+      let name2CellObj = MultiSheetObj[sheetName]
+      sheet2CalcArray[sheetName] = this.updateByName2CellObj(name2CellObj, sheetName)
+    }
+    return sheet2CalcArray
+  }
+
+  getMultiSheetObjFromSheet2CalcArray(sheet2CalcArray){
+    let multiSheetObj =  {}, sheetObj
+    for(let sheetName of Object.getOwnPropertyNames(sheet2CalcArray)){
+      sheetObj = {}
+      sheet2CalcArray[sheetName].map((calcCell)=> {sheetObj[calcCell.celName] = calcCell.cellObj})
+      multiSheetObj[sheetName] = sheetObj
+    }
+    return multiSheetObj
+  }
+
+  ensureGetSheet(sheetName) {
+    if (typeof sheetName === 'undefined') {
+      return this.getFirstSheet();
+    } else {
+      return this.getSheetByName(sheetName);
+    }
+  }
+
+  convertPreAction2name2CellObj(preAction){
+    let name2CellObj = {}
+    let to_calc_cell_names = preAction.findAllNeedCalcCell(); // 获取所有需要计算的单元格； 可能有很多null; 不存在多sheet的情况
+    to_calc_cell_names.map((cellName) => {name2CellObj[cellName]={}} ) // {} 代表需要重新计算，不需要更新值了
+    let newName2CellObj = {}
+
+    let newCell = preAction.newCell // newCell是单元格的f发生更改的cellProp实例的集合
+    newCell.map((aCell) => {newName2CellObj[aCell.expr] = {f: aCell.cell.formulas}})
+    Object.assign(name2CellObj, newName2CellObj)
+    return name2CellObj
+  }
+  getCalcCellArrayByNames(cellNames, sheetName){
+    let theSheet = this.ensureGetSheet(sheetName);
+    return cellNames.map((cellName) => theSheet.getCellByName(cellName))
+  }
+
+  /**
+   *
+   * @param {PreAction} preAction
+   */
+  updateByPreAction(preAction){
+    let name2CellObj = this.convertPreAction2name2CellObj(preAction)
+    return this.updateByName2CellObj(name2CellObj) // 暂时只有一个sheet
+  }
+
+  updateByWorkbookObj(workbookObj){ // 需要废弃
     this.name2SheetProxy = this.createName2SheetProxy(workbookObj); // 实例化sheet与cell
   }
 
   createName2SheetProxy(workbookObj) {
     if(typeof workbookObj.Sheets === "undefined"){
-      workbookObj.Sheets = { Sheet1: {A1: ""}} // 默认的空文件
+      workbookObj.Sheets = EmptyMultiSheetObj// 默认的空文件
     }
     let name2SheetProxy = {}
     for (let sheetName of Object.getOwnPropertyNames(workbookObj.Sheets)) {
