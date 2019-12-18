@@ -248,6 +248,8 @@ class Rows {
 
             row.cells[ci].style = _cell.style;
             return;
+        }else if(what === 'assign') {
+            Object.assign(row.cells[ci], cell);
         }
         // cell
         this.getDependCell(xy2expr(ci, ri), this.getCell(ri, ci));

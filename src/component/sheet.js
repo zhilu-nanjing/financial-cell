@@ -941,7 +941,6 @@ function throwFormula() {
 }
 
 function addChart() {
-
 }
 
 export function insertDeleteRowColumn(type) {
