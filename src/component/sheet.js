@@ -1353,7 +1353,7 @@ function sheetInitEvents() {
         // data.history.add(data.getData());
     });
 
-    bind(window, 'cut', (evt) => {
+    bind(this.el.el, 'cut', (evt) => {
         console.log("cut", evt);
         cut.call(this);
         mountCopy.call(this, evt);
@@ -1361,7 +1361,7 @@ function sheetInitEvents() {
         data.history.add(data.getData());
     });
 
-    bind(window, 'paste', (evt) => {
+    bind(this.el.el, 'paste', (evt) => {
         pasteEvent.call(this, evt);
     });
 
