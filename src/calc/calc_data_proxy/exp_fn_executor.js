@@ -110,8 +110,7 @@ export class BaseExpFunction{ // 默认行为; 如果不符合默认行为的函
 
 
     convertToStringAndNumber(arg){ // 这个是函数参数默认转换方式
-        let cellVType = arg.cellVTypeName
-        if(["string","number"].includes(typeof cellVType)){
+        if(["string","number"].includes(typeof arg)){
             return arg
         }
         else {

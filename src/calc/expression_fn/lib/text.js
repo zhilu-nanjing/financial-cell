@@ -1,9 +1,15 @@
-import utils from '../../calc_utils/helper'
+import * as utils from '../../calc_utils/helper'
 import {errorObj} from '../../calc_utils/error_config'
 import numeral from 'numeral'
 
 //TODO
-exports.ASC = function(str) {
+/**
+ *
+ * @param str 必需。 文本或对包含要更改文本的单元格的引用。 如果文本不包含任何全角字母，则不会对文本进行转换。
+ * @returns {string}
+ * @constructor
+ */
+export function ASC(str) {
   let tmp = "";
   str= str.toString()
   for (let i = 0; i < str.length; i++) {

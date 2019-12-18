@@ -1,98 +1,72 @@
 import { errorObj } from '../../calc_utils/error_config';
 import * as dateTime from './date_time';
 import * as utils from '../../calc_utils/helper';
-import { dayNum2Date, parseNumber } from '../../calc_utils/parse_helper';
+import * as jStat from 'jstat';
+import {dayNum2Date, days_str2date, parseBool, parseNumber} from '../../calc_utils/parse_helper';
 
-// exports.validDate = function (d)
 function validDate(d){
   return d && d.getTime && !isNaN(d.getTime());
 }
 
-// function ensureDate(d) {
-//   return (d instanceof Date)?d:created Date(d);
-// }
 
-exports.ACCRINT = function(issue, first, settlement, rate, par, frequency, basis) {
-  if (typeof issue=='string'){
-    issue = dayNum2Date(issue)
-  }
-  //XW: 参数错误报错
-  try{
-    issue = utils.ExcelDateToJSDate(issue);
-    first = utils.ExcelDateToJSDate(first);
-    settlement = utils.ExcelDateToJSDate(settlement);
-  }catch (e) {
-    return errorObj.ERROR_VALUE;
-  }
-  //XW：end
-  if (!validDate(issue) || !validDate(first) || !validDate(settlement)) {
-    return errorObj.ERROR_VALUE;
-  }
-
-  // Return error if either rate or par are lower than or equal to zero
+/**TODO basis =1 时有差异
+ *
+ * @param {number}issue 必需。 有价证券的发行日。
+ * @param {number}first 必需。 有价证券的首次计息日。
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}rate 必需。 有价证券的年息票利率。
+ * @param{number} par 必需。 证券的票面值。 如果省略此参数，则 ACCRINT 使用 ￥10,000。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4。
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @param {boolean}Calc_method 可选。 一个逻辑值，指定当结算日期晚于首次计息日期时用于计算总应计利息的方法。
+ *                    如果值为 TRUE (1)，则返回从发行日到结算日的总应计利息。
+ *                    如果值为 FALSE (0)，则返回从首次计息日到结算日的应计利息。 如果不输入此参数，则默认为 TRUE。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function ACCRINT(issue, first, settlement, rate, par, frequency, basis,Calc_method) {
   if (rate <= 0 || par <= 0) {
     return errorObj.ERROR_NUM;
   }
-
-  // Return error if frequency is neither 1, 2, or 4
   if ([1, 2, 4].indexOf(frequency) === -1) {
     return errorObj.ERROR_NUM;
   }
-
-  // Return error if basis is neither 0, 1, 2, 3, or 4
   if ([0, 1, 2, 3, 4].indexOf(basis) === -1) {
     return errorObj.ERROR_NUM;
   }
-
-  // Return error if settlement is before or equal to issue
   if (settlement <= issue) {
     return errorObj.ERROR_NUM;
   }
-
-  // Set default values
-  par = par || 0;
+  let Calcmethod = parseBool(Calc_method)
+  par = par || 10000;
   basis = basis || 0;
-  // Compute accrued interest
   return par * rate * dateTime.YEARFRAC(issue, settlement, basis);
 };
 
-// XW: ACCRINTM函数
-exports.ACCRINTM = function(issue, settlement, rate, par, basis) {
-  //XW: 参数错误报错
-  try{
-    issue = utils.ExcelDateToJSDate(issue);
-    settlement = utils.ExcelDateToJSDate(settlement);
-  }catch (e) {
-    return errorObj.ERROR_VALUE;
-  }
-  //XW：end
-  // Return error if either rate or par are lower than or equal to zero
+/**
+ *
+ * @param {number}issue 必需。 有价证券的发行日。
+ * @param {number}settlement 必需。 有价证券的到期日。
+ * @param {number}rate 必需。 有价证券的年息票利率。
+ * @param {number}par 必需。 证券的票面值。 如果省略此参数，则 ACCRINTM 使用 ￥10,000。
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function ACCRINTM(issue, settlement, rate, par, basis) {
   if (rate <= 0 || par <= 0) {
     return errorObj.ERROR_NUM;
   }
-
-
   if (basis < 0 || basis > 4) {
     return errorObj.ERROR_NUM;
   }
-
-  // Return error if settlement is before or equal to issue
   if (settlement <= issue) {
     return errorObj.ERROR_NUM;
   }
-
-  // Set default values
-  par = par || 0;
+  par = par || 10000;
   basis = basis || 0;
-  // Compute accrued interest
-  let result = par * rate * dateTime.YEARFRAC(issue, settlement, basis);
-  if (isNaN(result)){
-    return errorObj.ERROR_VALUE;
-  }else{
-    return result
-  }
-};
-//XW: end
+  return par * rate * dateTime.YEARFRAC(issue, settlement, basis);
+}
 
 // TODO
 //XW: 待实现
@@ -118,159 +92,180 @@ exports.AMORLINC = function() {
   throw new Error('AMORLINC is not implemented');
 };
 
-// exports.get_days = function(settlement,maturity,frequency)测试时使用
-//获取债券结息日(购买日)所在付息期间的起始时间
-function get_days(settlement,maturity,frequency){
-  let settlementDate = dayNum2Date(settlement)
-  let maturityDate = dayNum2Date(maturity)
-  /**
-   * @type {CellVDateTime} settlementDate
-   * @type {CellVDateTime} maturityDate
-   */
 
-  let month_SM=maturityDate.getFullYear()*12+maturityDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth()
-  let times=parseInt(month_SM/(12/frequency))
-  let endday = utils.Copy(maturityDate)
-  endday.setMonth(endday.getMonth()-times*12/frequency)
-  let startday= utils.Copy(endday)
-    startday.setMonth(endday.getMonth()-12/frequency)
-  return {"startday": startday, "endday":endday}
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4。
+ * @returns {{startDay: *, endDay: *}}
+ */
+function get_Startdays_and_Enddays(settlement,maturity,frequency) {
+  let settlementDate = days_str2date(settlement)
+  let maturityDate = days_str2date(maturity)
+  let N = parseInt((maturityDate.getFullYear()*12+maturityDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth())/(12/frequency))
+  let testDate = utils.Copy(maturityDate)
+  testDate.setMonth(testDate.getMonth() - N* 12 / frequency)
+  if(testDate > settlementDate){
+    N = N + 1
+  }
+  else{
+    N
+  }
+  let endDay = utils.Copy(maturityDate)
+  endDay.setMonth(endDay.getMonth() - (N-1) * 12 / frequency)
+  let startDay = utils.Copy(endDay)
+  startDay.setMonth(endDay.getMonth() - 12 / frequency)
+  return {"startDay": startDay, "endDay": endDay,"N": N}
 }
-//TODO  COUP系列函数目前均未考虑参数输入不规范的报错情况
 
-// COUPDAYBS计算的是债券在结算日(即购买日)前最后一次付息日至结算日之间的天数    by旺旺 2019/11/14
-exports.COUPDAYBS = function (settlement, maturity, frequency, basis) {
-  // if (!validDate(maturity) || !validDate(settlement)) {
-  //   return errorObj.ERROR_VALUE;
-  // }
-  if ([0,1,2,3,4].indexOf(basis)===-1) {
-    return errorObj.ERROR_NUM;
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4。
+ * @returns {{startDay: *, endDay: *}}
+ */
+function COUP_PARAMETER_TEST(settlement, maturity, frequency, basis){
+  if ([0,1,2,3,4].indexOf(basis)===-1 & basis !== undefined) {
+    return 0;
   }
   if ([1,2,4].indexOf(frequency)===-1){
-    return errorObj.ERROR_NUM;
+    return 0;
+  }
+  if (typeof(settlement)!='number'||typeof(maturity)!='number'){
+    return 0;
   }
   if (settlement >= maturity) {
-    return errorObj.ERROR_NUM;
+    return 0;
   }
-  let settlementDate = dayNum2Date(settlement)
-  let result = settlementDate - get_days(settlement, maturity, frequency).startday
-  return result / (1000 * 60 * 60 * 24)
+}
+
+/**
+ *
+ * @param {number}dateafter 较大的日子
+ * @param {number}datebefore 较小的日子
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {number}
+ * @constructor
+ */
+function DAYSBETWEEN_AFTER_BASIS_TEST(dateafter,datebefore,basis) {
+  if ([1, 2, 3].indexOf(basis) >= 0) {
+    return (dateafter - datebefore) / (MSECOND_NUM_PER_DAY)
+  } else {
+    let monthsBetween = dateafter.getFullYear() * MONTH_NUM_PER_YEAR + dateafter.getMonth()
+        - datebefore.getFullYear() * MONTH_NUM_PER_YEAR - datebefore.getMonth() - 1
+    return monthsBetween * DAYS_NUM_PER_MONTH_US + DAYS_NUM_PER_MONTH_US - datebefore.getDate() + dateafter.getDate()
+  }
+}
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function COUPDAYBS(settlement, maturity, frequency, basis) {
+  if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
+    return errorObj.ERROR_NUM
+  }
+  let settlementDate = days_str2date(settlement)
+  let startDay = get_Startdays_and_Enddays(settlement, maturity, frequency).startDay
+  return DAYSBETWEEN_AFTER_BASIS_TEST(settlementDate,startDay,basis)
 };
-//原代码
-// let maturityDate = utils.days_str2date(maturity)
-// let startday = utils.Copy(maturityDate)
-// startday.setMonth(startday.getMonth()-12/frequency) // todo 余数算法更好
-// while(startday >= settlementDate){
-//   startday.setMonth(startday.getMonth()-12/frequency)
-// }
-// let endday = utils.Copy(startday)
-// endday.setMonth(endday.getMonth()+12/frequency)
 
-//COUPDAYS计算的是是结算日(即购买日)所处的计息周期的天数,如:到期日为2019/11/1,结算日为2019/2/1,那么计算是2019/11/11至2019/5/1的天数.by旺旺 2019/11/15
-exports.COUPDAYS = function (settlement, maturity, frequency, basis) {
-  // // if (!validDate(maturity) || !validDate(settlement)) {
-  //   return errorObj.ERROR_VALUE;
-  // }
-  // Return error if either rate or par are lower than or equal to zero
-  if ([0,1,2,3,4].indexOf(basis)===-1) {
-    return errorObj.ERROR_NUM;
-  }
-  if ([1,2,4].indexOf(frequency)===-1){
-    return errorObj.ERROR_NUM;
-  }
-  if (settlement >= maturity) {
-    return errorObj.ERROR_NUM;
-  }
-  if ([0,2,4].indexOf(basis)>=0) {
-    let result = 360/frequency
-    return result;
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function COUPDAYS(settlement, maturity, frequency, basis) {
+  if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
+    return errorObj.ERROR_NUM
   }
   if (basis===3 ) {
-    let result = 365/frequency
-    return result;
+    return DAYS_NUM_PER_YEAR/frequency;
   }
   if (basis===1) {
-    let result = get_days(settlement, maturity, frequency).endday - get_days(settlement, maturity, frequency).startday
-    return result / (1000 * 60 * 60 * 24)
+    return (get_Startdays_and_Enddays(settlement, maturity, frequency).endDay
+        - get_Startdays_and_Enddays(settlement, maturity, frequency).startDay )/ MSECOND_NUM_PER_DAY
+  }
+  else {
+    return DAYS_NUM_PER_YEAR_US/frequency;
   }
 };
 
-// COUPDAYSNC计算的是结算日到下一付息日的天数
-exports.COUPDAYSNC = function (settlement, maturity, frequency, basis) {
-  // if (!validDate(maturity) || !validDate(settlement)) {
-  //   return errorObj.ERROR_VALUE;
-  // }
-  // Return error if either rate or par are lower than or equal to zero
-  if ([0,1,2,3,4].indexOf(basis)===-1) {
-    return errorObj.ERROR_NUM;
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function COUPDAYSNC(settlement, maturity, frequency, basis) {
+  if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
+    return errorObj.ERROR_NUM
   }
-  if ([1,2,4].indexOf(frequency)===-1){
-    return errorObj.ERROR_NUM;
-  }
-  if (settlement >= maturity) {
-    return errorObj.ERROR_NUM;
-  }
-  let settlementDate = dayNum2Date(settlement)
-  let result = get_days(settlement, maturity, frequency).endday - settlementDate
-  return result / (1000 * 60 * 60 * 24)
+  let settlementDate = days_str2date(settlement)
+  let endDay = get_Startdays_and_Enddays(settlement, maturity, frequency).endDay
+  return DAYSBETWEEN_AFTER_BASIS_TEST(endDay,settlementDate,basis)
 };
 
-//COUPNCD计算的是下一付息日,目前结果精确到天 by 旺旺 2019/11/15
-exports.COUPNCD = function (settlement, maturity, frequency, basis) {
-  // if (!validDate(maturity) || !validDate(settlement)) {
-  //   return errorObj.ERROR_VALUE;
-  // }
-  // Return error if either rate or par are lower than or equal to zero
-  if ([0,1,2,3,4].indexOf(basis)===-1) {
-    return errorObj.ERROR_NUM;
+
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function COUPNUM(settlement, maturity, frequency, basis) {
+  if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
+    return errorObj.ERROR_NUM
   }
-  if ([1,2,4].indexOf(frequency)===-1){
-    return errorObj.ERROR_NUM;
-  }
-  if (settlement >= maturity) {
-    return errorObj.ERROR_NUM;
-  }
-  return get_days(settlement, maturity, frequency).endday
+  return get_Startdays_and_Enddays(settlement, maturity, frequency).N
 };
 
-//COUPNUM计算的是结算日后付息次数
-exports.COUPNUM = function (settlement, maturity, frequency, basis) {
-  // if (!validDate(maturity) || !validDate(settlement)) {
-  //   return errorObj.ERROR_VALUE;
-  // }
-  // Return error if either rate or par are lower than or equal to zero
-  if ([0,1,2,3,4].indexOf(basis)===-1) {
-    return errorObj.ERROR_NUM;
-  }
-  if ([1,2,4].indexOf(frequency)===-1){
-    return errorObj.ERROR_NUM;
-  }
-  if (settlement >= maturity) {
-    return errorObj.ERROR_NUM;
-  }
-  let settlementDate = dayNum2Date(settlement)
-  let maturityDate = dayNum2Date(maturity)
-  let month_SM=maturityDate.getFullYear()*12+maturityDate.getMonth()-settlementDate.getFullYear()*12-settlementDate.getMonth()
-  let times=parseInt(month_SM/(12/frequency))
-  return times+1
-};
 
-//COUPPCD计算的是结算日前最后一次付息日,目前结果精确到天 by 旺旺 2019/11/15
-exports.COUPPCD = function (settlement, maturity, frequency, basis) {
-  // if (!validDate(maturity) || !validDate(settlement)) {
-  //   return errorObj.ERROR_VALUE;
-  // }
-  // Return error if either rate or par are lower than or equal to zero
-  if ([0,1,2,3,4].indexOf(basis)===-1) {
-    return errorObj.ERROR_NUM;
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function COUPPCD(settlement, maturity, frequency, basis) {
+  if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
+    return errorObj.ERROR_NUM
   }
-  if ([1,2,4].indexOf(frequency)===-1){
-    return errorObj.ERROR_NUM;
+  return get_Startdays_and_Enddays(settlement, maturity, frequency).startDay
+};
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}frequency 必需。 年付息次数。 如果按年支付，frequency = 1；按半年期支付，frequency = 2；按季支付，frequency = 4
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function COUPNCD(settlement, maturity, frequency, basis) {
+  if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
+    return errorObj.ERROR_NUM
   }
-  if (settlement >= maturity) {
-    return errorObj.ERROR_NUM;
-  }
-  return get_days(settlement, maturity, frequency).startday
+  return get_Startdays_and_Enddays(settlement, maturity, frequency).endDay
 };
 
 

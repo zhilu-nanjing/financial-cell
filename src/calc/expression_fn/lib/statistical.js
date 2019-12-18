@@ -1,15 +1,21 @@
-import mathTrig from './math-trig';
-import text from './text';
+import * as mathTrig from './math-trig';
+import * as text from './text';
 import * as jStat from 'jstat';
 import * as utils from '../../calc_utils/helper';
 import { errorObj } from '../../calc_utils/error_config';
-import misc from './miscellaneous';
-import evalExpression from './expression';
+import * as misc from './miscellaneous';
+import * as evalExpression from './expression';
 import { parseBool, parseNumber, parseNumberArray } from '../../calc_utils/parse_helper';
 
 let SQRT2PI = 2.5066282746310002;
 
-exports.AVEDEV = function() {
+/**
+ * number1, number2, ...    Number1 是必需的，后续数字是可选的。
+ * 要计算其绝对偏差平均值的 1 到 255 个参数。 也可以用单一数组或对某个数组的引用来代替用逗号分隔的参数。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function AVEDEV() {
   let range = parseNumberArray(utils.flatten(arguments));
   if (range instanceof Error) {
     return range;
@@ -17,7 +23,13 @@ exports.AVEDEV = function() {
   return jStat.sum(jStat(range).subtract(jStat.mean(range)).abs()[0]) / range.length;
 };
 
-exports.AVERAGE = function() {
+/**
+ * Number1    必需。 要计算平均值的第一个数字、单元格引用或单元格区域。
+   Number2, ...    可选。 要计算平均值的其他数字、单元格引用或单元格区域，最多可包含 255 个。
+ * @returns {Error|(string&Error)|undefined|([]&Error)|number|*}
+ * @constructor
+ */
+export function AVERAGE() {
   let range = utils.flattenNum(arguments); // 这个arguments是通过function.call传递过来的
   if (range instanceof Error) {
     return range;
@@ -35,8 +47,15 @@ exports.AVERAGE = function() {
   return sum / count;
 };
 
-exports.AVERAGEA = function() {
-  let range = utils.flattenNum(arguments);
+
+/**
+ * Value1, value2, ...    Value1 是必需的，后续值是可选的。 需要计算平均值的 1 到 255 个单元格、单元格区域或值。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function AVERAGEA() {
+  // let range = utils.flattenNum(arguments);
+  let range = arguments
   if (range.length === 1 && isNaN(range[0])){
     return errorObj.ERROR_VALUE
   }
@@ -48,8 +67,8 @@ exports.AVERAGEA = function() {
     if (typeof el === 'number') {
       sum += el;
     }
-    if (el === true) {
-      sum++;
+    if (typeof el !== 'number') {
+      sum ;
     }
     if (el !== null) {
       count++;
@@ -58,7 +77,17 @@ exports.AVERAGEA = function() {
   return sum / count;
 };
 
-exports.AVERAGEIF = function (range, criteria, average_range) {
+
+/**
+ *
+ * @param {number}range 必需。 要计算平均值的一个或多个单元格，其中包含数字或包含数字的名称、数组或引用。
+ * @param {string}criteria 必需。 形式为数字、表达式、单元格引用或文本的条件，用来定义将计算平均值的单元格。
+ *                 例如，条件可以表示为 32、"32"、">32"、"苹果" 或 B4。
+ * @param {string}average_range 可选。 计算平均值的实际单元格组。 如果省略，则使用 range。
+ * @returns {*|Error|Error|number}
+ * @constructor
+ */
+export function AVERAGEIF (range, criteria, average_range) {
   if (arguments.length <= 1) {
     return errorObj.ERROR_NA;
   }

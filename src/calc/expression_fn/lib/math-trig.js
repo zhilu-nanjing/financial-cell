@@ -1,54 +1,93 @@
-import numeric from 'numeric'
-import utils from '../../calc_utils/helper'
+import * as numeric from 'numeric'
+import * as utils from '../../calc_utils/helper'
 import {errorObj} from '../../calc_utils/error_config'
-import statistical from './statistical'
-import information from './information'
+import * as statistical from './statistical'
+import * as information from './information'
+import {parseNumber} from "../../calc_utils/parse_helper";
 
-exports.ABS = function(number) {
-  number = utils.parseNumber(number);
-  if (number instanceof Error) {
-    return number;
+/**
+ *
+ * @param {number} 必需。 需要计算其绝对值的实数。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function ABS(number) {
+  if(typeof(number)!='number'){
+  return errorObj.ERROR_NUM;
   }
-  return Math.abs(utils.parseNumber(number));
+  return Math.abs(number);
 };
 
-exports.ACOS = function(number) {
-  number = utils.parseNumber(number);
-  if (number instanceof Error) {
-    return number;
+/**
+ *
+ * @param {number} 必需。 所求角度的余弦值，必须介于 -1 到 1 之间。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function ACOS(number) {
+  if(typeof(number)!='number'){
+    return errorObj.ERROR_NUM;
   }
   return Math.acos(number);
 };
 
-exports.ACOSH = function(number) {
-  number = utils.parseNumber(number);
-  if (number instanceof Error) {
-    return number;
+/**
+ *
+ * @param {number} 必需。 大于或等于 1 的任意实数。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function ACOSH(number) {
+  if(typeof(number)!='number'){
+    return errorObj.ERROR_NUM;
   }
   return Math.log(number + Math.sqrt(number * number - 1));
 };
 
-exports.ACOT = function(number) {
-  number = utils.parseNumber(number);
-  if (number instanceof Error) {
-    return number;
+/**
+ *
+ * @param {number} 必需。 Number 为所需角度的余切值。 此值必须是实数。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function ACOT(number) {
+  if(typeof(number)!='number'){
+    return errorObj.ERROR_NUM;
   }
   return Math.atan(1 / number);
 };
 
-exports.ACOTH = function(number) {
-  number = utils.parseNumber(number);
-  if (number instanceof Error) {
-    return number;
+/**
+ *
+ * @param {number} 必需。 Number 的绝对值必须大于 1。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function ACOTH(number) {
+  if(typeof(number)!='number'){
+    return errorObj.ERROR_NUM;
   }
   return 0.5 * Math.log((number + 1) / (number - 1));
+};
+
+/**
+ *
+ * @param {number} num1
+ * @param {number} num2
+ * @returns {*|Error}
+ * @constructor
+ */
+export function ADD(num1, num2) {
+  if(typeof(num1)!='number'||typeof(num2)!='number'){
+    return errorObj.ERROR_NUM;
+  }
+  return num1 + num2;
 };
 
 //TODO: use options
 exports.AGGREGATE = function(function_num, options, ref1, ref2) {
   function_num = utils.parseNumber(function_num);
   options = utils.parseNumber(options);
-  //XW: 函数报错
   if (typeof ref1 == 'string') {
     return errorObj.ERROR_VALUE
   }//XW:end
@@ -100,8 +139,13 @@ exports.AGGREGATE = function(function_num, options, ref1, ref2) {
   }
 };
 
-exports.ARABIC = function(text) {
-  // Credits: Rafa? Kukawski
+/**
+ *
+ * @param {string}text 必需。 用引号引起的字符串、空字符串 ("") 或对包含文本的单元格的引用。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function ARABIC(text) {
   text = text.toUpperCase()
   if (!/^M*(?:D?C{0,3}|C[MD])(?:L?X{0,3}|X[CL])(?:V?I{0,3}|I[XV])$/.test(text)) {
     return errorObj.ERROR_VALUE;
@@ -127,43 +171,68 @@ exports.ARABIC = function(text) {
   return r;
 };
 
-exports.ASIN = function(number) {
-  number = utils.parseNumber(number);
-  if (number instanceof Error) {
-    return number;
+/**
+ *
+ * @param {number} 必需。 所求角度的正弦值，必须介于 -1 到 1 之间。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function ASIN(number) {
+  if(typeof(number)!='number'){
+    return errorObj.ERROR_NUM;
   }
   return Math.asin(number);
 };
 
-exports.ASINH = function(number) {
-  number = utils.parseNumber(number);
-  if (number instanceof Error) {
-    return number;
+/**
+ *
+ * @param  {number} 必需。 任意实数。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function ASINH(number) {
+  if(typeof(number)!='number'){
+    return errorObj.ERROR_NUM;
   }
   return Math.log(number + Math.sqrt(number * number + 1));
 };
 
-exports.ATAN = function(number) {
-  number = utils.parseNumber(number);
-  if (number instanceof Error) {
-    return number;
+/**
+ *
+ * @param {number} 必需。 所求角度的正切值。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function ATAN(number) {
+  if(typeof(number)!='number'){
+    return errorObj.ERROR_NUM;
   }
   return Math.atan(number);
 };
 
-exports.ATAN2 = function(number_x, number_y) {
-  number_x = utils.parseNumber(number_x);
-  number_y = utils.parseNumber(number_y);
-  if (utils.anyIsError(number_x, number_y)) {
-    return errorObj.ERROR_VALUE;
+/**
+ *
+ * @param {number} number_x 必需。 点的 x 坐标。
+ * @param {number} number_y 必需。 点的 y 坐标。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function ATAN2(number_x, number_y) {
+  if(typeof(number_x)!='number'||typeof(number_y)!='number'){
+    return errorObj.ERROR_NUM;
   }
   return Math.atan2(number_x, number_y);
 };
 
-exports.ATANH = function(number) {
-  number = utils.parseNumber(number);
-  if (number instanceof Error) {
-    return number;
+/**
+ *
+ * @param {number} 必需。 -1 到 1 之间的任意实数。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function ATANH(number) {
+  if(typeof(number)!='number'){
+    return errorObj.ERROR_NUM;
   }
   return Math.log((1 + number) / (1 - number)) / 2;
 };
@@ -832,19 +901,7 @@ exports.SUBTOTAL = function(function_code, ref1) {
   }
 };
 
-exports.ADD = function (num1, num2) {
-  if (arguments.length !== 2) {
-    return errorObj.ERROR_NA;
-  }
 
-  num1 = utils.parseNumber(num1);
-  num2 = utils.parseNumber(num2);
-  if (utils.anyIsError(num1, num2)) {
-    return errorObj.ERROR_NAme;
-  }
-
-  return num1 + num2;
-};
 
 exports.MINUS = function (num1, num2) {
   if (arguments.length !== 2) {

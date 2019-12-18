@@ -2,6 +2,7 @@ import { errorObj } from '../../calc_utils/error_config';
 import * as cf from '../../calc_utils/config';
 import { d18991230MS, MS_PER_DAY } from '../../calc_utils/config';
 import utils from '../../calc_utils/helper';
+import {days_str2date} from "../../calc_utils/parse_helper";
 
 let WEEK_STARTS = [
   undefined,
@@ -537,21 +538,21 @@ function daysBetween(start_date, end_date) {
 }
 
 exports.YEARFRAC = function(start_date, end_date, basis) {
-  start_date = utils.parseDate(start_date);
+  start_date = days_str2date(start_date);
   if (start_date instanceof Error) {
     return start_date;
   }
-  end_date = utils.parseDate(end_date);
+  end_date = days_str2date(end_date);
   if (end_date instanceof Error) {
     return end_date;
   }
 
   basis = basis || 0;
   let sd = start_date.getDate();
-  let sm = start_date.getMonth() + 1;
+  let sm = start_date.getMonth() ;
   let sy = start_date.getFullYear();
   let ed = end_date.getDate();
-  let em = end_date.getMonth() + 1;
+  let em = end_date.getMonth();
   let ey = end_date.getFullYear();
 
   switch (basis) {
@@ -599,6 +600,14 @@ exports.YEARFRAC = function(start_date, end_date, basis) {
       return daysBetween(start_date, end_date) / 365;
     case 4:
       // European 30/360
+      if (sd === 31 && ed === 31) {
+        sd = 30;
+        ed = 30;
+      } else if (sd === 31) {
+        sd = 30;
+      } else if (sd === 30 && ed === 31) {
+        ed = 30;
+      }
       return ((ed + em * 30 + ey * 360) - (sd + sm * 30 + sy * 360)) / 360;
   }
 };
