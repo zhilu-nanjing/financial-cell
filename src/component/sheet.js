@@ -1348,7 +1348,7 @@ function sheetInitEvents() {
         // this.focusing = overlayerEl.contains(evt.target);
     });
 
-    bind(window, 'copy', (evt) => {
+    bind(this.el.el, 'copy', (evt) => {
         mountCopy.call(this, evt);
         // data.history.add(data.getData());
     });
