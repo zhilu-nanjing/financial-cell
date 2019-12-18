@@ -98,3 +98,4 @@ export const NOT_NUMBER = 'NOT_NUMBER';
 export const SHAPE_DIFF = 'SHARPE_DIFF';
 export const NOT_SUPPORT = 'NOT_SUPPORT';
 export const EmptyMultiSheetObj = { Sheet1: { A1: { f: '' } } };
+export const NOT_CONVERT = 'NOT_CONVERT';

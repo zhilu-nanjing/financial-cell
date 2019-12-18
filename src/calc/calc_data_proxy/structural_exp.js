@@ -11,6 +11,7 @@ import {
 } from '../cell_value_type/cell_value';
 import { TwoArgOperatorColl } from './two_arg_operator';
 import {MatrixValue} from './matrix_math';
+import {UserFnExecutor} from './exp_fn_executor';
 
 let exp_id = 0; // 全局变量
 /**
@@ -57,7 +58,9 @@ export class StructuralExp {
         if(hasMatrix){
             return new CellVArray(a).exeElementOperator(new CellVArray(b), op) // 都转换为cellVArray
         }
-        return this.twoArgOperator.exeOperator(a,b,op)
+        let theFunc = this.twoArgOperator.getFunc(op)
+        let res = new UserFnExecutor(theFunc, [a,b]).solveExpression()
+        return res// todo： 需要修改
 
     }
 

@@ -3,6 +3,7 @@ import * as utils from '../../calc_utils/helper'
 import {errorObj} from '../../calc_utils/error_config'
 import * as statistical from './statistical'
 import * as information from './information'
+import {OnlyNumberExpFunction} from '../../calc_data_proxy/exp_function_proxy';
 
 
 /**
