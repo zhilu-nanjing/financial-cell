@@ -150,17 +150,21 @@ export function parse(a) {
   if (a instanceof Error) {
     return a;
   }
-  if (a instanceof Array) {
+  if (a instanceof Array) { // 都转换为二维矩阵
     let arr = [];
     for (let i = 0; i < a.length; i++) {
-      if (typeof a[i][0] === 'string' && a[i][0] !== 'default_0') {
-        return errorObj.ERROR_NAME;
-      }
-      if (typeof a[i][0] === 'number') {
-        arr.push(a[i][0]);
-      }
-      if (a[i][0] instanceof Object) {
-        return errorObj.ERROR_NAME;
+      for(let j = 0; j < a[0].length; j++){
+        if (typeof a[i][j] === 'string' && a[i][j] !== 'default_0') {
+          return errorObj.ERROR_NAME;
+        }
+        if (typeof a[i][j] === 'number') {
+          arr.push(a[i][j]);
+        }
+        if (a[i][j] instanceof Object) {
+          return errorObj.ERROR_NAME;
+        }
+
+
       }
     }
     return arr;

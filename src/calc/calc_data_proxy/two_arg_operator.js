@@ -1,8 +1,14 @@
 // 双元运算符的统一封装
 import {TO_PARA_TYPE} from '../calc_utils/config';
-import {UserFnExecutor} from './exp_fn_executor';
+import {
+  CellVTypeObj,
+  NotConvertEmptyExpFunction,
+  StringExpFunction,
+  UserFnExecutor
+} from './exp_fn_executor';
+import { ERROR_DIV0, ERROR_SYNTAX, errorObj } from '../calc_utils/error_config';
 
-class TwoArgOperatorColl {
+export class TwoArgOperatorColl {
   constructor() {
     this.operatorObj = {
       plus: '+', //双元运算符
@@ -41,13 +47,20 @@ class TwoArgOperatorColl {
   }
 
   getFunc(aStr) {
-    return this.operatorFunOBj[aStr];
+    let self = this
+    if(this.isTwoArgOperator(aStr) === false){
+      return new Error(ERROR_SYNTAX)
+    }
+    function aFunc(a,b) {
+      return self.exeOperator(a,b, aStr)
+    }
+    return aFunc
   }
 
   exeOperator(a, b, operator = '+') {
     // 处理empty
 
-    let theFunc = this.getFunc(operator);
+    let theFunc = this.operatorFunOBj[operator];
     return new UserFnExecutor(theFunc, [a,b]).solveExpression()
   }
 }
@@ -65,6 +78,9 @@ export function opMultiply(a,b){
 }
 
 export function opDivide(a,b){
+  if (b === 0) {
+    return new Error(ERROR_DIV0);
+  }
   return a / b
 }
 
@@ -72,19 +88,27 @@ export function opPower(a,b){
   return Math.pow(a, b)
 }
 
-export function opJoinString(a,b){
+function opJoinStringF(a,b){
   return String(a) + String(b)
 }
-opJoinString.argConfig = [TO_PARA_TYPE.string, TO_PARA_TYPE.string] // 参数需要都转换为string 类型
+export const opJoinString = new StringExpFunction(opJoinStringF) // 特殊转换
+
 
 export function opIsLessThan(a, b){
   return a < b
 }
 
-export function opIsEqual(a, b){
-  return Math.abs(a - b)< 0.001 // 可能存在浮点数的问题
+function opIsEqualF(a, b){
+  if(typeof a === "number" && typeof b ==="number"){
+    return Math.abs(a - b)< 0.001 // 可能存在浮点数的问题
+  }
+  else if(a.cellVTypeName === b.cellVTypeName === CellVTypeObj.CellVEmpty){
+    return true
+  }
+  return a === b
 }
-opJoinString.argConfig = []
+export const opIsEqual = new NotConvertEmptyExpFunction(opIsEqualF)
+
 
 export function opIsGreaterThan(a, b){
   return a > b

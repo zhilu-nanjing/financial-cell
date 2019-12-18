@@ -33,7 +33,7 @@ export default class PreAction {
         this.height = height;
         this.width = width;
         this.oldCell = oldCell;
-        this.newCell = newCell;
+        this.newCell = newCell; // 一个Object记录，更新的值
         this.oldMergesData = oldMergesData;
         this.newMergesData = newMergesData;
         this.property = property;

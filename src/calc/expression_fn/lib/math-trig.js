@@ -1,22 +1,20 @@
-import * as numeric from 'numeric'
-import * as utils from '../../calc_utils/helper'
+import numeric from 'numeric'
+import utils from '../../calc_utils/helper'
 import {errorObj} from '../../calc_utils/error_config'
-import * as statistical from './statistical'
-import * as information from './information'
-import {parseNumber} from "../../calc_utils/parse_helper";
+import statistical from './statistical'
+import information from './information'
+
 
 /**
- *
- * @param {number} 必需。 需要计算其绝对值的实数。
- * @returns {*|Error|number}
- * @constructor
+ * @return {number}
  */
-export function ABS(number) {
-  if(typeof(number)!='number'){
-  return errorObj.ERROR_NUM;
+function ABS_(number){
+  if(typeof number !== "number"){
+    return new Error(ERROR_VALUE)
   }
   return Math.abs(number);
 };
+export const ABS = new OnlyNumberExpFunction(ABS_)
 
 /**
  *
@@ -901,7 +899,19 @@ exports.SUBTOTAL = function(function_code, ref1) {
   }
 };
 
+exports.ADD = function (num1, num2) {
+  if (arguments.length !== 2) {
+    return errorObj.ERROR_NA;
+  }
 
+  num1 = utils.parseNumber(num1);
+  num2 = utils.parseNumber(num2);
+  if (utils.anyIsError(num1, num2)) {
+    return errorObj.ERROR_NAme;
+  }
+
+  return num1 + num2;
+};
 
 exports.MINUS = function (num1, num2) {
   if (arguments.length !== 2) {

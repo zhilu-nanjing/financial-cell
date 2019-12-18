@@ -15,8 +15,7 @@ export const common_operations = { // todo: 需要把这个常数放到config里
 };
 
 export const FORMULA_STATUS = {
-  created: "created",
-  edited: "edited", // 被修改了
+  created: "created",// 被修改或新建
   working: "working",
   solved: "solved",
 }
@@ -94,3 +93,8 @@ export const TO_PARA_TYPE = { // 可以转换成的数据类型
   string: 'string',
   number: 'number'
 };
+export const INVALID_MATRIX = 'INVALID_MATRIX';
+export const NOT_NUMBER = 'NOT_NUMBER';
+export const SHAPE_DIFF = 'SHARPE_DIFF';
+export const NOT_SUPPORT = 'NOT_SUPPORT';
+export const EmptyMultiSheetObj = { Sheet1: { A1: { f: '' } } };

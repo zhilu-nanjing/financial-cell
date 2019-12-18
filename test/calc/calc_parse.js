@@ -5,76 +5,82 @@ import { MS_PER_DAY } from '../../src/calc/calc_utils/config';
 import { CellVDateTime, CellVNumber } from '../../src/calc/cell_value_type/cell_value';
 import { compareFloat } from '../../src/calc/calc_utils/helper';
 
-it('preSpace', function() { // structuralExpression 在去掉空格之前的解析逻辑
-  let workbook = {};
-  workbook.Sheets = {};
-  workbook.Sheets.Sheet1 = {};
-  workbook.Sheets.Sheet1.A1 = {f: '= {average(A1:A2)}'}; // 不支持数组公式
-  // workbook.Sheets.Sheet1.B1 = {f: '=FLOOR.MATH(-8.1,2)'}; // 负号运算符
-  let calc = new Calc()
-  calc.calculateWorkbook(workbook);
-  assert.equal(workbook.Sheets.Sheet1.A1.v.toString(), "asdf-as");
-});
-
-it('minus', function() { // 检查符号的判定
-  let workbook = {};
-  workbook.Sheets = {};
-  workbook.Sheets.Sheet1 = {};
-  workbook.Sheets.Sheet1.B1 = {f: '=FLOOR.MATH(-8.1,2)'}; // 负号运算符
-  let calc = new Calc()
-  calc.calculateWorkbook(workbook);
-  console.log(workbook.Sheets.Sheet1.H614.v);
-  assert.equal(workbook.Sheets.Sheet1.H614.v, "asdf-as");
-});
-
 it('date', function() { // 检查符号的判定
   let dayNum = 400
   let v = new CellVNumber(dayNum).toDate()
   console.log(v)
 });
 
+it('学习js中的date', function() { // 检查simple_expression的判定是否正确
+  let d1900 = new Date(1900, 0, 1);
+  let a1 = new Date(d1900.getTime() + (0 -2) * MS_PER_DAY) // js 的date是从1970年开始的呀
+  let a2 = new Date(d1900.getTime() + (1 -2) * MS_PER_DAY)
+  let a3 = new Date(d1900.getTime() + (61.5 -2) * MS_PER_DAY)
+  console.log(a1, a2, a3)
+  let d18991230 = new Date(1989, 11, 30);
+  let a4 = new Date(d18991230.getTime() + (61.5) * MS_PER_DAY)
+  let a5 = new Date("1991/1s01/01")
+  console.log(a1, a2, a3)
+
+});
 
 describe('新的解析算法', function() {
-  it('学习js中的date', function() { // 检查simple_expression的判定是否正确
-    let d1900 = new Date(1900, 0, 1);
-    let a1 = new Date(d1900.getTime() + (0 -2) * MS_PER_DAY) // js 的date是从1970年开始的呀
-    let a2 = new Date(d1900.getTime() + (1 -2) * MS_PER_DAY)
-    let a3 = new Date(d1900.getTime() + (61.5 -2) * MS_PER_DAY)
-    console.log(a1, a2, a3)
-    let d18991230 = new Date(1989, 11, 30);
-    let a4 = new Date(d18991230.getTime() + (61.5) * MS_PER_DAY)
-    let a5 = new Date("1991/1s01/01")
-    console.log(a1, a2, a3)
-
+  it('数组公式报错', function() { // structuralExpression 在去掉空格之前的解析逻辑
+    let workbook = {};
+    workbook.Sheets = {};
+    workbook.Sheets.Sheet1 = {};
+    workbook.Sheets.Sheet1.A1 = {f: '={average(A1:A2)}'}; // 不支持数组公式
+    // workbook.Sheets.Sheet1.B1 = {f: '=FLOOR.MATH(-8.1,2)'}; // 负号运算符
+    let calc = new Calc()
+    calc.calculateWorkbook(workbook);
+    assert.equal(workbook.Sheets.Sheet1.A1.v.toString(), "#SYNTAX");
   });
+
+  it('minus', function() { // 检查符号的判定
+    let workbook = {};
+    workbook.Sheets = {};
+    workbook.Sheets.Sheet1 = {};
+    let calc = new Calc()
+    calc.calculateWorkbook(workbook);
+
+    workbook.Sheets.Sheet1.B1 = {f: '=FLOOR.MATH(-8.1,2)'}; // 负号运算符
+    workbook.Sheets.Sheet1.B2 = {f: '=B1+1'}; // 负号运算符
+
+    let updatedRes = calc.updateByMultiSheetObj(workbook.Sheets)
+    assert.equal(updatedRes.Sheet1.B1.v.toNumber(), -10);
+  });
+
 
   it('SimpleExpression', function() { // 检查simple_expression的判定是否正确 ==> OK!!!
     let workbook = {};
     workbook.Sheets = {};
     workbook.Sheets.Sheet1 = {};
-    workbook.Sheets.Sheet1.A1 = {f:""} // 空字符串，看对不对
-    workbook.Sheets.Sheet1.A2 = {f:"'2019/1/1 12:12:12.12"}; // 强制字符串
-    workbook.Sheets.Sheet1.A3 = {f:'2019/1/1 12:12:12.12'};
-    workbook.Sheets.Sheet1.B3 = {f:'2019年1月1日 12:12:12.12'};
+    // workbook.Sheets.Sheet1.A1 = {f:""} // 空字符串，看对不对
+    // workbook.Sheets.Sheet1.A2 = {f:"'2019/1/10 12:12:12.12"}; // 强制字符串
+    workbook.Sheets.Sheet1.A3 = {f:'2019/1/12 12:12:12.12'};
+    workbook.Sheets.Sheet1.B3 = {f:'2019年1月10日 12:12:12.12'};
     workbook.Sheets.Sheet1.A4 = {f:'00001,123,123.56e12'};
     workbook.Sheets.Sheet1.A5 = {f:'$  123,123e12'};
     workbook.Sheets.Sheet1.A6 = {f:'   123,123e12  %  '};
     workbook.Sheets.Sheet1.A7 = {f:'   123,123123e12  %  '}; // 无法解析
     workbook.Sheets.Sheet1.A8 = {f:'trUe'}; // 转化为true
+    workbook.Sheets.Sheet1.A9 = {f:'75.91%'}; // 无法解析
+
 
 
     let calc = new Calc()
     calc.calculateWorkbook(workbook);
-    assert.equal(workbook.Sheets.Sheet1.A1.v.toNumber(), 0);
-    assert.equal(workbook.Sheets.Sheet1.A2.v.toString(), "2019/1/1 12:12:12.12");
-    let num = workbook.Sheets.Sheet1.A3.v.toNumber()
-    assert(compareFloat( num, 43466.5084736111));
-    assert(compareFloat(workbook.Sheets.Sheet1.B3.v.toNumber()  , 43466.5084736111));
+    // assert.equal(workbook.Sheets.Sheet1.A1.v.toNumber(), 0);
+    // assert.equal(workbook.Sheets.Sheet1.A2.v.toString(), "2019/1/10 12:12:12.12");
+    assert(compareFloat(workbook.Sheets.Sheet1.A3.v.toNumber(), 43477.5084736));
+    assert(compareFloat(workbook.Sheets.Sheet1.B3.v.toNumber()  , 43475.508472222));
     assert.equal(workbook.Sheets.Sheet1.A4.v.toNumber(), 1123123.56e12);
     assert.equal(workbook.Sheets.Sheet1.A5.v.toNumber(), 1.23123e17);
     assert.equal(workbook.Sheets.Sheet1.A6.v.toNumber(), 1231230000000000);
     assert.equal(workbook.Sheets.Sheet1.A7.v.toString(), '   123,123123e12  %  ');
     assert.equal(workbook.Sheets.Sheet1.A8.v.toNumber(), 1);
+    assert.equal(workbook.Sheets.Sheet1.A9.v.toNumber(), 0.7591);
+
 
     console.log(workbook.Sheets.Sheet1)
     // assert.equal(workbook.Sheets.Sheet1.H614.v, "asdf-as");
@@ -112,19 +118,23 @@ describe('新的解析算法', function() {
     assert.equal(workbook.Sheets.Sheet1.B1.v.toString(), '""');
     assert.equal(workbook.Sheets.Sheet1.B2.v.toString(), '"we"');
   });
-  it('rawArray', function() { // 检查连续双引号的判定; done
+  it('数组计算', function() { // todo: 直接输入数组，要能够解析出来
     let workbook = {};
     workbook.Sheets = {};
     workbook.Sheets.Sheet1 = {};
-    workbook.Sheets.Sheet1.A1 = {f: '=AVERAGE({1,3}+{3,2})'};
-    workbook.Sheets.Sheet1.A2 = {f: '=AVERAGE({1,3}  +  {3,2} * {1,3})'};
-    workbook.Sheets.Sheet1.A3 = {f: '=AVERAGE({1,3}  +  {3,2} * 2)'};
+    // workbook.Sheets.Sheet1.A1 = {f: '=AVERAGE({1,3}+{3,2})'};
+    // workbook.Sheets.Sheet1.A2 = {f: '=AVERAGE({1,3}  +  {3,2} * {1,3})'};
+    // workbook.Sheets.Sheet1.A3 = {f: '=AVERAGE({1,3}  +  {3,2} * 2)'};
+    workbook.Sheets.Sheet1.A4 = {f: '=average({1,2;3,4}*2)'};
+
 
     let calc = new Calc()
     calc.calculateWorkbook(workbook);
-    assert.equal(workbook.Sheets.Sheet1.A1.v.toNumber(), 4.5);
-    assert.equal(workbook.Sheets.Sheet1.A2.v.toNumber(), 6.5);
-    assert.equal(workbook.Sheets.Sheet1.A3.v.toNumber(), 7);
+    // assert.equal(workbook.Sheets.Sheet1.A1.v.toNumber(), 4.5);
+    // assert.equal(workbook.Sheets.Sheet1.A2.v.toNumber(), 6.5);
+    // assert.equal(workbook.Sheets.Sheet1.A3.v.toNumber(), 7);
+    assert.equal(workbook.Sheets.Sheet1.A4.v.toNumber(), 5);
+
 
   });
 

@@ -1,6 +1,6 @@
 import checker from '../calc_utils/formula_check.js';
 import { errorObj } from '../calc_utils/error_config';
-import exp from '../../utils/alphabet';
+import { expr2xy } from '../../utils/alphabet';
 import { FORMULA_STATUS } from '../calc_utils/config';
 import { isHave } from '../../helper/check_value';
 
@@ -19,8 +19,27 @@ export class CalcCell{
     this.cellObj = cellObj;
     this.celName = celName;
     this.cellStatus = cellStatus;
-    this.formulaString = this.cellObj.f || ""// 公式字符串,可能为空
+    this.formulaString = this.getFormulaString()// 公式字符串,可能为空
+  }
+  getFormulaString(){
+    return  this.cellObj.f || ""// 公式字符串,可能为空
+  }
 
+  getRiCi(){  // A1 => 0,0
+    return expr2xy(this.celName).reverse()
+  }
+
+  getCellObjForRendering(){
+    return {v: this.cellObj.v,
+    formulas: this.cellObj.f,
+      text: this.cellObj.v.toString()
+    }
+  }
+
+  updateByCellObj(newCellObj){ // 更新之后改变状态 todo: 只有要维护dependent的状态
+    Object.assign(this.cellObj, newCellObj)
+    this.formulaString = this.getFormulaString()// 公式字符串,可能为空
+    this.cellStatus = FORMULA_STATUS.created
   }
   getCellProperty(propertyName){
     return this.cellObj[propertyName]

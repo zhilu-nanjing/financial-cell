@@ -9,7 +9,6 @@ import {BoolParser,
   NumberParser
 } from '../../calc_data_proxy/parser_proxy';
 
-
 export class SimpleExpressionBuilder { // 解析不含等号的那些表达式
   /**
    *

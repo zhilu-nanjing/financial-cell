@@ -1,11 +1,17 @@
 import { StructuralExp } from '../../calc_data_proxy/structural_exp';
-import { RawArray, RawValue } from '../../calc_data_proxy/raw_value';
+import { RawValue } from '../../calc_data_proxy/raw_value';
 import { MARK_OBJ, SINGLE_CHAR_OPERATOR } from '../../calc_utils/config';
 import { Range } from '../../calc_data_proxy/range_ref';
 import { RefValue } from '../../calc_data_proxy/ref_value';
 import { BoolParser } from '../../calc_data_proxy/parser_proxy';
-import { ERROR_SYNTAX, PARSE_FAIL } from '../../calc_utils/error_config';
+import {
+  ERROR_NON_SOLVED,
+  ERROR_SYNTAX,
+  ERROR_VALUE,
+  PARSE_FAIL
+} from '../../calc_utils/error_config';
 import { CellVBool } from '../../cell_value_type/cell_value';
+import { RawArray } from '../../calc_data_proxy/matrix_math';
 
 class StackProxy{
   constructor(stackArray = []){
@@ -18,8 +24,8 @@ class StackProxy{
     return this.stackArray.pop()
   }
 
-  isFnExecutorValid(stackObj){
-    let theType = typeof stackObj.fnExecutor
+  isFnExecutorValid(fnExecutor){
+    let theType = typeof fnExecutor
     return ["number", "undefined"].includes(theType) === false
   }
   getLastStack(){
@@ -47,7 +53,7 @@ export class StructuralExpressionBuilder {
   constructor(calcCell, multiCollFn) {
     this.multiCollFn = multiCollFn;
     this.calcCell = calcCell
-   this.root_exp = new StructuralExp(calcCell);  // 封装公式实例
+    this.root_exp = new StructuralExp(calcCell);  // 封装公式实例
     // 下面应该是状态
     this.curExpression = this.root_exp
     this.buffer = '';
@@ -118,7 +124,7 @@ export class StructuralExpressionBuilder {
   }
 
   initOperator(char) {
-    if(this.buffer !== ""){
+    if(this.buffer.trim() !== ""){
       push2ExpArgs(this.curExpression,this.buffer, this.position_i)
     }
     this.buffer = char
@@ -174,7 +180,7 @@ export class StructuralExpressionBuilder {
     this.buffer = '';
   }
   initBrace(){
-    if(this.buffer!== ""){
+    if(this.buffer.trim()!== ""){
       push2ExpArgs(this.curExpression, this.buffer)
     }
     this.state = this.insideBrace
@@ -200,12 +206,12 @@ export class StructuralExpressionBuilder {
       this.buffer += char
       this.state = this.sheetNameState;
     } else if (char === '{') { // 左大括号 --> 进入single_quote状态
-      this.state = this.initBrace();
+      this.initBrace();
     } else if (char === '(') { // 左括号 --> 进入ini_parentheses状态
       this.initParentheses();
     } else if (char === ')') { // 右括号 --> 进入end_parentheses状态
       this.endParentheses();
-    } else if (Object.values(SINGLE_CHAR_OPERATOR).includes(char)) { // 运算符 --> 进入add_operation状态
+    } else if (char!=="%" && Object.values(SINGLE_CHAR_OPERATOR).includes(char)) { // 百分号会push2ExpArgs中解析，在运算符 --> 进入add_operation状态
       this.initOperator(char);
     } else if (char === ',' && this.stackProxy.isLastFnExecutorValid()) { // 逗号且fn_stack存在special属性， 此时应该要结束掉逗号前的哪个参数
       this.endFnArg()
@@ -231,6 +237,10 @@ export class StructuralExpressionBuilder {
     // 主执行语句在这里，上面是定义一系列方法
     let self = this;
     let toParseStr = this.calcCell.formulaString.slice(1); // 去掉首字符（'='）
+    if(toParseStr[0] === "{" && toParseStr[toParseStr.length - 1] === "}"){
+      push2ExpArgs(this.root_exp, new RawValue(new Error(ERROR_SYNTAX))) // 不支持数组公式
+      return this.root_exp
+    }
     for (; this.position_i < toParseStr.length; this.position_i++) {
       self.state(toParseStr[self.position_i]); // 逐字符解析函数; self.state代表当前的解析状态
     }
@@ -243,7 +253,7 @@ export function str2Value(astNodeStr, calcCell, position_i) { // todo: 可以设
   console.assert(typeof astNodeStr === 'string');
   let v;
   let res1 = new BoolParser(calcCell, astNodeStr).parseString()
-  if (res1.msg!== PARSE_FAIL) { // boll 变量
+  if (res1.msg!== PARSE_FAIL) { // true, false --> boll 变量
     v = new RawValue(CellVBool(res1));
   } else if (astNodeStr.trim() // 表示一个Range
     .replace(/\$/g, '')

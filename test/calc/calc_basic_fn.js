@@ -1,5 +1,6 @@
 import assert from 'assert'
 import { Calc } from '../../src/calc/calc_cmd/calc';
+import {easyCalcWorkbook} from '../../src/calc/calc_cmd/calc';
 
 // todo: 很多函数计算结果都有问题
 describe('expression_fn integration', function() {
@@ -15,20 +16,20 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.A32 = {v: 2};
       workbook.Sheets.Sheet1.A28 = {v: 11}; // formula的计算顺序与初次赋值时间从晚向前
       workbook.Sheets.Sheet1.A5 = {f: '=AVERAGE($A$28:$A$32)'};
-      let calc = new Calc()
-      let updatedRes = calc.calculateWorkbook(workbook);
-      assert.equal(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","A5", "v"), 11.8);
+      easyCalcWorkbook(workbook);
+      assert.equal(workbook.Sheets.Sheet1.A5.v.toNumber(), 11.8);
     });
 
-    it('-', function() {
-
+    it('带比分比的计算', function() {
       let workbook = {};
       workbook.Sheets = {};
       workbook.Sheets.Sheet1 = {};
-      workbook.Sheets.Sheet1.H614 = {f: '=2-1'};
+      workbook.Sheets.Sheet1.A1 = {f: '75.91%'};
+      workbook.Sheets.Sheet1.A2 = {f: '=H7*$A$1'};
+      workbook.Sheets.Sheet1.H7 = {f: '6753'};
       let calc = new Calc()
       calc.calculateWorkbook(workbook);
-      assert.equal(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","H614", "v"), 1);
+      assert.equal(workbook.Sheets.Sheet1.A2.v.toNumber(), 5126.2023);
     });
     it('COUPNCD', function() {
 
@@ -42,11 +43,10 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.A11 = {f: '=COUPNCD(A185,A186,A187,A188)'};
       let calc = new Calc()
       calc.calculateWorkbook(workbook);
-      let theCell = calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","A11", "v")
       // todo: 会报错，不number，可能要修改；对函数要归类，某些函数的所有参数都是数字，这些函数的值会实现转化为数值。
       // todo： 也可以使用类似flask的装饰器语法，来做字符转换
       // 其他函数处理不同类型的时候就要各区所需了
-      assert.equal(theCell.toNumber(), 40678);
+      assert.equal(workbook.Sheets.Sheet1.A11.v.toNumber(), 40678);
     });
     it('COUPNUM', function() {
 
@@ -115,9 +115,20 @@ describe('expression_fn integration', function() {
       calc.calculateWorkbook(workbook);
       assert.equal(workbook.Sheets.Sheet1.H845.v, 3628800);
       assert.equal(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","H845", "v"), 3628800);
+    });
+    it('ABS', function() {
+
+      let workbook = {};
+      workbook.Sheets = {};
+      workbook.Sheets.Sheet1 = {};
+      workbook.Sheets.Sheet1.A1 = {v: -10};
+      workbook.Sheets.Sheet1.A2 = {f: '=ABS(A1)'};
+      easyCalcWorkbook(workbook);
+      assert.equal(workbook.Sheets.Sheet1.A2.v.toNumber(), 10);
 
     });
-    it('PRICE', function() {
+
+    it('PRICE', function() { // 等到旺旺修复
 
       let workbook = {};
       workbook.Sheets = {};
