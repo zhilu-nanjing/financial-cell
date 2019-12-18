@@ -1,17 +1,14 @@
-import numeric from 'numeric'
-import utils from '../../calc_utils/helper'
+import * as numeric from 'numeric'
+import * as utils from '../../calc_utils/helper'
 import {errorObj} from '../../calc_utils/error_config'
-import statistical from './statistical'
-import information from './information'
+import * as statistical from './statistical'
+import * as information from './information'
 
 
 /**
  * @return {number}
  */
 function ABS_(number){
-  if(typeof number !== "number"){
-    return new Error(ERROR_VALUE)
-  }
   return Math.abs(number);
 };
 export const ABS = new OnlyNumberExpFunction(ABS_)

@@ -171,9 +171,9 @@ describe('expression_fn integration', function () {
       assert.equal(res2, 5.6)
     })
     it('AVERAGEIF', function () {
-      // let res1 = easySolve(statistical.AVERAGEIF, [[[7000,14000,21000,28000]],'<23000' ])
-      // console.log(res1)
-      // assert.equal(res1, 14000)
+      let res5 = easySolve(statistical.AVERAGEIF, [[[7000,14000,21000,28000]],'<23000' ])
+      console.log(res5)
+      assert.equal(res5, 14000)
       // let res2 = easySolve(statistical.AVERAGEIF, [10,7,9,2,'不存在'])
       // console.log(res2)
       // assert.equal(res2, 5.6)
