@@ -30,6 +30,7 @@ import RectProxy from "../core/rect_proxy";
 import {testValid} from "../utils/test";
 import Timer from "../model/Timer";
 import PreAction from "../model/pre_action";
+import ChartView from "../chart/chart_cmd/chart_view";
 
 function scrollbarMove() {
     const {
@@ -100,7 +101,7 @@ function selectorMove(multiple, direction) {
         selector.indexes = [editor.ri, editor.ci];
     }
     let [ri, ci] = selector.indexes;
-    const { eci} = selector.range;
+    const {eci} = selector.range;
     if (multiple) {
         [ri, ci] = selector.moveIndexes;
     }
@@ -474,7 +475,7 @@ function overlayerMousedown(evt) {
     // console.log(':::::overlayer.mousedown:', evt.detail, evt.button, evt.buttons, evt.shiftKey);
     // console.log('evt.target.className:', evt.target.className);
     const {
-        selector, data,  sortFilter, editor, advice
+        selector, data, sortFilter, editor, advice
     } = this;
     const {offsetX, offsetY} = evt;
     const isAutofillEl = evt.target.className === `${cssPrefix}-selector-corner`;
@@ -676,13 +677,15 @@ function hasEditor(showEditor = true) {
                 this.editor.el,
                 this.selectorMoveEl.el,
                 this.selector.el,
+                this.chartView.el
             );
     } else {
         return this.overlayerCEl = h('div', `${cssPrefix}-overlayer-content`)
             .children(
                 // this.editor.el,
                 // this.selector.el,
-                this.selectorMoveEl.el
+                this.selectorMoveEl.el,
+                this.chartView.el,
             );
     }
 }
@@ -937,6 +940,10 @@ function throwFormula() {
     // sheetReset.call(this);
 }
 
+function addChart() {
+
+}
+
 export function insertDeleteRowColumn(type) {
     const {data} = this;
     if (type === 'insert-row') {
@@ -973,12 +980,16 @@ function toolbarChange(type, value) {
     } else if (type === 'paintformat') {
         if (value === true) copy.call(this);
         else clearClipboard.call(this);
+    } else if (type === 'chart') {
+        console.log("chaet");
+        addChart.call(this);
+        this.toolbar.reset();
+        // if (value === true) copy.call(this);
+        // else clearClipboard.call(this);
     } else if (type === 'clearformat') {
         insertDeleteRowColumn.call(this, 'delete-cell-format');
     } else if (type === 'link') {
         // link
-    } else if (type === 'chart') {
-        // chart
     } else if (type === 'autofilter') {
         // filter
         autofilter.call(this);
@@ -1054,7 +1065,7 @@ function sheetInitEvents() {
         verticalScrollbar,
         horizontalScrollbar,
         editor,
-         contextMenu,
+        contextMenu,
         data,
         toolbar,
         modalValidation,
@@ -1370,7 +1381,7 @@ function sheetInitEvents() {
         // if (!this.focusing) return;
         const keyCode = evt.keyCode || evt.which;
         const {
-            key, ctrlKey, shiftKey,   metaKey,
+            key, ctrlKey, shiftKey, metaKey,
         } = evt;
         // console.log('keydown.evt: ', keyCode);
         if (getChooseImg.call(this)) {
@@ -1571,8 +1582,8 @@ export default class Sheet {
         const {view, showToolbar, showContextmenu, showEditor, rowWidth} = data.settings;
         this.el = h('div', `${cssPrefix}-sheet`);
         this.toolbar = new Toolbar(data, view.width, !showToolbar);
-
         targetEl.children(this.toolbar.el, this.el);
+
         this.pictureOffsetLeft = 10;
         this.pictureOffsetTop = 10;
 
@@ -1611,6 +1622,7 @@ export default class Sheet {
         this.advice = new Advice(data, this);
         // this.pasteDirectionsArr = [];
         // this.pasteOverlay = h('div', `${cssPrefix}-paste-overlay-container`).hide();
+        this.chartView = new ChartView();
 
         this.overlayerCEl = hasEditor.call(this, showEditor);
         this.selectors = [];
@@ -1626,8 +1638,8 @@ export default class Sheet {
             .children(this.overlayerCEl);
         // sortFilter
         this.sortFilter = new SortFilter();
-        this.direction = false;   // 图片移动
 
+        this.direction = false;   // 图片移动
         // root element
         this.el.children(
             this.tableEl,
@@ -1647,7 +1659,7 @@ export default class Sheet {
         );
 
         // table
-        this.table = new Table(this.tableEl.el, data, this.editor);
+        this.table = new Table(this.tableEl.el, data);
         sheetInitEvents.call(this);
         sheetReset.call(this, false);
         // init selector [0, 0]
@@ -1683,7 +1695,7 @@ export default class Sheet {
     }
 
     setCellRange(reference, tableProxy, styleBool, cellRange) {
-        let {  data} = this;
+        let {data} = this;
         data.paste(cellRange);
         for (let i = 0; i < reference.length; i++) {
             let {ri, ci} = reference[i];

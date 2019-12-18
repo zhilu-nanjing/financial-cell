@@ -13,10 +13,6 @@ import CellProp from "../model/cell_prop";
 import Cell from "../model/cell";
 
 export function isFormula(text) {
-    // if (text && text[0] === "=") {
-    //     return true;
-    // }
-
     return text && text[0] === "=";
 }
 
@@ -29,9 +25,6 @@ function isEmpty(text, formulas, formatText) {
         return false;
     }
 
-    // if(isHave(formatText)) {
-    //     return false;
-    // }
 
     return !isHave(formatText);
 }
