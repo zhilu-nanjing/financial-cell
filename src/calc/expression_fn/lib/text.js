@@ -1,6 +1,7 @@
 import * as utils from '../../calc_utils/helper'
 import {errorObj} from '../../calc_utils/error_config'
 import numeral from 'numeral'
+import {parseNumber} from "../../calc_utils/parse_helper";
 
 //TODO
 /**
@@ -29,7 +30,7 @@ exports.BAHTTEXT = function() {
 };
 
 exports.CHAR = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -86,8 +87,8 @@ exports.DBCS = function() {
 exports.DOLLAR = function(number, decimals) {
   decimals = (decimals === undefined) ? 2 : decimals;
 
-  number = utils.parseNumber(number);
-  decimals = utils.parseNumber(decimals);
+  number = parseNumber(number);
+  decimals = parseNumber(decimals);
   if (utils.anyIsError(number, decimals)) {
     return errorObj.ERROR_VALUE;
   }
@@ -114,8 +115,8 @@ exports.FIXED = function(number, decimals, no_commas) {
   decimals = (decimals === undefined) ? 2 : decimals;
   no_commas = (no_commas === undefined) ? false : no_commas;
 
-  number = utils.parseNumber(number);
-  decimals = utils.parseNumber(decimals);
+  number = parseNumber(number);
+  decimals = parseNumber(decimals);
   if (utils.anyIsError(number, decimals)) {
     return errorObj.ERROR_VALUE;
   }
@@ -155,7 +156,7 @@ exports.INDEX = function (matrix, row_num, column_num) {
 };
 exports.LEFT = function(text, number) {
   number = (number === undefined) ? 1 : number;
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error || typeof text !== 'string') {
     return errorObj.ERROR_VALUE;
   }
@@ -186,8 +187,8 @@ exports.LOWER = function(text) {
 };
 
 exports.MID = function(text, start, number) {
-  start = utils.parseNumber(start);
-  number = utils.parseNumber(number);
+  start = parseNumber(start);
+  number = parseNumber(number);
   if (utils.anyIsError(start, number) || typeof text !== 'string') {
     return number;
   }
@@ -251,8 +252,8 @@ exports.REGEXREPLACE = function (text, regular_expression, replacement) {
 };
 
 exports.REPLACE = function(text, position, length, new_text) {
-  position = utils.parseNumber(position);
-  length = utils.parseNumber(length);
+  position = parseNumber(position);
+  length = parseNumber(length);
   if (utils.anyIsError(position, length) ||
     typeof text !== 'string' ||
     typeof new_text !== 'string') {
@@ -262,16 +263,16 @@ exports.REPLACE = function(text, position, length, new_text) {
 };
 
 exports.REPT = function(text, number) {
-  number = utils.parseNumber(number);
-  if (number instanceof Error) {
-    return number;
-  }
+  number = parseNumber(number);
+  // if (number instanceof Error) {
+  //   return number;
+  // }
   return new Array(number + 1).join(text);
 };
 
 exports.RIGHT = function(text, number) {
   number = (number === undefined) ? 1 : number;
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }

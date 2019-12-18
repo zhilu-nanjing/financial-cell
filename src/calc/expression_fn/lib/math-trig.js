@@ -1,10 +1,10 @@
 import * as numeric from 'numeric'
 import * as utils from '../../calc_utils/helper'
-import {errorObj} from '../../calc_utils/error_config'
+import {ERROR_DIV0, ERROR_VALUE, errorObj} from '../../calc_utils/error_config'
 import * as statistical from './statistical'
 import * as information from './information'
-import {OnlyNumberExpFunction} from '../../calc_data_proxy/exp_function_proxy';
-
+import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
+import {parseNumber} from "../../calc_utils/parse_helper";
 
 /**
  * @return {number}
@@ -233,14 +233,21 @@ export function ATANH(number) {
   return Math.log((1 + number) / (1 - number)) / 2;
 };
 
-exports.BASE = function(number, radix, min_length) {
+/**
+ *
+ * @param {number} number 必需。 要转换的数字。 必须是大于或等于0且小于 2 ^ 53 的整数。
+ * @param {number} radix 必需。 要将数字转换为的基础基数。 必须是大于或等于2且小于或等于36的整数。
+ * @param {number} min_length  可选。 返回的字符串的最小长度。 必须是大于或等于0的整数。
+ * @returns {*|Error|string}
+ * @constructor
+ */
+export function BASE(number, radix, min_length) {
   min_length = min_length || 0;
-
-  number = utils.parseNumber(number);
-  radix = utils.parseNumber(radix);
-  min_length = utils.parseNumber(min_length);
+  number = parseNumber(number);
+  radix = parseNumber(radix);
+  min_length = parseNumber(min_length);
   if (utils.anyIsError(number, radix, min_length)) {
-    return errorObj.ERROR_VALUE;
+    return new Error(ERROR_VALUE);
   }
   min_length = (min_length === undefined) ? 0 : min_length;
   let result = number.toString(radix);
@@ -897,19 +904,6 @@ exports.SUBTOTAL = function(function_code, ref1) {
   }
 };
 
-exports.ADD = function (num1, num2) {
-  if (arguments.length !== 2) {
-    return errorObj.ERROR_NA;
-  }
-
-  num1 = utils.parseNumber(num1);
-  num2 = utils.parseNumber(num2);
-  if (utils.anyIsError(num1, num2)) {
-    return errorObj.ERROR_NAme;
-  }
-
-  return num1 + num2;
-};
 
 exports.MINUS = function (num1, num2) {
   if (arguments.length !== 2) {

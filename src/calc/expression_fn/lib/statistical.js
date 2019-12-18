@@ -2,10 +2,11 @@ import * as mathTrig from './math-trig';
 import * as text from './text';
 import * as jStat from 'jstat';
 import * as utils from '../../calc_utils/helper';
-import { errorObj } from '../../calc_utils/error_config';
+import {ERROR_DIV0, ERROR_NUM, errorObj} from '../../calc_utils/error_config';
 import * as misc from './miscellaneous';
 import * as evalExpression from './expression';
 import { parseBool, parseNumber, parseNumberArray } from '../../calc_utils/parse_helper';
+import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
 
 let SQRT2PI = 2.5066282746310002;
 
@@ -123,12 +124,23 @@ export function AVERAGEIF (range, criteria, average_range) {
     }
   }
   if (average_count === 0){
-    return errorObj.ERROR_DIV0
+    return new Error(ERROR_DIV0)
   }
   return result / average_count;
 };
 
-exports.AVERAGEIFS = function () {
+
+/**
+ *Average_range 必需。要计算平均值的一个或多个单元格，其中包含数字或包含数字的名称、数组或引用。
+
+ Criteria_range1、criteria_range2 等 Criteria_range1 是必需的，后续 criteria_range 是可选的。在其中计算关联条件的 1 至 127 个区域。
+
+ Criteria1、criteria2 等 Criteria1 是必需的，后续 criteria 是可选的。 形式为数字、表达式、单元格引用或文本的 1 至 127 个条件，用来定义将计算平均值的单元格。
+                         例如，条件可以表示为 32、"32"、">32"、"苹果" 或 B4。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function AVERAGEIFS() {
   // Does not work with multi dimensional ranges yet!
   //http://office.microsoft.com/en-001/excel-help/averageifs-function-HA010047493.aspx
   let args = utils.argsToArray(arguments);
@@ -136,16 +148,13 @@ exports.AVERAGEIFS = function () {
   let range = utils.flatten(args[0]);
   let count = 0;
   let result = 0;
-
   for (let i = 0; i < range.length; i++) {
     let isMeetCondition = false;
-
     for (let j = 0; j < criteriaLength; j++) {
       let value = args[2 * j + 1][i];
       let criteria = args[2 * j + 2];
       let isWildcard = criteria === void 0 || criteria === '*';
       let computedResult = false;
-
       if (isWildcard) {
         computedResult = true;
       } else {
@@ -154,92 +163,125 @@ exports.AVERAGEIFS = function () {
 
         computedResult = evalExpression.compute(tokens);
       }
-
       // Criterias are calculated as AND so any `false` breakes the loop as unmeet condition
       if (!computedResult) {
         isMeetCondition = false;
         break;
       }
-
       isMeetCondition = true;
     }
-
     if (isMeetCondition) {
       result += range[i];
       count++;
     }
   }
-
   let average = result / count;
-
   if (isNaN(average)) {
-    return errorObj.ERROR_DIV0;
+      return new Error(ERROR_DIV0);
   } else {
     return average;
   }
 };
 
+
 exports.BETA = {};
 
-exports.BETA.DIST = function (x, alpha, beta, cumulative, A, B) {
+/**
+ *
+ * @param {number}x 必需。 用来计算其函数的值，介于值 A 和 B 之间
+ * @param {number}alpha 必需。 分布参数。
+ * @param {number}beta 必需。 分布参数。
+ * @param {boolean}cumulative 必需。 决定函数形式的逻辑值。 如果 cumulative 为 TRUE，则 BETA.DIST 返回累积分布函数；如果为 FALSE，则返回概率密度函数。
+ * @param {number}A 可选。 x 所属区间的下界。
+ * @param {number}B 可选。 x 所属区间的上界。
+ * @returns {Error|number}
+ * @constructor
+ * @private
+ */
+export function BETADIST_(x, alpha, beta, cumulative, A, B) {
   if (arguments.length < 4) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_NUM);
   }
-
   A = (A === undefined) ? 0 : A;
   B = (B === undefined) ? 1 : B;
-
   x = parseNumber(x);
   alpha = parseNumber(alpha);
   beta = parseNumber(beta);
   A = parseNumber(A);
   B = parseNumber(B);
-  if (utils.anyIsError(x, alpha, beta, A, B)) {
-    return errorObj.ERROR_VALUE;
-  }
   cumulative = parseBool(cumulative)
   x = (x - A) / (B - A);
   return cumulative ? jStat.beta.cdf(x, alpha, beta) : jStat.beta.pdf(x, alpha, beta)/2;
 };
+export const BETADIST = new OnlyNumberExpFunction(BETADIST_)
 
-exports.BETA.INV = function(probability, alpha, beta, A, B) {
+/**
+ *
+ * @param {number}probability 必需。 与 beta 分布相关的概率。
+ * @param {number}alpha 必需。 分布参数。
+ * @param {number}beta  必需。 分布参数。
+ * @param {number}A 可选。 x 所属区间的下界。
+ * @param {number}B 可选。 x 所属区间的上界。
+ * @returns {*|Error}
+ * @constructor
+ */
+export function BETAINV_(probability, alpha, beta, A, B) {
   A = (A === undefined) ? 0 : A;
   B = (B === undefined) ? 1 : B;
-
   probability = parseNumber(probability);
   alpha = parseNumber(alpha);
   beta = parseNumber(beta);
   A = parseNumber(A);
   B = parseNumber(B);
-  if (utils.anyIsError(probability, alpha, beta, A, B)) {
-    return errorObj.ERROR_VALUE;
+  if(probability<=0||probability>1||alpha<=0||beta<=0){
+    return Error(ERROR_NUM)
   }
-
   return jStat.beta.inv(probability, alpha, beta) * (B - A) + A;
 };
+export const BETAINV = new OnlyNumberExpFunction(BETAINV_)
 
 exports.BINOM = {};
 
-exports.BINOM.DIST = function (successes, trials, probability, cumulative) {
+/**
+ *
+ * @param {number} successes 必需。 试验的成功次数。
+ * @param {number} trials 必需。 独立试验次数。
+ * @param {number} probability 必需。 每次试验成功的概率。
+ * @param {boolean} cumulative 必需。 决定函数形式的逻辑值。 如果 cumulative 为 TRUE，则 BINOM.DIST 返回累积分布函数，
+ *                  即最多存在 number_s 次成功的概率；如果为 FALSE，则返回概率密度函数，即存在 number_s 次成功的概率。
+ * @returns {*|number}
+ * @constructor
+ * @private
+ */
+function BINOMDIST_(successes, trials, probability, cumulative) {
   successes = parseNumber(successes);
   trials = parseNumber(trials);
   probability = parseNumber(probability);
   cumulative = parseBool(cumulative)
   cumulative = parseNumber(cumulative);
-  if (utils.anyIsError(successes, trials, probability, cumulative)) {
-    return errorObj.ERROR_VALUE;
+  if(successes<0||successes>trials||probability<0||probability>1){
+    return Error(ERROR_NUM)
   }
   return (cumulative) ? jStat.binomial.cdf(successes, trials, probability) : jStat.binomial.pdf(successes, trials, probability);
 };
+export const BINOMDIST = new OnlyNumberExpFunction(BINOMDIST_)
 
-exports.BINOM.INV = function(trials, probability, alpha) {
+/**
+ *
+ * @param {number} trials  必需。 贝努利试验次数。
+ * @param {number} probability 必需。 一次试验中成功的概率。
+ * @param {number} alpha 必需。 临界值。
+ * @returns {number}
+ * @constructor
+ * @private
+ */
+function BINOMINV_(trials, probability, alpha) {
   trials = parseNumber(trials);
   probability = parseNumber(probability);
   alpha = parseNumber(alpha);
-  if (utils.anyIsError(trials, probability, alpha)) {
-    return errorObj.ERROR_VALUE;
+  if(trials<0||probability<0||probability>1||alpha<0||alpha>1){
+    return Error(ERROR_NUM)
   }
-
   let x = 0;
   while (x <= trials) {
     if (jStat.binomial.cdf(x, trials, probability) >= alpha) {
@@ -248,6 +290,7 @@ exports.BINOM.INV = function(trials, probability, alpha) {
     x++;
   }
 };
+export const BINOMINV = new OnlyNumberExpFunction(BINOMINV_)
 
 exports.CHISQ = {};
 
