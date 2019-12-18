@@ -1,10 +1,15 @@
 import {errorObj} from '../../calc_utils/error_config'
-import utils from '../../calc_utils/helper'
-import information from './information'
+import * as utils from '../../calc_utils/helper'
+import * as information from './information'
 
-exports.AND = function() {
+/**
+ * 使用 AND 函数，它是一个逻辑函数，用于确定测试中的所有条件是否均为 TRUE。
+ * @returns {boolean}
+ * @constructor
+ */
+export function AND() {
   let args = utils.flatten(arguments);
-  let result = true;
+  let result = 'true';
   for (let i = 0; i < args.length; i++) {
     if (!args[i]) {
       result = false;

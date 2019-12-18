@@ -51,7 +51,7 @@ export class MatrixValue { // 二维数组
 
   getShape(aArray) { // 获取矩阵的形状，第一维对应row，第二维对应col
     let lenArray = aArray.map(f => f.length);
-    if (Math.max(lenArray) === Math.min(lenArray)) {
+    if (Math.max(...lenArray) === Math.min(...lenArray)) {
       return [aArray.length, lenArray[0]]; // 行，与列的数量
     } else {
       return new Error(INVALID_MATRIX);
