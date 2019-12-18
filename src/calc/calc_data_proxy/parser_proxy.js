@@ -119,9 +119,10 @@ export class DateTimeParser { // todo： 暂时不支持Jan-1这样的形式的�
   }
 
 
-  convertDateStrToDate(dateStr) { // 试图解析日期
+  convertDateStrToDate(dateStr) { // 试图解析日期； 支持-/混合切割，以及年月日切割
     let noSpaceStr = dateStr.replace(/\s+/g, ''); // 去掉所有空格
     let splitArray;
+    let adjustNum = 0
     if (this.isSimpleForm(noSpaceStr)) {
       splitArray = noSpaceStr.split(/[-/]/); // 用这个做切割的；之后还要做年月日的切割
     } else {
@@ -129,6 +130,7 @@ export class DateTimeParser { // todo： 暂时不支持Jan-1这样的形式的�
         return PARSE_FAIL_OBJ;
       } else {
         splitArray = noSpaceStr.split(/[年月日]/);
+        adjustNum = 1 //  会被切割为 ["2019","1","10",""]
       }
     }
     let theYearInt = this.yearStr2Int(splitArray[0]);
@@ -140,7 +142,7 @@ export class DateTimeParser { // todo： 暂时不支持Jan-1这样的形式的�
       return PARSE_FAIL_OBJ;
     }
     let theDayInt;
-    if (splitArray.length === 4) { // ["2019","1","10",""]
+    if (splitArray.length - adjustNum === 3) {
       theDayInt = parseInt(splitArray[2]);
     } else {
       theDayInt = 1;

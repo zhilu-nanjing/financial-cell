@@ -1,5 +1,5 @@
 import {errorObj, errorMsgArr} from '../../calc_utils/error_config'
-import {AllowErrorExpFunction} from '../../calc_data_proxy/exp_fn_executor';
+import { AllowErrorExpFunction } from '../../calc_data_proxy/exp_function_proxy';
 
 // TODO
 exports.CELL = function() {

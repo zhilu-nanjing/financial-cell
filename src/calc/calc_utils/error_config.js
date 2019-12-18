@@ -11,6 +11,8 @@ export const ERROR_CIRCULAR = '#CIRCULA!';
 export const ERROR_ERROR = '#ERROR!';
 export const ERROR_SYNTAX = "#SYNTAX" // 语法错误
 export const ERROR_NON_SOLVED = "NON_SOLVED"
+
+
 export const PARSE_FAIL = "PARSE_FAIL"
 export const PARSE_FAIL_OBJ = {msg: "PARSE_FAIL"}
 

@@ -147,15 +147,24 @@ export class CalcWorkbookProxy { // 对workbook的数据代理
     }
   }
 
+  /**
+   *
+   * @param {PreAction} preAction
+   */
   convertPreAction2name2CellObj(preAction){
-    let name2CellObj = {}
-    let to_calc_cell_names = preAction.findAllNeedCalcCell(); // 获取所有需要计算的单元格； 可能有很多null; 不存在多sheet的情况
-    to_calc_cell_names.map((cellName) => {name2CellObj[cellName]={}} ) // {} 代表需要重新计算，不需要更新值了
-    let newName2CellObj = {}
+    let oldName2CellObj = {}
+    let oldCell = preAction.oldCell // newCell是单元格的f发生更改的cellProp实例的集合
+    oldCell.map((aCell) => {oldName2CellObj[aCell.expr] = {f: aCell.cell.formulas}})
 
+    let newName2CellObj = {}
     let newCell = preAction.newCell // newCell是单元格的f发生更改的cellProp实例的集合
     newCell.map((aCell) => {newName2CellObj[aCell.expr] = {f: aCell.cell.formulas}})
-    Object.assign(name2CellObj, newName2CellObj)
+    Object.assign(oldName2CellObj, newName2CellObj)
+
+    let name2CellObj = {}
+    let to_calc_cell_names = preAction.findAllNeedCalcCell(); // 获取所有需要计算的单元格； 可能有很多null; 不存在多sheet的情况
+    to_calc_cell_names.map((cellName) => {name2CellObj[cellName] = {}} ) // {} 代表需要重新计算，不需要更新值了
+    Object.assign(name2CellObj, oldName2CellObj)
     return name2CellObj
   }
   getCalcCellArrayByNames(cellNames, sheetName){

@@ -1,148 +1,162 @@
-import {errorObj} from '../../calc_utils/error_config'
+import {ERROR_DIV0, ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/error_config'
 import {jStat} from 'jstat'
-import text  from './text'
-import utils from '../../calc_utils/helper'
+import * as text  from './text'
+import * as utils from '../../calc_utils/helper'
 import bessel from 'bessel'
+import {parseNumber} from "../../calc_utils/parse_helper";
+import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
 
 function isValidBinaryNumber(number) {
   return (/^[01]{1,10}$/).test(number);
 }
 
-exports.BESSELI = function(x, n) {
-  x = utils.parseNumber(x);
-  n = utils.parseNumber(n);
-  if (utils.anyIsError(x, n)) {
-    return errorObj.ERROR_VALUE;
-  }
+/**
+ *
+ * @param {number}x 必需。 用来计算函数的值。
+ * @param {number}n 必需。 贝赛耳函数的阶数。 如果 n 不是整数，将被截尾取整。
+ * @returns {*|RegExp|number|Error}
+ * @constructor
+ */
+function BESSELI_(x, n) {
+  x = parseNumber(x);
+  n = parseNumber(n);
   return bessel.besseli(x, n);
 };
+export const BESSELI = new OnlyNumberExpFunction(BESSELI_)
 
-exports.BESSELJ = function(x, n) {
-  x = utils.parseNumber(x);
-  n = utils.parseNumber(n);
-  if (utils.anyIsError(x, n)) {
-    return errorObj.ERROR_VALUE;
-  }
+/**
+ *
+ * @param {number}x 必需。 用来计算函数的值。
+ * @param {number}n 必需。 贝赛耳函数的阶数。 如果 n 不是整数，将被截尾取整。
+ * @returns {number|*}
+ * @constructor
+ * @private
+ */
+function BESSELJ_(x, n) {
+  x = parseNumber(x);
+  n = parseNumber(n);
   return bessel.besselj(x, n);
 };
+export const BESSELJ = new OnlyNumberExpFunction(BESSELJ_)
 
-exports.BESSELK = function(x, n) {
-  x = utils.parseNumber(x);
-  n = utils.parseNumber(n);
-  if (utils.anyIsError(x, n)) {
-    return errorObj.ERROR_VALUE;
-  }
+/**
+ *
+ * @param {number} x 必需。 用来计算函数的值。
+ * @param {number} n 必需。 函数的阶数。 如果 n 不是整数，将被截尾取整。
+ * @returns {number}
+ * @constructor
+ * @private
+ */
+function BESSELK_(x, n) {
+  x = parseNumber(x);
+  n = parseNumber(n);
   return bessel.besselk(x, n);
 };
+export const BESSELK = new OnlyNumberExpFunction(BESSELK_)
 
-exports.BESSELY = function(x, n) {
-  x = utils.parseNumber(x);
-  n = utils.parseNumber(n);
-  if (utils.anyIsError(x, n)) {
-    return errorObj.ERROR_VALUE;
-  }
+/**
+ *
+ * @param {number}x 必需。 用来计算函数的值。
+ * @param {number}n 必需。 函数的阶数。 如果 n 不是整数，将被截尾取整。
+ * @returns {number}
+ * @constructor
+ * @private
+ */
+function BESSELY_(x, n) {
+  x = parseNumber(x);
+  n = parseNumber(n);
   return bessel.bessely(x, n);
 };
+export const BESSELY = new OnlyNumberExpFunction(BESSELY_)
 
-exports.BIN2DEC = function(number) {
-  // Return error if number is not binary or contains more than 10 characters (10 digits)
-  if (!isValidBinaryNumber(number)) {
-    return errorObj.ERROR_NUM;
-  }
-
-  // Convert binary number to decimal
+/**
+ *
+ * @param {number}number 必需。 要转换的二进制数。 Number 包含的字符不能超过 10 个（10 位）。
+ *                       Number 的最高位为符号位。 其余 9 位是数量位。 负数用二进制补码记数法表示。
+ * @returns {number}
+ * @constructor
+ * @private
+ */
+function BIN2DEC_(number) {
   let result = parseInt(number, 2);
-
-  // Handle negative numbers
   let stringified = number.toString();
+  if(stringified.length>10){
+    return Error(ERROR_NUM);
+  }
   if (stringified.length === 10 && stringified.substring(0, 1) === '1') {
     return parseInt(stringified.substring(1), 2) - 512;
   } else {
     return result;
   }
 };
+export const BIN2DEC = new OnlyNumberExpFunction(BIN2DEC_)
 
-
-exports.BIN2HEX = function(number, places) {
-  // Return error if number is not binary or contains more than 10 characters (10 digits)
-  if (!isValidBinaryNumber(number)) {
-    return errorObj.ERROR_NUM;
-  }
-
-  // Ignore places and return a 10-character hexadecimal number if number is negative
+/**
+ *
+ * @param {number} number 必需。 要转换的二进制数。 Number 包含的字符不能超过 10 个（10 位）。
+ *                 Number 的最高位为符号位。 其余 9 位是数量位。 负数用二进制补码记数法表示。
+ * @param {number} places 可选。 要使用的字符数。 如果省略 Places，BIN2HEX 将使用必需的最小字符数。 Places 可用于在返回的值前置 0（零）。
+ * @returns {string|Error|*}
+ * @constructor
+ * @private
+ */
+function BIN2HEX_(number, places) {
   let stringified = number.toString();
   if (stringified.length === 10 && stringified.substring(0, 1) === '1') {
     return (1099511627264 + parseInt(stringified.substring(1), 2)).toString(16);
   }
-
-  // Convert binary number to hexadecimal
   let result = parseInt(number, 2).toString(16);
-
-  // Return hexadecimal number using the minimum number of characters necessary if places is undefined
   if (places === undefined) {
     return result;
-  } else {
-    // Return error if places is nonnumeric
+  }
+  else {
     if (isNaN(places)) {
-      return errorObj.ERROR_VALUE;
+      return Error(ERROR_VALUE);
     }
-
-    // Return error if places is negative
     if (places < 0) {
-      return errorObj.ERROR_NUM;
+      return Error(ERROR_NUM);
     }
-
-    // Truncate places in case it is not an integer
     places = Math.floor(places);
-
-    // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : Error(ERROR_NUM);
   }
 };
+export const BIN2HEX = new OnlyNumberExpFunction(BIN2HEX_)
 
-exports.BIN2OCT = function(number, places) {
-  // Return error if number is not binary or contains more than 10 characters (10 digits)
-  if (!isValidBinaryNumber(number)) {
-    return errorObj.ERROR_NUM;
-  }
-
-  // Ignore places and return a 10-character octal number if number is negative
+/**
+ *
+ * @param  {number} number 必需。 要转换的二进制数。 Number 包含的字符不能超过 10 个（10 位）。
+ *               Number 的最高位为符号位。 其余 9 位是数量位。 负数用二进制补码记数法表示。
+ * @param   {number} places 可选。 要使用的字符数。 如果省略 places，BIN2OCT 将使用必需的最小字符数。 Places 可用于在返回的值前置 0（零）。
+ * @returns {*|Error|string|Error}
+ * @constructor
+ */
+function BIN2OCT_(number, places) {
   let stringified = number.toString();
   if (stringified.length === 10 && stringified.substring(0, 1) === '1') {
     return (1073741312 + parseInt(stringified.substring(1), 2)).toString(8);
   }
-
-  // Convert binary number to octal
   let result = parseInt(number, 2).toString(8);
-
-  // Return octal number using the minimum number of characters necessary if places is undefined
   if (places === undefined) {
     return result;
   } else {
-    // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return errorObj.ERROR_VALUE;
+      return Error(ERROR_VALUE);
     }
-
-    // Return error if places is negative
     if (places < 0) {
-      return errorObj.ERROR_NUM;
+      return Error(ERROR_NUM);
     }
-
-    // Truncate places in case it is not an integer
     places = Math.floor(places);
-
-    // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : Error(ERROR_NUM);
   }
 };
+export const BIN2OCT = new OnlyNumberExpFunction(BIN2OCT_)
 
 exports.BITAND = function(number1, number2) {
   // Return error if either number is a non-numeric value
-  number1 = utils.parseNumber(number1);
-  number2 = utils.parseNumber(number2);
+  number1 = parseNumber(number1);
+  number2 = parseNumber(number2);
   if (utils.anyIsError(number1, number2)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Return error if either number is less than 0
@@ -165,10 +179,10 @@ exports.BITAND = function(number1, number2) {
 };
 
 exports.BITLSHIFT = function(number, shift) {
-  number = utils.parseNumber(number);
-  shift = utils.parseNumber(shift);
+  number = parseNumber(number);
+  shift = parseNumber(shift);
   if (utils.anyIsError(number, shift)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Return error if number is less than 0
@@ -196,10 +210,10 @@ exports.BITLSHIFT = function(number, shift) {
 };
 
 exports.BITOR = function(number1, number2) {
-  number1 = utils.parseNumber(number1);
-  number2 = utils.parseNumber(number2);
+  number1 = parseNumber(number1);
+  number2 = parseNumber(number2);
   if (utils.anyIsError(number1, number2)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Return error if either number is less than 0
@@ -222,10 +236,10 @@ exports.BITOR = function(number1, number2) {
 };
 
 exports.BITRSHIFT = function(number, shift) {
-  number = utils.parseNumber(number);
-  shift = utils.parseNumber(shift);
+  number = parseNumber(number);
+  shift = parseNumber(shift);
   if (utils.anyIsError(number, shift)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Return error if number is less than 0
@@ -253,10 +267,10 @@ exports.BITRSHIFT = function(number, shift) {
 };
 
 exports.BITXOR = function(number1, number2) {
-  number1 = utils.parseNumber(number1);
-  number2 = utils.parseNumber(number2);
+  number1 = parseNumber(number1);
+  number2 = parseNumber(number2);
   if (utils.anyIsError(number1, number2)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Return error if either number is less than 0
@@ -279,11 +293,11 @@ exports.BITXOR = function(number1, number2) {
 };
 
 exports.COMPLEX = function(real, imaginary, suffix) {
-  real = utils.parseNumber(real);
-  imaginary = utils.parseNumber(imaginary);
+  real = parseNumber(real);
+  imaginary = parseNumber(imaginary);
   //XW: 参数报错
   if (utils.anyIsError(real, imaginary)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   //XW：end
 
@@ -292,7 +306,7 @@ exports.COMPLEX = function(real, imaginary, suffix) {
   suffix = suffix.toLowerCase();
   // Return error if suffix is neither "i" nor "j"
   if (suffix !== 'i' && suffix !== 'j') {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Return complex number
@@ -309,7 +323,7 @@ exports.COMPLEX = function(real, imaginary, suffix) {
 };
 
 exports.CONVERT = function(number, from_unit, to_unit) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -596,7 +610,7 @@ exports.CONVERT = function(number, from_unit, to_unit) {
 };
 
 exports.DEC2BIN = function(number, places) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -620,7 +634,7 @@ exports.DEC2BIN = function(number, places) {
   } else {
     // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return errorObj.ERROR_VALUE;
+      return Error(ERROR_VALUE);
     }
 
     // Return error if places is negative
@@ -637,7 +651,7 @@ exports.DEC2BIN = function(number, places) {
 };
 
 exports.DEC2HEX = function(number, places) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -661,7 +675,7 @@ exports.DEC2HEX = function(number, places) {
   } else {
     // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return errorObj.ERROR_VALUE;
+      return Error(ERROR_VALUE);
     }
 
     // Return error if places is negative
@@ -678,7 +692,7 @@ exports.DEC2HEX = function(number, places) {
 };
 
 exports.DEC2OCT = function(number, places) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -702,7 +716,7 @@ exports.DEC2OCT = function(number, places) {
   } else {
     // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return errorObj.ERROR_VALUE;
+      return Error(ERROR_VALUE);
     }
 
     // Return error if places is negative
@@ -721,10 +735,10 @@ exports.DEC2OCT = function(number, places) {
 exports.DELTA = function(number1, number2) {
   // Set number2 to zero if undefined
   number2 = (number2 === undefined) ? 0 : number2;
-  number1 = utils.parseNumber(number1);
-  number2 = utils.parseNumber(number2);
+  number1 = parseNumber(number1);
+  number2 = parseNumber(number2);
   if (utils.anyIsError(number1, number2)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Return delta
@@ -736,10 +750,10 @@ exports.ERF = function(lower_bound, upper_bound) {
   // Set number2 to zero if undefined
   upper_bound = (upper_bound === undefined) ? 0 : upper_bound;
 
-  lower_bound = utils.parseNumber(lower_bound);
-  upper_bound = utils.parseNumber(upper_bound);
+  lower_bound = parseNumber(lower_bound);
+  upper_bound = parseNumber(upper_bound);
   if (utils.anyIsError(lower_bound, upper_bound)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   return jStat.erf(lower_bound);
@@ -748,7 +762,7 @@ exports.ERF = function(lower_bound, upper_bound) {
 // TODO
 exports.ERF.PRECISE = function(x) {
   if (isNaN(x)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let Formulas = window.jsSpreadsheet.AllFormulas;
   return Formulas.ERF(x)
@@ -757,7 +771,7 @@ exports.ERF.PRECISE = function(x) {
 exports.ERFC = function(x) {
   // Return error if x is not a number
   if (isNaN(x)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   return jStat.erfc(x);
@@ -766,7 +780,7 @@ exports.ERFC = function(x) {
 // TODO
 exports.ERFC.PRECISE = function(x) {
   if (isNaN(x)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let Formulas = window.jsSpreadsheet.AllFormulas;
   return Formulas.ERFC(x)
@@ -774,7 +788,7 @@ exports.ERFC.PRECISE = function(x) {
 
 exports.GESTEP = function(number, step) {
   step = step || 0;
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (utils.anyIsError(step, number)) {
     return number;
   }
@@ -814,7 +828,7 @@ exports.HEX2BIN = function(number, places) {
   } else {
     // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return errorObj.ERROR_VALUE;
+      return Error(ERROR_VALUE);
     }
 
     // Return error if places is negative
@@ -871,7 +885,7 @@ exports.HEX2OCT = function(number, places) {
   } else {
     // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return errorObj.ERROR_VALUE;
+      return Error(ERROR_VALUE);
     }
 
     // Return error if places is negative
@@ -892,7 +906,7 @@ exports.ROWS = function (matrix) {
   }
 
   if (!(matrix instanceof Array)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   if (matrix.length === 0) {
@@ -914,7 +928,7 @@ exports.IMABS = function (inumber) {
 
   // Return error if either coefficient is not a number
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Return absolute value of complex number
@@ -924,7 +938,7 @@ exports.IMABS = function (inumber) {
 exports.IMAGINARY = function (inumber) {
   inumber = trans_num(inumber)
   if (inumber === undefined || inumber === true || inumber === false) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Return 0 if inumber is equal to 0
@@ -988,7 +1002,7 @@ exports.IMARGUMENT = function (inumber) {
 
   // Return error if either coefficient is not a number
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Return error if inumber is equal to zero
@@ -1033,7 +1047,7 @@ exports.IMCONJUGATE = function (inumber) {
   let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup imaginary unit
@@ -1051,7 +1065,7 @@ exports.IMCOS = function (inumber) {
   let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup imaginary unit
@@ -1069,7 +1083,7 @@ exports.IMCOSH = function (inumber) {
   let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup imaginary unit
@@ -1087,7 +1101,7 @@ exports.IMCOT = function (inumber) {
   let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Return cotangent of complex number
@@ -1102,7 +1116,7 @@ exports.IMDIV = function(inumber1, inumber2) {
   let d = exports.IMAGINARY(inumber2);
 
   if (utils.anyIsError(a, b, c, d)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup imaginary unit
@@ -1132,7 +1146,7 @@ exports.IMEXP = function(inumber) {
   let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup imaginary unit
@@ -1150,7 +1164,7 @@ exports.IMLN = function(inumber) {
   let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup imaginary unit
@@ -1168,7 +1182,7 @@ exports.IMLOG10 = function(inumber) {
   let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup imaginary unit
@@ -1186,7 +1200,7 @@ exports.IMLOG2 = function(inumber) {
   let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup imaginary unit
@@ -1199,11 +1213,11 @@ exports.IMLOG2 = function(inumber) {
 
 exports.IMPOWER = function(inumber, number) {
   inumber = trans_num(inumber)
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
   if (utils.anyIsError(number, x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup imaginary unit
@@ -1233,7 +1247,7 @@ exports.IMPRODUCT = function() {
     let d = exports.IMAGINARY(arguments[i]);
 
     if (utils.anyIsError(a, b, c, d)) {
-      return errorObj.ERROR_VALUE;
+      return Error(ERROR_VALUE);
     }
 
     // Complute product of two complex numbers
@@ -1247,7 +1261,7 @@ exports.IMPRODUCT = function() {
 exports.IMREAL = function(inumber) {
   inumber = trans_num(inumber)
   if (inumber === undefined || inumber === true || inumber === false) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Return 0 if inumber is equal to 0
@@ -1303,7 +1317,7 @@ exports.IMSEC = function(inumber) {
   inumber = trans_num(inumber)
   // Return error if inumber is a logical value
   if (inumber === true || inumber === false) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
@@ -1311,7 +1325,7 @@ exports.IMSEC = function(inumber) {
   let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Return secant of complex number
@@ -1325,7 +1339,7 @@ exports.IMSECH = function(inumber) {
   let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Return hyperbolic secant of complex number
@@ -1339,7 +1353,7 @@ exports.IMSIN = function(inumber) {
   let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup imaginary unit
@@ -1357,7 +1371,7 @@ exports.IMSINH = function(inumber) {
   let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup imaginary unit
@@ -1375,7 +1389,7 @@ exports.IMSQRT = function(inumber) {
   let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup imaginary unit
@@ -1396,7 +1410,7 @@ exports.IMCSC = function (inumber) {
   // Return error if inumber is a logical value
   inumber = trans_num(inumber)
   if (inumber === true || inumber === false) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
@@ -1416,7 +1430,7 @@ exports.IMCSCH = function (inumber) {
   // Return error if inumber is a logical value
   inumber = trans_num(inumber)
   if (inumber === true || inumber === false) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
@@ -1443,7 +1457,7 @@ exports.IMSUB = function(inumber1, inumber2) {
   let d = exports.IMAGINARY(inumber2);
 
   if (utils.anyIsError(a, b, c, d)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup imaginary unit
@@ -1476,7 +1490,7 @@ exports.IMSUM = function (inumber) {
     let d = exports.IMAGINARY(args[i]);
 
     if (utils.anyIsError(a, b, c, d)) {
-      return errorObj.ERROR_VALUE;
+      return Error(ERROR_VALUE);
     }
 
     // Complute product of two complex numbers
@@ -1491,7 +1505,7 @@ exports.IMTAN = function (inumber) {
   inumber = trans_num(inumber)
   // Return error if inumber is a logical value
   if (inumber === true || inumber === false) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
@@ -1499,7 +1513,7 @@ exports.IMTAN = function (inumber) {
   let y = exports.IMAGINARY(inumber);
 
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   // Return tangent of complex number
@@ -1539,7 +1553,7 @@ exports.OCT2BIN = function (number, places) {
   } else {
     // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return errorObj.ERROR_VALUE;
+      return Error(ERROR_VALUE);
     }
 
     // Return error if places is negative
@@ -1590,7 +1604,7 @@ exports.OCT2HEX = function(number, places) {
   } else {
     // Return error if places is nonnumeric
     if (isNaN(places)) {
-      return errorObj.ERROR_VALUE;
+      return Error(ERROR_VALUE);
     }
 
     // Return error if places is negative

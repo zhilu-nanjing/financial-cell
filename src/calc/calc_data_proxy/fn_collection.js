@@ -1,7 +1,8 @@
 // todo: 需要把FLOOR.MATH这样的公式解析为FLOOR_MATH这样的函数
 
 import { UserRawFnExecutor } from './exp_raw_fn_executor';
-import { BaseExpFunction, UserFnExecutor } from './exp_fn_executor';
+import { UserFnExecutor } from './exp_fn_executor';
+import { BaseExpFunction } from './exp_function_proxy';
 
 export class FnCollection { // 封装的统一管理exp_fn的函数。
   constructor() {
@@ -71,8 +72,9 @@ export class MultiCollExpFn {
     return typeof foundExpFn === 'function' || foundExpFn instanceof BaseExpFunction
   }
 
-  getFnExecutorByName(fnName){
+  getFnExecutorByName(fnName, isToUpperCase = true){
     let fnType
+    fnName = isToUpperCase? fnName.toUpperCase(): fnName // 转换为大写
     let foundExpFn = this.raw_fn_coll.getExpFunction(fnName); // this.xlsx_raw_Fx = {OFFSET; IFERROR; IF; AND}
     if (this.isValidExpFn(foundExpFn)) {
       return new this.rawFnExecutor(foundExpFn)
