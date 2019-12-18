@@ -1,6 +1,7 @@
 "use strict";
 import { TO_PARA_TYPE } from '../calc_utils/config';
 import { ERROR_VALUE } from '../calc_utils/error_config';
+import { CellVArray } from '../cell_value_type/cell_value';
 const NOT_CONVERT = "NOT_CONVERT"; // 不转换
 
 
@@ -116,6 +117,9 @@ export class BaseExpFunction{ // 默认行为; 如果不符合默认行为的函
     convertToStringAndNumber(arg){ // 这个是函数参数默认转换方式
         if(["string","number"].includes(typeof arg)){
             return arg
+        }
+        else if(arg instanceof Array){
+            return new CellVArray(arg)
         }
         else {
             return arg.toNumberOrString() // 转换; 如果遇到其他的一些数据类型会报错

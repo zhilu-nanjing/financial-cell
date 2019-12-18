@@ -283,7 +283,7 @@ export class CellVBool {
 export class CellVArray {
   constructor(aArray) {
     if (aArray instanceof Array) {
-      this.aArray = aArray; // 最多支持2维数组
+      this.aArray = this.to2DArray(aArray); // 1维数组会转化为2维数组
     } else if (aArray instanceof MatrixValue || aArray instanceof CellVArray) {
       this.aArray = aArray.aArray; //属性
     } else if (['number', 'string'].includes(typeof aArray)) { // 单个数字与字符串
@@ -294,6 +294,14 @@ export class CellVArray {
     this.matrixValue = new MatrixValue(this.aArray);
     this.isCellV = true;
     this.cellVTypeName = CellVTypeObj.CellVArray;
+  }
+  to2DArray(aArray){
+    if(typeof aArray[0][0] === "undefined"){
+      return Array(1).push(aArray)
+    }
+    else {
+      return aArray
+    }
   }
 
   applyToAll(func) {
