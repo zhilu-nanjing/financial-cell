@@ -61,7 +61,7 @@ export class CalcRowsProxy { // 代理对于rows的数据获取与数据更新
   }
 
   updateRowsByCalcCellArray(calcCellArray, rows){
-    calcCellArray.map((calcCell) => {rows.setCell(...calcCell.getRiCi(),calcCell.getCellObjForRendering())})
+    calcCellArray.map((calcCell) => {rows.setCell(...calcCell.getRiCi(),calcCell.getCellObjForRendering(), "assign")})
   }
 
 

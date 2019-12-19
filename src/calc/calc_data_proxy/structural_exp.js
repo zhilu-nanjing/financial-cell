@@ -1,7 +1,8 @@
 "use strict";
 import { FORMULA_STATUS, MARK_OBJ } from '../calc_utils/config';
-import { RawValue } from './raw_value.js';
-import { Range } from './range_ref.js';
+import { RawValue } from './syntax_unit_raw_value.js';
+import {SUnitRefValue} from './syntax_unit_ref_value';
+import { SUnitRangeRef } from './syntax_unit_range.js';
 import { errorMsgArr, errorObj, ERROR_SYNTAX } from '../calc_utils/error_config';
 import {
     CellVArray,
@@ -19,7 +20,7 @@ let exp_id = 0; // 全局变量
  */
 export class StructuralExp {
     // 代表语法树上面的一个节点。这个几点的args是代表树枝，
-    // 可以为RawValue，RefValue，LazyValue或字符或FormulaExp; 存在括号的时候，会把括号内的表达式构造为FormulaExp
+    // 可以为RawValue，SUnitRefValue，LazyValue或字符或FormulaExp; 存在括号的时候，会把括号内的表达式构造为FormulaExp
     constructor(calcCell) {
         this.id = ++exp_id;   // id 是一个递增序列，其中root_exp的id为1
         this.args = []; // 一个表达式下面的多个平行的节点。例如“1+average(A1:A5)-23 * 123” 有4个平行节点
@@ -109,7 +110,7 @@ export class StructuralExp {
         let sheet
         try {
             for (let i = 0; i < args.length; i++) { // 遍历所有的参数
-                if (args[i].name === 'RefValue') { // 属于引用的字符串
+                if (args[i] instanceof SUnitRefValue) { // 属于引用的字符串
                     sheet = args[i].calcCell.calcSheet;
                     //未定义单元格f置为default_0
                     let cellName = args[i].str_expression
@@ -169,7 +170,7 @@ export class StructuralExp {
         try {
             if (Array.isArray(self.args) // 不合法的参数； 何时会出现这种情况？
               && self.args.length === 1
-              && self.args[0] instanceof Range) {
+              && self.args[0] instanceof SUnitRangeRef) {
                 throw errorObj.ERROR_VALUE;
             }
             curCellObj.v = self.solveExpression(); // 计算数值

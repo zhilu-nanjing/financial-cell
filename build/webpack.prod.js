@@ -46,5 +46,6 @@ module.exports = merge(common, {
     output: {
         filename: '[name].js',
         path: path.resolve(__dirname, '../dist'),
+        jsonpFunction: 'wpJsonpFlightsWidget'
     },
 });

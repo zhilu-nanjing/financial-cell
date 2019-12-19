@@ -27,6 +27,7 @@ import MultiPreAction from "../core/multi_pre_action";
 import CellProxy from "./cell_proxy";
 import CellProp from "../model/cell_prop";
 import PaintFormat from "../model/paint_format";
+import Chart from "../chart/chart_cmd/chart";
 // private methods
 /*
  * {
@@ -702,6 +703,7 @@ export default class DataProxy {
         this.calc = new Calc();
         this.pasteDirectionsArr = [];
         this.changeDataForCalc = null;
+        this.chart = new Chart();
 
         // save data end
 
@@ -1864,7 +1866,7 @@ export default class DataProxy {
         Object.keys(d).forEach((property) => {
             // this.judgeAutoWidth(d.rows);
             if (property === 'merges'
-                || property === 'cols' || property === 'validations') {
+                || property === 'cols' || property === 'validations' || property === 'chart') {
                 this[property].setData(d[property]);
             } else if (property === 'flex') {
                 autoFilter.addFiexRows(d[property]);

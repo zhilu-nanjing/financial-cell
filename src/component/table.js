@@ -7,6 +7,7 @@ import {look} from "../config";
 // import {deepCopy, distinct} from "../core/operator";
 import {testValid} from "../utils/test";
 import {isHave} from "../helper/check_value";
+import Chart from "../chart/chart_cmd/chart";
 // import Worker from 'worker-loader!../external/Worker2.js';
 // gobal var
 const cellPaddingWidth = 5;
@@ -77,6 +78,10 @@ function getChangeDataToCalc() {
     }
 }
 
+function parseEchat() {
+
+}
+
 function parseCell() {
     let {data} = this;
 
@@ -85,7 +90,7 @@ function parseCell() {
         return;
     }
     try {
-        data.calc.calculateRows(data.rows, changeDataArgs.data); // jobs; 调用calc模块进行计算
+        // data.calc.calculateRows(data.rows, changeDataArgs.data); // jobs; 调用calc模块进行计算
     } catch(e) {
         console.error("公式模块报错：" + e);
     }
@@ -388,15 +393,15 @@ function renderFreezeHighlightLine(fw, fh, ftw, fth) {
 
 /** end */
 class Table {
-    constructor(el, data, editor) {
+    constructor(el, data) {
         this.el = el;
         this.draw = new Draw(el, data.viewWidth(), data.viewHeight());
         // this.factory = created ApplicationFactory(data.methods, data.name, this);
-        this.editor = editor;
+        // this.editor = editor;
         this.data = data;
-        this.timer = null;
+        // this.timer = null;
         // this.worker = created Worker();
-        this.autoAdaptList = [];
+        // this.autoAdaptList = [];
     }
 
 
@@ -442,6 +447,7 @@ class Table {
         let viewRange = data.viewRange();
 
         parseCell.call(this);
+        parseEchat.call(this);
         this.clear();
 
         this.draw.resize(data.viewWidth(), data.viewHeight());

@@ -2,7 +2,7 @@ import {isHaveStyle} from "../event/paste";
 import {Rows} from "../core/row";
 import {splitStr} from "../core/operator";
 import CellRange from '../core/cell_range';
-import {isHave} from "../helper/dataproxy_helper";
+import {isHave} from "../helper/check_value";
 export default class TableProxy {
     constructor(data ) {
         this.data = data;

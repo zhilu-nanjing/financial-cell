@@ -13,10 +13,6 @@ import CellProp from "../model/cell_prop";
 import Cell from "../model/cell";
 
 export function isFormula(text) {
-    // if (text && text[0] === "=") {
-    //     return true;
-    // }
-
     return text && text[0] === "=";
 }
 
@@ -29,9 +25,6 @@ function isEmpty(text, formulas, formatText) {
         return false;
     }
 
-    // if(isHave(formatText)) {
-    //     return false;
-    // }
 
     return !isHave(formatText);
 }
@@ -255,7 +248,10 @@ class Rows {
 
             row.cells[ci].style = _cell.style;
             return;
+        }else if(what === 'assign') {
+            Object.assign(row.cells[ci], cell);
         }
+
         // cell
         this.getDependCell(xy2expr(ci, ri), this.getCell(ri, ci));
         _cell.setFormatText(data.tryParseToNum(_cell, ri, ci));

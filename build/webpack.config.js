@@ -7,7 +7,6 @@ module.exports = {
     entry: {
         xspreadsheet: './src/index.js'
     },
-
     module: {
         rules: [
             {

@@ -99,7 +99,7 @@ export default {
     },
     dataValidation: {
         mode: 'Mode',
-        range: 'Cell Range',
+        range: 'Cell SUnitRangeRef',
         criteria: 'Criteria',
         modeType: {
             cell: 'Cell',

@@ -92,7 +92,7 @@ function spanDomPackage(spanDom, tableDom) {
 
 export function process(tableDom, styleDom = "") {
     let {el, data} = this;
-    data.history.add(data.getData());
+    // data.history.add(data.getData());
     el.child(tableDom);
     GetInfoFromTable.call(this, tableDom);
     tableDom.parentNode.removeChild(tableDom);

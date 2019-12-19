@@ -30,6 +30,7 @@ import RectProxy from "../core/rect_proxy";
 import {testValid} from "../utils/test";
 import Timer from "../model/Timer";
 import PreAction from "../model/pre_action";
+import ChartView from "../chart/chart_cmd/chart_view";
 
 function scrollbarMove() {
     const {
@@ -61,14 +62,16 @@ function scrollbarMove() {
 }
 
 function selectorSet(multiple, ri, ci, indexesUpdated = true, moving = false) {
-    if (ri === -1 && ci === -1) return;
+    // if(ri === 0 && ci === 0) { // 左上角全选
+    //     ri = -1;
+    //     ci = -1;
+    // }
+    // if (ri === -1 && ci === -1) return;
     // console.log(multiple, ', ri:', ri, ', ci:', ci);
     const {
         table, selector, toolbar,
     } = this;
-    /**
-     * @type {Table} table
-     */
+
 
     if (multiple) {
         selector.setEnd(ri, ci, moving, true);
@@ -100,7 +103,7 @@ function selectorMove(multiple, direction) {
         selector.indexes = [editor.ri, editor.ci];
     }
     let [ri, ci] = selector.indexes;
-    const { eci} = selector.range;
+    const {eci} = selector.range;
     if (multiple) {
         [ri, ci] = selector.moveIndexes;
     }
@@ -361,8 +364,8 @@ function dropDown(e, isAutofillEl, selector, data, verticalScrollbar, rows, evt,
         }
 
     } else if (e.buttons === 1 && !e.shiftKey) {
-        ri = ri <= 0 ? 0 : ri;
-        ci = ci <= 0 ? 0 : ci;
+        // ri = ri <= 0 ? 0 : ri;
+        // ci = ci <= 0 ? 0 : ci;   注释是因为如果点击索引，然后mousemove则会取消全选，注释则不会
         let cell = data.viewRange();
         let pos = cell.getMovePos(ri, ci);
 
@@ -474,7 +477,7 @@ function overlayerMousedown(evt) {
     // console.log(':::::overlayer.mousedown:', evt.detail, evt.button, evt.buttons, evt.shiftKey);
     // console.log('evt.target.className:', evt.target.className);
     const {
-        selector, data,  sortFilter, editor, advice
+        selector, data, sortFilter, editor, advice
     } = this;
     const {offsetX, offsetY} = evt;
     const isAutofillEl = evt.target.className === `${cssPrefix}-selector-corner`;
@@ -676,19 +679,25 @@ function hasEditor(showEditor = true) {
                 this.editor.el,
                 this.selectorMoveEl.el,
                 this.selector.el,
+                this.chartView.el
             );
     } else {
         return this.overlayerCEl = h('div', `${cssPrefix}-overlayer-content`)
             .children(
                 // this.editor.el,
                 // this.selector.el,
-                this.selectorMoveEl.el
+                this.selectorMoveEl.el,
+                this.chartView.el,
             );
     }
 }
 
 function editorSet() {
     const {editor, data, selector} = this;
+    let {mri, mci} = data.getMax();
+    if (mri === selector.range.eri - selector.range.sri + 1 || mci === selector.range.eci - selector.range.sci + 1) {
+        return;
+    }
     editorSetOffset.call(this);
     editor.setCellEnd(data.getSelectedCell());
     // editor.setCell(data.getSelectedCell(), data.getSelectedValidator(), type);
@@ -937,6 +946,9 @@ function throwFormula() {
     // sheetReset.call(this);
 }
 
+function addChart() {
+}
+
 export function insertDeleteRowColumn(type) {
     const {data} = this;
     if (type === 'insert-row') {
@@ -973,12 +985,16 @@ function toolbarChange(type, value) {
     } else if (type === 'paintformat') {
         if (value === true) copy.call(this);
         else clearClipboard.call(this);
+    } else if (type === 'chart') {
+        console.log("chaet");
+        addChart.call(this);
+        this.toolbar.reset();
+        // if (value === true) copy.call(this);
+        // else clearClipboard.call(this);
     } else if (type === 'clearformat') {
         insertDeleteRowColumn.call(this, 'delete-cell-format');
     } else if (type === 'link') {
         // link
-    } else if (type === 'chart') {
-        // chart
     } else if (type === 'autofilter') {
         // filter
         autofilter.call(this);
@@ -1054,7 +1070,7 @@ function sheetInitEvents() {
         verticalScrollbar,
         horizontalScrollbar,
         editor,
-         contextMenu,
+        contextMenu,
         data,
         toolbar,
         modalValidation,
@@ -1096,6 +1112,7 @@ function sheetInitEvents() {
                 if (editor.getLock()) {
                     return;
                 }
+
                 editorSet.call(this);
             } else {
                 if (editor.getLock() || editor.isCors) {
@@ -1348,12 +1365,12 @@ function sheetInitEvents() {
         // this.focusing = overlayerEl.contains(evt.target);
     });
 
-    bind(window, 'copy', (evt) => {
+    bind(this.el.el, 'copy', (evt) => {
         mountCopy.call(this, evt);
         // data.history.add(data.getData());
     });
 
-    bind(window, 'cut', (evt) => {
+    bind(this.el.el, 'cut', (evt) => {
         console.log("cut", evt);
         cut.call(this);
         mountCopy.call(this, evt);
@@ -1361,7 +1378,7 @@ function sheetInitEvents() {
         data.history.add(data.getData());
     });
 
-    bind(window, 'paste', (evt) => {
+    bind(this.el.el, 'paste', (evt) => {
         pasteEvent.call(this, evt);
     });
 
@@ -1370,7 +1387,7 @@ function sheetInitEvents() {
         // if (!this.focusing) return;
         const keyCode = evt.keyCode || evt.which;
         const {
-            key, ctrlKey, shiftKey,   metaKey,
+            key, ctrlKey, shiftKey, metaKey,
         } = evt;
         // console.log('keydown.evt: ', keyCode);
         if (getChooseImg.call(this)) {
@@ -1571,8 +1588,8 @@ export default class Sheet {
         const {view, showToolbar, showContextmenu, showEditor, rowWidth} = data.settings;
         this.el = h('div', `${cssPrefix}-sheet`);
         this.toolbar = new Toolbar(data, view.width, !showToolbar);
-
         targetEl.children(this.toolbar.el, this.el);
+
         this.pictureOffsetLeft = 10;
         this.pictureOffsetTop = 10;
 
@@ -1611,6 +1628,7 @@ export default class Sheet {
         this.advice = new Advice(data, this);
         // this.pasteDirectionsArr = [];
         // this.pasteOverlay = h('div', `${cssPrefix}-paste-overlay-container`).hide();
+        this.chartView = new ChartView();
 
         this.overlayerCEl = hasEditor.call(this, showEditor);
         this.selectors = [];
@@ -1626,8 +1644,8 @@ export default class Sheet {
             .children(this.overlayerCEl);
         // sortFilter
         this.sortFilter = new SortFilter();
-        this.direction = false;   // 图片移动
 
+        this.direction = false;   // 图片移动
         // root element
         this.el.children(
             this.tableEl,
@@ -1647,7 +1665,7 @@ export default class Sheet {
         );
 
         // table
-        this.table = new Table(this.tableEl.el, data, this.editor);
+        this.table = new Table(this.tableEl.el, data);
         sheetInitEvents.call(this);
         sheetReset.call(this, false);
         // init selector [0, 0]
@@ -1683,7 +1701,7 @@ export default class Sheet {
     }
 
     setCellRange(reference, tableProxy, styleBool, cellRange) {
-        let {  data} = this;
+        let {data} = this;
         data.paste(cellRange);
         for (let i = 0; i < reference.length; i++) {
             let {ri, ci} = reference[i];

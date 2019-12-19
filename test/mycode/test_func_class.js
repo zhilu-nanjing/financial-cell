@@ -9,7 +9,7 @@ import {
     CellVNumber,
     CellVDateTime
 } from '../../src/calc/cell_value_type/cell_value';
-import {RawValue} from '../../src/calc/calc_data_proxy/raw_value';
+import {RawValue} from '../../src/calc/calc_data_proxy/syntax_unit_raw_value';
 import {easySolve} from '../../src/calc/calc_data_proxy/exp_fn_executor';
 import * as date_time from '../../src/calc/expression_fn/lib/date_time'
 import * as statistical from '../../src/calc/expression_fn/lib/statistical'
