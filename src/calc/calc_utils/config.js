@@ -93,9 +93,31 @@ export const TO_PARA_TYPE = { // 可以转换成的数据类型
   string: 'string',
   number: 'number'
 };
+
 export const INVALID_MATRIX = 'INVALID_MATRIX';
 export const NOT_NUMBER = 'NOT_NUMBER';
 export const SHAPE_DIFF = 'SHARPE_DIFF';
 export const NOT_SUPPORT = 'NOT_SUPPORT';
 export const EmptyMultiSheetObj = { Sheet1: { A1: { f: '' } } };
 export const NOT_CONVERT = 'NOT_CONVERT';
+
+
+
+
+
+
+
+
+
+
+export const OPERATOR = 'operator';
+export const SPLIT_MARK = 'split_mark';// 逗号，分号这样分割不同语法单元的标记
+export const CONTAINER = 'container';// 括号双引号能包含其他单元这样的标记， 字符串不含有标志起始结尾的双引号
+export const RAW_VALUE = 'raw_value';// 直接输入的数字。 {1,2,3}这样的矩阵属于复合型单元。
+export const RAW_ARRAY = 'raw_array'
+export const SINGLE_REF = 'single_ref';// 单一引用，associatedValue有isColAbsolute, isRowAbsolute 这样的方法
+export const RANG_REF = 'range_ref';// 范围引用associatedValue有isBeginColAbsolute, isBeginRowAbsolute 这样的方法
+export const USELESS = 'useless';// 被忽略的部分
+export const EXP_FN = 'exp_fn';// 表达式函数
+export const VALUE_NAME = 'value_name';// 变量或常量的名字
+export const SOLVE_FAIL_OBJ = { msg: 'solve_fail' };// 求解不成功

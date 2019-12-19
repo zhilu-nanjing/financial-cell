@@ -20,6 +20,7 @@ export class CalcCell{
     this.celName = celName;
     this.cellStatus = cellStatus;
     this.formulaString = this.getFormulaString()// 公式字符串,可能为空
+    this.syntaxRootUnit = null
   }
   getFormulaString(){
     return  this.cellObj.f || ""// 公式字符串,可能为空

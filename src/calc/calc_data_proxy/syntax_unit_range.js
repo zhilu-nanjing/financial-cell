@@ -1,7 +1,7 @@
 "use strict";
 import {getSanitizedSheetName} from '../calc_utils/get_sheetname.js'
 import {ERROR_CIRCULAR} from '../calc_utils/error_config.js'
-import { FORMULA_STATUS } from '../calc_utils/config';
+import { FORMULA_STATUS,RANG_REF } from '../calc_utils/config';
 import { ColIndexProxy } from './col_index';
 
 /**
@@ -13,7 +13,7 @@ export class SUnitRangeRef{
         let range_expression, sheet_name, sheet;
         this.calcCell = calcCell
         this.start_pst = position_i - str_expression.length;
-        this.end_pst = position_i;
+        this.unitType = RANG_REF;
 
         if (str_expression.indexOf('!') !== -1) {
             let aux = str_expression.split('!');

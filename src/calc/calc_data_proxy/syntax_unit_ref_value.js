@@ -2,17 +2,20 @@
 
 import { getSanitizedSheetName } from '../calc_utils/get_sheetname.js';
 import * as error_cf from '../calc_utils/error_config.js';
-import { FORMULA_STATUS } from '../calc_utils/config';
+import { FORMULA_STATUS, SINGLE_REF, SPLIT_MARK } from '../calc_utils/config';
+import { MultiSyntaxUnitProxy, SyntaxStructureBuilder } from './syntax_unit_proxy';
 
 /**
  *@property {CalcCell} calcCell
- * @property {String} str_expression
+ *@property {String} str_expression
  */
 export class SUnitRefValue {
   constructor(str_expression, calcCell) {
     this.name = 'SUnitRefValue';
     this.str_expression = str_expression;
     this.calcCell = calcCell;
+    this.unitType = SINGLE_REF;
+    this.subSyntaxBuilder = new SyntaxStructureBuilder()
   }
 
   /**
@@ -20,31 +23,34 @@ export class SUnitRefValue {
    * @return {CalcCell}
    */
 
-  getRefCalcCell() {
+  getRefCalcCell() { //
     let self = this;
-    let calcCell = this.calcCell;
     /**
-     * @type {CalcCell} calcCell
+     * @type {CalcCell}
      */
+    let calcCell = this.calcCell;
     let str_expression = this.str_expression;
     let calcSheet,
       sheet_name,
       cell_name,
       cell_full_name;
-    if (str_expression.indexOf('!') !== -1) {
+    if (str_expression.indexOf('!') !== -1) { // sheet1!A1的形式
       let aux = str_expression.split('!');
       sheet_name = getSanitizedSheetName(aux[0]);
+      this.subSyntaxBuilder.addStringToCurUnit(aux[0], [SINGLE_REF])
+      this.subSyntaxBuilder.addStringToCurUnit("!", [SPLIT_MARK])
       calcSheet = calcCell.workbookProxy.getSheetByName(sheet_name);
       cell_name = aux[1];
-    } else {
+    } else {// A1的形式
       calcSheet = calcCell.calcSheet;
       sheet_name = calcCell.calcSheet.name;
       cell_name = str_expression;
     }
+    this.subSyntaxBuilder.addStringToCurUnit(cell_name, [SINGLE_REF])
     if (!calcSheet) {
       throw Error('Sheet ' + sheet_name + ' not found.');
     }
-    return this.calcCell.workbookProxy.getCellByName(sheet_name, cell_name);
+    return this.calcCell.workbookProxy.getCellByName(sheet_name, cell_name); // todo: 绝对引用与相对引用没有考虑？
   };
 
   solveExpression() {
