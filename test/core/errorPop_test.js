@@ -304,7 +304,6 @@ describe('qq', () => {
 
     describe('  test  calc ', () => {
         it(' 计算 ', () => {
-
             let changeDataForCalc = new PreAction({
                 type: 999,
                 action: "重新计算",
