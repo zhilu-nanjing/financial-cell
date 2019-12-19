@@ -8,7 +8,7 @@ import { ColIndexProxy } from './col_index';
  * @property {CalcCell} calcCell
  * @property {CalcSheet} calcSheet
  */
-export class Range{
+export class SUnitRangeRef{
     constructor(str_expression, calcCell, position_i){
         let range_expression, sheet_name, sheet;
         this.calcCell = calcCell

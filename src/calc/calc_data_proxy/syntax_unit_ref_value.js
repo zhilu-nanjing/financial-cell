@@ -8,9 +8,9 @@ import { FORMULA_STATUS } from '../calc_utils/config';
  *@property {CalcCell} calcCell
  * @property {String} str_expression
  */
-export class RefValue {
+export class SUnitRefValue {
   constructor(str_expression, calcCell) {
-    this.name = 'RefValue';
+    this.name = 'SUnitRefValue';
     this.str_expression = str_expression;
     this.calcCell = calcCell;
   }
