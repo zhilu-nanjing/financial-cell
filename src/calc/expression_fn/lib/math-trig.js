@@ -82,8 +82,8 @@ export function ADD(num1, num2) {
 
 //TODO: use options
 exports.AGGREGATE = function(function_num, options, ref1, ref2) {
-  function_num = utils.parseNumber(function_num);
-  options = utils.parseNumber(options);
+  function_num = parseNumber(function_num);
+  options = parseNumber(options);
   if (typeof ref1 == 'string') {
     return errorObj.ERROR_VALUE
   }//XW:end
@@ -254,38 +254,51 @@ export function BASE(number, radix, min_length) {
   return new Array(Math.max(min_length + 1 - result.length, 0)).join('0') + result;
 };
 
-exports.CEILING = function(number, significance, mode) {
+/**
+ * 
+ * @param {number}number 必需。 要舍入的值。
+ * @param {number}significance 必需。 要舍入到的倍数。
+ * @param mode
+ * @returns {*|Error|number}
+ * @constructor
+ */
+function CEILING_(number, significance, mode) {
+  let a = significance
   significance = (significance === undefined) ? 1 : Math.abs(significance);
   mode = mode || 0;
-
-  number = utils.parseNumber(number);
-  significance = utils.parseNumber(significance);
-  mode = utils.parseNumber(mode);
-  if (utils.anyIsError(number, significance, mode)) {
-    return errorObj.ERROR_VALUE;
-  }
+  number = parseNumber(number);
+  significance = parseNumber(significance);
+  mode = parseNumber(mode);
   if (significance === 0) {
     return 0;
   }
   let precision = -Math.floor(Math.log(significance) / Math.log(10));
   if (number >= 0) {
     return exports.ROUND(Math.ceil(number / significance) * significance, precision);
-  } else {
+  }
+  else {
     if (mode === 0) {
-      return -exports.ROUND(Math.floor(Math.abs(number) / significance) * significance, precision);
-    } else {
+      if (a<0){
+      return -exports.ROUND(Math.ceil(Math.abs(number) / significance) * significance, precision);
+      }
+      else{
+        return -exports.ROUND(Math.floor(Math.abs(number) / significance) * significance, precision);
+      }
+    }
+    else {
       return -exports.ROUND(Math.ceil(Math.abs(number) / significance) * significance, precision);
     }
   }
 };
+export const CEILING = new OnlyNumberExpFunction(CEILING_)
 
 exports.CEILING.MATH = exports.CEILING;
 
 exports.CEILING.PRECISE = exports.CEILING;
 
 exports.COMBIN = function(number, number_chosen) {
-  number = utils.parseNumber(number);
-  number_chosen = utils.parseNumber(number_chosen);
+  number = parseNumber(number);
+  number_chosen = parseNumber(number_chosen);
   if (utils.anyIsError(number, number_chosen)) {
     return errorObj.ERROR_VALUE;
   }
@@ -293,8 +306,8 @@ exports.COMBIN = function(number, number_chosen) {
 };
 
 exports.COMBINA = function(number, number_chosen) {
-  number = utils.parseNumber(number);
-  number_chosen = utils.parseNumber(number_chosen);
+  number = parseNumber(number);
+  number_chosen = parseNumber(number_chosen);
   if (utils.anyIsError(number, number_chosen)) {
     return errorObj.ERROR_VALUE;
   }
@@ -302,7 +315,7 @@ exports.COMBINA = function(number, number_chosen) {
 };
 
 exports.COS = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -310,7 +323,7 @@ exports.COS = function(number) {
 };
 
 exports.COSH = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -318,7 +331,7 @@ exports.COSH = function(number) {
 };
 
 exports.COT = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -326,7 +339,7 @@ exports.COT = function(number) {
 };
 
 exports.COTH = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -335,7 +348,7 @@ exports.COTH = function(number) {
 };
 
 exports.CSC = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -343,7 +356,7 @@ exports.CSC = function(number) {
 };
 
 exports.CSCH = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -360,7 +373,7 @@ exports.DECIMAL = function(number, radix) {
 };
 
 exports.DEGREES = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -368,7 +381,7 @@ exports.DEGREES = function(number) {
 };
 
 exports.EVEN = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -379,7 +392,7 @@ exports.EXP = Math.exp;
 
 let MEMOIZED_FACT = [];
 exports.FACT = function (number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number < 0){
     return errorObj.ERROR_NUM
   }
@@ -398,7 +411,7 @@ exports.FACT = function (number) {
 };
 
 exports.FACTDOUBLE = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -478,7 +491,7 @@ exports.FLOOR.PRECISE = exports.FLOORPRACE;
 //XW: end
 // adapted http://rosettacode.org/wiki/Greatest_common_divisor#JavaScript
 exports.GCD = function() {
-  let range = utils.parseNumberArray(utils.flatten(arguments));
+  let range = parseNumberArray(utils.flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
@@ -502,7 +515,7 @@ exports.GCD = function() {
 
 
 exports.INT = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -516,7 +529,7 @@ exports.ISO = {
 
 exports.LCM = function() {
   // Credits: Jonas Raoni Soares Silva
-  let o = utils.parseNumberArray(utils.flatten(arguments));
+  let o = parseNumberArray(utils.flatten(arguments));
   if (o instanceof Error) {
     return o;
   }
@@ -541,7 +554,7 @@ exports.LCM = function() {
 };
 
 exports.LN = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -549,8 +562,8 @@ exports.LN = function(number) {
 };
 
 exports.LOG = function (number, base) {
-  number = utils.parseNumber(number);
-  base = utils.parseNumber(base);
+  number = parseNumber(number);
+  base = parseNumber(base);
   if (utils.anyIsError(base)) {
     base = 10
   }
@@ -559,7 +572,7 @@ exports.LOG = function (number, base) {
 };
 
 exports.LOG10 = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -596,8 +609,8 @@ exports.MMULT = function(matrix1, matrix2) {
 };
 
 exports.MOD = function(dividend, divisor) {
-  dividend = utils.parseNumber(dividend);
-  divisor = utils.parseNumber(divisor);
+  dividend = parseNumber(dividend);
+  divisor = parseNumber(divisor);
   if (utils.anyIsError(dividend, divisor)) {
     return errorObj.ERROR_VALUE;
   }
@@ -609,8 +622,8 @@ exports.MOD = function(dividend, divisor) {
 };
 
   exports.MROUND = function(number, multiple) {
-  number = utils.parseNumber(number);
-  multiple = utils.parseNumber(multiple);
+  number = parseNumber(number);
+  multiple = parseNumber(multiple);
   if (utils.anyIsError(number, multiple)) {
     return errorObj.ERROR_VALUE;
   }
@@ -622,7 +635,7 @@ exports.MOD = function(dividend, divisor) {
 };
 
 exports.MULTINOMIAL = function() {
-  let args = utils.parseNumberArray(utils.flatten(arguments));
+  let args = parseNumberArray(utils.flatten(arguments));
   if (args instanceof Error) {
     return args;
   }
@@ -636,7 +649,7 @@ exports.MULTINOMIAL = function() {
 };
 
 exports.MUNIT = function(dimension) {
-  dimension = utils.parseNumber(dimension);
+  dimension = parseNumber(dimension);
   if (dimension instanceof Error) {
     return dimension;
   }
@@ -644,7 +657,7 @@ exports.MUNIT = function(dimension) {
 };
 
 exports.ODD = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -658,8 +671,8 @@ exports.PI = function() {
 };
 
 exports.POWER = function(number, power) {
-  number = utils.parseNumber(number);
-  power = utils.parseNumber(power);
+  number = parseNumber(number);
+  power = parseNumber(power);
   if (utils.anyIsError(number, power)) {
     return errorObj.ERROR_VALUE;
   }
@@ -672,7 +685,7 @@ exports.POWER = function(number, power) {
 };
 
 exports.PRODUCT = function() {
-  let args = utils.parseNumberArray(utils.flatten(arguments));
+  let args = parseNumberArray(utils.flatten(arguments));
   if (args instanceof Error) {
     return args;
   }
@@ -684,8 +697,8 @@ exports.PRODUCT = function() {
 };
 
 exports.QUOTIENT = function(numerator, denominator) {
-  numerator = utils.parseNumber(numerator);
-  denominator = utils.parseNumber(denominator);
+  numerator = parseNumber(numerator);
+  denominator = parseNumber(denominator);
   if (utils.anyIsError(numerator, denominator)) {
     return errorObj.ERROR_VALUE;
   }
@@ -693,7 +706,7 @@ exports.QUOTIENT = function(numerator, denominator) {
 };
 
 exports.RADIANS = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -708,8 +721,8 @@ exports.RAND = function() {
 };
 
 exports.RANDBETWEEN = function(bottom, top) {
-  bottom = utils.parseNumber(bottom);
-  top = utils.parseNumber(top);
+  bottom = parseNumber(bottom);
+  top = parseNumber(top);
   if (utils.anyIsError(bottom, top)) {
     return errorObj.ERROR_VALUE;
   }
@@ -720,7 +733,7 @@ exports.RANDBETWEEN = function(bottom, top) {
 
 // TODO
 exports.ROMAN = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -737,8 +750,8 @@ exports.ROMAN = function(number) {
 };
 
 exports.ROUND = function (number, digits) {
-  number = utils.parseNumber(number);
-  digits = utils.parseNumber(digits);
+  number = parseNumber(number);
+  digits = parseNumber(digits);
   if (utils.anyIsError(number, digits)) {
     return errorObj.ERROR_VALUE;
   }
@@ -750,8 +763,8 @@ exports.ROUND = function (number, digits) {
 };
 
 exports.ROUNDDOWN = function(number, digits) {
-  number = utils.parseNumber(number);
-  digits = utils.parseNumber(digits);
+  number = parseNumber(number);
+  digits = parseNumber(digits);
   if (utils.anyIsError(number, digits)) {
     return errorObj.ERROR_VALUE;
   }
@@ -760,8 +773,8 @@ exports.ROUNDDOWN = function(number, digits) {
 };
 
 exports.ROUNDUP = function(number, digits) {
-  number = utils.parseNumber(number);
-  digits = utils.parseNumber(digits);
+  number = parseNumber(number);
+  digits = parseNumber(digits);
   if (utils.anyIsError(number, digits)) {
     return errorObj.ERROR_VALUE;
   }
@@ -770,7 +783,7 @@ exports.ROUNDUP = function(number, digits) {
 };
 
 exports.SEC = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -778,7 +791,7 @@ exports.SEC = function(number) {
 };
 
 exports.SECH = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -786,10 +799,10 @@ exports.SECH = function(number) {
 };
 
 exports.SERIESSUM = function(x, n, m, coefficients) {
-  x = utils.parseNumber(x);
-  n = utils.parseNumber(n);
-  m = utils.parseNumber(m);
-  coefficients = utils.parseNumberArray(coefficients);
+  x = parseNumber(x);
+  n = parseNumber(n);
+  m = parseNumber(m);
+  coefficients = parseNumberArray(coefficients);
   if (utils.anyIsError(x, n, m, coefficients)) {
     return errorObj.ERROR_VALUE;
   }
@@ -801,7 +814,7 @@ exports.SERIESSUM = function(x, n, m, coefficients) {
 };
 
 exports.SIGN = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -815,7 +828,7 @@ exports.SIGN = function(number) {
 };
 
 exports.SIN = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -823,7 +836,7 @@ exports.SIN = function(number) {
 };
 
   exports.SINH = function(number) {
-    number = utils.parseNumber(number);
+    number = parseNumber(number);
     if (number instanceof Error) {
       return number;
     }
@@ -831,7 +844,7 @@ exports.SIN = function(number) {
   };
 
   exports.SQRT = function(number) {
-    number = utils.parseNumber(number);
+    number = parseNumber(number);
     if (number instanceof Error) {
       return number;
     }
@@ -842,7 +855,7 @@ exports.SIN = function(number) {
   };
 
   exports.SQRTPI = function(number) {
-    number = utils.parseNumber(number);
+    number = parseNumber(number);
     if (number instanceof Error) {
       return number;
     }
@@ -850,7 +863,7 @@ exports.SIN = function(number) {
   };
 
 exports.SUBTOTAL = function(function_code, ref1) {
-  function_code = utils.parseNumber(function_code);
+  function_code = parseNumber(function_code);
   if (function_code instanceof Error) {
     return function_code;
   }
@@ -910,8 +923,8 @@ exports.MINUS = function (num1, num2) {
     return errorObj.ERROR_NA;
   }
 
-  num1 = utils.parseNumber(num1);
-  num2 = utils.parseNumber(num2);
+  num1 = parseNumber(num1);
+  num2 = parseNumber(num2);
   if (utils.anyIsError(num1, num2)) {
     return errorObj.ERROR_VALUE;
   }
@@ -924,8 +937,8 @@ exports.DIVIDE = function (dividend, divisor) {
     return errorObj.ERROR_NA;
   }
 
-  dividend = utils.parseNumber(dividend);
-  divisor = utils.parseNumber(divisor);
+  dividend = parseNumber(dividend);
+  divisor = parseNumber(divisor);
   if (utils.anyIsError(dividend, divisor)) {
     return errorObj.ERROR_VALUE;
   }
@@ -942,8 +955,8 @@ exports.MULTIPLY = function (factor1, factor2) {
     return errorObj.ERROR_NA;
   }
 
-  factor1 = utils.parseNumber(factor1);
-  factor2 = utils.parseNumber(factor2);
+  factor1 = parseNumber(factor1);
+  factor2 = parseNumber(factor2);
   if (utils.anyIsError(factor1, factor2)) {
     return errorObj.ERROR_VALUE;
   }
@@ -956,8 +969,8 @@ exports.GTE = function (num1, num2) {
     return errorObj.ERROR_NA;
   }
 
-  num1 = utils.parseNumber(num1);
-  num2 = utils.parseNumber(num2);
+  num1 = parseNumber(num1);
+  num2 = parseNumber(num2);
   if (utils.anyIsError(num1, num2)) {
     return errorObj.ERROR_ERROR;
   }
@@ -970,8 +983,8 @@ exports.LT = function (num1, num2) {
     return errorObj.ERROR_NA;
   }
 
-  num1 = utils.parseNumber(num1);
-  num2 = utils.parseNumber(num2);
+  num1 = parseNumber(num1);
+  num2 = parseNumber(num2);
   if (utils.anyIsError(num1, num2)) {
     return errorObj.ERROR_ERROR;
   }
@@ -985,8 +998,8 @@ exports.LTE = function (num1, num2) {
     return errorObj.ERROR_NA;
   }
 
-  num1 = utils.parseNumber(num1);
-  num2 = utils.parseNumber(num2);
+  num1 = parseNumber(num1);
+  num2 = parseNumber(num2);
   if (utils.anyIsError(num1, num2)) {
     return errorObj.ERROR_ERROR;
   }
@@ -1015,8 +1028,8 @@ exports.POW = function (base, exponent) {
     return errorObj.ERROR_NA;
   }
 
-  base = utils.parseNumber(base);
-  exponent = utils.parseNumber(exponent);
+  base = parseNumber(base);
+  exponent = parseNumber(exponent);
   if (utils.anyIsError(base, exponent)) {
     return errorObj.ERROR_ERROR;
   }
@@ -1042,7 +1055,7 @@ exports.SUM = function() {
 };
 
 exports.SUMIF = function(range, criteria) {
-  range = utils.parseNumberArray(utils.flatten(range));
+  range = parseNumberArray(utils.flatten(range));
   if (range instanceof Error) {
     return range;
   }
@@ -1196,7 +1209,7 @@ exports.SUMPRODUCT = function() {
     if (!(arguments[0][i] instanceof Array)) {
       product = 1;
       for (k = 1; k < arrays; k++) {
-        _i = utils.parseNumber(arguments[k - 1][i]);
+        _i = parseNumber(arguments[k - 1][i]);
         if (_i instanceof Error) {
           return _i;
         }
@@ -1207,7 +1220,7 @@ exports.SUMPRODUCT = function() {
       for (let j = 0; j < arguments[0][i].length; j++) {
         product = 1;
         for (k = 1; k < arrays; k++) {
-          _ij = utils.parseNumber(arguments[k - 1][i][j]);
+          _ij = parseNumber(arguments[k - 1][i][j]);
           if (_ij instanceof Error) {
             return _ij;
           }
@@ -1221,7 +1234,7 @@ exports.SUMPRODUCT = function() {
 };
 
 exports.SUMSQ = function() {
-  let numbers = utils.parseNumberArray(utils.flatten(arguments));
+  let numbers = parseNumberArray(utils.flatten(arguments));
   if (numbers instanceof Error) {
     return numbers;
   }
@@ -1244,8 +1257,8 @@ exports.SUMX2MY2 = function (array_x, array_y) {
     return errorObj.ERROR_VALUE;
   }
   let result = 0;
-  array_x = utils.parseNumberArray(utils.flatten(array_x));
-  array_y = utils.parseNumberArray(utils.flatten(array_y));
+  array_x = parseNumberArray(utils.flatten(array_x));
+  array_y = parseNumberArray(utils.flatten(array_y));
   for (let i = 0; i < array_x.length; i++) {
     result += array_x[i] * array_x[i] - array_y[i] * array_y[i];
   }
@@ -1265,8 +1278,8 @@ exports.SUMX2PY2 = function (array_x, array_y) {
     return errorObj.ERROR_VALUE;
   }
   let result = 0;
-  array_x = utils.parseNumberArray(utils.flatten(array_x));
-  array_y = utils.parseNumberArray(utils.flatten(array_y));
+  array_x = parseNumberArray(utils.flatten(array_x));
+  array_y = parseNumberArray(utils.flatten(array_y));
   for (let i = 0; i < array_x.length; i++) {
     result += array_x[i] * array_x[i] + array_y[i] * array_y[i];
   }
@@ -1280,8 +1293,8 @@ exports.SUMXMY2 = function(array_x, array_y) {
   if (typeof array_y === "string") {
     array_y = utils.strToMatrix(array_y);
   }
-  array_x = utils.parseNumberArray(utils.flatten(array_x));
-  array_y = utils.parseNumberArray(utils.flatten(array_y));
+  array_x = parseNumberArray(utils.flatten(array_x));
+  array_y = parseNumberArray(utils.flatten(array_y));
   if (utils.anyIsError(array_x, array_y)) {
     return errorObj.ERROR_VALUE;
   }
@@ -1295,7 +1308,7 @@ exports.SUMXMY2 = function(array_x, array_y) {
 };
 
 exports.TAN = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -1303,7 +1316,7 @@ exports.TAN = function(number) {
 };
 
 exports.TANH = function(number) {
-  number = utils.parseNumber(number);
+  number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
@@ -1313,8 +1326,8 @@ exports.TANH = function(number) {
 
 exports.TRUNC = function(number, digits) {
   digits = (digits === undefined) ? 0 : digits;
-  number = utils.parseNumber(number);
-  digits = utils.parseNumber(digits);
+  number = parseNumber(number);
+  digits = parseNumber(digits);
   if (utils.anyIsError(number, digits)) {
     return errorObj.ERROR_VALUE;
   }

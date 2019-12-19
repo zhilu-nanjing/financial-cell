@@ -151,146 +151,129 @@ function BIN2OCT_(number, places) {
 };
 export const BIN2OCT = new OnlyNumberExpFunction(BIN2OCT_)
 
-exports.BITAND = function(number1, number2) {
-  // Return error if either number is a non-numeric value
+
+/**
+ *
+ * @param {number}number1 必需。 必须为十进制格式且大于等于 0。
+ * @param {number}number2 必需。 必须为十进制格式且大于等于 0。
+ * @returns {*|Error|Error|number}
+ * @constructor
+ */
+function BITAND_(number1, number2) {
   number1 = parseNumber(number1);
   number2 = parseNumber(number2);
-  if (utils.anyIsError(number1, number2)) {
-    return Error(ERROR_VALUE);
-  }
-
-  // Return error if either number is less than 0
   if (number1 < 0 || number2 < 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return error if either number is a non-integer
   if (Math.floor(number1) !== number1 || Math.floor(number2) !== number2) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return error if either number is greater than (2^48)-1
   if (number1 > 281474976710655 || number2 > 281474976710655) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return bitwise AND of two numbers
   return number1 & number2;
 };
+export const BITAND = new OnlyNumberExpFunction(BITAND_)
 
-exports.BITLSHIFT = function(number, shift) {
+/**
+ *
+ * @param {number}number 必需。 Number 必须是大于或等于0的整数。
+ * @param {number}shift 必需。 Shift_amount 必须是整数。
+ * @returns {*|Error|Error}
+ * @constructor
+ */
+function BITLSHIFT_(number, shift) {
   number = parseNumber(number);
   shift = parseNumber(shift);
-  if (utils.anyIsError(number, shift)) {
-    return Error(ERROR_VALUE);
-  }
-
-  // Return error if number is less than 0
   if (number < 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return error if number is a non-integer
   if (Math.floor(number) !== number) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return error if number is greater than (2^48)-1
   if (number > 281474976710655) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return error if the absolute value of shift is greater than 53
   if (Math.abs(shift) > 53) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return number shifted by shift bits to the left or to the right if shift is negative
   return (shift >= 0) ? number << shift : number >> -shift;
 };
+export const BITLSHIFT = new OnlyNumberExpFunction(BITLSHIFT_)
 
-exports.BITOR = function(number1, number2) {
+
+/**
+ *
+ * @param {number}number1 必需。 必须为十进制格式且大于等于 0。
+ * @param {number}number2 必需。 必须为十进制格式且大于等于 0。
+ * @returns {*|Error|Error|number}
+ * @constructor
+ */
+function BITOR_(number1, number2) {
   number1 = parseNumber(number1);
   number2 = parseNumber(number2);
-  if (utils.anyIsError(number1, number2)) {
-    return Error(ERROR_VALUE);
-  }
-
-  // Return error if either number is less than 0
   if (number1 < 0 || number2 < 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return error if either number is a non-integer
   if (Math.floor(number1) !== number1 || Math.floor(number2) !== number2) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return error if either number is greater than (2^48)-1
   if (number1 > 281474976710655 || number2 > 281474976710655) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return bitwise OR of two numbers
   return number1 | number2;
 };
+export const BITOR = new OnlyNumberExpFunction(BITOR_)
 
-exports.BITRSHIFT = function(number, shift) {
+/**
+ *
+ * @param {number}number 必需。 必须是大于或等于0的整数。
+ * @param {number}shift 必需。 必须是整数。
+ * @returns {*|Error|Error}
+ * @constructor
+ */
+function BITRSHIFT_(number, shift) {
   number = parseNumber(number);
   shift = parseNumber(shift);
-  if (utils.anyIsError(number, shift)) {
-    return Error(ERROR_VALUE);
-  }
-
-  // Return error if number is less than 0
   if (number < 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return error if number is a non-integer
   if (Math.floor(number) !== number) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return error if number is greater than (2^48)-1
   if (number > 281474976710655) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return error if the absolute value of shift is greater than 53
   if (Math.abs(shift) > 53) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return number shifted by shift bits to the right or to the left if shift is negative
   return (shift >= 0) ? number >> shift : number << -shift;
 };
+export const BITRSHIFT = new OnlyNumberExpFunction(BITRSHIFT_)
 
-exports.BITXOR = function(number1, number2) {
+/**
+ *
+ * @param {number}number1 必需。 必须大于或等于 0。
+ * @param {number}number2 必需。 必须大于或等于 0。
+ * @returns {Error|number}
+ * @constructor
+ * @private
+ */
+function BITXOR_(number1, number2) {
   number1 = parseNumber(number1);
   number2 = parseNumber(number2);
-  if (utils.anyIsError(number1, number2)) {
-    return Error(ERROR_VALUE);
-  }
-
-  // Return error if either number is less than 0
   if (number1 < 0 || number2 < 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return error if either number is a non-integer
   if (Math.floor(number1) !== number1 || Math.floor(number2) !== number2) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return error if either number is greater than (2^48)-1
   if (number1 > 281474976710655 || number2 > 281474976710655) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
-  // Return bitwise XOR of two numbers
   return number1 ^ number2;
 };
+export const BITXOR = new OnlyNumberExpFunction(BITXOR_)
 
 exports.COMPLEX = function(real, imaginary, suffix) {
   real = parseNumber(real);
@@ -617,7 +600,7 @@ exports.DEC2BIN = function(number, places) {
 
   // Return error if number is not decimal, is lower than -512, or is greater than 511
   if (!/^-?[0-9]{1,3}$/.test(number) || number < -512 || number > 511) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Ignore places and return a 10-character binary number if number is negative
@@ -639,14 +622,14 @@ exports.DEC2BIN = function(number, places) {
 
     // Return error if places is negative
     if (places < 0) {
-      return errorObj.ERROR_NUM;
+      return Error(ERROR_NUM);
     }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
 
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : Error(ERROR_NUM);
   }
 };
 
@@ -658,7 +641,7 @@ exports.DEC2HEX = function(number, places) {
 
   // Return error if number is not decimal, is lower than -549755813888, or is greater than 549755813887
   if (!/^-?[0-9]{1,12}$/.test(number) || number < -549755813888 || number > 549755813887) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Ignore places and return a 10-character hexadecimal number if number is negative
@@ -680,14 +663,14 @@ exports.DEC2HEX = function(number, places) {
 
     // Return error if places is negative
     if (places < 0) {
-      return errorObj.ERROR_NUM;
+      return Error(ERROR_NUM);
     }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
 
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : Error(ERROR_NUM);
   }
 };
 
@@ -699,7 +682,7 @@ exports.DEC2OCT = function(number, places) {
 
   // Return error if number is not decimal, is lower than -549755813888, or is greater than 549755813887
   if (!/^-?[0-9]{1,9}$/.test(number) || number < -536870912 || number > 536870911) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Ignore places and return a 10-character octal number if number is negative
@@ -721,14 +704,14 @@ exports.DEC2OCT = function(number, places) {
 
     // Return error if places is negative
     if (places < 0) {
-      return errorObj.ERROR_NUM;
+      return Error(ERROR_NUM);
     }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
 
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : Error(ERROR_NUM);
   }
 };
 
@@ -800,7 +783,7 @@ exports.GESTEP = function(number, step) {
 exports.HEX2BIN = function(number, places) {
   // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
   if (!/^[0-9A-Fa-f]{1,10}$/.test(number)) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Check if number is negative
@@ -811,7 +794,7 @@ exports.HEX2BIN = function(number, places) {
 
   // Return error if number is lower than -512 or greater than 511
   if (decimal < -512 || decimal > 511) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Ignore places and return a 10-character binary number if number is negative
@@ -833,21 +816,21 @@ exports.HEX2BIN = function(number, places) {
 
     // Return error if places is negative
     if (places < 0) {
-      return errorObj.ERROR_NUM;
+      return Error(ERROR_NUM);
     }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
 
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : Error(ERROR_NUM);
   }
 };
 
 exports.HEX2DEC = function(number) {
   // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
   if (!/^[0-9A-Fa-f]{1,10}$/.test(number)) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Convert hexadecimal number to decimal
@@ -860,7 +843,7 @@ exports.HEX2DEC = function(number) {
 exports.HEX2OCT = function(number, places) {
   // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
   if (!/^[0-9A-Fa-f]{1,10}$/.test(number)) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Convert hexadecimal number to decimal
@@ -868,7 +851,7 @@ exports.HEX2OCT = function(number, places) {
 
   // Return error if number is positive and greater than 0x1fffffff (536870911)
   if (decimal > 536870911 && decimal < 1098974756864) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Ignore places and return a 10-character octal number if number is negative
@@ -890,14 +873,14 @@ exports.HEX2OCT = function(number, places) {
 
     // Return error if places is negative
     if (places < 0) {
-      return errorObj.ERROR_NUM;
+      return Error(ERROR_NUM);
     }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
 
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : Error(ERROR_NUM);
   }
 };
 exports.ROWS = function (matrix) {
@@ -972,24 +955,24 @@ exports.IMAGINARY = function (inumber) {
   if (plus >= 0 || minus >= 0) {
     // Return error if imaginary unit is neither i nor j
     if (!unit) {
-      return errorObj.ERROR_NUM;
+      return Error(ERROR_NUM);
     }
 
     // Return imaginary coefficient of complex number
     if (plus >= 0) {
       return (isNaN(inumber.substring(0, plus)) || isNaN(inumber.substring(plus + 1, inumber.length - 1))) ?
-        errorObj.ERROR_NUM :
+        Error(ERROR_NUM) :
         Number(inumber.substring(plus + 1, inumber.length - 1));
     } else {
       return (isNaN(inumber.substring(0, minus)) || isNaN(inumber.substring(minus + 1, inumber.length - 1))) ?
-        errorObj.ERROR_NUM :
+        Error(ERROR_NUM) :
         -Number(inumber.substring(minus + 1, inumber.length - 1));
     }
   } else {
     if (unit) {
-      return (isNaN(inumber.substring(0, inumber.length - 1))) ? errorObj.ERROR_NUM : inumber.substring(0, inumber.length - 1);
+      return (isNaN(inumber.substring(0, inumber.length - 1))) ? Error(ERROR_NUM) : inumber.substring(0, inumber.length - 1);
     } else {
-      return (isNaN(inumber)) ? errorObj.ERROR_NUM : 0;
+      return (isNaN(inumber)) ? Error(ERROR_NUM) : 0;
     }
   }
 };
@@ -1131,7 +1114,7 @@ exports.IMDIV = function(inumber1, inumber2) {
 
   // Return error if inumber2 is null
   if (c === 0 && d === 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return exponential of complex number
@@ -1291,24 +1274,24 @@ exports.IMREAL = function(inumber) {
   if (plus >= 0 || minus >= 0) {
     // Return error if imaginary unit is neither i nor j
     if (!unit) {
-      return errorObj.ERROR_NUM;
+      return Error(ERROR_NUM);
     }
 
     // Return real coefficient of complex number
     if (plus >= 0) {
       return (isNaN(inumber.substring(0, plus)) || isNaN(inumber.substring(plus + 1, inumber.length - 1))) ?
-        errorObj.ERROR_NUM :
+        Error(ERROR_NUM) :
         Number(inumber.substring(0, plus));
     } else {
       return (isNaN(inumber.substring(0, minus)) || isNaN(inumber.substring(minus + 1, inumber.length - 1))) ?
-        errorObj.ERROR_NUM :
+        Error(ERROR_NUM) :
         Number(inumber.substring(0, minus));
     }
   } else {
     if (unit) {
-      return (isNaN(inumber.substring(0, inumber.length - 1))) ? errorObj.ERROR_NUM : 0;
+      return (isNaN(inumber.substring(0, inumber.length - 1))) ? Error(ERROR_NUM) : 0;
     } else {
-      return (isNaN(inumber)) ? errorObj.ERROR_NUM : inumber;
+      return (isNaN(inumber)) ? Error(ERROR_NUM) : inumber;
     }
   }
 };
@@ -1419,7 +1402,7 @@ exports.IMCSC = function (inumber) {
 
   // Return error if either coefficient is not a number
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return cosecant of complex number
@@ -1439,7 +1422,7 @@ exports.IMCSCH = function (inumber) {
 
   // Return error if either coefficient is not a number
   if (utils.anyIsError(x, y)) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return hyperbolic cosecant of complex number
@@ -1523,7 +1506,7 @@ exports.IMTAN = function (inumber) {
 exports.OCT2BIN = function (number, places) {
   // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
   if (!/^[0-7]{1,10}$/.test(number)) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Check if number is negative
@@ -1534,7 +1517,7 @@ exports.OCT2BIN = function (number, places) {
 
   // Return error if number is lower than -512 or greater than 511
   // if (decimal < -512 || decimal > 511) {
-  //     return errorObj.ERROR_NUM;
+  //     return Error(ERROR_NUM);
   // }
 
   // Ignore places and return a 10-character binary number if number is negative
@@ -1558,20 +1541,20 @@ exports.OCT2BIN = function (number, places) {
 
     // Return error if places is negative
     if (places < 0) {
-      return errorObj.ERROR_NUM;
+      return Error(ERROR_NUM);
     }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : Error(ERROR_NUM);
   }
 };
 
 exports.OCT2DEC = function(number) {
   // Return error if number is not octal or contains more than ten characters (10 digits)
   if (!/^[0-7]{1,10}$/.test(number)) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Convert octal number to decimal
@@ -1584,7 +1567,7 @@ exports.OCT2DEC = function(number) {
 exports.OCT2HEX = function(number, places) {
   // Return error if number is not octal or contains more than ten characters (10 digits)
   if (!/^[0-7]{1,10}$/.test(number)) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Convert octal number to decimal
@@ -1609,13 +1592,13 @@ exports.OCT2HEX = function(number, places) {
 
     // Return error if places is negative
     if (places < 0) {
-      return errorObj.ERROR_NUM;
+      return Error(ERROR_NUM);
     }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
 
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
-    return (places >= result.length) ? text.REPT('0', places - result.length) + result : errorObj.ERROR_NUM;
+    return (places >= result.length) ? text.REPT('0', places - result.length) + result : Error(ERROR_NUM);
   }
 };
