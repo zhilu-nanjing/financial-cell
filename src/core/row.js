@@ -251,6 +251,7 @@ class Rows {
         }else if(what === 'assign') {
             Object.assign(row.cells[ci], cell);
         }
+
         // cell
         this.getDependCell(xy2expr(ci, ri), this.getCell(ri, ci));
         _cell.setFormatText(data.tryParseToNum(_cell, ri, ci));

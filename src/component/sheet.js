@@ -62,14 +62,16 @@ function scrollbarMove() {
 }
 
 function selectorSet(multiple, ri, ci, indexesUpdated = true, moving = false) {
-    if (ri === -1 && ci === -1) return;
+    // if(ri === 0 && ci === 0) { // 左上角全选
+    //     ri = -1;
+    //     ci = -1;
+    // }
+    // if (ri === -1 && ci === -1) return;
     // console.log(multiple, ', ri:', ri, ', ci:', ci);
     const {
         table, selector, toolbar,
     } = this;
-    /**
-     * @type {Table} table
-     */
+
 
     if (multiple) {
         selector.setEnd(ri, ci, moving, true);
@@ -362,8 +364,8 @@ function dropDown(e, isAutofillEl, selector, data, verticalScrollbar, rows, evt,
         }
 
     } else if (e.buttons === 1 && !e.shiftKey) {
-        ri = ri <= 0 ? 0 : ri;
-        ci = ci <= 0 ? 0 : ci;
+        // ri = ri <= 0 ? 0 : ri;
+        // ci = ci <= 0 ? 0 : ci;   注释是因为如果点击索引，然后mousemove则会取消全选，注释则不会
         let cell = data.viewRange();
         let pos = cell.getMovePos(ri, ci);
 
@@ -692,6 +694,10 @@ function hasEditor(showEditor = true) {
 
 function editorSet() {
     const {editor, data, selector} = this;
+    let {mri, mci} = data.getMax();
+    if (mri === selector.range.eri - selector.range.sri + 1 || mci === selector.range.eci - selector.range.sci + 1) {
+        return;
+    }
     editorSetOffset.call(this);
     editor.setCellEnd(data.getSelectedCell());
     // editor.setCell(data.getSelectedCell(), data.getSelectedValidator(), type);
@@ -1106,6 +1112,7 @@ function sheetInitEvents() {
                 if (editor.getLock()) {
                     return;
                 }
+
                 editorSet.call(this);
             } else {
                 if (editor.getLock() || editor.isCors) {

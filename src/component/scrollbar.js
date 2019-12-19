@@ -8,8 +8,6 @@ export default class Scrollbar {
         this.moveFn = null;
         this.el = h('div', `${cssPrefix}-scrollbar ${vertical ? 'vertical' : 'horizontal'}`)
             .child(this.contentEl = h('div', ''))
-            .on('mousemove.stop', () => {
-            })
             .on('scroll.stop', (evt) => {
                 let {scrollTop, scrollLeft} = evt.target;
                 // scrollTop = scrollTop * 2;

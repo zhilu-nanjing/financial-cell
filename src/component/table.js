@@ -90,7 +90,7 @@ function parseCell() {
         return;
     }
     try {
-        data.calc.calculateRows(data.rows, changeDataArgs.data); // jobs; 调用calc模块进行计算
+        // data.calc.calculateRows(data.rows, changeDataArgs.data); // jobs; 调用calc模块进行计算
     } catch(e) {
         console.error("公式模块报错：" + e);
     }
