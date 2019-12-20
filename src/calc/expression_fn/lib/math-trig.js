@@ -22,7 +22,7 @@ export const ABS = new OnlyNumberExpFunction(ABS_)
  */
 export function ACOS(number) {
   if(typeof(number)!='number'){
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_VALUE);
   }
   return Math.acos(number);
 };
@@ -35,7 +35,7 @@ export function ACOS(number) {
  */
 export function ACOSH(number) {
   if(typeof(number)!='number'){
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_VALUE);
   }
   return Math.log(number + Math.sqrt(number * number - 1));
 };
@@ -48,7 +48,7 @@ export function ACOSH(number) {
  */
 export function ACOT(number) {
   if(typeof(number)!='number'){
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_VALUE);
   }
   return Math.atan(1 / number);
 };
@@ -61,7 +61,7 @@ export function ACOT(number) {
  */
 export function ACOTH(number) {
   if(typeof(number)!='number'){
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_VALUE);
   }
   return 0.5 * Math.log((number + 1) / (number - 1));
 };
@@ -75,7 +75,7 @@ export function ACOTH(number) {
  */
 export function ADD(num1, num2) {
   if(typeof(num1)!='number'||typeof(num2)!='number'){
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_VALUE);
   }
   return num1 + num2;
 };
@@ -175,7 +175,7 @@ export function ARABIC(text) {
  */
 export function ASIN(number) {
   if(typeof(number)!='number'){
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_VALUE);
   }
   return Math.asin(number);
 };
@@ -188,7 +188,7 @@ export function ASIN(number) {
  */
 export function ASINH(number) {
   if(typeof(number)!='number'){
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_VALUE);
   }
   return Math.log(number + Math.sqrt(number * number + 1));
 };
@@ -201,7 +201,7 @@ export function ASINH(number) {
  */
 export function ATAN(number) {
   if(typeof(number)!='number'){
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_VALUE);
   }
   return Math.atan(number);
 };
@@ -215,7 +215,7 @@ export function ATAN(number) {
  */
 export function ATAN2(number_x, number_y) {
   if(typeof(number_x)!='number'||typeof(number_y)!='number'){
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_VALUE);
   }
   return Math.atan2(number_x, number_y);
 };
@@ -228,7 +228,7 @@ export function ATAN2(number_x, number_y) {
  */
 export function ATANH(number) {
   if(typeof(number)!='number'){
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_VALUE);
   }
   return Math.log((1 + number) / (1 - number)) / 2;
 };
@@ -292,76 +292,106 @@ function CEILING_(number, significance, mode) {
 };
 export const CEILING = new OnlyNumberExpFunction(CEILING_)
 
-exports.CEILING.MATH = exports.CEILING;
+exports.CEILINGMATH = exports.CEILING;
 
-exports.CEILING.PRECISE = exports.CEILING;
+exports.CEILINGPRECISE = exports.CEILING;
 
-exports.COMBIN = function(number, number_chosen) {
+/**
+ *
+ * @param {number}number 必需。 项目的数量。
+ * @param {number}number_chosen 必需。 每一组合中项目的数量。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function COMBIN(number, number_chosen) {
   number = parseNumber(number);
   number_chosen = parseNumber(number_chosen);
-  if (utils.anyIsError(number, number_chosen)) {
-    return errorObj.ERROR_VALUE;
-  }
   return exports.FACT(number) / (exports.FACT(number_chosen) * exports.FACT(number - number_chosen));
 };
 
-exports.COMBINA = function(number, number_chosen) {
+/**
+ *
+ * @param {number}number 必需。 必须大于或等于 0 并大于或等于 Number_chosen。 非整数值将被截尾取整。
+ * @param {number}number_chosen 必需。 必须大于或等于 0。 非整数值将被截尾取整。
+ * @returns {number}
+ * @constructor
+ * @private
+ */
+function COMBINA_(number, number_chosen) {
   number = parseNumber(number);
   number_chosen = parseNumber(number_chosen);
-  if (utils.anyIsError(number, number_chosen)) {
-    return errorObj.ERROR_VALUE;
-  }
   return (number === 0 && number_chosen === 0) ? 1 : exports.COMBIN(number + number_chosen - 1, number - 1);
 };
+export const COMBINA = new OnlyNumberExpFunction(COMBINA_)
 
-exports.COS = function(number) {
+/**
+ *
+ * @param {number} number 必需。 想要求余弦的角度，以弧度表示。
+ * @returns {number}
+ * @constructor
+ * @private
+ */
+function COS_(number) {
   number = parseNumber(number);
-  if (number instanceof Error) {
-    return number;
-  }
   return Math.cos(number);
 };
+export const COS = new OnlyNumberExpFunction(COS_)
 
-exports.COSH = function(number) {
+/**
+ *
+ * @param {number}number 必需。 想要求双曲余弦的任意实数。
+ * @returns {Error|number}
+ * @constructor
+ */
+function COSH_(number) {
   number = parseNumber(number);
-  if (number instanceof Error) {
-    return number;
-  }
   return (Math.exp(number) + Math.exp(-number)) / 2;
 };
+export const COSH = new OnlyNumberExpFunction(COSH_)
 
-exports.COT = function(number) {
+/**
+ *
+ * @param {number} number 必需。 要获得其余切值的角度，以弧度表示。
+ * @returns {number}
+ * @constructor
+ * @private
+ */
+function COT_(number) {
   number = parseNumber(number);
-  if (number instanceof Error) {
-    return number;
-  }
   return 1 / Math.tan(number);
 };
+export const COT = new OnlyNumberExpFunction(COT_)
 
-exports.COTH = function(number) {
+/**
+ *
+ * @param {number} number 必需。
+ * @returns {Error|number}
+ * @constructor
+ */
+function COTH_(number) {
   number = parseNumber(number);
-  if (number instanceof Error) {
-    return number;
-  }
   let e2 = Math.exp(2 * number);
   return (e2 + 1) / (e2 - 1);
 };
+export const COTH = new OnlyNumberExpFunction(COTH_)
 
-exports.CSC = function(number) {
+/**
+ *
+ * @param {number}number 必需。
+ * @returns {Error|number}
+ * @constructor
+ */
+function CSC_(number) {
   number = parseNumber(number);
-  if (number instanceof Error) {
-    return number;
-  }
   return 1 / Math.sin(number);
 };
+export const CSC = new OnlyNumberExpFunction(CSC_)
 
-exports.CSCH = function(number) {
+function CSCH_(number) {
   number = parseNumber(number);
-  if (number instanceof Error) {
-    return number;
-  }
   return 2 / (Math.exp(number) - Math.exp(-number));
 };
+export const CSCH = new OnlyNumberExpFunction(CSCH_)
 
 exports.DECIMAL = function(number, radix) {
   if (arguments.length < 1) {
@@ -394,7 +424,7 @@ let MEMOIZED_FACT = [];
 exports.FACT = function (number) {
   number = parseNumber(number);
   if (number < 0){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_VALUE)
   }
   if (number instanceof Error) {
     return number;
@@ -436,7 +466,7 @@ exports.FLOORMATH = function(number, significance, mode) {
     return errorObj.ERROR_VALUE; // ERROR_VALUE = '#VALUE!'
   }
   if (number>0&&significance<0){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_VALUE)
   }
   if (number<0&&significance<0){
     number = -number
@@ -628,7 +658,7 @@ exports.MOD = function(dividend, divisor) {
     return errorObj.ERROR_VALUE;
   }
   if (number * multiple < 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_VALUE);
   }
 
   return Math.round(number / multiple) * multiple;
@@ -678,7 +708,7 @@ exports.POWER = function(number, power) {
   }
   let result = Math.pow(number, power);
   if (isNaN(result)) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_VALUE);
   }
 
   return result;
@@ -849,7 +879,7 @@ exports.SIN = function(number) {
       return number;
     }
     if (number < 0) {
-      return errorObj.ERROR_NUM;
+      return Error(ERROR_VALUE);
     }
     return Math.sqrt(number);
   };

@@ -1,4 +1,4 @@
-import errorObj from '../../calc_utils/error_config'
+import errorObj, {ERROR_DIV0, ERROR_VALUE} from '../../calc_utils/error_config'
 import stats from  './statistical'
 import maths from  './math-trig'
 import utils from '../../calc_utils/helper'
@@ -79,11 +79,21 @@ function get_values(resultIndexes, database, field){
   }
   return values
 }
-// Database functions
-exports.DAVERAGE = function (database, field, criteria) {
-  // Return error if field is not a number and not a string
+
+/**
+ *
+ * @param {number||string}database 构成列表或数据库的单元格区域。 数据库是包含一组相关数据的列表，
+ * 其中包含相关信息的行为记录，而包含数据的列为字段。 列表的第一行包含每一列的标签。
+ * @param {number||string}field 指定函数所使用的列。 输入两端带双引号的列标签，如 "使用年数" 或 "产量"；
+ * 或是代表列表中列位置的数字（不带引号）：1 表示第一列，2 表示第二列，依此类推。
+ * @param {number||string}criteria 为包含指定条件的单元格区域。 可以为参数指定 criteria 任意区域，
+ * 只要此区域包含至少一个列标签，并且列标签下至少有一个在其中为列指定条件的单元格。
+ * @returns {Error|any}
+ * @constructor
+ */
+export function DAVERAGE(database, field, criteria) {
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   if (typeof field == 'number'){
     let resultIndexes = [];
@@ -98,8 +108,10 @@ exports.DAVERAGE = function (database, field, criteria) {
   for (let i=0; i < targetValues.length; i++){
     sum += targetValues[i]
   }
-  return resultIndexes.length === 0 ? errorObj.ERROR_DIV0 : sum / targetValues.length;
+  return resultIndexes.length === 0 ? Error(ERROR_DIV0) : sum / targetValues.length;
 };
+
+
 exports.DCOUNT = function(database, field, criteria) {
   if (isNaN(field) && (typeof field !== "string")) {
     return errorObj.ERROR_VALUE;

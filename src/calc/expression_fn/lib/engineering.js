@@ -1,4 +1,4 @@
-import {ERROR_DIV0, ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/error_config'
+import {ERROR_DIV0, ERROR_NA, ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/error_config'
 import {jStat} from 'jstat'
 import * as text  from './text'
 import * as utils from '../../calc_utils/helper'
@@ -275,24 +275,22 @@ function BITXOR_(number1, number2) {
 };
 export const BITXOR = new OnlyNumberExpFunction(BITXOR_)
 
-exports.COMPLEX = function(real, imaginary, suffix) {
+/**
+ *
+ * @param {number}real 必需。 复数的实系数。
+ * @param {number}imaginary 必需。 复数的虚系数。
+ * @param {string}suffix 可选。 复数中虚系数的后缀。 如果省略，则认为它是“i”。
+ * @returns {string|Error|number}
+ * @constructor
+ */
+export function COMPLEX(real, imaginary, suffix) {
   real = parseNumber(real);
   imaginary = parseNumber(imaginary);
-  //XW: 参数报错
-  if (utils.anyIsError(real, imaginary)) {
-    return Error(ERROR_VALUE);
-  }
-  //XW：end
-
-  // Set suffix
   suffix = (suffix === undefined) ? 'i' : suffix;
   suffix = suffix.toLowerCase();
-  // Return error if suffix is neither "i" nor "j"
   if (suffix !== 'i' && suffix !== 'j') {
     return Error(ERROR_VALUE);
   }
-
-  // Return complex number
   if (real === 0 && imaginary === 0) {
     return 0;
   } else if (real === 0) {
@@ -305,13 +303,15 @@ exports.COMPLEX = function(real, imaginary, suffix) {
   }
 };
 
-exports.CONVERT = function(number, from_unit, to_unit) {
-  number = parseNumber(number);
-  if (number instanceof Error) {
-    return number;
-  }
-  // List of units supported by CONVERT and units defined by the International System of Units
-  // [Name, Symbol, Alternate symbols, Quantity, ISU, CONVERT, Conversion ratio]
+/**
+ *
+ * @param {number}number 是以 from_unit 为单位的需要进行转换的数值。
+ * @param {number}from_unit 是数值的单位。
+ * @param {number}to_unit 是结果的单位。
+ * @returns {*|Error|Error|number}
+ * @constructor
+ */
+export function CONVER(number, from_unit, to_unit) {
   let units = [
     ["a.u. of action", "?", null, "action", false, false, 1.05457168181818e-34],
     ["a.u. of charge", "e", null, "electric_charge", false, false, 1.60217653141414e-19],
@@ -574,7 +574,7 @@ exports.CONVERT = function(number, from_unit, to_unit) {
 
   // Return error if a unit does not exist
   if (from === null || to === null) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
 
   //Return error if units represent different quantities
@@ -585,7 +585,7 @@ exports.CONVERT = function(number, from_unit, to_unit) {
     if(from_unit == 'C' && to_unit == 'F'){
       return number * 1.8 + 32
     }
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
 
   // Return converted number

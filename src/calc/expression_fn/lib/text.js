@@ -2,6 +2,7 @@ import * as utils from '../../calc_utils/helper'
 import {errorObj} from '../../calc_utils/error_config'
 import numeral from 'numeral'
 import {parseNumber} from "../../calc_utils/parse_helper";
+import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
 
 //TODO
 /**
@@ -29,21 +30,40 @@ exports.BAHTTEXT = function() {
  throw new Error('BAHTTEXT is not implemented');
 };
 
-exports.CHAR = function(number) {
+/**
+ *
+ * @param {number}number 必需。 介于 1 到 255 之间的数字，指定所需的字符。 使用的是当前计算机字符集中的字符。
+ * @returns {string}
+ * @constructor
+ * @private
+ */
+function CHAR_(number) {
   number = parseNumber(number);
-  if (number instanceof Error) {
-    return number;
-  }
   return String.fromCharCode(number);
 };
+export const CHAR = new OnlyNumberExpFunction(CHAR_)
 
-exports.CLEAN = function(text) {
+/**
+ *
+ * @param {string}text 必需。 要从中删除非打印字符的任何工作表信息。
+ * @returns {string}
+ * @constructor
+ * @private
+ */
+export function CLEAN(text) {
   text = text || '';
   let re = /[\0-\x1F]/g;
   return text.replace(re, "");
 };
 
-exports.CODE = function(text) {
+
+/**
+ *
+ * @param {string}text 必需。 要为其获取第一个字符的代码的文本。
+ * @returns {number}
+ * @constructor
+ */
+export function CODE(text) {
   text = text || '';
   return text.charCodeAt(0);
 };
