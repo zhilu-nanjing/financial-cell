@@ -1,5 +1,11 @@
 // 关于矩阵的定义与算法都在这里
-import { INVALID_MATRIX, NOT_NUMBER, NOT_SUPPORT, SHAPE_DIFF } from '../calc_utils/config';
+import {
+  INVALID_MATRIX,
+  NOT_NUMBER,
+  NOT_SUPPORT, RAW_ARRAY,
+  RAW_VALUE,
+  SHAPE_DIFF
+} from '../calc_utils/config';
 import { ERROR_SYNTAX, PARSE_FAIL } from '../calc_utils/error_config';
 import { RawValueParser, Str2NumberParser } from './base_parser';
 import { CellVError } from '../cell_value_type/cell_value';
@@ -134,6 +140,7 @@ export class RawArray {
     this.rawStr = rawStr;
     this.cellVError = null;
     this.solution = null
+    this.unitType = RAW_ARRAY
   }
 
   parse2Array() {

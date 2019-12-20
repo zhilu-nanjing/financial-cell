@@ -183,3 +183,7 @@ export function initial(array, idx) {
 export function compareFloat(a, b, toleration = 0.001) {
   return Math.abs(a - b) < toleration;
 }
+
+export function isArrayBeginWithOther(aArray, other) {
+  return other.every((e, index) => e === aArray[index]);
+}
