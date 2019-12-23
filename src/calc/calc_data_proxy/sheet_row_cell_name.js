@@ -297,7 +297,7 @@ export class AARangeRefer {
  * @property {BigInt} pstID 第几个语法单元
  * @property {String} wholeStr
  */
-export class SyntaxUnitProxy {
+export class SyntaxUnitProxy { // todo： 需要有个继承体系，防止循环依赖
   constructor(pstID, wholeStr, aTypeArray) {
     this.pstID = pstID;
     this.wholeStr = wholeStr;

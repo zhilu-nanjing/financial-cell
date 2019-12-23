@@ -1,7 +1,9 @@
 import Dropdown from './dropdown';
 import Icon from './icon';
 import { h } from './element';
-import { allFnObj } from '../calc/calc_cmd/formula';
+// import { allFnObj } from '../calc/calc_cmd/formula';
+import { allFnObj } from '../calc/calc_cmd/mock_calc';
+
 import { cssPrefix } from '../config';
 
 export default class DropdownFormula extends Dropdown {
