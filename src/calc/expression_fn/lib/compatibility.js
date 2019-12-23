@@ -3,13 +3,13 @@ import * as statistical from './statistical'
 import * as engineering from './engineering'
 import * as dateTime from './date_time'
 
-function set(fn, root) {
-  if (root) {
-    for (let i in root) {
-      fn[i] = root[i];
+function set(target, source) {
+  if (source) {
+    for (let i in source) {
+      target[i] = source[i];
     }
   }
-  return fn;
+  return target;
 }
 
 exports.BETADIST = statistical.BETA.DIST;

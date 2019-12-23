@@ -57,7 +57,7 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.A188 = {v: 1};
       workbook.Sheets.Sheet1.A11 = {f: '=COUPNUM(A185,A186,A187,A188)'};
       easyCalcWorkbook(workbook);
-      assert.equal(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","A11", "v").toNumber(), 2);
+      assert.equal(workbook.Sheets.Sheet1.A11.v.toNumber(), 2);
     });
     it('COUPPCD', function() {
 
@@ -70,7 +70,7 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.A188 = {v: 1};
       workbook.Sheets.Sheet1.A11 = {f: '=COUPPCD(A185,A186,A187,A188)'};
       easyCalcWorkbook(workbook);
-      assert.equal(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","A11", "v").toNumber(), 40497);
+      assert.equal(workbook.Sheets.Sheet1.A11.v.toNumber(), 40497);
     });
     it('VDB', function() {
 
@@ -82,7 +82,7 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.B801 = {v: 10};
       workbook.Sheets.Sheet1.H811 = {f: '=VDB(B799,B800,B801,0,0.875,1.5)'};
       easyCalcWorkbook(workbook);
-      assert.equal(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","H811", "v").toNumber(), 315);
+      assert.equal(workbook.Sheets.Sheet1.H811.v.toNumber(), 315);
     });
     it('YIELDDISC', function() {
       let workbook = {};
@@ -95,7 +95,7 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.C839 = {v: 2};
       workbook.Sheets.Sheet1.H845 = {f: '=YIELDDISC(C835,C836,C837,C838,C839)'};
       easyCalcWorkbook(workbook);
-      assert.equal(Math.abs(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","H845", "v")-0.0528) < 0.01, true);
+      assert.equal(Math.abs(workbook.Sheets.Sheet1.H845.v.toNumber()-0.0528) < 0.01, true);
 
     });
     it('FACTORIAL', function() {
@@ -107,7 +107,7 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.H845 = {f: '=FACTORIAL(C835)'};
       easyCalcWorkbook(workbook);
       assert.equal(workbook.Sheets.Sheet1.H845.v, 3628800);
-      assert.equal(calc.calcWorkbookProxy.getCellPropertyByName("Sheet1","H845", "v"), 3628800);
+      assert.equal(workbook.Sheets.Sheet1.H845.v, 3628800);
     });
     it('ABS', function() {
 
