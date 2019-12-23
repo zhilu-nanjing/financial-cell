@@ -22,6 +22,7 @@ describe('calc', () => {
             newCell: data.rows.eachRange(new CellRange(0, 0, 10, 10))
         }, data);
         data.calc.calculateRows(data.rows, changeDataForCalc);
+        data.calc.calculateRows(data.rows, changeDataForCalc);
 
         let cell1 = data.rows.getCell(1,1);
         console.log(cell1);

@@ -88,7 +88,7 @@ function readPNG(path) {
 }
 
 async function loadActions(actions, page) {
-    let delay = 150;
+    let delay = 50;
     let png = [];
     for (let i = 0; i < actions.length; i++) {
         let {x, y, type} = actions[i];
@@ -108,7 +108,7 @@ async function loadActions(actions, page) {
             });
             await waitTime(delay);
         } else if (type === 'screenshot') {
-            let path = "/Users/wen/Desktop/work/sda/financial-cell/test/core/runTest/png/";
+            let path = "/Users/wen/Desktop/work/sda/financial-cell/test/runTest/png/";
             let name = path + "asdd" + (Math.random() * delay * 1000) + ".png";
             console.log(name, "   name");
             await page.screenshot({path: name});
