@@ -7,7 +7,7 @@ const PNG = require('pngjs').PNG;
 const pixelmatch = require('pixelmatch');
 
 const puppeteer = require('/Users/wen/Downloads/incubator-echarts/node_modules/puppeteer');
-const url = "http://192.168.31.33:8081/";
+const url = "http://192.168.31.33:8080/";
 
 describe('test', () => {
 

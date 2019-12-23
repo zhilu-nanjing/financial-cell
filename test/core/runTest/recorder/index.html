@@ -1393,7 +1393,6 @@
                 code = 'Backspace';
             } else {
                 code = e.code;
-
             }
             opt.push({
                 'world': code,
@@ -1412,8 +1411,8 @@
         // });
 
         dom.addEventListener("mousedown", e => {
-            let time2 = new Date();
-            if (time2.valueOf() - mt.valueOf() > delay) {
+            // let time2 = new Date();
+            // if (time2.valueOf() - mt.valueOf() > delay) {
                 console.log(e.detail);
                 if (e.detail === 2) {
                     opt.push({
@@ -1426,8 +1425,8 @@
                         'type': 'mousedown',
                     });
                 }
-                mt = new Date();
-            }
+            //     mt = new Date();
+            // }
         });
         let mt2 = new Date();
 
