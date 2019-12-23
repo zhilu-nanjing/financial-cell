@@ -266,7 +266,7 @@ export class StructuralExpressionBuilder {
       this.push2ExpArgs(this.curExpression,theRawValue);
       this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer, this.lastUnitTypeArray)
       this.synUnitBuilder.addContainerUnit(this.char, [CONTAINER], true)
-    } else {
+    } else if(this.buffer !== ""){
       this.push2ExpArgs(this.curExpression, this.buffer, this.position_i); // root_exp 是一个Exp实例，这个实例会引用一个Exp数组; 最后的处理
       this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer, this.lastUnitTypeArray)
     }
@@ -325,7 +325,7 @@ export class StructuralExpressionBuilder {
     } else if (astNodeStr.trim() // sheet1!A:A 这样形式的Range
       .replace(/\$/g, '')
       .match(/^[^!]+![A-Z]+:[A-Z]+$/)) {
-      this.lastUnitTypeArray = [RANG_REF, SHEET1A1A2]
+      this.lastUnitTypeArray = [RANG_REF, SHEET1AA]
       v = new SUnitRangeRef(astNodeStr.trim()
         .replace(/\$/g, ''), calcCell, position_i);
 
@@ -342,7 +342,6 @@ export class StructuralExpressionBuilder {
       this.lastUnitTypeArray = [SINGLE_REF, SHEET1A1]
       v = new SUnitRefValue(astNodeStr.trim()
         .replace(/\$/g, ''), calcCell);
-
     } else if (!isNaN(astNodeStr.trim() // 数字，允许百分号
       .replace(/%$/, ''))) { // 处理公式中的百分号
       v = new RawValue(+(astNodeStr.trim()
@@ -397,6 +396,7 @@ export class StructuralExpressionBuilder {
 export const BOOL = "bool"
 export const A1A2 = "A1:A2"
 export const SHEET1A1A2 = "sheet1!A1:A2"
+export const SHEET1AA = "sheet1!A:A"
 export const AA = "A:A"
 export const A1 = "A1"
 export const SHEET1A1 = "sheet1!A1"
