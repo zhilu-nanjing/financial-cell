@@ -2,11 +2,13 @@ import * as mathTrig from './math-trig';
 import * as text from './text';
 import * as jStat from 'jstat';
 import * as utils from '../../calc_utils/helper';
-import {ERROR_DIV0, ERROR_NUM, errorObj} from '../../calc_utils/error_config';
+import {ERROR_DIV0, ERROR_NA, ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/error_config';
 import * as misc from './miscellaneous';
 import * as evalExpression from './expression';
 import { parseBool, parseNumber, parseNumberArray } from '../../calc_utils/parse_helper';
 import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
+import{anyIsError} from "../../calc_utils/helper";
+import* as helper from "../../calc_utils/helper";
 
 let SQRT2PI = 2.5066282746310002;
 
@@ -58,7 +60,7 @@ export function AVERAGEA() {
   // let range = utils.flattenNum(arguments);
   let range = arguments
   if (range.length === 1 && isNaN(range[0])){
-    return errorObj.ERROR_VALUE
+    return Error(ERROR_VALUE)
   }
   let n = range.length;
   let sum = 0;
@@ -292,84 +294,114 @@ function BINOMINV_(trials, probability, alpha) {
 };
 export const BINOMINV = new OnlyNumberExpFunction(BINOMINV_)
 
-exports.CHISQ = {};
 
-exports.CHISQ.DIST = function(x, k, cumulative) {
+/**
+ *
+ * @param {Number}x 必需。 用来计算分布的数值
+ * @param {Number}k 必需。 自由度数,即样本个数
+ * @param {Boolean}cumulative 必需。 决定函数形式的逻辑值
+ * @returns {*|Error}
+ * @constructor
+ */
+export function CHISQDIST(x, k, cumulative) {
   cumulative = parseBool(cumulative)
   if (x < 0){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   x = parseNumber(x);
   k = parseNumber(k);
-  if (utils.anyIsError(x, k)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(x, k)) {
+    return Error(ERROR_NUM);
   }
   return (cumulative) ? jStat.chisquare.cdf(x, k) : jStat.chisquare.pdf(x, k);
 };
 
-exports.CHISQ.DIST.RT = function(x, k) {
-  if (!x | !k) {
-    return errorObj.ERROR_NA;
+/**
+ *
+ * @param x {Number}x 必需。 用来计算分布的数值
+ * @param k {Number}k 必需。 自由度数,即样本个数
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function CHISQDISTRT(x, k) {
+  if (!x || !k) {
+    return Error(ERROR_VALUE);
   }
 
   if (x < 1 || k > Math.pow(10, 10)) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   if ((typeof x !== 'number') || (typeof k !== 'number')) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   return 1 -  jStat.chisquare.cdf(x, k);
 };
 
-exports.CHISQ.INV = function(probability, k) {
+/**
+ *
+ * @param x {Number}probability 必需。 与 χ2 分布相关联的概率。
+ * @param k {Number}k 必需。 自由度数。
+ * @returns {*|Error}
+ * @constructor
+ */
+export  function CHISQINV(probability, k) {
   probability = parseNumber(probability);
   k = parseNumber(k);
-  if (utils.anyIsError(probability, k)) {
-    return errorObj.ERROR_VALUE;
-  }
   return jStat.chisquare.inv(probability, k);
 };
 
-exports.CHISQ.INV.RT = function(p, k) {
-  if (!p | !k) {
-    return errorObj.ERROR_NA;
+/**
+ *
+ * @param x {Number}probability 必需。 与 χ2 分布相关联的概率。
+ * @param k {Number}k 必需。 自由度数。
+ * @returns {*|Error}
+ * @constructor
+ */
+export function CHISQINVRT(probability, k) {
+  if (!probability | !k) {
+    return Error(ERROR_VALUE);
   }
 
-  if (p < 0 || p > 1 || k < 1 || k > Math.pow(10, 10)) {
-    return errorObj.ERROR_NUM;
+  if (probability < 0 || probability > 1 || k < 1 || k > Math.pow(10, 10)) {
+    return Error(ERROR_NUM);
   }
 
-  if ((typeof p !== 'number') || (typeof k !== 'number')) {
-    return errorObj.ERROR_VALUE;
+  if ((typeof probability !== 'number') || (typeof k !== 'number')) {
+    return Error(ERROR_VALUE);
   }
 
-  return jStat.chisquare.inv(1.0 - p, k);
+  return jStat.chisquare.inv(1.0 - probability, k);
 };
 
-exports.CHISQ.TEST = function(observed, expected) {
+/**
+ *
+ * @param {number}observed 必需。 包含观察值的数据区域，用于检验预期值。
+ * @param {number}expected 必需。 包含行列汇总的乘积与总计值之比率的数据区域。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+function CHISQTEST_(observed, expected) {
   if (arguments.length !== 2) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
 
   if ((!(observed instanceof Array)) || (!(expected instanceof Array))) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   if (observed.length !== expected.length) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   if (observed[0] && expected[0] &&
       observed[0].length !== expected[0].length) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   let row = observed.length;
   let tmp, i, j;
-
-  // Convert single-dimension array into two-dimension array
   for (i = 0; i < row; i ++) {
     if (!(observed[i] instanceof Array)) {
       tmp = observed[i];
@@ -382,19 +414,15 @@ exports.CHISQ.TEST = function(observed, expected) {
       expected[i].push(tmp);
     }
   }
-
   let col = observed[0].length;
   let dof = (col === 1) ? row-1 : (row-1)*(col-1);
   let xsqr = 0;
   let Pi =Math.PI;
-
   for (i = 0; i < row; i ++) {
     for (j = 0; j < col; j ++) {
       xsqr += Math.pow((observed[i][j] - expected[i][j]), 2) / expected[i][j];
     }
   }
-
-  // Get independency by X square and its degree of freedom
   function ChiSq(xsqr, dof) {
     let p = Math.exp(-0.5 * xsqr);
     if((dof%2) === 1) {
@@ -414,54 +442,77 @@ exports.CHISQ.TEST = function(observed, expected) {
     }
     return 1-p;
   }
-
   return Math.round(ChiSq(xsqr, dof) * 1000000) / 1000000;
 };
+export const CHISQTEST = new OnlyNumberExpFunction(CHISQTEST_)
 
-exports.COLUMN = function() {
+/**
+ * 可选。 要返回其列号的单元格或单元格范围。
+ * @returns {number}
+ * @constructor
+ */
+export function COLUMN() {
   let col_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
   let cell_name = this.args[0].cellFormulaProxy.name
   cell_name = cell_name.replace(/\d+/g,'')
   return col_list.indexOf(cell_name)+1
 };
 
-exports.COLUMNS = function(matrix) {
+/**
+ *
+ * @param matrix 必需。 要计算列数的数组、数组公式或是对单元格区域的引用。
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export  function COLUMNS(matrix) {
   if (typeof matrix === 'string'){
     matrix = utils.strToMatrix(matrix)
   }
-
   if (!(matrix instanceof Array)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
-
   if (matrix.length === 0) {
     return 0;
   }
-
   return jStat.cols(matrix);
 };
 
 exports.CONFIDENCE = {};
 
-exports.CONFIDENCE.NORM = function(alpha, sd, n) {
+/**
+ *
+ * @param {number} alpha 必需。 用来计算置信水平的显著性水平。
+ * 置信水平等于 100*(1 - alpha)%，亦即，如果 alpha 为 0.05，则置信水平为 95%。
+ * @param {number} sd 必需。 数据区域的总体标准偏差，假定为已知。
+ * @param {number}n 必需。 样本大小。
+ * @returns {number}
+ * @constructor
+ * @private
+ */
+function CONFIDENCENORM_(alpha, sd, n) {
   alpha = parseNumber(alpha);
   sd = parseNumber(sd);
   n = parseNumber(n);
-  if (utils.anyIsError(alpha, sd, n)) {
-    return errorObj.ERROR_VALUE;
-  }
   return jStat.normalci(1, alpha, sd, n)[1] - 1;
 };
+export const CONFIDENCENORM = new OnlyNumberExpFunction(CONFIDENCENORM_)
 
-exports.CONFIDENCE.T = function(alpha, sd, n) {
+/**
+ *
+ * @param {number}alpha 必需。 用来计算置信水平的显著性水平。 置信水平等于 100*(1 - alpha)%，亦即，如果 alpha 为 0.05，则置信水平为 95%。
+ * @param {number}sd 必需。 数据区域的总体标准偏差，假定为已知。
+ * @param {number}n 必需。 样本大小。
+ * @returns {number}
+ * @constructor
+ */
+export function CONFIDENCET(alpha, sd, n) {
   alpha = parseNumber(alpha);
   sd = parseNumber(sd);
   n = parseNumber(n);
-  if (utils.anyIsError(alpha, sd, n)) {
-    return errorObj.ERROR_VALUE;
-  }
   return jStat.tci(1, alpha, sd, n)[1] - 1;
 };
+
+
 exports.IFS = function() {
   for (let i = 0; i + 1 < arguments.length; i += 2) {
     let cond = arguments[i];
@@ -472,21 +523,39 @@ exports.IFS = function() {
   }
   return errorObj.ERROR_NA;
 }
-exports.CORREL = function(array1, array2) {
+
+/**
+ *
+ * @param {number} array1 必需。 单元格值的范围。
+ * @param {number} array2 必需。 单元格值的第二个区域。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function CORREL(array1, array2) {
   array1 = parseNumberArray(utils.flatten(array1));
   array2 = parseNumberArray(utils.flatten(array2));
-  if (utils.anyIsError(array1, array2)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(array1, array2)) {
+    return Error(ERROR_VALUE);
   }
   return jStat.corrcoeff(array1, array2);
 };
 
-exports.COUNT = function() {
-  return utils.numbers(utils.flatten(arguments)).length;
+/**
+ *  函数计算包含数字的单元格个数以及参数列表中数字的个数。
+ * @returns {*}
+ * @constructor
+ */
+export function COUNT() {
+  return helper.numbers(helper.flatten(arguments)).length;
 };
 
-exports.COUNTA = function() {
-  let range = utils.flatten(arguments);
+/**
+ * 函数计算范围中不为空的单元格的个数。
+ * @returns {number}
+ * @constructor
+ */
+export function COUNTA() {
+  let range = helper.flatten(arguments);
   return range.length - exports.COUNTBLANK(range);
 };
 
@@ -500,8 +569,12 @@ exports.COUNTIN = function (range, value) {
   return result;
 };
 
-
-exports.COUNTBLANK = function() {
+/**
+ * 计算单元格区域中的空单元格的数量。
+ * @returns {number}
+ * @constructor
+ */
+export function COUNTBLANK() {
   let range = utils.flatten(arguments);
   let blanks = 0;
   let element;
@@ -514,29 +587,32 @@ exports.COUNTBLANK = function() {
   return blanks;
 };
 
-exports.COUNTIF = function (range, criteria) {
-  range = utils.flatten(range);
+/**
+ *
+ * @param {number} range 范围
+ * @param {string} criteria 条件
+ * @returns {Error|number|*}
+ * @constructor
+ */
+export function COUNTIF(range, criteria) {
+  range = helper.flatten(range);
   if (criteria === undefined) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let isWildcard = criteria === void 0 || criteria === '*';
 
   if (isWildcard) {
     return range.length;
   }
-
   let matches = 0;
   let tokenizedCriteria = evalExpression.parse(criteria + '');
-
   for (let i = 0; i < range.length; i++) {
     let value = range[i];
     let tokens = [evalExpression.createToken(value, evalExpression.TOKEN_TYPE_LITERAL)].concat(tokenizedCriteria);
-
     if (evalExpression.compute(tokens)) {
       matches++;
     }
   }
-
   return matches;
 };
 
@@ -577,11 +653,18 @@ exports.COUNTUNIQUE = function () {
 
 exports.COVARIANCE = {};
 
-exports.COVARIANCE.P = function(array1, array2) {
+/**
+ *
+ * @param {array} array1 必需。 整数的第一个单元格区域。
+ * @param {array} array2 必需。 整数的第二个单元格区域。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function COVARIANCEP(array1, array2) {
   array1 = parseNumberArray(utils.flatten(array1));
   array2 = parseNumberArray(utils.flatten(array2));
-  if (utils.anyIsError(array1, array2)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(array1, array2)) {
+    return Error(ERROR_VALUE);
   }
   let mean1 = jStat.mean(array1);
   let mean2 = jStat.mean(array2);
@@ -593,7 +676,14 @@ exports.COVARIANCE.P = function(array1, array2) {
   return result / n;
 };
 
-exports.COVARIANCE.S = function(array1, array2) {
+/**
+ *
+ * @param {array} array1  必需。 整数的第一个单元格区域。
+ * @param {array} array2 必需。 整数的第二个单元格区域。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function COVARIANCES(array1, array2) {
   if (typeof array1 === "string") {
     array1 = utils.strToMatrix(array1);
   }
@@ -602,8 +692,8 @@ exports.COVARIANCE.S = function(array1, array2) {
   }
   array1 = parseNumberArray(utils.flatten(array1));
   array2 = parseNumberArray(utils.flatten(array2));
-  if (utils.anyIsError(array1, array2)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(array1, array2)) {
+    return Error(ERROR_VALUE);
   }
   return jStat.covariance(array1, array2);
 };
@@ -627,8 +717,8 @@ exports.EXPON.DIST = function(x, lambda, cumulative) {
   cumulative = parseBool(cumulative)
   x = parseNumber(x);
   lambda = parseNumber(lambda);
-  if (utils.anyIsError(x, lambda)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(x, lambda)) {
+    return Error(ERROR_VALUE);
   }
   return (cumulative) ? jStat.exponential.cdf(x, lambda) : jStat.exponential.pdf(x, lambda);
 };
@@ -639,14 +729,14 @@ exports.F.DIST = function (x, d1, d2, cumulative) {
   x = parseNumber(x);
   d1 = parseNumber(d1);
   d2 = parseNumber(d2);
-  if (utils.anyIsError(x, d1, d2)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(x, d1, d2)) {
+    return Error(ERROR_VALUE);
   }
   if (cumulative === undefined){
     cumulative = true
   }
   if(typeof cumulative === 'string' && !(cumulative === 'FALSE' || cumulative === 'TRUE')){
-    return errorObj.ERROR_VALUE
+    return Error(ERROR_VALUE)
   }
   if (cumulative === 'FALSE'){
     cumulative = false
@@ -664,7 +754,7 @@ exports.F.DIST.RT = function (x, d1, d2) {
   }
 
   if ((typeof x !== 'number') || (typeof d1 !== 'number') || (typeof d2 !== 'number')) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   return 1 - jStat.centralF.cdf(x, d1, d2);
@@ -680,7 +770,7 @@ exports.F.INV = function (p, d1, d2) {
   }
 
   if ((typeof p !== 'number') || (typeof d1 !== 'number') || (typeof d2 !== 'number')) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   return jStat.centralF.inv(1.0 - p, d1, d2);
@@ -696,7 +786,7 @@ exports.F.INV.RT = function (p, d1, d2) {
   }
 
   if ((typeof p !== 'number') || (typeof d1 !== 'number') || (typeof d2 !== 'number')) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   return jStat.centralF.inv(1.0 - p, d1, d2);
@@ -752,8 +842,8 @@ exports.FORECAST = function(x, data_y, data_x) {
   x = parseNumber(x);
   data_y = parseNumberArray(utils.flatten(data_y));
   data_x = parseNumberArray(utils.flatten(data_x));
-  if (utils.anyIsError(x, data_y, data_x)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(x, data_y, data_x)) {
+    return Error(ERROR_VALUE);
   }
   let xmean = jStat.mean(data_x);
   let ymean = jStat.mean(data_y);
@@ -772,8 +862,8 @@ exports.FORECAST = function(x, data_y, data_x) {
 exports.FREQUENCY = function(data, bins) {
   data = parseNumberArray(utils.flatten(data));
   bins = parseNumberArray(utils.flatten(bins));
-  if (utils.anyIsError(data, bins)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(data, bins)) {
+    return Error(ERROR_VALUE);
   }
   let n = data.length;
   let b = bins.length;
@@ -824,11 +914,11 @@ exports.GAMMA.DIST = function(value, alpha, beta, cumulative) {
   }
 
   if (value < 0 || alpha <= 0 || beta <= 0) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   if ((typeof value !== 'number') || (typeof alpha !== 'number') || (typeof beta !== 'number')) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   return cumulative ? jStat.gamma.cdf(value, alpha, beta, true) : jStat.gamma.pdf(value, alpha, beta, false);
@@ -844,7 +934,7 @@ exports.GAMMA.INV = function(probability, alpha, beta) {
   }
 
   if ((typeof probability !== 'number') || (typeof alpha !== 'number') || (typeof beta !== 'number')) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   return jStat.gamma.inv(probability, alpha, beta);
@@ -868,7 +958,7 @@ exports.GAMMALN.PRECISE = function(x) {
   }
 
   if (typeof x !== 'number') {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   return jStat.gammaln(x);
@@ -915,8 +1005,8 @@ exports.GROWTH = function(known_y, known_x, new_x, use_const) {
 
   known_x = parseNumberArray(known_x);
   new_x = parseNumberArray(new_x);
-  if (utils.anyIsError(known_x, new_x)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(known_x, new_x)) {
+    return Error(ERROR_VALUE);
   }
 
 
@@ -983,8 +1073,8 @@ exports.HYPGEOM.DIST = function(x, n, M, N, cumulative) {
   n = parseNumber(n);
   M = parseNumber(M);
   N = parseNumber(N);
-  if (utils.anyIsError(x, n, M, N)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(x, n, M, N)) {
+    return Error(ERROR_VALUE);
   }
 
   function pdf(x, n, M, N) {
@@ -1005,8 +1095,8 @@ exports.HYPGEOM.DIST = function(x, n, M, N, cumulative) {
 exports.INTERCEPT = function(known_y, known_x) {
   known_y = parseNumberArray(known_y);
   known_x = parseNumberArray(known_x);
-  if (utils.anyIsError(known_y, known_x)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(known_y, known_x)) {
+    return Error(ERROR_VALUE);
   }
   if (known_y.length !== known_x.length) {
     return errorObj.ERROR_NA;
@@ -1039,7 +1129,7 @@ exports.LARGE = function(range, k) {
   }
   range = arr;
   k = parseNumber(k);
-  if (utils.anyIsError(range, k)) {
+  if (anyIsError(range, k)) {
     return range;
   }
   return range.sort(function (a, b) {
@@ -1050,8 +1140,8 @@ exports.LARGE = function(range, k) {
 exports.LINEST = function(data_y, data_x) {
   data_y = parseNumberArray(utils.flatten(data_y));
   data_x = parseNumberArray(utils.flatten(data_x));
-  if (utils.anyIsError(data_y, data_x)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(data_y, data_x)) {
+    return Error(ERROR_VALUE);
   }
   let ymean = jStat.mean(data_y);
   let xmean = jStat.mean(data_x);
@@ -1074,8 +1164,8 @@ exports.LINEST = function(data_y, data_x) {
 exports.LOGEST = function(data_y, data_x) {
   data_y = parseNumberArray(utils.flatten(data_y));
   data_x = parseNumberArray(utils.flatten(data_x));
-  if (utils.anyIsError(data_y, data_x)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(data_y, data_x)) {
+    return Error(ERROR_VALUE);
   }
   for (let i = 0; i < data_y.length; i ++) {
     data_y[i] = Math.log(data_y[i]);
@@ -1094,8 +1184,8 @@ exports.LOGNORM.DIST = function(x, mean, sd, cumulative) {
   x = parseNumber(x);
   mean = parseNumber(mean);
   sd = parseNumber(sd);
-  if (utils.anyIsError(x, mean, sd)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(x, mean, sd)) {
+    return Error(ERROR_VALUE);
   }
   return (cumulative) ? jStat.lognormal.cdf(x, mean, sd) : jStat.lognormal.pdf(x, mean, sd);
 };
@@ -1104,8 +1194,8 @@ exports.LOGNORM.INV = function(probability, mean, sd) {
   probability = parseNumber(probability);
   mean = parseNumber(mean);
   sd = parseNumber(sd);
-  if (utils.anyIsError(probability, mean, sd)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(probability, mean, sd)) {
+    return Error(ERROR_VALUE);
   }
   return jStat.lognormal.inv(probability, mean, sd);
 };
@@ -1187,8 +1277,8 @@ exports.NEGBINOM.DIST = function(k, r, p, cumulative) {
   k = parseNumber(k);
   r = parseNumber(r);
   p = parseNumber(p);
-  if (utils.anyIsError(k, r, p)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(k, r, p)) {
+    return Error(ERROR_VALUE);
   }
   return (cumulative) ? jStat.negbin.cdf(k, r, p) : jStat.negbin.pdf(k, r, p);
 };
@@ -1200,8 +1290,8 @@ exports.NORM.DIST = function(x, mean, sd, cumulative) {
   x = parseNumber(x);
   mean = parseNumber(mean);
   sd = parseNumber(sd);
-  if (utils.anyIsError(x, mean, sd)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(x, mean, sd)) {
+    return Error(ERROR_VALUE);
   }
   if (sd <= 0) {
     return errorObj.ERROR_NUM;
@@ -1215,8 +1305,8 @@ exports.NORM.INV = function(probability, mean, sd) {
   probability = parseNumber(probability);
   mean = parseNumber(mean);
   sd = parseNumber(sd);
-  if (utils.anyIsError(probability, mean, sd)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(probability, mean, sd)) {
+    return Error(ERROR_VALUE);
   }
   return jStat.normal.inv(probability, mean, sd);
 };
@@ -1227,7 +1317,7 @@ exports.NORM.S.DIST = function(z, cumulative) {
   cumulative = parseBool(cumulative)
   z = parseNumber(z);
   if (z instanceof Error) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   return (cumulative) ? jStat.normal.cdf(z, 0, 1) : jStat.normal.pdf(z, 0, 1);
 };
@@ -1235,7 +1325,7 @@ exports.NORM.S.DIST = function(z, cumulative) {
 exports.NORM.S.INV = function(probability) {
   probability = parseNumber(probability);
   if (probability instanceof Error) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   return jStat.normal.inv(probability, 0, 1);
 };
@@ -1243,8 +1333,8 @@ exports.NORM.S.INV = function(probability) {
 exports.PEARSON = function(data_x, data_y) {
   data_y = parseNumberArray(utils.flatten(data_y));
   data_x = parseNumberArray(utils.flatten(data_x));
-  if (utils.anyIsError(data_y, data_x)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(data_y, data_x)) {
+    return Error(ERROR_VALUE);
   }
   let xmean = jStat.mean(data_x);
   let ymean = jStat.mean(data_y);
@@ -1265,8 +1355,8 @@ exports.PERCENTILE = {};
 exports.PERCENTILE.EXC = function(array, k) {
   array = parseNumberArray(utils.flatten(array));
   k = parseNumber(k);
-  if (utils.anyIsError(array, k)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(array, k)) {
+    return Error(ERROR_VALUE);
   }
   array = array.sort(function(a, b) {
     {
@@ -1285,8 +1375,8 @@ exports.PERCENTILE.EXC = function(array, k) {
 exports.PERCENTILE.INC = function(array, k) {
   array = parseNumberArray(utils.flatten(array));
   k = parseNumber(k);
-  if (utils.anyIsError(array, k)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(array, k)) {
+    return Error(ERROR_VALUE);
   }
   array = array.sort(function(a, b) {
     return a - b;
@@ -1304,8 +1394,8 @@ exports.PERCENTRANK.EXC = function(array, x, significance) {
   array = parseNumberArray(utils.flatten(array));
   x = parseNumber(x);
   significance = parseNumber(significance);
-  if (utils.anyIsError(array, x, significance)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(array, x, significance)) {
+    return Error(ERROR_VALUE);
   }
   array = array.sort(function(a, b) {
     return a - b;
@@ -1335,8 +1425,8 @@ exports.PERCENTRANK.INC = function(array, x, significance) {
   array = parseNumberArray(utils.flatten(array));
   x = parseNumber(x);
   significance = parseNumber(significance);
-  if (utils.anyIsError(array, x, significance)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(array, x, significance)) {
+    return Error(ERROR_VALUE);
   }
   array = array.sort(function(a, b) {
     return a - b;
@@ -1364,8 +1454,8 @@ exports.PERCENTRANK.INC = function(array, x, significance) {
 exports.PERMUT = function(number, number_chosen) {
   number = parseNumber(number);
   number_chosen = parseNumber(number_chosen);
-  if (utils.anyIsError(number, number_chosen)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(number, number_chosen)) {
+    return Error(ERROR_VALUE);
   }
   return mathTrig.FACT(number) / mathTrig.FACT(number - number_chosen);
 };
@@ -1373,8 +1463,8 @@ exports.PERMUT = function(number, number_chosen) {
 exports.PERMUTATIONA = function(number, number_chosen) {
   number = parseNumber(number);
   number_chosen = parseNumber(number_chosen);
-  if (utils.anyIsError(number, number_chosen)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(number, number_chosen)) {
+    return Error(ERROR_VALUE);
   }
   return Math.pow(number, number_chosen);
 };
@@ -1382,7 +1472,7 @@ exports.PERMUTATIONA = function(number, number_chosen) {
 exports.PHI = function(x) {
   x = parseNumber(x);
   if (x instanceof Error) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   return Math.exp(-0.5 * x * x) / SQRT2PI;
 };
@@ -1393,8 +1483,8 @@ exports.POISSON.DIST = function(x, mean, cumulative) {
   cumulative = parseBool(cumulative)
   x = parseNumber(x);
   mean = parseNumber(mean);
-  if (utils.anyIsError(x, mean)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(x, mean)) {
+    return Error(ERROR_VALUE);
   }
   return (cumulative) ? jStat.poisson.cdf(x, mean) : jStat.poisson.pdf(x, mean);
 };
@@ -1409,8 +1499,8 @@ exports.PROB = function(range, probability, lower, upper) {
   probability = parseNumberArray(utils.flatten(probability));
   lower = parseNumber(lower);
   upper = parseNumber(upper);
-  if (utils.anyIsError(range, probability, lower, upper)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(range, probability, lower, upper)) {
+    return Error(ERROR_VALUE);
   }
 
   if (lower === upper) {
@@ -1435,8 +1525,8 @@ exports.QUARTILE = {};
 exports.QUARTILE.EXC = function(range, quart) {
   range = parseNumberArray(utils.flatten(range));
   quart = parseNumber(quart);
-  if (utils.anyIsError(range, quart)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(range, quart)) {
+    return Error(ERROR_VALUE);
   }
   switch (quart) {
     case 1:
@@ -1453,8 +1543,8 @@ exports.QUARTILE.EXC = function(range, quart) {
 exports.QUARTILE.INC = function(range, quart) {
   range = parseNumberArray(utils.flatten(range));
   quart = parseNumber(quart);
-  if (utils.anyIsError(range, quart)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(range, quart)) {
+    return Error(ERROR_VALUE);
   }
   switch (quart) {
     case 1:
@@ -1473,8 +1563,8 @@ exports.RANK = {};
 exports.RANK.AVG = function(number, range, order) {
   number = parseNumber(number);
   range = parseNumberArray(utils.flatten(range));
-  if (utils.anyIsError(number, range)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(number, range)) {
+    return Error(ERROR_VALUE);
   }
   range = utils.flatten(range);
   order = order || false;
@@ -1499,8 +1589,8 @@ exports.RANK.AVG = function(number, range, order) {
 exports.RANK.EQ = function(number, range, order) {
   number = parseNumber(number);
   range = parseNumberArray(utils.flatten(range));
-  if (utils.anyIsError(number, range)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(number, range)) {
+    return Error(ERROR_VALUE);
   }
   order = order || false;
   let sort = (order) ? function(a, b) {
@@ -1522,7 +1612,7 @@ exports.ROW = function(matrix, index) {
   }
 
   if (!(matrix instanceof Array) || (typeof index !== 'number')) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   if (matrix.length === 0) {
@@ -1538,7 +1628,7 @@ exports.ROWS = function(matrix) {
   }
 
   if (!(matrix instanceof Array)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   if (matrix.length === 0) {
@@ -1551,8 +1641,8 @@ exports.ROWS = function(matrix) {
 exports.RSQ = function(data_x, data_y) { // no need to flatten here, PEARSON will take care of that
   data_x = parseNumberArray(utils.flatten(data_x));
   data_y = parseNumberArray(utils.flatten(data_y));
-  if (utils.anyIsError(data_x, data_y)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(data_x, data_y)) {
+    return Error(ERROR_VALUE);
   }
   return Math.pow(exports.PEARSON(data_x, data_y), 2);
 };
@@ -1592,8 +1682,8 @@ exports.SKEW.P = function() {
 exports.SLOPE = function(data_y, data_x) {
   data_y = parseNumberArray(utils.flatten(data_y));
   data_x = parseNumberArray(utils.flatten(data_x));
-  if (utils.anyIsError(data_y, data_x)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(data_y, data_x)) {
+    return Error(ERROR_VALUE);
   }
   let xmean = jStat.mean(data_x);
   let ymean = jStat.mean(data_y);
@@ -1610,7 +1700,7 @@ exports.SLOPE = function(data_y, data_x) {
 exports.SMALL = function(range, k) {
   range = parseNumberArray(utils.flatten(range));
   k = parseNumber(k);
-  if (utils.anyIsError(range, k)) {
+  if (anyIsError(range, k)) {
     return range;
   }
   return range.sort(function(a, b) {
@@ -1622,8 +1712,8 @@ exports.STANDARDIZE = function(x, mean, sd) {
   x = parseNumber(x);
   mean = parseNumber(mean);
   sd = parseNumber(sd);
-  if (utils.anyIsError(x, mean, sd)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(x, mean, sd)) {
+    return Error(ERROR_VALUE);
   }
   return (x - mean) / sd;
 };
@@ -1654,8 +1744,8 @@ exports.STDEVPA = function() {
 exports.STEYX = function(data_y, data_x) {
   data_y = parseNumberArray(utils.flatten(data_y));
   data_x = parseNumberArray(utils.flatten(data_x));
-  if (utils.anyIsError(data_y, data_x)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(data_y, data_x)) {
+    return Error(ERROR_VALUE);
   }
   let xmean = jStat.mean(data_x);
   let ymean = jStat.mean(data_y);
@@ -1684,8 +1774,8 @@ exports.T.DIST = function (x, df, cumulative) {
   cumulative = parseBool(cumulative)
   x = parseNumber(x);
   df = parseNumber(df);
-  if (utils.anyIsError(x, df)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(x, df)) {
+    return Error(ERROR_VALUE);
   }
   return (cumulative) ? jStat.studentt.cdf(x, df) : jStat.studentt.pdf(x, df);
 };
@@ -1700,7 +1790,7 @@ exports.T.DIST['2T'] = function(x, df) {
   }
 
   if ((typeof x !== 'number') || (typeof df !== 'number')) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   return (1 - jStat.studentt.cdf(x , df)) * 2;
@@ -1716,7 +1806,7 @@ exports.T.DIST.RT = function(x, df) {
   }
 
   if ((typeof x !== 'number') || (typeof df !== 'number')) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   return 1 - jStat.studentt.cdf(x , df);
@@ -1725,8 +1815,8 @@ exports.T.DIST.RT = function(x, df) {
 exports.T.INV = function (probability, df) {
   // probability = utils.parseNumber(probability);
   // df = utils.parseNumber(df);
-  // if (utils.anyIsError(probability, df)) {
-  //   return errorObj.ERROR_VALUE;
+  // if (anyIsError(probability, df)) {
+  //   return Error(ERROR_VALUE);
   // }
   // let res = jStat.studentt.inv(probability, df);
   // return res
@@ -1735,8 +1825,8 @@ exports.T.INV = function (probability, df) {
   if (probability <= 0 || probability > 1 || df < 1) {
     return errorObj.ERROR_NUM;
   }
-  if (utils.anyIsError(probability, df)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(probability, df)) {
+    return Error(ERROR_VALUE);
   }
   return Math.abs(jStat.studentt.inv(probability/2, df));
 };
@@ -1747,8 +1837,8 @@ exports.T.INV['2T'] = function(probability, df) {
   if (probability <= 0 || probability > 1 || df < 1) {
     return errorObj.ERROR_NUM;
   }
-  if (utils.anyIsError(probability, df)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(probability, df)) {
+    return Error(ERROR_VALUE);
   }
   return Math.abs(jStat.studentt.inv(probability/2, df));
 };
@@ -1758,8 +1848,8 @@ exports.T.INV['2T'] = function(probability, df) {
 exports.T.TEST = function(data_x, data_y) {
   data_x = parseNumberArray(utils.flatten(data_x));
   data_y = parseNumberArray(utils.flatten(data_y));
-  if (utils.anyIsError(data_x, data_y)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(data_x, data_y)) {
+    return Error(ERROR_VALUE);
   }
 
   let mean_x = jStat.mean(data_x);
@@ -1795,8 +1885,8 @@ exports.TREND = function (data_y, data_x, new_data_x) {
 exports.TRIMMEAN = function (range, percent) {
   range = parseNumberArray(utils.flatten(range));
   percent = parseNumber(percent);
-  if (utils.anyIsError(range, percent)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(range, percent)) {
+    return Error(ERROR_VALUE);
   }
   let trim = mathTrig.FLOORMATH(range.length * percent, 2) / 2;
   return jStat.mean(utils.initial(utils.rest(range.sort(function (a, b) {
@@ -1809,7 +1899,7 @@ exports.VAR = {};
 exports.VAR.P = function () {
   let range = utils.numbers(utils.flatten(arguments));
   if (range.length===0){
-    return errorObj.ERROR_VALUE
+    return Error(ERROR_VALUE)
   }
   let n = range.length;
   let sigma = 0;
@@ -1818,7 +1908,7 @@ exports.VAR.P = function () {
     sigma += Math.pow(range[i] - mean, 2);
   }
   if (isNaN(sigma / n)){
-    return errorObj.ERROR_VALUE
+    return Error(ERROR_VALUE)
   }else{
     return sigma / n;
   }
@@ -1890,8 +1980,8 @@ exports.WEIBULL.DIST = function(x, alpha, beta, cumulative) {
   x = parseNumber(x);
   alpha = parseNumber(alpha);
   beta = parseNumber(beta);
-  if (utils.anyIsError(x, alpha, beta)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(x, alpha, beta)) {
+    return Error(ERROR_VALUE);
   }
   return (cumulative) ? 1 - Math.exp(-Math.pow(x / beta, alpha)) : Math.pow(x, alpha - 1) * Math.exp(-Math.pow(x / beta, alpha)) * alpha / Math.pow(beta, alpha);
 };
@@ -1901,8 +1991,8 @@ exports.Z = {};
 exports.Z.TEST = function (range, x, sd) {
   range = parseNumberArray(utils.flatten(range));
   x = parseNumber(x);
-  if (utils.anyIsError(range, x)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(range, x)) {
+    return Error(ERROR_VALUE);
   }
 
   sd = sd || exports.STDEV.S(range);

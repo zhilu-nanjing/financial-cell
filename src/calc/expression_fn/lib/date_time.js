@@ -1,8 +1,9 @@
-import { errorObj } from '../../calc_utils/error_config';
+import {ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/error_config';
 import * as cf from '../../calc_utils/config';
 import { d18991230MS, MS_PER_DAY } from '../../calc_utils/config';
 import utils from '../../calc_utils/helper';
-import {days_str2date} from "../../calc_utils/parse_helper";
+import {dayNum2Date, days_str2date, parseBool, parseNumber} from '../../calc_utils/parse_helper';
+import {anyIsError} from "../../calc_utils/helper";
 
 let WEEK_STARTS = [
   undefined,
@@ -65,15 +66,23 @@ let WEEKEND_TYPES = [
   [6, 6]
 ];
 
-exports.DATE = function(year, month, day) {
-  year = utils.parseNumber(year);
-  month = utils.parseNumber(month);
-  day = utils.parseNumber(day);
-  if (utils.anyIsError(year, month, day)) {
-    return errorObj.ERROR_VALUE;
+/**
+ *
+ * @param {number}year 年
+ * @param {number}month 月
+ * @param {number}day 日
+ * @returns {any}
+ * @constructor
+ */
+export function DATE(year, month, day) {
+  year = parseNumber(year);
+  month = parseNumber(month);
+  day = parseNumber(day);
+  if (anyIsError(year, month, day)) {
+    return  Error(ERROR_VALUE);
   }
   if (year < 0 || month < 0 || day < 0) {
-    return errorObj.ERROR_NUM;
+    return  Error(ERROR_NUM);
   }
   let date = new Date(year, month - 1, day); // 需要减去1才对
   return date;
@@ -83,13 +92,20 @@ export function stamp2DayNum(timeStamp) {
   return (timeStamp - d18991230MS) / MS_PER_DAY;
 }
 
-exports.DATEVALUE = function(date_text) {
+/**
+ *
+ * @param {string}date_text 必需。代表采用 Excel 日期格式的日期的文本，或是对包含这种文本的单元格的引用。
+ * 例如，用于表示日期的引号内的文本字符串 "2008-1-30" 或 "30-Jan-2008"。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function DATEVALUE(date_text) {
   if (typeof date_text !== 'string') {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let date = Date.parse(date_text);
   if (isNaN(date)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   return stamp2DayNum(date);
 };
@@ -158,7 +174,7 @@ exports.EDATE = function(start_date, months) {
     return start_date;
   }
   if (isNaN(months)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   months = parseInt(months, 10);
   start_date.setMonth(start_date.getMonth() + months);
@@ -171,7 +187,7 @@ exports.EOMONTH = function(start_date, months) {
     return start_date;
   }
   if (isNaN(months)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   months = parseInt(months, 10);
   return stamp2DayNum(new Date(start_date.getFullYear(), start_date.getMonth() + months + 1, 0));
@@ -192,7 +208,7 @@ exports.HOUR = function(serial_number) {
 
 exports.INTERVAL = function (second) {
   if (typeof second !== 'number' && typeof second !== 'string') {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   } else {
     second = parseInt(second, 10);
   }
@@ -283,7 +299,7 @@ exports.NETWORKDAYSINTL = function (start_date, end_date, weekend, holidays) {
       weekend = WEEKEND_TYPES[weekend];
     }
     if (!(weekend instanceof Array)) {
-      return errorObj.ERROR_VALUE;
+      return Error(ERROR_VALUE);
     }
     if (holidays === undefined) {
       holidays = [];
@@ -343,7 +359,7 @@ exports.NETWORKDAYS.INTL = function (start_date, end_date, weekend, holidays) {
     weekend = WEEKEND_TYPES[weekend];
   }
   if (!(weekend instanceof Array)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   if (holidays === undefined) {
     holidays = [];
@@ -396,14 +412,14 @@ exports.SECOND = function(serial_number) {
 };
 
 exports.TIME = function(hour, minute, second) {
-  hour = utils.parseNumber(hour);
-  minute = utils.parseNumber(minute);
-  second = utils.parseNumber(second);
-  if (utils.anyIsError(hour, minute, second)) {
-    return errorObj.ERROR_VALUE;
+  hour = parseNumber(hour);
+  minute = parseNumber(minute);
+  second = parseNumber(second);
+  if (anyIsError(hour, minute, second)) {
+    return Error(ERROR_VALUE);
   }
   if (hour < 0 || minute < 0 || second < 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   return (3600 * hour + 60 * minute + second) / 86400;
 };
@@ -413,7 +429,7 @@ exports.TIMEVALUE = function(time_text) {
   try{
     return Formulas.TIMEVALUE(time_text);
   }catch(e){
-    return errorObj.ERROR_VALUE
+    return Error(ERROR_VALUE)
   }
 };
 
@@ -467,14 +483,14 @@ exports.WORKDAYINTL = function (start_date, days, weekend, holidays) {
     return start_date;
   }
   if (weekend == 0){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
-  days = utils.parseNumber(days);
+  days = parseNumber(days);
   if (days instanceof Error) {
     return days;
   }
   if (days < 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   if (weekend === undefined) {
     weekend = WEEKEND_TYPES[1];
@@ -482,7 +498,7 @@ exports.WORKDAYINTL = function (start_date, days, weekend, holidays) {
     weekend = WEEKEND_TYPES[weekend];
   }
   if (!(weekend instanceof Array)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   if (holidays === undefined) {
     holidays = [];

@@ -1,9 +1,9 @@
-import { errorObj } from '../../calc_utils/error_config';
+import {ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/error_config';
 import * as dateTime from './date_time';
 import * as utils from '../../calc_utils/helper';
 import * as jStat from 'jstat';
 import {dayNum2Date, days_str2date, parseBool, parseNumber} from '../../calc_utils/parse_helper';
-
+import {anyIsError} from "../../calc_utils/helper";
 function validDate(d){
   return d && d.getTime && !isNaN(d.getTime());
 }
@@ -26,16 +26,16 @@ function validDate(d){
  */
 export function ACCRINT(issue, first, settlement, rate, par, frequency, basis,Calc_method) {
   if (rate <= 0 || par <= 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   if ([1, 2, 4].indexOf(frequency) === -1) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   if ([0, 1, 2, 3, 4].indexOf(basis) === -1) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   if (settlement <= issue) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   let Calcmethod = parseBool(Calc_method)
   par = par || 10000;
@@ -55,13 +55,13 @@ export function ACCRINT(issue, first, settlement, rate, par, frequency, basis,Ca
  */
 export function ACCRINTM(issue, settlement, rate, par, basis) {
   if (rate <= 0 || par <= 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   if (basis < 0 || basis > 4) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   if (settlement <= issue) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   par = par || 10000;
   basis = basis || 0;
@@ -72,18 +72,18 @@ export function ACCRINTM(issue, settlement, rate, par, basis) {
 //XW: 待实现
 exports.AMORDEGRC = function (cost, date_purchased, first_period, salvage, period, rate, basis) {
   if (!validDate(issue) || !validDate(settlement)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   // Return error if either rate or par are lower than or equal to zero
   if (rate <= 0 || par <= 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   if (basis < 0 || basis > 4) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   // Return error if settlement is before or equal to issue
   if (settlement <= issue) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 };
 
@@ -169,7 +169,7 @@ function DAYSBETWEEN_AFTER_BASIS_TEST(dateafter,datebefore,basis) {
  */
 export function COUPDAYBS(settlement, maturity, frequency, basis) {
   if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   let settlementDate = days_str2date(settlement)
   let startDay = get_Startdays_and_Enddays(settlement, maturity, frequency).startDay
@@ -187,7 +187,7 @@ export function COUPDAYBS(settlement, maturity, frequency, basis) {
  */
 export function COUPDAYS(settlement, maturity, frequency, basis) {
   if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   if (basis===3 ) {
     return DAYS_NUM_PER_YEAR/frequency;
@@ -212,7 +212,7 @@ export function COUPDAYS(settlement, maturity, frequency, basis) {
  */
 export function COUPDAYSNC(settlement, maturity, frequency, basis) {
   if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   let settlementDate = days_str2date(settlement)
   let endDay = get_Startdays_and_Enddays(settlement, maturity, frequency).endDay
@@ -231,7 +231,7 @@ export function COUPDAYSNC(settlement, maturity, frequency, basis) {
  */
 export function COUPNUM(settlement, maturity, frequency, basis) {
   if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   return get_Startdays_and_Enddays(settlement, maturity, frequency).N
 };
@@ -248,7 +248,7 @@ export function COUPNUM(settlement, maturity, frequency, basis) {
  */
 export function COUPPCD(settlement, maturity, frequency, basis) {
   if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   return get_Startdays_and_Enddays(settlement, maturity, frequency).startDay
 };
@@ -263,13 +263,23 @@ export function COUPPCD(settlement, maturity, frequency, basis) {
  */
 export function COUPNCD(settlement, maturity, frequency, basis) {
   if(COUP_PARAMETER_TEST(settlement, maturity, frequency, basis) === 0){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   return get_Startdays_and_Enddays(settlement, maturity, frequency).endDay
 };
 
-
-exports.CUMIPMT = function(rate, periods, value, start, end, type) {
+/**
+ *
+ * @param {number}rate 必需。 利率。
+ * @param {number}periods 必需。 总付款期数。
+ * @param {number}value 必需。 现值。
+ * @param {number}start 必需。 计算中的首期。 付款期数从 1 开始计数。
+ * @param {number}end 必需。 计算中的末期。
+ * @param {number}type 必需。 付款时间类型。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function CUMIPMT (rate, periods, value, start, end, type) {
   // Credits: algorithm inspired by Apache OpenOffice
   // Credits: Hannes Stiebitzhofer for the translations of function and variable names
   // Requires exports.FV() and exports.PMT() from exports.js [http://stoic.com/exports/]
@@ -277,23 +287,23 @@ exports.CUMIPMT = function(rate, periods, value, start, end, type) {
   rate = parseNumber(rate);
   periods = parseNumber(periods);
   value = parseNumber(value);
-  if (utils.anyIsError(rate, periods, value)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(rate, periods, value)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return error if either rate, periods, or value are lower than or equal to zero
   if (rate <= 0 || periods <= 0 || value <= 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return error if deal1Char < 1, end < 1, or deal1Char > end
   if (start < 1 || end < 1 || start > end) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return error if type is neither 0 nor 1
   if (type !== 0 && type !== 1) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Compute cumulative interest
@@ -320,30 +330,41 @@ exports.CUMIPMT = function(rate, periods, value, start, end, type) {
   return interest;
 };
 
-exports.CUMPRINC = function(rate, periods, value, start, end, type) {
+/**
+ *
+ * @param {number} rate 必需。 利率。
+ * @param {number} periods 必需。 总付款期数。
+ * @param {number} value 必需。 现值。
+ * @param {number} start 必需。 计算中的首期。 付款期数从 1 开始计数。
+ * @param {number} end 必需。 计算中的末期。
+ * @param {number} type  必需。 付款时间类型。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function CUMPRINC(rate, periods, value, start, end, type) {
   // Credits: algorithm inspired by Apache OpenOffice
   // Credits: Hannes Stiebitzhofer for the translations of function and variable names
 
   rate = parseNumber(rate);
   periods = parseNumber(periods);
   value = parseNumber(value);
-  if (utils.anyIsError(rate, periods, value)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(rate, periods, value)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return error if either rate, periods, or value are lower than or equal to zero
   if (rate <= 0 || periods <= 0 || value <= 0) {
-    return errorObj.ERROR_NUM;
+    return  Error(ERROR_NUM);
   }
 
   // Return error if deal1Char < 1, end < 1, or deal1Char > end
   if (start < 1 || end < 1 || start > end) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return error if type is neither 0 nor 1
   if (type !== 0 && type !== 1) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Compute cumulative principal
@@ -378,23 +399,23 @@ exports.DB = function(cost, salvage, life, period, month) {
   life = parseNumber(life);
   period = parseNumber(period);
   month = parseNumber(month);
-  if (utils.anyIsError(cost, salvage, life, period, month)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(cost, salvage, life, period, month)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return error if any of the parameters is negative
   if (cost < 0 || salvage < 0 || life < 0 || period < 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return error if month is not an integer between 1 and 12
   if ([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].indexOf(month) === -1) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return error if period is greater than life
   if (period > life) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return 0 (zero) if salvage is greater than or equal to cost
@@ -438,18 +459,18 @@ exports.DDB = function(cost, salvage, life, period, factor) {
   life = parseNumber(life);
   period = parseNumber(period);
   factor = parseNumber(factor);
-  if (utils.anyIsError(cost, salvage, life, period, factor)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(cost, salvage, life, period, factor)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return error if any of the parameters is negative or if factor is null
   if (cost < 0 || salvage < 0 || life < 0 || period < 0 || factor <= 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return error if period is greater than life
   if (period > life) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return 0 (zero) if salvage is greater than or equal to cost
@@ -472,13 +493,13 @@ exports.DDB = function(cost, salvage, life, period, factor) {
 // TODO
 exports.DISC = function (settlement,maturity,pr,redemption,basis) {
   if (pr<=0 || redemption<=0){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   if (basis<0 || basis >4){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   if (settlement >= maturity){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   let B = 360
   let DSM = Math.abs(dateTime.DAYS(maturity, settlement, false))
@@ -490,13 +511,13 @@ exports.DOLLARDE = function(dollar, fraction) {
 
   dollar = parseNumber(dollar);
   fraction = parseNumber(fraction);
-  if (utils.anyIsError(dollar, fraction)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(dollar, fraction)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return error if fraction is negative
   if (fraction < 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return error if fraction is greater than or equal to 0 and less than 1
@@ -526,13 +547,13 @@ exports.DOLLARFR = function(dollar, fraction) {
 
   dollar = parseNumber(dollar);
   fraction = parseNumber(fraction);
-  if (utils.anyIsError(dollar, fraction)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(dollar, fraction)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return error if fraction is negative
   if (fraction < 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return error if fraction is greater than or equal to 0 and less than 1
@@ -559,13 +580,13 @@ exports.DURATION = function (settlement, maturity, coupon, yld, frequency, basis
   settlement = dayNum2Date(settlement);
   maturity = dayNum2Date(maturity);
   if (!validDate(maturity) || !validDate(settlement)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   if (basis<0 || basis > 4){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   if (settlement >= maturity){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
 };
 //XW：end
@@ -573,13 +594,13 @@ exports.DURATION = function (settlement, maturity, coupon, yld, frequency, basis
 exports.EFFECT = function(rate, periods) {
   rate = parseNumber(rate);
   periods = parseNumber(periods);
-  if (utils.anyIsError(rate, periods)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(rate, periods)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return error if rate <=0 or periods < 1
   if (rate <= 0 || periods < 1) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Truncate periods if it is not an integer
@@ -600,8 +621,8 @@ exports.FV = function(rate, periods, payment, value, type) {
   payment = parseNumber(payment);
   value = parseNumber(value);
   type = parseNumber(type);
-  if (utils.anyIsError(rate, periods, payment, value, type)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(rate, periods, payment, value, type)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return future value
@@ -625,8 +646,8 @@ exports.FVSCHEDULE = function (principal, schedule) {
     schedule = utils.strToMatrix(schedule)
   }
   schedule = parseNumberArray(utils.flatten(schedule));
-  if (utils.anyIsError(principal, schedule)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(principal, schedule)) {
+    return Error(ERROR_VALUE);
   }
 
   let n = schedule.length;
@@ -646,13 +667,13 @@ exports.FVSCHEDULE = function (principal, schedule) {
 exports.INTRATE = function (settlement, maturity, investment, redemption, basis) {
   //https://support.office.com/zh-cn/article/intrate-%E5%87%BD%E6%95%B0-5cb34dde-a221-4cb6-b3eb-0b9e55e1316f
   if (investment<=0 || redemption<=0){
-    return errorObj.ERROR_VALUE
+    return Error(ERROR_VALUE)
   }
   if (basis<0 || basis > 4){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   if (settlement >= maturity){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   let B = 1//一年之中的天数，取决于年基准数。
   let DIM = 2// 结算日与到期日之间的天数。
@@ -672,8 +693,8 @@ exports.IPMT = function(rate, period, periods, present, future, type) {
   present = parseNumber(present);
   future = parseNumber(future);
   type = parseNumber(type);
-  if (utils.anyIsError(rate, period, periods, present, future, type)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(rate, period, periods, present, future, type)) {
+    return Error(ERROR_VALUE);
   }
 
   // Compute payment
@@ -706,8 +727,8 @@ exports.IRR = function(values, guess) {
 
   values = parseNumberArray(utils.flatten(values));
   guess = parseNumber(guess);
-  if (utils.anyIsError(values, guess)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(values, guess)) {
+    return Error(ERROR_VALUE);
   }
 
   // Calculates the resulting amount
@@ -747,7 +768,7 @@ exports.IRR = function(values, guess) {
 
   // Return error if values does not contain at least one positive value and one negative value
   if (!positive || !negative) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Initialize guess and resultRate
@@ -777,8 +798,8 @@ exports.ISPMT = function(rate, period, periods, value) {
   period = parseNumber(period);
   periods = parseNumber(periods);
   value = parseNumber(value);
-  if (utils.anyIsError(rate, period, periods, value)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(rate, period, periods, value)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return interest
@@ -788,13 +809,13 @@ exports.ISPMT = function(rate, period, periods, value) {
 // XW：待实现
 exports.MDURATION = function (settlement, maturity, coupon, yld, frequency, basis) {
   if (coupon < 0 || yld < 0){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   if (basis < 0 || basis > 4){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   if ([1, 2, 4].indexOf(frequency) === -1) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
 };
@@ -804,8 +825,8 @@ exports.MIRR = function(values, finance_rate, reinvest_rate) {
   values = parseNumberArray(utils.flatten(values));
   finance_rate = parseNumber(finance_rate);
   reinvest_rate = parseNumber(reinvest_rate);
-  if (utils.anyIsError(values, finance_rate, reinvest_rate)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(values, finance_rate, reinvest_rate)) {
+    return Error(ERROR_VALUE);
   }
 
   // Initialize number of values
@@ -831,13 +852,13 @@ exports.MIRR = function(values, finance_rate, reinvest_rate) {
 exports.NOMINAL = function(rate, periods) {
   rate = parseNumber(rate);
   periods = parseNumber(periods);
-  if (utils.anyIsError(rate, periods)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(rate, periods)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return error if rate <=0 or periods < 1
   if (rate <= 0 || periods < 1) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Truncate periods if it is not an integer
@@ -856,8 +877,8 @@ exports.NPER = function(rate, payment, present, future, type) {
   present = parseNumber(present);
   future = parseNumber(future);
   type = parseNumber(type);
-  if (utils.anyIsError(rate, payment, present, future, type)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(rate, payment, present, future, type)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return number of periods
@@ -911,13 +932,13 @@ exports.PDURATION = function(rate, present, future) {
   rate = parseNumber(rate);
   present = parseNumber(present);
   future = parseNumber(future);
-  if (utils.anyIsError(rate, present, future)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(rate, present, future)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return error if rate <=0
   if (rate <= 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return number of periods
@@ -935,8 +956,8 @@ exports.PMT = function(rate, periods, present, future, type) {
   present = parseNumber(present);
   future = parseNumber(future);
   type = parseNumber(type);
-  if (utils.anyIsError(rate, periods, present, future, type)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(rate, periods, present, future, type)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return payment
@@ -963,8 +984,8 @@ exports.PPMT = function(rate, period, periods, present, future, type) {
   present = parseNumber(present);
   future = parseNumber(future);
   type = parseNumber(type);
-  if (utils.anyIsError(rate, periods, present, future, type)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(rate, periods, present, future, type)) {
+    return Error(ERROR_VALUE);
   }
 
   return exports.PMT(rate, periods, present, future, type) - exports.IPMT(rate, period, periods, present, future, type);
@@ -973,8 +994,8 @@ exports.PPMT = function(rate, period, periods, present, future, type) {
 exports.PRICE = function (settlement, maturity, rate, yld, redemption, frequency, basis) {
   let settlementDate = dayNum2Date(settlement)
   let maturityDate = dayNum2Date(maturity)
-  if (utils.anyIsError(settlementDate, maturityDate)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(settlementDate, maturityDate)) {
+    return Error(ERROR_VALUE);
   }
   if (basis<0 || basis>4){
     return errorObj.ERROR_NA
@@ -1013,8 +1034,8 @@ exports.PRICE = function (settlement, maturity, rate, yld, redemption, frequency
 exports.PRICEDISC = function (settlement, maturity, discount, redemption, basis) {
   settlement = dayNum2Date(settlement);
   maturity = dayNum2Date(maturity);
-  if (utils.anyIsError(settlement, maturity)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(settlement, maturity)) {
+    return Error(ERROR_VALUE);
   }
   if (basis<0 || basis>4){
     return errorObj.ERROR_NA
@@ -1031,8 +1052,8 @@ exports.PRICEMAT = function (settlement, maturity, issue, rate, yld, basis) {
   settlement = dayNum2Date(settlement);
   maturity = dayNum2Date(maturity);
   issue = dayNum2Date(issue);
-  if (utils.anyIsError(settlement, maturity)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(settlement, maturity)) {
+    return Error(ERROR_VALUE);
   }
   if (basis<0 || basis>4){
     return errorObj.ERROR_NA
@@ -1057,8 +1078,8 @@ exports.PV = function(rate, periods, payment, future, type) {
   payment = parseNumber(payment);
   future = parseNumber(future);
   type = parseNumber(type);
-  if (utils.anyIsError(rate, periods, payment, future, type)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(rate, periods, payment, future, type)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return present value
@@ -1082,8 +1103,8 @@ exports.RATE = function(periods, payment, present, future, type, guess) {
   future = parseNumber(future);
   type = parseNumber(type);
   guess = parseNumber(guess);
-  if (utils.anyIsError(periods, payment, present, future, type, guess)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(periods, payment, present, future, type, guess)) {
+    return Error(ERROR_VALUE);
   }
 
   // Set maximum epsilon for end of iteration
@@ -1117,8 +1138,8 @@ exports.RATE = function(periods, payment, present, future, type, guess) {
 exports.RECEIVED = function (settlement, maturity, investment, discount, basis) {
   settlement = dayNum2Date(settlement);
   maturity = dayNum2Date(maturity);
-  if (utils.anyIsError(settlement, maturity)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(settlement, maturity)) {
+    return Error(ERROR_VALUE);
   }
   if (investment <= 0 || discount <= 0){
     return errorObj.ERROR_NA
@@ -1138,13 +1159,13 @@ exports.RRI = function(periods, present, future) {
   periods = parseNumber(periods);
   present = parseNumber(present);
   future = parseNumber(future);
-  if (utils.anyIsError(periods, present, future)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(periods, present, future)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return error if periods or present is equal to 0 (zero)
   if (periods === 0 || present === 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return equivalent interest rate
@@ -1155,13 +1176,13 @@ exports.SLN = function(cost, salvage, life) {
   cost = parseNumber(cost);
   salvage = parseNumber(salvage);
   life = parseNumber(life);
-  if (utils.anyIsError(cost, salvage, life)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(cost, salvage, life)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return error if life equal to 0 (zero)
   if (life === 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return straight-line depreciation
@@ -1174,18 +1195,18 @@ exports.SYD = function(cost, salvage, life, period) {
   salvage = parseNumber(salvage);
   life = parseNumber(life);
   period = parseNumber(period);
-  if (utils.anyIsError(cost, salvage, life, period)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(cost, salvage, life, period)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return error if life equal to 0 (zero)
   if (life === 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return error if period is lower than 1 or greater than life
   if (period < 1 || period > life) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Truncate period if it is not an integer
@@ -1199,23 +1220,23 @@ exports.TBILLEQ = function(settlement, maturity, discount) {
   settlement = dayNum2Date(settlement);
   maturity = dayNum2Date(maturity);
   discount = parseNumber(discount);
-  if (utils.anyIsError(settlement, maturity, discount)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(settlement, maturity, discount)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return error if discount is lower than or equal to zero
   if (discount <= 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return error if settlement is greater than maturity
   if (settlement > maturity) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return error if maturity is more than one year after settlement
   if (maturity - settlement > 365 * 24 * 60 * 60 * 1000) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return bond-equivalent yield
@@ -1226,23 +1247,23 @@ exports.TBILLPRICE = function(settlement, maturity, discount) {
   settlement = dayNum2Date(settlement);
   maturity = dayNum2Date(maturity);
   discount = parseNumber(discount);
-  if (utils.anyIsError(settlement, maturity, discount)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(settlement, maturity, discount)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return error if discount is lower than or equal to zero
   if (discount <= 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return error if settlement is greater than maturity
   if (settlement > maturity) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return error if maturity is more than one year after settlement
   if (maturity - settlement > 365 * 24 * 60 * 60 * 1000) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return bond-equivalent yield
@@ -1253,23 +1274,23 @@ exports.TBILLYIELD = function(settlement, maturity, price) {
   settlement = dayNum2Date(settlement);
   maturity = dayNum2Date(maturity);
   price = parseNumber(price);
-  if (utils.anyIsError(settlement, maturity, price)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(settlement, maturity, price)) {
+    return Error(ERROR_VALUE);
   }
 
   // Return error if price is lower than or equal to zero
   if (price <= 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return error if settlement is greater than maturity
   if (settlement > maturity) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return error if maturity is more than one year after settlement
   if (maturity - settlement > 365 * 24 * 60 * 60 * 1000) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return bond-equivalent yield
@@ -1297,14 +1318,14 @@ exports.VDB = function(cost, salvage, life, Start_period,End_period,factor,No_sw
   let lifeNum = life
   let Start_periodNum = Start_period
   let End_periodNum = End_period
-  if (utils.anyIsError(costNum, salvageNum, lifeNum, Start_periodNum,End_periodNum, factorNum)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(costNum, salvageNum, lifeNum, Start_periodNum,End_periodNum, factorNum)) {
+    return Error(ERROR_VALUE);
   }
   if (costNum < 0 || salvageNum < 0 || lifeNum < 0 || Start_periodNum < 0 || factorNum <= 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   if (Start_periodNum > lifeNum) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   if (salvageNum >= costNum) {
     return 0;
@@ -1321,8 +1342,8 @@ exports.XIRR = function(values, dates, guess) {
   values = parseNumberArray(utils.flatten(values));
   dates = utils.parseDateArray(utils.flatten(dates));
   guess = parseNumber(guess);
-  if (utils.anyIsError(values, dates, guess)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(values, dates, guess)) {
+    return Error(ERROR_VALUE);
   }
 
   // Calculates the resulting amount
@@ -1360,7 +1381,7 @@ exports.XIRR = function(values, dates, guess) {
 
   // Return error if values does not contain at least one positive value and one negative value
   if (!positive || !negative) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Initialize guess and resultRate
@@ -1389,8 +1410,8 @@ exports.XNPV = function(rate, values, dates) {
   rate = parseNumber(rate);
   values = parseNumberArray(utils.flatten(values));
   dates = utils.parseDateArray(utils.flatten(dates));
-  if (utils.anyIsError(rate, values, dates)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(rate, values, dates)) {
+    return Error(ERROR_VALUE);
   }
 
   let result = 0;
@@ -1404,22 +1425,22 @@ exports.XNPV = function(rate, values, dates) {
 exports.YIELD = function (settlement, maturity, rate, pr, redemption, frequency, basis) {
   settlement = dayNum2Date(settlement);
   maturity = dayNum2Date(maturity);
-  if (utils.anyIsError(settlement, maturity)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(settlement, maturity)) {
+    return Error(ERROR_VALUE);
   }
   if(rate <= 0){
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   // Return error if price is lower than or equal to zero
   if (pr <= 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   if (redemption <= 0){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   // Return error if settlement is greater than maturity
   if (settlement >= maturity  ) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   let A = Math.abs(dateTime.DAYS(settlement, maturity, false))
 
@@ -1431,20 +1452,20 @@ exports.YIELDDISC = function(settlement, maturity,pr, redemption,basis) {
   // throw created Error('YIELDDISC is not implemented');
   let settlementDate = dayNum2Date(settlement);
   let maturityDate = dayNum2Date(maturity);
-  if (utils.anyIsError(settlementDate, maturityDate)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(settlementDate, maturityDate)) {
+    return Error(ERROR_VALUE);
   }
   if (pr <= 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   if (redemption <= 0){
-    return errorObj.ERROR_NUM
+    return Error(ERROR_NUM)
   }
   if (settlementDate >= maturityDate  ) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   if ([0,1,2,3,4].indexOf(basis)===-1) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   let res
   if (basis===1){
