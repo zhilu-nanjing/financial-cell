@@ -255,7 +255,7 @@ export function BASE(number, radix, min_length) {
 };
 
 /**
- * 
+ *
  * @param {number}number 必需。 要舍入的值。
  * @param {number}significance 必需。 要舍入到的倍数。
  * @param mode
@@ -292,9 +292,9 @@ function CEILING_(number, significance, mode) {
 };
 export const CEILING = new OnlyNumberExpFunction(CEILING_)
 
-exports.CEILINGMATH = exports.CEILING;
+exports.CEILING.MATH = CEILING;
 
-exports.CEILINGPRECISE = exports.CEILING;
+exports.CEILING.PRECISE = CEILING;
 
 /**
  *

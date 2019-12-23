@@ -294,7 +294,6 @@ function BINOMINV_(trials, probability, alpha) {
 };
 export const BINOM__INV = new OnlyNumberExpFunction(BINOMINV_)
 
-
 /**
  *
  * @param {Number}x 必需。 用来计算分布的数值

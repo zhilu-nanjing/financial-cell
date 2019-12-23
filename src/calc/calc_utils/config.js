@@ -121,3 +121,7 @@ export const USELESS = 'useless';// 被忽略的部分
 export const EXP_FN = 'exp_fn';// 表达式函数
 export const VALUE_NAME = 'value_name';// 变量或常量的名字
 export const SOLVE_FAIL_OBJ = { msg: 'solve_fail' };// 求解不成功
+export const SHEET_NAME = 'sheet_name';
+export const COL_NAME = 'col_name';
+export const ROW_NAME = 'row_name';
+export const ABSOLUTE_MARK = 'absolute_mark';
