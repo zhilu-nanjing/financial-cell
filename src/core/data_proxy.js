@@ -1,6 +1,8 @@
 /* global document */
 
-import { Calc } from '../../src/calc/calc_cmd/calc';
+// import { Calc } from '../../src/calc/calc_cmd/calc';
+import { MockCalc } from '../calc/calc_cmd/mock_calc';
+
 import Selector from './selector';
 import Scroll from './scroll';
 import Clipboard from './clipboard';
@@ -700,7 +702,8 @@ export default class DataProxy {
         this.hyperlinks = {};
         this.comments = {};
         this.showEquation = false;
-        this.calc = new Calc();
+        // this.calc = new Calc();
+        this.calc = new MockCalc()
         this.pasteDirectionsArr = [];
         this.changeDataForCalc = null;
         this.chart = new Chart();

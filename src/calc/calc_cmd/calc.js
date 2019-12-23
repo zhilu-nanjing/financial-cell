@@ -47,3 +47,4 @@ export function easyCalcWorkbook(workbook) {
   let aCalc = new Calc()
   aCalc.calculateWorkbook(workbook)
 }
+

@@ -53,6 +53,7 @@ export class MultiSyntaxUnitProxy { // 复合型节点
 
 }
 
+
 export class SyntaxStructureBuilder {
   constructor(SyntaxUnitCls) {
     this.rootUnit = new MultiSyntaxUnitProxy();
@@ -60,6 +61,9 @@ export class SyntaxStructureBuilder {
     this.curExpID = -1; // 表达式ID
     this.containerStack = [];
     this.curUnitStack = [this.rootUnit];
+    if(typeof SyntaxUnitCls === "undefined"){
+      SyntaxUnitCls = SyntaxUnitProxy
+    }
     this.SyntaxUnitCls = SyntaxUnitCls
   }
 
@@ -116,5 +120,5 @@ export class SyntaxStructureBuilder {
     let syntaxUnitProxy = this.addStringToCurUnit(theStr, [USELESS]);
   }
 
-
 }
+
