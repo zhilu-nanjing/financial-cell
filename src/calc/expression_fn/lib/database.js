@@ -24,7 +24,7 @@ exports.FINDFIELD = function(database, title) {
 
   // Return error if the input field title is incorrect
   if (index == null) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   return index;
 };
@@ -111,10 +111,20 @@ export function DAVERAGE(database, field, criteria) {
   return resultIndexes.length === 0 ? Error(ERROR_DIV0) : sum / targetValues.length;
 };
 
-
-exports.DCOUNT = function(database, field, criteria) {
+/**
+ *
+ * @param {number string}database 必需。 构成列表或数据库的单元格区域。
+ * 数据库是包含一组相关数据的列表，其中包含相关信息的行为记录，而包含数据的列为字段。 列表的第一行包含每一列的标签。
+ * @param {string}field 必需。 指定函数所使用的列。
+ * 输入两端带双引号的列标签，如 "使用年数" 或 "产量"；或是代表列表中列位置的数字（不带引号）：1 表示第一列，2 表示第二列，依此类推。
+ * @param {string}criteria 必需。 包含所指定条件的单元格区域。
+ * 可以为参数 criteria 指定任意区域，只要此参数包含至少一个列标签，并且列标签下至少有一个在其中为列指定条件的单元格。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function DCOUNT(database, field, criteria) {
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return  Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
@@ -124,7 +134,7 @@ exports.DCOUNT = function(database, field, criteria) {
 exports.DCOUNTA = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
@@ -134,7 +144,7 @@ exports.DCOUNTA = function(database, field, criteria) {
 exports.DGET = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   if (resultIndexes.length > 1){
@@ -147,7 +157,7 @@ exports.DGET = function(database, field, criteria) {
 exports.DMAX = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
@@ -163,7 +173,7 @@ exports.DMAX = function(database, field, criteria) {
 exports.DMIN = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
@@ -179,7 +189,7 @@ exports.DMIN = function(database, field, criteria) {
 exports.DPRODUCT = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
@@ -194,7 +204,7 @@ exports.DPRODUCT = function(database, field, criteria) {
 exports.DSTDEV = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
@@ -205,7 +215,7 @@ exports.DSTDEV = function(database, field, criteria) {
 exports.DSTDEVP = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
@@ -216,7 +226,7 @@ exports.DSTDEVP = function(database, field, criteria) {
 exports.DSUM = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
@@ -226,7 +236,7 @@ exports.DSUM = function(database, field, criteria) {
 exports.DVAR = function (database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
@@ -236,7 +246,7 @@ exports.DVAR = function (database, field, criteria) {
 exports.DVARP = function (database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);

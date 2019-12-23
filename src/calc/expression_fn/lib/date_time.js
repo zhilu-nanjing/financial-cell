@@ -4,6 +4,7 @@ import { d18991230MS, MS_PER_DAY } from '../../calc_utils/config';
 import utils from '../../calc_utils/helper';
 import {dayNum2Date, days_str2date, parseBool, parseNumber} from '../../calc_utils/parse_helper';
 import {anyIsError} from "../../calc_utils/helper";
+import {parseDate} from "numeric";
 
 let WEEK_STARTS = [
   undefined,
@@ -110,30 +111,37 @@ export function DATEVALUE(date_text) {
   return stamp2DayNum(date);
 };
 
-exports.DAY = function(serial_number) {
+export function DAY(serial_number) {
   let date = utils.parseDate(serial_number);
-  if (date instanceof Error) {
-    return date;
-  }
   return date.getDate();
 };
 
-exports.DAYS = function(end_date, start_date) {
-  end_date = utils.parseDate(end_date);
-  start_date = utils.parseDate(start_date);
-  if (end_date instanceof Error) {
-    return end_date;
-  }
-  if (start_date instanceof Error) {
-    return start_date;
-  }
-  return stamp2DayNum(end_date) - stamp2DayNum(start_date);
+
+/**
+ *
+ * @param{string} end_date 必需。 Start_date 和 End_date 是用于计算期间天数的起止日期。
+ * @param {string} start_date 必需。Start_date 和 End_date 是用于计算期间天数的起止日期。
+ * @returns {number}
+ * @constructor
+ */
+export function DAYS(end_date, start_date) {
+  end_date = days_str2date(end_date);
+  start_date = days_str2date(start_date);
+  return parseInt(stamp2DayNum(end_date) - stamp2DayNum(start_date));
 };
 
-exports.DAYS360 = function(start_date, end_date, method) {
-  method = utils.parseBool(method);
-  start_date = utils.parseDate(start_date);
-  end_date = utils.parseDate(end_date);
+/**
+ *
+ * @param {string}start_date 必需。 用于计算期间天数的起止日期。
+ * @param {string}end_date 必需。 用于计算期间天数的起止日期。
+ * @param {number}method 可选。 逻辑值，用于指定在计算中是采用美国方法 还是欧洲方法。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function DAYS360(start_date, end_date, method) {
+  method = parseBool(method);
+  start_date = days_str2date(start_date);
+  end_date = days_str2date(end_date);
   if (start_date instanceof Error) {
     return start_date;
   }
