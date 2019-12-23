@@ -734,7 +734,14 @@ export function DEC2OCT(number, places) {
   }
 };
 
-exports.DELTA = function(number1, number2) {
+/**
+ *
+ * @param {number}number1 必需。 第一个数字。
+ * @param {number}number2 可选。 第二个数字。 如果省略，则假设 Number2 值为零。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function DELTA(number1, number2) {
   // Set number2 to zero if undefined
   number2 = (number2 === undefined) ? 0 : number2;
   number1 = parseNumber(number1);
@@ -742,8 +749,6 @@ exports.DELTA = function(number1, number2) {
   if (utils.anyIsError(number1, number2)) {
     return Error(ERROR_VALUE);
   }
-
-  // Return delta
   return (number1 === number2) ? 1 : 0;
 };
 

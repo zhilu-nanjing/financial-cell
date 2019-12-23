@@ -23,7 +23,7 @@ export function AVEDEV() {
   if (range instanceof Error) {
     return range;
   }
-  return jStat.sum(jStat(range).subtract(jStat.mean(range)).abs()[0]) / range.length;
+  return jStat.meandev(range);
 };
 
 /**
@@ -697,7 +697,12 @@ export function COVARIANCE__S(array1, array2) {
   return jStat.covariance(array1, array2);
 };
 
-exports.DEVSQ = function() {
+/**
+ * {number}Number1 是必需的，后续数字是可选的。 用于计算偏差平方和的 1 到 255 个参数。 也可以用单一数组或对某个数组的引用来代替用逗号分隔的参数。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function DEVSQ() {
   let range = parseNumberArray(utils.flatten(arguments));
   if (range instanceof Error) {
     return range;
