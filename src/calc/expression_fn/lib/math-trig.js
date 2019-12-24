@@ -85,10 +85,10 @@ exports.AGGREGATE = function(function_num, options, ref1, ref2) {
   function_num = parseNumber(function_num);
   options = parseNumber(options);
   if (typeof ref1 == 'string') {
-    return errorObj.ERROR_VALUE
+    return Error(ERROR_VALUE)
   }//XW:end
   if (utils.anyIsError(function_num, options)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   switch (function_num) {
     case 1:
@@ -121,7 +121,7 @@ exports.AGGREGATE = function(function_num, options, ref1, ref2) {
       return statistical.LARGE(ref1, ref2);
     case 15:
       if (ref2 == undefined){
-        return errorObj.ERROR_VALUE
+        return Error(ERROR_VALUE)
       }
       return statistical.SMALL(ref1, ref2);
     case 16:
@@ -144,7 +144,7 @@ exports.AGGREGATE = function(function_num, options, ref1, ref2) {
 export function ARABIC(text) {
   text = text.toUpperCase()
   if (!/^M*(?:D?C{0,3}|C[MD])(?:L?X{0,3}|X[CL])(?:V?I{0,3}|I[XV])$/.test(text)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let r = 0;
   text.replace(/[MDLV]|C[MD]?|X[CL]?|I[XV]?/g, function (i) {
@@ -393,16 +393,30 @@ function CSCH_(number) {
 };
 export const CSCH = new OnlyNumberExpFunction(CSCH_)
 
-exports.DECIMAL = function(number, radix) {
+/**
+ *
+ * @param{string/number} number 必需
+ * @param {number}radix  必需。Radix 必须是整数。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function DECIMAL(number, radix) {
   if (arguments.length < 1) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
 
   return parseInt(number, radix);
 };
 
-exports.DEGREES = function(number) {
+
+/**
+ *
+ * @param {角度}number 必需。 要转换的角度，以弧度表示。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function DEGREES(number) {
   number = parseNumber(number);
   if (number instanceof Error) {
     return number;
@@ -463,7 +477,7 @@ let ROUND = function (value, places) {
 };
 exports.FLOORMATH = function(number, significance, mode) {
   if (typeof number !=='number'){ //
-    return errorObj.ERROR_VALUE; // ERROR_VALUE = '#VALUE!'
+    return Error(ERROR_VALUE); // ERROR_VALUE = '#VALUE!'
   }
   if (number>0&&significance<0){
     return Error(ERROR_VALUE)
@@ -491,7 +505,7 @@ exports.FLOORMATH = function(number, significance, mode) {
 }
 exports.FLOORPRACE = function(number, significance, mode) {
   if (typeof number !=='number'){ //
-    return errorObj.ERROR_VALUE; // ERROR_VALUE = '#VALUE!'
+    return Error(ERROR_VALUE); // ERROR_VALUE = '#VALUE!'
   }
   if (number<0&&significance<0){
     number = -number
@@ -616,7 +630,7 @@ exports.MDETERM = function(matrix) {
   try{
     return numeric.det(matrix);
   }catch (e) {
-    return errorObj.ERROR_VALUE
+    return Error(ERROR_VALUE)
   }
 };
 
@@ -632,7 +646,7 @@ exports.MMULT = function(matrix1, matrix2) {
   matrix1 = utils.parseMatrix(matrix1);
   matrix2 = utils.parseMatrix(matrix2);
   if (utils.anyIsError(matrix1, matrix2)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   console.log(numeric.dot(matrix1, matrix2))
   return numeric.dot(matrix1, matrix2);
@@ -642,7 +656,7 @@ exports.MOD = function(dividend, divisor) {
   dividend = parseNumber(dividend);
   divisor = parseNumber(divisor);
   if (utils.anyIsError(dividend, divisor)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   if (divisor === 0) {
     return errorObj.ERROR_DIV0;
@@ -655,7 +669,7 @@ exports.MOD = function(dividend, divisor) {
   number = parseNumber(number);
   multiple = parseNumber(multiple);
   if (utils.anyIsError(number, multiple)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   if (number * multiple < 0) {
     return Error(ERROR_VALUE);
@@ -704,7 +718,7 @@ exports.POWER = function(number, power) {
   number = parseNumber(number);
   power = parseNumber(power);
   if (utils.anyIsError(number, power)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let result = Math.pow(number, power);
   if (isNaN(result)) {
@@ -730,7 +744,7 @@ exports.QUOTIENT = function(numerator, denominator) {
   numerator = parseNumber(numerator);
   denominator = parseNumber(denominator);
   if (utils.anyIsError(numerator, denominator)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   return parseInt(numerator / denominator, 10);
 };
@@ -745,7 +759,7 @@ exports.RADIANS = function(number) {
 
 exports.RAND = function() {
   if (arguments.length > 0 && arguments[0] !== undefined){
-    return errorObj.ERROR_VALUE
+    return Error(ERROR_VALUE)
   }
   return Math.random();
 };
@@ -754,7 +768,7 @@ exports.RANDBETWEEN = function(bottom, top) {
   bottom = parseNumber(bottom);
   top = parseNumber(top);
   if (utils.anyIsError(bottom, top)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   // Creative Commons Attribution 3.0 License
   // Copyright (c) 2012 eqcode
@@ -783,7 +797,7 @@ exports.ROUND = function (number, digits) {
   number = parseNumber(number);
   digits = parseNumber(digits);
   if (utils.anyIsError(number, digits)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   if (number < 0){
     number = 0-number
@@ -796,7 +810,7 @@ exports.ROUNDDOWN = function(number, digits) {
   number = parseNumber(number);
   digits = parseNumber(digits);
   if (utils.anyIsError(number, digits)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let sign = (number > 0) ? 1 : -1;
   return sign * (Math.floor(Math.abs(number) * Math.pow(10, digits))) / Math.pow(10, digits);
@@ -806,7 +820,7 @@ exports.ROUNDUP = function(number, digits) {
   number = parseNumber(number);
   digits = parseNumber(digits);
   if (utils.anyIsError(number, digits)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let sign = (number > 0) ? 1 : -1;
   return sign * (Math.ceil(Math.abs(number) * Math.pow(10, digits))) / Math.pow(10, digits);
@@ -834,7 +848,7 @@ exports.SERIESSUM = function(x, n, m, coefficients) {
   m = parseNumber(m);
   coefficients = parseNumberArray(coefficients);
   if (utils.anyIsError(x, n, m, coefficients)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let result = coefficients[0] * Math.pow(x, n);
   for (let i = 1; i < coefficients.length; i++) {
@@ -956,7 +970,7 @@ exports.MINUS = function (num1, num2) {
   num1 = parseNumber(num1);
   num2 = parseNumber(num2);
   if (utils.anyIsError(num1, num2)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   return num1 - num2;
@@ -970,7 +984,7 @@ exports.DIVIDE = function (dividend, divisor) {
   dividend = parseNumber(dividend);
   divisor = parseNumber(divisor);
   if (utils.anyIsError(dividend, divisor)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   if (divisor === 0) {
@@ -988,7 +1002,7 @@ exports.MULTIPLY = function (factor1, factor2) {
   factor1 = parseNumber(factor1);
   factor2 = parseNumber(factor2);
   if (utils.anyIsError(factor1, factor2)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   return factor1 * factor2;
@@ -1103,11 +1117,11 @@ exports.SUMIFS = function() {
     return range;
   }
   if (args.length % 2 !== 0) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   for (let i = 0; i < args.length; i += 2) {
     if (args[i].length !== range.length || !args[i + 1]) {
-      return errorObj.ERROR_VALUE;
+      return Error(ERROR_VALUE);
     }
   }
   let arr = [];
@@ -1177,7 +1191,7 @@ exports.SUMIFS = function() {
           }
         }
         if(str) {
-          return errorObj.ERROR_VALUE;
+          return Error(ERROR_VALUE);
         }
       }
 
@@ -1209,7 +1223,7 @@ exports.SUMIFS = function() {
   }
 
   if (arr.length <= 0) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
 
   for (let i = 0; i < resultArr.length; i++) {
@@ -1227,7 +1241,7 @@ exports.SUMIFS = function() {
 
 exports.SUMPRODUCT = function() {
   if (!arguments || arguments.length === 0) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let arrays = arguments.length + 1;
   let result = 0;
@@ -1284,7 +1298,7 @@ exports.SUMX2MY2 = function (array_x, array_y) {
     array_y = utils.strToMatrix(array_y);
   }
   if (utils.anyIsError(array_x, array_y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let result = 0;
   array_x = parseNumberArray(utils.flatten(array_x));
@@ -1305,7 +1319,7 @@ exports.SUMX2PY2 = function (array_x, array_y) {
   }
   //XW：end
   if (utils.anyIsError(array_x, array_y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let result = 0;
   array_x = parseNumberArray(utils.flatten(array_x));
@@ -1326,7 +1340,7 @@ exports.SUMXMY2 = function(array_x, array_y) {
   array_x = parseNumberArray(utils.flatten(array_x));
   array_y = parseNumberArray(utils.flatten(array_y));
   if (utils.anyIsError(array_x, array_y)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let result = 0;
   array_x = utils.flatten(array_x);
@@ -1359,7 +1373,7 @@ exports.TRUNC = function(number, digits) {
   number = parseNumber(number);
   digits = parseNumber(digits);
   if (utils.anyIsError(number, digits)) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let sign = (number > 0) ? 1 : -1;
   return sign * (Math.floor(Math.abs(number) * Math.pow(10, digits))) / Math.pow(10, digits);

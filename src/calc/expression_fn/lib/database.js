@@ -1,7 +1,7 @@
 import errorObj, {ERROR_DIV0, ERROR_VALUE} from '../../calc_utils/error_config'
-import stats from  './statistical'
-import maths from  './math-trig'
-import utils from '../../calc_utils/helper'
+import * as stats from './statistical'
+import * as maths from './math-trig'
+import * as utils from '../../calc_utils/helper'
 
 function compact(array) {
   if (!array) { return array; }
@@ -24,7 +24,7 @@ exports.FINDFIELD = function(database, title) {
 
   // Return error if the input field title is incorrect
   if (index == null) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   return index;
 };
@@ -55,7 +55,7 @@ function find_result_idx(database, criteria){
         let a = data[parseInt(valid_arr[j][k].split('-')[0])]
         let b = valid_arr[j][k].split('-')[1]
         if (b.indexOf('=') >= 0){
-          is_valid = (a == b.replace('=', ''))
+          is_valid = (a === b.replace('=', ''))
         }else if(!eval(a+b)){
           is_valid = false
         }
@@ -68,10 +68,11 @@ function find_result_idx(database, criteria){
   return result_idx
 }
 function get_values(resultIndexes, database, field){
+  let field_idx
   if (typeof field == 'number'){
-    let field_idx = field - 1
+    field_idx = field - 1
   }else{
-    let field_idx = database[0].indexOf(field)
+    field_idx = database[0].indexOf(field)
   }
   let values= []
   for (let i=0; i< resultIndexes.length; i++){
@@ -95,13 +96,14 @@ export function DAVERAGE(database, field, criteria) {
   if (isNaN(field) && (typeof field !== "string")) {
     return Error(ERROR_VALUE);
   }
+  let resultIndexes
   if (typeof field == 'number'){
     let resultIndexes = [];
     for (let i=1;i<database.length;i++){
       resultIndexes.push(i)
     }
-  }else{
-    let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
+  } else {
+    resultIndexes = find_result_idx(database, criteria)//findResultIndex(database, criteria);
   }
   let targetValues = get_values(resultIndexes, database, field);
   let sum = 0
@@ -111,20 +113,41 @@ export function DAVERAGE(database, field, criteria) {
   return resultIndexes.length === 0 ? Error(ERROR_DIV0) : sum / targetValues.length;
 };
 
-
-exports.DCOUNT = function(database, field, criteria) {
+/**
+ *
+ * @param {number/string}database 必需。 构成列表或数据库的单元格区域。
+ * 数据库是包含一组相关数据的列表，其中包含相关信息的行为记录，而包含数据的列为字段。 列表的第一行包含每一列的标签。
+ * @param {string}field 必需。 指定函数所使用的列。
+ * 输入两端带双引号的列标签，如 "使用年数" 或 "产量"；或是代表列表中列位置的数字（不带引号）：1 表示第一列，2 表示第二列，依此类推。
+ * @param {string}criteria 必需。 包含所指定条件的单元格区域。
+ * 可以为参数 criteria 指定任意区域，只要此参数包含至少一个列标签，并且列标签下至少有一个在其中为列指定条件的单元格。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function DCOUNT(database, field, criteria) {
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return  Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
   return stats.COUNT(targetValues);
 };
 
-exports.DCOUNTA = function(database, field, criteria) {
+/**
+ *
+ * @param {number/string}database 必需。 构成列表或数据库的单元格区域。 数据库是包含一组相关数据的列表，
+ * 其中包含相关信息的行为记录，而包含数据的列为字段。 列表的第一行包含每一列的标签。
+ * @param {string}field 可选。 指定函数所使用的列。 输入两端带双引号的列标签，如 "使用年数" 或 "产量"；
+ * 或是代表列表中列位置的数字（不带引号）：1 表示第一列，2 表示第二列，依此类推。
+ * @param {string}criteria 必需。 包含所指定条件的单元格区域。 可以为参数 criteria 指定任意区域，
+ * 只要此区域包含至少一个列标签，并且列标签下至少有一个在其中为列指定条件的单元格。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function DCOUNTA(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
@@ -134,7 +157,7 @@ exports.DCOUNTA = function(database, field, criteria) {
 exports.DGET = function(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   if (resultIndexes.length > 1){
@@ -144,10 +167,21 @@ exports.DGET = function(database, field, criteria) {
   return targetValues[0];
 };
 
-exports.DMAX = function(database, field, criteria) {
+/**
+ *
+ * @param {区域}database 必需。 构成列表或数据库的单元格区域。
+ * 数据库是包含一组相关数据的列表，其中包含相关信息的行为记录，而包含数据的列为字段。 列表的第一行包含每一列的标签。
+ * @param{string} field 必需。 指定函数所使用的列。
+ * 输入两端带双引号的列标签，如 "使用年数" 或 "产量"；或是代表列表中列位置的数字（不带引号）：1 表示第一列，2 表示第二列，依此类推。
+ * @param {区域}criteria 必需。 包含所指定条件的单元格区域。 可以为参数 criteria 指定任意区域，
+ * 只要此区域包含至少一个列标签，并且列标签下至少有一个在其中为列指定条件的单元格。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function DMAX(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
@@ -160,10 +194,21 @@ exports.DMAX = function(database, field, criteria) {
   return max
 };
 
-exports.DMIN = function(database, field, criteria) {
+/**
+ *
+ * @param {区域}database 必需。 构成列表或数据库的单元格区域。
+ * 数据库是包含一组相关数据的列表，其中包含相关信息的行为记录，而包含数据的列为字段。 列表的第一行包含每一列的标签。
+ * @param{string} field 必需。 指定函数所使用的列。
+ * 输入两端带双引号的列标签，如 "使用年数" 或 "产量"；或是代表列表中列位置的数字（不带引号）：1 表示第一列，2 表示第二列，依此类推。
+ * @param {区域}criteria 必需。 包含所指定条件的单元格区域。 可以为参数 criteria 指定任意区域，
+ * 只要此区域包含至少一个列标签，并且列标签下至少有一个在其中为列指定条件的单元格。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function DMIN(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
@@ -176,12 +221,22 @@ exports.DMIN = function(database, field, criteria) {
   return min
 };
 
-exports.DPRODUCT = function(database, field, criteria) {
+/**
+ *
+ * @param {number/string}database 必需。 构成列表或数据库的单元格区域。 数据库是包含一组相关数据的列表，
+ * 其中包含相关信息的行为记录，而包含数据的列为字段。 列表的第一行包含每一列的标签。
+ * @param {number/string}field  必需。 指定函数所使用的列。 输入两端带双引号的列标签，如 "使用年数" 或 "产量"；
+ * 或是代表列表中列位置的数字（不带引号）：1 表示第一列，2 表示第二列，依此类推。
+ * @param {number/string}criteria 必需。 包含所指定条件的单元格区域。 可以为参数 criteria 指定任意区域，
+ * 只要此区域包含至少一个列标签，并且列标签下至少有一个在其中为列指定条件的单元格。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function DPRODUCT(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
-
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
   let result = 1;
@@ -191,10 +246,21 @@ exports.DPRODUCT = function(database, field, criteria) {
   return result;
 };
 
-exports.DSTDEV = function(database, field, criteria) {
+/**
+ *
+ * @param {number/string}database 必需。 构成列表或数据库的单元格区域。 数据库是包含一组相关数据的列表，
+ * 其中包含相关信息的行为记录，而包含数据的列为字段。 列表的第一行包含每一列的标签。
+ * @param {number/string}field  必需。 指定函数所使用的列。 输入两端带双引号的列标签，如 "使用年数" 或 "产量"；
+ * 或是代表列表中列位置的数字（不带引号）：1 表示第一列，2 表示第二列，依此类推。
+ * @param {number/string}criteria 必需。 包含所指定条件的单元格区域。 可以为参数 criteria 指定任意区域，
+ * 只要此区域包含至少一个列标签，并且列标签下至少有一个在其中为列指定条件的单元格。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function DSTDEV(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
@@ -202,10 +268,22 @@ exports.DSTDEV = function(database, field, criteria) {
   return stats.STDEV.S(targetValues);
 };
 
-exports.DSTDEVP = function(database, field, criteria) {
+
+/**
+ *
+ * @param {number/string}database 必需。 构成列表或数据库的单元格区域。 数据库是包含一组相关数据的列表，
+ * 其中包含相关信息的行为记录，而包含数据的列为字段。 列表的第一行包含每一列的标签。
+ * @param {number/string}field  必需。 指定函数所使用的列。 输入两端带双引号的列标签，如 "使用年数" 或 "产量"；
+ * 或是代表列表中列位置的数字（不带引号）：1 表示第一列，2 表示第二列，依此类推。
+ * @param {number/string}criteria 必需。 包含所指定条件的单元格区域。 可以为参数 criteria 指定任意区域，
+ * 只要此区域包含至少一个列标签，并且列标签下至少有一个在其中为列指定条件的单元格。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function DSTDEVP(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
@@ -213,30 +291,64 @@ exports.DSTDEVP = function(database, field, criteria) {
   return stats.STDEV.P(targetValues);
 };
 
-exports.DSUM = function(database, field, criteria) {
+/**
+ *
+ * @param {number/string}database 必需。 构成列表或数据库的单元格区域。 数据库是包含一组相关数据的列表，
+ * 其中包含相关信息的行为记录，而包含数据的列为字段。 列表的第一行包含每一列的标签。
+ * @param {number/string}field  必需。 指定函数所使用的列。 输入两端带双引号的列标签，如 "使用年数" 或 "产量"；
+ * 或是代表列表中列位置的数字（不带引号）：1 表示第一列，2 表示第二列，依此类推。
+ * @param {number/string}criteria 必需。 包含所指定条件的单元格区域。 可以为参数 criteria 指定任意区域，
+ * 只要此区域包含至少一个列标签，并且列标签下至少有一个在其中为列指定条件的单元格。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function DSUM(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
   return maths.SUM(targetValues);
 };
 
-exports.DVAR = function (database, field, criteria) {
+
+/**
+ *
+ * @param {number/string}database 必需。 构成列表或数据库的单元格区域。 数据库是包含一组相关数据的列表，
+ * 其中包含相关信息的行为记录，而包含数据的列为字段。 列表的第一行包含每一列的标签。
+ * @param {number/string}field  必需。 指定函数所使用的列。 输入两端带双引号的列标签，如 "使用年数" 或 "产量"；
+ * 或是代表列表中列位置的数字（不带引号）：1 表示第一列，2 表示第二列，依此类推。
+ * @param {number/string}criteria 必需。 包含所指定条件的单元格区域。 可以为参数 criteria 指定任意区域，
+ * 只要此区域包含至少一个列标签，并且列标签下至少有一个在其中为列指定条件的单元格。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function DVAR(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);
   return stats.VAR.S(targetValues);
 };
 
-exports.DVARP = function (database, field, criteria) {
+/**
+ *
+ * @param {number/string}database 必需。 构成列表或数据库的单元格区域。 数据库是包含一组相关数据的列表，
+ * 其中包含相关信息的行为记录，而包含数据的列为字段。 列表的第一行包含每一列的标签。
+ * @param {number/string}field  必需。 指定函数所使用的列。 输入两端带双引号的列标签，如 "使用年数" 或 "产量"；
+ * 或是代表列表中列位置的数字（不带引号）：1 表示第一列，2 表示第二列，依此类推。
+ * @param {number/string}criteria 必需。 包含所指定条件的单元格区域。 可以为参数 criteria 指定任意区域，
+ * 只要此区域包含至少一个列标签，并且列标签下至少有一个在其中为列指定条件的单元格。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function DVARP(database, field, criteria) {
   // Return error if field is not a number and not a string
   if (isNaN(field) && (typeof field !== "string")) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   let resultIndexes = find_result_idx(database,criteria)//findResultIndex(database, criteria);
   let targetValues = get_values(resultIndexes, database, field);

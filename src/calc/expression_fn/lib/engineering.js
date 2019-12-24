@@ -592,7 +592,15 @@ export function CONVER(number, from_unit, to_unit) {
   return number * from[6] * from_multiplier / (to[6] * to_multiplier);
 };
 
-exports.DEC2BIN = function(number, places) {
+/**
+ *
+ * @param {number}number 必需。 要转换的十进制整数。 如果数字为负数，则忽略有效的 place 值，且 DEC2BIN 返回 10 个字符的（10 位）二进制数，
+ * 其中最高位为符号位。 其余 9 位是数量位。 负数用二进制补码记数法表示。
+ * @param {number}places 可选。 要使用的字符数。 如果省略 places，则 DEC2BIN 使用必要的最小字符数。 Places 可用于在返回的值前置 0（零）。
+ * @returns {string|Error|*}
+ * @constructor
+ */
+export function DEC2BIN(number, places) {
   number = parseNumber(number);
   if (number instanceof Error) {
     return number;
@@ -633,7 +641,16 @@ exports.DEC2BIN = function(number, places) {
   }
 };
 
-exports.DEC2HEX = function(number, places) {
+/**
+ *
+ * @param{number} number 必需。 要转换的十进制整数。 如果数字为负数，则忽略 places，且 DEC2HEX 返回 10 个字符的（40 位）十六进制数，其中最高位为符号位。
+ * 其余 39 位是数量位。 负数由二进制补码记数法表示。
+ * @param {number}places 可选。 要使用的字符数。 如果省略 places，则 DEC2HEX 使用必要的最小字符数。
+ * Places 可用于在返回的值前置 0（零）。
+ * @returns {string|Error|*}
+ * @constructor
+ */
+export function DEC2HEX (number, places) {
   number = parseNumber(number);
   if (number instanceof Error) {
     return number;
@@ -674,12 +691,19 @@ exports.DEC2HEX = function(number, places) {
   }
 };
 
-exports.DEC2OCT = function(number, places) {
+/**
+ *
+ * @param {number}number 必需。 要转换的十进制整数。 如果数字为负数，则忽略 places，且 DEC2OCT 返回 10 个字符的（30 位）八进制数，
+ * 其中最高位为符号位。 其余 29 位是数量位。 负数由二进制补码记数法表示。
+ * @param {number}places 可选。 要使用的字符数。 如果省略 places，则 DEC2OCT 使用必要的最小字符数。 Places 可用于在返回的值前置 0（零）。
+ * @returns {string|Error|*}
+ * @constructor
+ */
+export function DEC2OCT(number, places) {
   number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
-
   // Return error if number is not decimal, is lower than -549755813888, or is greater than 549755813887
   if (!/^-?[0-9]{1,9}$/.test(number) || number < -536870912 || number > 536870911) {
     return Error(ERROR_NUM);
@@ -689,10 +713,8 @@ exports.DEC2OCT = function(number, places) {
   if (number < 0) {
     return (1073741824 + number).toString(8);
   }
-
   // Convert decimal number to octal
   let result = parseInt(number, 10).toString(8);
-
   // Return octal number using the minimum number of characters necessary if places is undefined
   if (typeof places === 'undefined') {
     return result;
@@ -701,21 +723,25 @@ exports.DEC2OCT = function(number, places) {
     if (isNaN(places)) {
       return Error(ERROR_VALUE);
     }
-
     // Return error if places is negative
     if (places < 0) {
       return Error(ERROR_NUM);
     }
-
     // Truncate places in case it is not an integer
     places = Math.floor(places);
-
     // Pad return value with leading 0s (zeros) if necessary (using Underscore.string)
     return (places >= result.length) ? text.REPT('0', places - result.length) + result : Error(ERROR_NUM);
   }
 };
 
-exports.DELTA = function(number1, number2) {
+/**
+ *
+ * @param {number}number1 必需。 第一个数字。
+ * @param {number}number2 可选。 第二个数字。 如果省略，则假设 Number2 值为零。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function DELTA(number1, number2) {
   // Set number2 to zero if undefined
   number2 = (number2 === undefined) ? 0 : number2;
   number1 = parseNumber(number1);
@@ -723,8 +749,6 @@ exports.DELTA = function(number1, number2) {
   if (utils.anyIsError(number1, number2)) {
     return Error(ERROR_VALUE);
   }
-
-  // Return delta
   return (number1 === number2) ? 1 : 0;
 };
 

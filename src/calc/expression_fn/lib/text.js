@@ -104,9 +104,15 @@ exports.DBCS = function() {
  throw new Error('DBCS is not implemented');
 };
 
-exports.DOLLAR = function(number, decimals) {
+/**
+ *
+ * @param {number}number
+ * @param {number}decimals
+ * @returns {*|Error}
+ * @constructor
+ */
+export function DOLLAR(number, decimals) {
   decimals = (decimals === undefined) ? 2 : decimals;
-
   number = parseNumber(number);
   decimals = parseNumber(decimals);
   if (utils.anyIsError(number, decimals)) {

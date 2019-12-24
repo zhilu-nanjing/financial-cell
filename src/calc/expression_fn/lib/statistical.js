@@ -23,7 +23,7 @@ export function AVEDEV() {
   if (range instanceof Error) {
     return range;
   }
-  return jStat.sum(jStat(range).subtract(jStat.mean(range)).abs()[0]) / range.length;
+  return jStat.meandev(range);
 };
 
 /**
@@ -215,7 +215,7 @@ export function BETADIST_(x, alpha, beta, cumulative, A, B) {
   x = (x - A) / (B - A);
   return cumulative ? jStat.beta.cdf(x, alpha, beta) : jStat.beta.pdf(x, alpha, beta)/2;
 };
-export const BETADIST = new OnlyNumberExpFunction(BETADIST_)
+export const BETA__DIST = new OnlyNumberExpFunction(BETADIST_)
 
 /**
  *
@@ -240,7 +240,7 @@ export function BETAINV_(probability, alpha, beta, A, B) {
   }
   return jStat.beta.inv(probability, alpha, beta) * (B - A) + A;
 };
-export const BETAINV = new OnlyNumberExpFunction(BETAINV_)
+export const BETA__INV = new OnlyNumberExpFunction(BETAINV_)
 
 exports.BINOM = {};
 
@@ -266,7 +266,7 @@ function BINOMDIST_(successes, trials, probability, cumulative) {
   }
   return (cumulative) ? jStat.binomial.cdf(successes, trials, probability) : jStat.binomial.pdf(successes, trials, probability);
 };
-export const BINOMDIST = new OnlyNumberExpFunction(BINOMDIST_)
+export const BINOM__DIST = new OnlyNumberExpFunction(BINOMDIST_)
 
 /**
  *
@@ -292,7 +292,7 @@ function BINOMINV_(trials, probability, alpha) {
     x++;
   }
 };
-export const BINOMINV = new OnlyNumberExpFunction(BINOMINV_)
+export const BINOM__INV = new OnlyNumberExpFunction(BINOMINV_)
 
 /**
  *
@@ -302,7 +302,7 @@ export const BINOMINV = new OnlyNumberExpFunction(BINOMINV_)
  * @returns {*|Error}
  * @constructor
  */
-export function CHISQDIST(x, k, cumulative) {
+export function CHISQ__DIST(x, k, cumulative) {
   cumulative = parseBool(cumulative)
   if (x < 0){
     return Error(ERROR_NUM)
@@ -322,7 +322,7 @@ export function CHISQDIST(x, k, cumulative) {
  * @returns {*|Error|number}
  * @constructor
  */
-export function CHISQDISTRT(x, k) {
+export function CHISQ__DIST__RT(x, k) {
   if (!x || !k) {
     return Error(ERROR_VALUE);
   }
@@ -345,7 +345,7 @@ export function CHISQDISTRT(x, k) {
  * @returns {*|Error}
  * @constructor
  */
-export  function CHISQINV(probability, k) {
+export  function CHISQ__INV(probability, k) {
   probability = parseNumber(probability);
   k = parseNumber(k);
   return jStat.chisquare.inv(probability, k);
@@ -358,7 +358,7 @@ export  function CHISQINV(probability, k) {
  * @returns {*|Error}
  * @constructor
  */
-export function CHISQINVRT(probability, k) {
+export function CHISQ__INV__RT(probability, k) {
   if (!probability | !k) {
     return Error(ERROR_VALUE);
   }
@@ -443,7 +443,7 @@ function CHISQTEST_(observed, expected) {
   }
   return Math.round(ChiSq(xsqr, dof) * 1000000) / 1000000;
 };
-export const CHISQTEST = new OnlyNumberExpFunction(CHISQTEST_)
+export const CHISQ__TEST = new OnlyNumberExpFunction(CHISQTEST_)
 
 /**
  * 可选。 要返回其列号的单元格或单元格范围。
@@ -494,7 +494,7 @@ function CONFIDENCENORM_(alpha, sd, n) {
   n = parseNumber(n);
   return jStat.normalci(1, alpha, sd, n)[1] - 1;
 };
-export const CONFIDENCENORM = new OnlyNumberExpFunction(CONFIDENCENORM_)
+export const CONFIDENCE__NORM = new OnlyNumberExpFunction(CONFIDENCENORM_)
 
 /**
  *
@@ -504,7 +504,7 @@ export const CONFIDENCENORM = new OnlyNumberExpFunction(CONFIDENCENORM_)
  * @returns {number}
  * @constructor
  */
-export function CONFIDENCET(alpha, sd, n) {
+export function CONFIDENCE__T(alpha, sd, n) {
   alpha = parseNumber(alpha);
   sd = parseNumber(sd);
   n = parseNumber(n);
@@ -659,7 +659,7 @@ exports.COVARIANCE = {};
  * @returns {Error|number}
  * @constructor
  */
-export function COVARIANCEP(array1, array2) {
+export function COVARIANCE__P(array1, array2) {
   array1 = parseNumberArray(utils.flatten(array1));
   array2 = parseNumberArray(utils.flatten(array2));
   if (anyIsError(array1, array2)) {
@@ -682,7 +682,7 @@ export function COVARIANCEP(array1, array2) {
  * @returns {Error|*}
  * @constructor
  */
-export function COVARIANCES(array1, array2) {
+export function COVARIANCE__S(array1, array2) {
   if (typeof array1 === "string") {
     array1 = utils.strToMatrix(array1);
   }
@@ -697,7 +697,12 @@ export function COVARIANCES(array1, array2) {
   return jStat.covariance(array1, array2);
 };
 
-exports.DEVSQ = function() {
+/**
+ * {number}Number1 是必需的，后续数字是可选的。 用于计算偏差平方和的 1 到 255 个参数。 也可以用单一数组或对某个数组的引用来代替用逗号分隔的参数。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function DEVSQ() {
   let range = parseNumberArray(utils.flatten(arguments));
   if (range instanceof Error) {
     return range;

@@ -1,4 +1,4 @@
-import {ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/error_config';
+import {ERROR_DIV0, ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/error_config';
 import * as dateTime from './date_time';
 import * as utils from '../../calc_utils/helper';
 import * as jStat from 'jstat';
@@ -7,6 +7,13 @@ import {anyIsError} from "../../calc_utils/helper";
 function validDate(d){
   return d && d.getTime && !isNaN(d.getTime());
 }
+
+const MSECOND_NUM_PER_DAY = 3600 * 24 * 1000
+const MONTH_NUM_PER_YEAR = 12
+const DAYS_NUM_PER_YEAR = 365
+const DAYS_NUM_PER_YEAR_US = 360
+const DAYS_NUM_PER_LEAP_YEAR = 366
+const DAYS_NUM_PER_MONTH_US = 30
 
 
 /**TODO basis =1 时有差异
@@ -490,8 +497,19 @@ exports.DDB = function(cost, salvage, life, period, factor) {
   return current;
 };
 
-// TODO
-exports.DISC = function (settlement,maturity,pr,redemption,basis) {
+/**
+ *
+ * @param settlement
+ * @param maturity
+ * @param pr
+ * @param redemption
+ * @param basis
+ * @returns {Error|number}
+ * @constructor
+ */
+export function DISC(settlement, maturity, pr, redemption, basis) {
+    let settlementDate = days_str2date(settlement);
+    let maturityDate = days_str2date(maturity);
   if (pr<=0 || redemption<=0){
     return Error(ERROR_NUM)
   }
@@ -501,12 +519,24 @@ exports.DISC = function (settlement,maturity,pr,redemption,basis) {
   if (settlement >= maturity){
     return Error(ERROR_NUM)
   }
-  let B = 360
-  let DSM = Math.abs(dateTime.DAYS(maturity, settlement, false))
-  return (redemption-pr)/pr * B /DSM
+    let DSM = DAYSBETWEEN_AFTER_BASIS_TEST(maturityDate, settlementDate, basis)
+    let B
+    if (basis === 1 || basis === 3) {
+        B = 365
+    } else {
+        B = 360
+    }
+    return (redemption - pr) / redemption * B / DSM
 };
 
-exports.DOLLARDE = function(dollar, fraction) {
+/**
+ *
+ * @param {number}dollar 必需。 以整数部份和分数部分表示的数字，用小数点隔开。
+ * @param {number}fraction 必需。 用作分数中的分母的整数。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function DOLLARDE(dollar, fraction) {
   // Credits: algorithm inspired by Apache OpenOffice
 
   dollar = parseNumber(dollar);
@@ -522,7 +552,7 @@ exports.DOLLARDE = function(dollar, fraction) {
 
   // Return error if fraction is greater than or equal to 0 and less than 1
   if (fraction >= 0 && fraction < 1) {
-    return errorObj.ERROR_DIV0;
+      return Error(ERROR_DIV0);
   }
 
   // Truncate fraction if it is not an integer
@@ -542,7 +572,14 @@ exports.DOLLARDE = function(dollar, fraction) {
   return result;
 };
 
-exports.DOLLARFR = function(dollar, fraction) {
+/**
+ *
+ * @param {number}dollar 必需。 小数。
+ * @param {number}fraction 必需。 用作分数中的分母的整数。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function DOLLARFR(dollar, fraction) {
   // Credits: algorithm inspired by Apache OpenOffice
 
   dollar = parseNumber(dollar);
@@ -558,7 +595,7 @@ exports.DOLLARFR = function(dollar, fraction) {
 
   // Return error if fraction is greater than or equal to 0 and less than 1
   if (fraction >= 0 && fraction < 1) {
-    return errorObj.ERROR_DIV0;
+      return Error(ERROR_DIV0);
   }
 
   // Truncate fraction if it is not an integer

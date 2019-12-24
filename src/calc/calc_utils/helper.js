@@ -56,7 +56,7 @@ export function flattenNum(args) { // todo: 这个函数有点复杂，需要优
     }
     let arr = []
     for( let i=0;i<args.length;i++){
-      let arg = parse(args[i])
+        let arg = (args[i])
 
       if (arg === undefined){
         return errorObj.ERROR_NAME
