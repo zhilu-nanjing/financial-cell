@@ -17,18 +17,108 @@
             margin: 4px 2px;
             cursor: pointer;
         }
+
+        .el-scrollbar {
+            height: 100%;
+            width: 100%;
+        }
+
+        .el-scrollbar__wrap {
+            overflow: scroll;
+            overflow: auto;
+        }
+
+        div:focus {
+            outline: none
+        }
+
+        .el-input__inner {
+            height: 30px !important;
+        }
     </style>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.19.0/axios.min.js"></script>
     <link href="../../../../dist/xspreadsheet.css" rel="stylesheet">
 </head>
 <body onload="load()">
 
-<div class="button" id="calcHelp"   >
-    点我。。
+<div id="app" tabindex="0" @keydown.stop style="width: 1200px">
+    <div style="width: 100px; display: inline-block;">
+        <el-input
+                placeholder="请输入文件名"
+                v-model="input">
+        </el-input>
+    </div>
+    <div class="button" @click="saveAction">
+        保存
+    </div>
+    <div class="button" @click="getActions">
+        运行测试用例
+    </div>
+    <div class="button" @click="clickPNG">
+        截图
+    </div>
+    <div class="button" @click="reREC">
+        重新录制
+    </div>
+    <div class="button" @click="lookAction">
+        查看录制内容
+    </div>
+
+    <el-dialog
+            tabindex="0"
+            title="提示"
+            :visible.sync="dialogShow"
+            width="80%">
+        <div style="height: 300px; overflow-y: scroll; ">
+            <div style="  width: 1200px;" @input.stop @click.stop @paste.stop @copy.stop @mousedown.stop @mouseup.stop>
+                <el-tree :data="fileData" ref="tree" :props="defaultProps" show-checkbox></el-tree>
+            </div>
+        </div>
+        <span slot="footer" class="dialog-footer">
+            <el-button :loading="run" @click="dialogShow = false">关 闭</el-button>
+            <el-button :loading="run" @click="handleCheckChange">执 行</el-button>
+            <el-button :loading="run" @click="showLogs">查看logs</el-button>
+        </span>
+    </el-dialog>
+
+    <el-dialog
+            title="提示"
+            :visible.sync="dialogVisible"
+            width="50%">
+        <div style="overflow-y: scroll; height: 300px">
+            {{opt}}
+        </div>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">关 闭</el-button>
+        </span>
+    </el-dialog>
+
+    <el-dialog
+            tabindex="0"
+            title="提示"
+            :visible.sync="dialogShow2"
+            width="60%">
+        <div style="height: 300px; overflow-y: scroll;">
+            <div v-for="log in logData">
+                <el-alert :description="log.desc"
+                          :title="log.title"
+                          :type="log.type"
+                          :closable="false"></el-alert>
+            </div>
+        </div>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogShow2 = false">返 回</el-button>
+        </span>
+    </el-dialog>
 </div>
-<input type="button" style="width: 100px;"   onclick=" clickPNG()" value="截图" />
 <div id="financial-cell"></div>
+
 <script>
     var opt = [];
+    let url = "http://127.0.0.1:1001/action";
 
     function load() {
         let options = {
@@ -1369,7 +1459,7 @@
         let dom = document.getElementById("financial-cell");
         window.addEventListener("input", e => {
             console.log(e.data)
-            if(!e.data) {
+            if (!e.data) {
                 opt.push({
                     'world': 'Backspace',
                     'type': 'keydown',
@@ -1389,7 +1479,7 @@
         window.addEventListener("keydown", e => {
             console.log(e, e.code);
             let code = '';
-            if(e.keyCode === 8) {
+            if (e.keyCode === 8) {
                 code = 'Backspace';
             } else {
                 code = e.code;
@@ -1413,18 +1503,18 @@
         dom.addEventListener("mousedown", e => {
             // let time2 = new Date();
             // if (time2.valueOf() - mt.valueOf() > delay) {
-                console.log(e.detail);
-                if (e.detail === 2) {
-                    opt.push({
-                        'type': 'dbmousedown',
-                    });
-                } else {
-                    opt.push({
-                        'x': e.x,
-                        'y': e.y,
-                        'type': 'mousedown',
-                    });
-                }
+            console.log(e.detail);
+            if (e.detail === 2) {
+                opt.push({
+                    'type': 'dbmousedown',
+                });
+            } else {
+                opt.push({
+                    'x': e.x,
+                    'y': e.y,
+                    'type': 'mousedown',
+                });
+            }
             //     mt = new Date();
             // }
         });
@@ -1457,24 +1547,138 @@
     }
 
     let count = 0;
-    function clickPNG() {
-        let e = window.event;
-        count += 1;
-
-        if(count > 2) {
-            alert("只能截图2次");
-            return;
-        }
-        console.log("eeeeee")
-        opt.push({
-            "type": 'screenshot',
-        });
-        e.stopPropagation();
-    }
 
     function optToString() {
         return JSON.stringify(opt);
     }
+
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                dialogShow: false,
+                dialogShow2: false,
+                dialogVisible: false,
+                logData: [],
+                input: '',
+                fileData: [],
+                defaultProps: {
+                    children: 'children',
+                    label: 'label'
+                },
+                opt: opt,
+                run: false,
+            }
+        },
+        watch: {
+            opt(n, o) {
+                this.opt = opt;
+            }
+        },
+        methods: {
+            clickPNG() {
+                let e = window.event;
+                count += 1;
+
+                if (count > 2) {
+                    alert("只能截图2次");
+                    return;
+                } else {
+                    this.$message('截图成功');
+                }
+                opt.push({
+                    "type": 'screenshot',
+                });
+                e.stopPropagation();
+            },
+            lookAction() {
+                this.dialogVisible = true;
+            },
+            saveAction() {
+                if(this.input === '') {
+                    this.$message('请输入文件名');
+                    return;
+                }
+                axios.post(url, {data: opt, fileName: this.input})
+                    .then(res => {
+                        this.$message('保存成功');
+                        this.reREC(false);
+                        console.log(res);
+                    });
+            },
+            reREC(print = true) {
+                setTimeout(() => {
+                    this.opt = [];
+                    opt = [];
+                    count = 0;
+                    if (print) {
+                        this.$message('清除成功');
+                    }
+                }, 100);
+            },
+            getActions() {
+                axios.post(url + "_catalogue", {data: "。。"})
+                    .then(res => {
+                        console.log(res);
+                        this.fileData = res.data;
+                        this.dialogShow = true;
+                    });
+            },
+            handleCheckChange() {
+                let res = this.$refs.tree.getCheckedNodes();
+                let arr = []
+                res.forEach((item) => {
+                    if (!item['children']) {
+                        arr.push(item['label']);
+                    }
+                });
+                this.runActions(arr);
+            },
+            runActions(items) {
+                this.run = true;
+                this.logData = [];
+                axios.post(url + "_runActions", {data: items})
+                    .then(res => {
+                        this.run = false;
+                        let data = res['data'];
+
+                        if (data['successArr']) {
+                            for (let i = 0; i < data['successArr'].length; i++) {
+                                let item = data['successArr'][i];
+                                console.log("item success: ", item);
+                                this.logData.push({
+                                    "title": `文件执行成功:  ${item['path']}`,
+                                    "desc": `相差diff: ${item['diff']}`,
+                                    "type": "success",
+                                });
+                            }
+                        }
+
+                        if (data['errorArr']) {
+                            for (let i = 0; i < data['errorArr'].length; i++) {
+                                let item = data['errorArr'][i];
+                                console.log("item error: ", item);
+                                this.logData.push({
+                                    "title": `文件执行失败: ${item['path']}`,
+                                    "desc": `报错原因: ${item['error']}`,
+                                    "type": "warning",
+                                });
+                            }
+                        }
+                    }).catch((e) => {
+                    this.run = false;
+                    console.error("运行失败", e);
+                });
+            },
+            showLogs() {
+                if (this.logData.length <= 0) {
+                    this.$message('没有日志');
+                } else {
+                    this.dialogShow2 = true;
+                }
+            }
+        }
+    });
 </script>
 
 <script type="text/javascript" src="../../../../dist/vendors~xspreadsheet.js"></script>
