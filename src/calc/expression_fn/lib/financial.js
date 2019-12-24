@@ -2,8 +2,8 @@ import {ERROR_DIV0, ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/err
 import * as dateTime from './date_time';
 import * as utils from '../../calc_utils/helper';
 import * as jStat from 'jstat';
-import {dayNum2Date, days_str2date, parseBool, parseNumber} from '../../calc_utils/parse_helper';
-import {anyIsError} from "../../calc_utils/helper";
+import {dayNum2Date, days_str2date, parseBool, parseNumber, parseNumberArray} from '../../calc_utils/parse_helper';
+import {anyIsError, strToMatrix, flatten} from "../../calc_utils/helper";
 function validDate(d){
   return d && d.getTime && !isNaN(d.getTime());
 }
@@ -628,7 +628,14 @@ exports.DURATION = function (settlement, maturity, coupon, yld, frequency, basis
 };
 //XW：end
 
-exports.EFFECT = function(rate, periods) {
+/**
+ *
+ * @param {number}rate 必需。 名义利率。
+ * @param {number}periods 必需。 每年的复利期数。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function EFFECT(rate, periods) {
   rate = parseNumber(rate);
   periods = parseNumber(periods);
   if (anyIsError(rate, periods)) {
@@ -647,7 +654,19 @@ exports.EFFECT = function(rate, periods) {
   return Math.pow(1 + rate / periods, periods) - 1;
 };
 
-exports.FV = function(rate, periods, payment, value, type) {
+
+/**
+ *
+ * @param {number}rate 必需。 各期利率。
+ * @param {number}periods 必需。 年金的付款总期数。
+ * @param {number}payment 必需。 各期所应支付的金额，在整个年金期间保持不变。 通常 pmt 包括本金和利息，
+ * 但不包括其他费用或税款。 如果省略 pmt，则必须包括 pv 参数。
+ * @param {number}value 可选。 现值，或一系列未来付款的当前值的累积和。 如果省略 pv，则假定其值为 0（零），并且必须包括 pmt 参数。
+ * @param {number}type 可选。 数字 0 或 1，用以指定各期的付款时间是在期初还是期末。 如果省略 type，则假定其值为 0。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function FV(rate, periods, payment, value, type) {
   // Credits: algorithm inspired by Apache OpenOffice
 
   value = value || 0;
@@ -677,26 +696,28 @@ exports.FV = function(rate, periods, payment, value, type) {
   return -result;
 };
 
-exports.FVSCHEDULE = function (principal, schedule) {
+
+/**
+ *
+ * @param {number}principal 必需。 现值。
+ * @param {number}schedule 必需。 要应用的利率数组。
+ * @returns {Error|*|Error|number}
+ * @constructor
+ */
+export function FVSCHEDULE(principal, schedule) {
   principal = parseNumber(principal);
   if (typeof schedule === 'string'){
-    schedule = utils.strToMatrix(schedule)
+    schedule = strToMatrix(schedule)
   }
-  schedule = parseNumberArray(utils.flatten(schedule));
+  schedule = parseNumberArray(flatten(schedule));
   if (anyIsError(principal, schedule)) {
     return Error(ERROR_VALUE);
   }
-
   let n = schedule.length;
   let future = principal;
-
-  // Apply all interests in schedule
   for (let i = 0; i < n; i++) {
-    // Apply scheduled interest
     future *= 1 + schedule[i];
   }
-
-  // Return future value
   return future;
 };
 

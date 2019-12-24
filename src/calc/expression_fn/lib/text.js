@@ -128,15 +128,32 @@ export function DOLLAR(number, decimals) {
   return numeral(number).format(format);
 };
 
-exports.EXACT = function(text1, text2) {
+/**
+ *
+ * @param {string}text1 必需。 第一个文本字符串。
+ * @param {string}text2 必需。 第二个文本字符串。
+ * @returns {boolean}
+ * @constructor
+ */
+export function EXACT(text1, text2) {
   return text1 === text2;
 };
 
-exports.FIND = function (find_text, within_text, position) {
+/**
+ *
+ * @param {string}find_text 必需。 要查找的文本。
+ * @param {string}within_text 必需。 包含要查找文本的文本。
+ * @param {number}position 可选。 指定开始进行查找的字符。 within_text 中的首字符是编号为 1 的字符。 如果省略 start_num，则假定其值为 1。
+ * @returns {null}
+ * @constructor
+ */
+export function FIND(find_text, within_text, position) {
   position = (position === undefined) ? 0 : position;
   within_text.indexOf(find_text)
   return within_text ? within_text.indexOf(find_text, position - 1) + 1 : null;
 };
+
+
 exports.FIXED = function(number, decimals, no_commas) {
   decimals = (decimals === undefined) ? 2 : decimals;
   no_commas = (no_commas === undefined) ? false : no_commas;

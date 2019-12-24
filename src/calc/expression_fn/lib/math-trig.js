@@ -1,10 +1,11 @@
 import * as numeric from 'numeric'
 import * as utils from '../../calc_utils/helper'
-import {ERROR_DIV0, ERROR_VALUE, errorObj} from '../../calc_utils/error_config'
+import {ERROR_DIV0, ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/error_config'
 import * as statistical from './statistical'
 import * as information from './information'
 import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
-import {parseNumber} from "../../calc_utils/parse_helper";
+import {parseNumber, parseNumberArray} from "../../calc_utils/parse_helper";
+import {flatten} from '../../calc_utils/helper'
 
 /**
  * @return {number}
@@ -262,7 +263,7 @@ export function BASE(number, radix, min_length) {
  * @returns {*|Error|number}
  * @constructor
  */
-function CEILING_(number, significance, mode) {
+export function CEILING_(number, significance, mode) {
   let a = significance
   significance = (significance === undefined) ? 1 : Math.abs(significance);
   mode = mode || 0;
@@ -424,21 +425,37 @@ export function DEGREES(number) {
   return number * 180 / Math.PI;
 };
 
-exports.EVEN = function(number) {
+/**
+ *
+ * @param {number}number 必需。 要舍入的值。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function EVEN(number) {
   number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
-  return exports.CEILING(number, -2, -1);
+  return exports.CEILING_(number, -2, -1);
 };
 
+/**
+ *  Number    必需。 底数 e 的指数。
+ * @type {(x: number) => number}
+ */
 exports.EXP = Math.exp;
 
-let MEMOIZED_FACT = [];
-exports.FACT = function (number) {
+/**
+ *
+ * @param {number}number  必需。 要计算其阶乘的非负数。 如果 number 不是整数，将被截尾取整。
+ * @returns {Error|number|*}
+ * @constructor
+ */
+export function FACT(number) {
+  let MEMOIZED_FACT = [];
   number = parseNumber(number);
   if (number < 0){
-    return Error(ERROR_VALUE)
+    return Error(ERROR_NUM)
   }
   if (number instanceof Error) {
     return number;
@@ -454,13 +471,22 @@ exports.FACT = function (number) {
   }
 };
 
-exports.FACTDOUBLE = function(number) {
+/**
+ *
+ * @param {number}number 必需。 为其返回双倍阶乘的值。 如果 number 不是整数，将被截尾取整。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function FACTDOUBLE(number) {
   number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
+  if (number < 0) {
+    return Error(ERROR_NUM)
+  }
   let n = Math.floor(number);
-  if (n <= 0) {
+  if (n <= 1) {
     return 1;
   } else {
     return n * exports.FACTDOUBLE(n - 2);
@@ -475,7 +501,16 @@ let ROUND = function (value, places) {
   let d = places;
   return Math.round(n * Math.pow(10, d)) / Math.pow(10, d);
 };
-exports.FLOORMATH = function(number, significance, mode) {
+
+/**
+ *
+ * @param {number}number 必需。 要向下舍入的数字。
+ * @param {number}significance 可选。 要舍入到的倍数。
+ * @param {number}mode 可选。 舍入负数的方向（接近或远离 0）。
+ * @returns {Error|number|*}
+ * @constructor
+ */
+export function FLOORMATH(number, significance, mode) {
   if (typeof number !=='number'){ //
     return Error(ERROR_VALUE); // ERROR_VALUE = '#VALUE!'
   }
@@ -493,7 +528,6 @@ exports.FLOORMATH = function(number, significance, mode) {
   if (significance === 0) {
     return 0;
   }
-
   significance = significance ? Math.abs(significance) : 1;
   let precision = -Math.floor(Math.log(significance) / Math.log(10));
   if (number >= 0) {
@@ -503,7 +537,16 @@ exports.FLOORMATH = function(number, significance, mode) {
   }
   return -ROUND(Math.floor(Math.abs(number) / significance) * significance, precision);
 }
-exports.FLOORPRACE = function(number, significance, mode) {
+
+/**
+ *
+ * @param {number}number 必需。 要向下舍入的数字。
+ * @param {number}significance 可选。 要舍入到的倍数。
+ * @param {number}mode 可选。 舍入负数的方向（接近或远离 0）。
+ * @returns {Error|number|*}
+ * @constructor
+ */
+export function FLOORPRACE(number, significance, mode) {
   if (typeof number !=='number'){ //
     return Error(ERROR_VALUE); // ERROR_VALUE = '#VALUE!'
   }
@@ -534,16 +577,28 @@ exports.FLOOR.MATH = exports.FLOORMATH;
 exports.FLOOR.PRECISE = exports.FLOORPRACE;
 //XW: end
 // adapted http://rosettacode.org/wiki/Greatest_common_divisor#JavaScript
-exports.GCD = function() {
-  let range = parseNumberArray(utils.flatten(arguments));
+
+/**
+ *number1, number2, ...    Number1 是必需的，后续数字是可选的。 介于 1 和 255 之间的值。 如果任意值不是整数，将被截尾取整。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function GCD() {
+  let range = parseNumberArray(flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
   let n = range.length;
   let r0 = range[0];
+  if (r0 < 0) {
+    return Error(ERROR_NUM)
+  }
   let x = r0 < 0 ? -r0 : r0;
   for (let i = 1; i < n; i++) {
     let ri = range[i];
+    if (ri < 0) {
+      return Error(ERROR_NUM)
+    }
     let y = ri < 0 ? -ri : ri;
     while (x && y) {
       if (x > y) {

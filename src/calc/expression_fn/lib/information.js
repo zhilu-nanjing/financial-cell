@@ -1,4 +1,4 @@
-import {errorObj, errorMsgArr} from '../../calc_utils/error_config'
+import {errorObj, errorMsgArr, ERROR_NA} from '../../calc_utils/error_config'
 import { AllowErrorExpFunction } from '../../calc_data_proxy/exp_function_proxy';
 
 // TODO
@@ -8,12 +8,12 @@ exports.CELL = function() {
 
 exports.ERROR = {};
 exports.ERROR.TYPE = function (error_val) { // 判断错误类型
-    let msgIndice = errorMsgArr.indexOf(error_val)
+  let msgIndice = errorMsgArr.indexOf(error_val) + 1
     if (msgIndice > -1){
       return msgIndice
     }
     else {
-      return errorObj.ERROR_NA;
+      return Error(ERROR_NA);
     }
 };
 

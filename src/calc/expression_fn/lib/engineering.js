@@ -5,6 +5,7 @@ import * as utils from '../../calc_utils/helper'
 import bessel from 'bessel'
 import {parseNumber} from "../../calc_utils/parse_helper";
 import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
+import {anyIsError} from "../../calc_utils/helper";
 
 function isValidBinaryNumber(number) {
   return (/^[01]{1,10}$/).test(number);
@@ -746,24 +747,30 @@ export function DELTA(number1, number2) {
   number2 = (number2 === undefined) ? 0 : number2;
   number1 = parseNumber(number1);
   number2 = parseNumber(number2);
-  if (utils.anyIsError(number1, number2)) {
+  if (anyIsError(number1, number2)) {
     return Error(ERROR_VALUE);
   }
   return (number1 === number2) ? 1 : 0;
 };
 
 // TODO: why is upper_bound not used ? The excel documentation has no examples with upper_bound
-exports.ERF = function(lower_bound, upper_bound) {
-  // Set number2 to zero if undefined
-  upper_bound = (upper_bound === undefined) ? 0 : upper_bound;
-
+/**
+ *
+ * @param {number}lower_bound 必需。 ERF 函数的积分下限。
+ * @param {number}upper_bound 可选。 ERF 函数的积分上限。 如果省略，ERF 积分将在零到 lower_limit 之间。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function ERF(lower_bound, upper_bound) {
   lower_bound = parseNumber(lower_bound);
-  upper_bound = parseNumber(upper_bound);
-  if (utils.anyIsError(lower_bound, upper_bound)) {
+  if (anyIsError(lower_bound, upper_bound)) {
     return Error(ERROR_VALUE);
   }
-
-  return jStat.erf(lower_bound);
+  if (upper_bound === undefined) {
+    return jStat.erf(lower_bound)
+  } else {
+    return jStat.erf(upper_bound) - jStat.erf(lower_bound);
+  }
 };
 
 // TODO
@@ -775,7 +782,13 @@ exports.ERF.PRECISE = function(x) {
   return Formulas.ERF(x)
 };
 
-exports.ERFC = function(x) {
+/**
+ *
+ * @param {number}x 必需。 ERFC 函数的积分下限。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function ERFC(x) {
   // Return error if x is not a number
   if (isNaN(x)) {
     return Error(ERROR_VALUE);
@@ -793,14 +806,19 @@ exports.ERFC.PRECISE = function(x) {
   return Formulas.ERFC(x)
 };
 
-exports.GESTEP = function(number, step) {
+/**
+ *
+ * @param {number}number 必需。 要针对步骤进行测试的值。
+ * @param {number}step 可选。 阈值。 如果省略 step 值，则 GESTEP 使用零。
+ * @returns {number|*|Error|number}
+ * @constructor
+ */
+export function GESTEP(number, step) {
   step = step || 0;
   number = parseNumber(number);
-  if (utils.anyIsError(step, number)) {
+  if (anyIsError(step, number)) {
     return number;
   }
-
-  // Return delta
   return (number >= step) ? 1 : 0;
 };
 
@@ -934,7 +952,7 @@ exports.IMABS = function (inumber) {
   let y = exports.IMAGINARY(inumber);
 
   // Return error if either coefficient is not a number
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1008,7 +1026,7 @@ exports.IMARGUMENT = function (inumber) {
   let y = exports.IMAGINARY(inumber);
 
   // Return error if either coefficient is not a number
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1053,7 +1071,7 @@ exports.IMCONJUGATE = function (inumber) {
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1071,7 +1089,7 @@ exports.IMCOS = function (inumber) {
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1089,7 +1107,7 @@ exports.IMCOSH = function (inumber) {
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1107,7 +1125,7 @@ exports.IMCOT = function (inumber) {
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1122,7 +1140,7 @@ exports.IMDIV = function(inumber1, inumber2) {
   let c = exports.IMREAL(inumber2);
   let d = exports.IMAGINARY(inumber2);
 
-  if (utils.anyIsError(a, b, c, d)) {
+  if (anyIsError(a, b, c, d)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1152,7 +1170,7 @@ exports.IMEXP = function(inumber) {
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1170,7 +1188,7 @@ exports.IMLN = function(inumber) {
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1188,7 +1206,7 @@ exports.IMLOG10 = function(inumber) {
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1206,7 +1224,7 @@ exports.IMLOG2 = function(inumber) {
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1223,7 +1241,7 @@ exports.IMPOWER = function(inumber, number) {
   number = parseNumber(number);
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
-  if (utils.anyIsError(number, x, y)) {
+  if (anyIsError(number, x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1253,7 +1271,7 @@ exports.IMPRODUCT = function() {
     let c = exports.IMREAL(arguments[i]);
     let d = exports.IMAGINARY(arguments[i]);
 
-    if (utils.anyIsError(a, b, c, d)) {
+    if (anyIsError(a, b, c, d)) {
       return Error(ERROR_VALUE);
     }
 
@@ -1331,7 +1349,7 @@ exports.IMSEC = function(inumber) {
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1345,7 +1363,7 @@ exports.IMSECH = function(inumber) {
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1359,7 +1377,7 @@ exports.IMSIN = function(inumber) {
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1377,7 +1395,7 @@ exports.IMSINH = function(inumber) {
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1395,7 +1413,7 @@ exports.IMSQRT = function(inumber) {
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1425,7 +1443,7 @@ exports.IMCSC = function (inumber) {
   let y = exports.IMAGINARY(inumber);
 
   // Return error if either coefficient is not a number
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_NUM);
   }
 
@@ -1445,7 +1463,7 @@ exports.IMCSCH = function (inumber) {
   let y = exports.IMAGINARY(inumber);
 
   // Return error if either coefficient is not a number
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_NUM);
   }
 
@@ -1463,7 +1481,7 @@ exports.IMSUB = function(inumber1, inumber2) {
   let c = exports.IMREAL(inumber2);
   let d = exports.IMAGINARY(inumber2);
 
-  if (utils.anyIsError(a, b, c, d)) {
+  if (anyIsError(a, b, c, d)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1496,7 +1514,7 @@ exports.IMSUM = function (inumber) {
     let c = exports.IMREAL(args[i]);
     let d = exports.IMAGINARY(args[i]);
 
-    if (utils.anyIsError(a, b, c, d)) {
+    if (anyIsError(a, b, c, d)) {
       return Error(ERROR_VALUE);
     }
 
@@ -1519,7 +1537,7 @@ exports.IMTAN = function (inumber) {
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
