@@ -1,4 +1,5 @@
 import * as utils from '../../calc_utils/helper'
+import {strToMatrix} from '../../calc_utils/helper'
 import {errorObj} from '../../calc_utils/error_config'
 import numeral from 'numeral'
 import {parseNumber} from "../../calc_utils/parse_helper";
@@ -191,9 +192,18 @@ exports.HTML2TEXT = function (value) {
 
   return result;
 };
-exports.INDEX = function (matrix, row_num, column_num) {
+
+/**
+ *
+ * @param {array}matrix 必需。 单元格区域或数组常量。
+ * @param {number}row_num 必需。 选择数组中的某行，函数从该行返回数值。 如果省略 row_num, 则需要 column_num。
+ * @param {number}column_num 可选。 选择数组中的某列，函数从该列返回数值。 如果省略 column_num, 则需要 row_num。
+ * @returns {*}
+ * @constructor
+ */
+export function INDEX(matrix, row_num, column_num) {
   if (typeof matrix == 'string'){
-    matrix = utils.strToMatrix(matrix)
+    matrix = strToMatrix(matrix)
   }
   return matrix[row_num][column_num-1]
 };

@@ -270,7 +270,13 @@ exports.INTERVAL = function (second) {
   'T' + hour + min + sec;
 };
 
-exports.ISOWEEKNUM = function(date) {
+/**
+ *
+ * @param {string/number}date 必需。 日期是 Excel 用于日期和时间计算的日期-时间代码。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function ISOWEEKNUM(date) {
   date = days_str2date(date);
   if (date instanceof Error) {
     return date;
