@@ -23,6 +23,11 @@ import {ERROR_DIV0, ERROR_NA, ERROR_NUM, ERROR_VALUE} from "../../src/calc/calc_
 
 describe('expression_fn integration', function () {
     describe('func', function () {
+        it('IF', function () {
+            let res2 = easySolve(logical.IF, ['2>4', 1, 2])
+            console.log(res2)
+            assert.equal(res2, 2)//无法识别表达式
+        })
 
     })
 })

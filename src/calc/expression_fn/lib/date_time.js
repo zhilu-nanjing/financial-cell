@@ -219,7 +219,14 @@ export function EOMONTH(start_date, months) {
   return (new Date(start_date.getFullYear(), start_date.getMonth() + months + 1, 0)).toLocaleString();
 };
 
-exports.HOUR = function(serial_number) {
+/**
+ *
+ * @param {number/string}serial_number 必需。 时间值，其中包含要查找的小时数。 时间值有多种输入方式：带引号的文本字符串（例如 "6:45 PM"）、十进制数
+ * （例如 0.78125 表示 6:45 PM）或其他公式或函数的结果（例如 TIMEVALUE("6:45 PM")）。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function HOUR(serial_number) {
   if (typeof serial_number === 'number' && !isNaN(serial_number)){
     //XW: 参数为数字时获取对应的小时数
     return parseInt((parseFloat(serial_number)-parseInt(serial_number)) * 24)

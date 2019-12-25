@@ -822,7 +822,16 @@ export function GESTEP(number, step) {
   return (number >= step) ? 1 : 0;
 };
 
-exports.HEX2BIN = function(number, places) {
+/**
+ *
+ * @param {number}number 必需。 要转换的十六进制数。 Number 不能包含超过 10 个字符。
+ * number 的最高位为符号位（从右侧起第 40 位）。 其余 9 位是数量位。 负数用二进制补码记数法表示。
+ * @param {number}places 可选。 要使用的字符数。 如果省略 places，
+ * 则 HEX2BIN 使用必要的最小字符数。 Places 可用于在返回的值前置 0（零）。
+ * @returns {string|Error|*}
+ * @constructor
+ */
+export function HEX2BIN(number, places) {
   // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
   if (!/^[0-9A-Fa-f]{1,10}$/.test(number)) {
     return Error(ERROR_NUM);
@@ -836,6 +845,9 @@ exports.HEX2BIN = function(number, places) {
 
   // Return error if number is lower than -512 or greater than 511
   if (decimal < -512 || decimal > 511) {
+    return Error(ERROR_NUM);
+  }
+  if (places < 0) {
     return Error(ERROR_NUM);
   }
 
@@ -857,9 +869,7 @@ exports.HEX2BIN = function(number, places) {
     }
 
     // Return error if places is negative
-    if (places < 0) {
-      return Error(ERROR_NUM);
-    }
+
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
@@ -869,7 +879,15 @@ exports.HEX2BIN = function(number, places) {
   }
 };
 
-exports.HEX2DEC = function(number) {
+
+/**
+ *
+ * @param {number}number 必需。 要转换的十六进制数。 Number 不能包含超过 10 个字符（40 位）。
+ * Number 的最高位为符号位。 其余 39 位是数量位。 负数由二进制补码记数法表示。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function HEX2DEC(number) {
   // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
   if (!/^[0-9A-Fa-f]{1,10}$/.test(number)) {
     return Error(ERROR_NUM);
@@ -882,7 +900,16 @@ exports.HEX2DEC = function(number) {
   return (decimal >= 549755813888) ? decimal - 1099511627776 : decimal;
 };
 
-exports.HEX2OCT = function(number, places) {
+
+/**
+ *
+ * @param {number}number  必需。 要转换的十六进制数。 Number 不能包含超过 10 个字符。 Number 的最高位为符号位。
+ * 其余 39 位是数量位。 负数由二进制补码记数法表示。
+ * @param {number}places 可选。 要使用的字符数。 如果省略 places，则 HEX2OCT 使用必要的最小字符数。 Places 可用于在返回的值前置 0（零）。
+ * @returns {string|Error|*}
+ * @constructor
+ */
+export function HEX2OCT(number, places) {
   // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
   if (!/^[0-9A-Fa-f]{1,10}$/.test(number)) {
     return Error(ERROR_NUM);
@@ -893,6 +920,9 @@ exports.HEX2OCT = function(number, places) {
 
   // Return error if number is positive and greater than 0x1fffffff (536870911)
   if (decimal > 536870911 && decimal < 1098974756864) {
+    return Error(ERROR_NUM);
+  }
+  if (places < 0) {
     return Error(ERROR_NUM);
   }
 
@@ -914,9 +944,6 @@ exports.HEX2OCT = function(number, places) {
     }
 
     // Return error if places is negative
-    if (places < 0) {
-      return Error(ERROR_NUM);
-    }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);

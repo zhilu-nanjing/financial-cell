@@ -512,8 +512,13 @@ export function CONFIDENCE__T(alpha, sd, n) {
   return jStat.tci(1, alpha, sd, n)[1] - 1;
 };
 
-
-exports.IFS = function() {
+/**
+ IFS 函数检查是否满足一个或多个条件，且返回符合第一个 TRUE 条件的值。
+ IFS 可以取代多个嵌套 IF 语句，并且有多个条件时更方便阅读。
+ * @returns {Error|any}
+ * @constructor
+ */
+export function IFS() {
   for (let i = 0; i + 1 < arguments.length; i += 2) {
     let cond = arguments[i];
     let val = arguments[i + 1];
@@ -1093,8 +1098,16 @@ export function GEOMEAN() {
   if (args instanceof Error) {
     return args;
   }
+  let n = args.length;
+  for (let i = 0; i < n; i++) {
+    if (args[i] <= 0) {
+      return Error(ERROR_NUM)
+    }
+  }
   return jStat.geomean(args);
-};
+
+  ;
+}
 
 exports.GROWTH = function(known_y, known_x, new_x, use_const) {
   // Credits: Ilmari Karonen (http://stackoverflow.com/questions/14161990/how-to-implement-growth-function-in-javascript)
@@ -1168,7 +1181,13 @@ exports.GROWTH = function(known_y, known_x, new_x, use_const) {
   return new_y;
 };
 
-exports.HARMEAN = function() {
+/**
+ * number1, number2, ...    Number1 是必需的，后续数字是可选的。 用于计算平均值的 1 到 255 个参数。
+ * 也可以用单一数组或对某个数组的引用来代替用逗号分隔的参数。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function HARMEAN() {
   let range = parseNumberArray(flatten(arguments));
   if (range instanceof Error) {
     return range;
@@ -1176,6 +1195,9 @@ exports.HARMEAN = function() {
   let n = range.length;
   let den = 0;
   for (let i = 0; i < n; i++) {
+    if (range[i] <= 0) {
+      return Error(ERROR_NUM)
+    }
     den += 1 / range[i];
   }
   return n / den;
@@ -1183,6 +1205,17 @@ exports.HARMEAN = function() {
 
 exports.HYPGEOM = {};
 
+/**
+ *
+ * @param {number}x 必需。 样本中成功的次数。
+ * @param {number}n 必需。 样本量。
+ * @param {number}M 必需。 总体中成功的次数。
+ * @param {number}N 必需。 总体大小。
+ * @param {boolean}cumulative 必需。 决定函数形式的逻辑值。 如果 cumulative 为 TRUE，
+ * 则 HYPGEOM.DIST 返回累积分布函数；如果为 FALSE，则返回概率密度函数。
+ * @returns {Error|number}
+ * @constructor
+ */
 exports.HYPGEOM.DIST = function(x, n, M, N, cumulative) {
   cumulative = parseBool(cumulative)
   x = parseNumber(x);
@@ -1191,6 +1224,9 @@ exports.HYPGEOM.DIST = function(x, n, M, N, cumulative) {
   N = parseNumber(N);
   if (anyIsError(x, n, M, N)) {
     return Error(ERROR_VALUE);
+  }
+  if (x < 0 || x > Math.min(n, M) || x < Math.max(0, n - N + M) || n <= 0 || n > N || M <= 0 || M > N || N <= 0) {
+    return Error(ERROR_NUM);
   }
 
   function pdf(x, n, M, N) {
