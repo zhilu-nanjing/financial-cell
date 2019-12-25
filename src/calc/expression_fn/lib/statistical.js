@@ -7,7 +7,7 @@ import * as misc from './miscellaneous';
 import * as evalExpression from './expression';
 import { parseBool, parseNumber, parseNumberArray } from '../../calc_utils/parse_helper';
 import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
-import {anyIsError, flatten} from "../../calc_utils/helper";
+import {anyIsError, flatten, flattenNum} from "../../calc_utils/helper";
 import* as helper from "../../calc_utils/helper";
 import {days_str2date} from "../../calc_utils/parse_helper";
 
@@ -1244,7 +1244,14 @@ exports.HYPGEOM.DIST = function(x, n, M, N, cumulative) {
   return (cumulative) ? cdf(x, n, M, N) : pdf(x, n, M, N);
 };
 
-exports.INTERCEPT = function(known_y, known_x) {
+/**
+ *
+ * @param {array}known_y 必需。 因变的观察值或数据的集合。
+ * @param {array}known_x 必需。 因变的观察值或数据的集合。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function INTERCEPT(known_y, known_x) {
   known_y = parseNumberArray(known_y);
   known_x = parseNumberArray(known_x);
   if (anyIsError(known_y, known_x)) {
@@ -1256,10 +1263,19 @@ exports.INTERCEPT = function(known_y, known_x) {
   return exports.FORECAST(0, known_y, known_x);
 };
 
-exports.KURT = function() {
+/**
+ * number1, number2, ...    Number1 是必需的，后续数字是可选的。
+ * 用于计算峰值的 1 到 255 个参数。 也可以用单一数组或对某个数组的引用来代替用逗号分隔的参数。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function KURT() {
   let range = parseNumberArray(flatten(arguments));
   if (range instanceof Error) {
     return range;
+  }
+  if (range.length < 4) {
+    return Error(ERROR_DIV0)
   }
   let mean = jStat.mean(range);
   let n = range.length;
@@ -1271,8 +1287,18 @@ exports.KURT = function() {
   return ((n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3))) * sigma - 3 * (n - 1) * (n - 1) / ((n - 2) * (n - 3));
 };
 
-exports.LARGE = function(range, k) {
+/**
+ *
+ * @param {array}range 必需。 需要确定第 k 个最大值的数组或数据区域。
+ * @param {number}k 必需。 返回值在数组或数据单元格区域中的位置（从大到小排）。
+ * @returns {[]|T}
+ * @constructor
+ */
+export function LARGE(range, k) {
   range = flatten(range)
+  if (range === undefined || k <= 0 || k > range.length) {
+    return Error(ERROR_NUM)
+  }
   let arr = []
   for ( let i=0;i<range.length;i++){
     if (parseFloat(range[i])){
@@ -1882,7 +1908,7 @@ exports.STDEV.S = function() {
   return Math.sqrt(v);
 };
 
-exports.STDEVA = function() {
+export function STDEVA() {
   let v = exports.VARA.apply(this, arguments);
   return Math.sqrt(v);
 };
@@ -2082,7 +2108,7 @@ exports.VARA = function() {
   let n = range.length;
   let sigma = 0;
   let count = 0;
-  let mean = exports.AVERAGEA(range);
+  let mean = AVERAGEA(range);
   for (let i = 0; i < n; i++) {
     let el = range[i];
     if (typeof el === 'number') {

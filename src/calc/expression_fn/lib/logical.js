@@ -68,7 +68,7 @@ export function IF(test, then_value, otherwise_value) {
  * @constructor
  */
 export function IFERROR(value, valueIfError) {
-  if (information.ISERROR(value)) {
+  if (information.ISERROR_(value)) {
     return valueIfError;
   }
   return value;

@@ -722,7 +722,17 @@ export function FVSCHEDULE(principal, schedule) {
 };
 
 // XW：INTRATE实现
-exports.INTRATE = function (settlement, maturity, investment, redemption, basis) {
+/**
+ *
+ * @param {number}settlement 必需。 有价证券的结算日。 有价证券结算日是在发行日之后，有价证券卖给购买者的日期。
+ * @param {number}maturity 必需。 有价证券的到期日。 到期日是有价证券有效期截止时的日期。
+ * @param {number}investment 必需。 有价证券的投资额。
+ * @param {number}redemption 必需。 有价证券到期时的兑换值。
+ * @param {number}basis 可选。 要使用的日计数基准类型。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function INTRATE(settlement, maturity, investment, redemption, basis) {
   //https://support.office.com/zh-cn/article/intrate-%E5%87%BD%E6%95%B0-5cb34dde-a221-4cb6-b3eb-0b9e55e1316f
   if (investment<=0 || redemption<=0){
     return Error(ERROR_VALUE)
@@ -733,8 +743,24 @@ exports.INTRATE = function (settlement, maturity, investment, redemption, basis)
   if (settlement >= maturity){
     return Error(ERROR_NUM)
   }
-  let B = 1//一年之中的天数，取决于年基准数。
-  let DIM = 2// 结算日与到期日之间的天数。
+  let maturityDate = days_str2date(maturity);
+  let settlementDate = days_str2date(settlement)
+  let B
+  if (basis === 3) {
+    B = 365
+  }
+  if (basis === 1) {
+    let year = settlementDate.getFullYear()
+    if (0 === year % 4 && (year % 100 !== 0 || year % 400 === 0)) {
+      B = 366
+    } else {
+      B = 365
+    }
+  }
+  if (basis !== 3 & basis !== 1) {
+    B = 360
+  }
+  let DIM = DAYSBETWEEN_AFTER_BASIS_TEST(maturityDate, settlementDate, basis)
   return (redemption-investment)/investment *(B/DIM)
 };
 //XW：end
@@ -851,7 +877,16 @@ exports.IRR = function(values, guess) {
   return resultRate;
 };
 
-exports.ISPMT = function(rate, period, periods, value) {
+/**
+ *
+ * @param {number}rate 必需。 投资的利率。
+ * @param {number}period 必需。 要查找其利息的期间, 并且必须介于1和 Nper 之间。
+ * @param {number}periods 必需。 投资的总支付期数。
+ * @param {number}value 必需。 投资的现值。 对于贷款, Pv 为贷款金额。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function ISPMT(rate, period, periods, value) {
   rate = parseNumber(rate);
   period = parseNumber(period);
   periods = parseNumber(periods);

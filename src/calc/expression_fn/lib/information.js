@@ -23,6 +23,11 @@ exports.INFO = function() {
 };
 
 ///////////// Jobs： ISBLANK函数能够处理Error，因此要这么写。 后面的ISERR与ISERROR都需要改写。
+/**
+ *
+ * @param arg 必需。 指的是要测试的值。 参数 value 可以是空白（空单元格）、错误值、逻辑值、文本、数字、引用值，或者引用要测试的以上任意值的名称。
+ * @returns {boolean}
+ */
 function isBlank(arg){
   if(arg.hasOwnProperty("cellVTypeName")){
     return ["CellVEmpty", "CellVError"].includes(arg.cellVTypeName)
@@ -31,59 +36,128 @@ function isBlank(arg){
 }
 export const ISBLANK = new AllowErrorExpFunction(isBlank) // 函数名字都会大写
 
-exports.ISERR = function(value) { // 是否是错误1
+/**
+ *
+ * @param value 必需。 指的是要测试的值。
+ * @returns {boolean}
+ * @constructor
+ * @private
+ */
+function ISERR_(value) { // 是否是错误1
   return errorMsgArr.indexOf(value) >= 0 ||
     (typeof value === 'number' && (isNaN(value) || !isFinite(value)));
 };
+export const ISERR = new AllowErrorExpFunction(ISERR_)
 
-exports.ISERROR = function(value) { // 是否是错误2
-  return exports.ISERR(value) || value === errorObj.ERROR_NA;
+/**
+ *
+ * @param value value 必需。 指的是要测试的值。
+ * @returns {boolean}
+ * @constructor
+ * @private
+ */
+export function ISERROR_(value) { // 是否是错误2
+  return ISERR_(value) || value === Error(ERROR_NA);
 };
-
+export const ISERROR = new AllowErrorExpFunction(ISERROR_)
 
 exports.ISBINARY = function (number) {
   return (/^[01]{1,10}$/).test(number);
 };
 
-
-exports.ISEVEN = function(number) {
+/**
+ *
+ * @param {number}number 必需。 要测试的值。 如果 number 不是整数，将被截尾取整。
+ * @returns {boolean}
+ * @constructor
+ */
+export function ISEVEN(number) {
   return (Math.floor(Math.abs(number)) & 1) ? false : true;
 };
+
 
 // TODO
 exports.ISFORMULA = function() {
   throw new Error('ISFORMULA is not implemented');
 };
 
-exports.ISLOGICAL = function(value) {
-  if(value === 'FALSE'){
+/**
+ *
+ * @param value 必需。 指的是要测试的值。
+ * @returns {boolean}
+ * @constructor
+ */
+export function ISLOGICAL(value) {
+  //
+  if (value === true || value === "TRUE" || value === false || value === "FALSE") {
+    return true
+  } else {
     return false
+    // return value === true || value === false;
   }
-  return value === true || value === false;
 };
 
-exports.ISNA = function(value) {
-  return value === errorObj.ERROR_NA || value === errorObj.ERROR_NA.message;;
+/**
+ *
+ * @param value 必需。 指的是要测试的值。
+ * @returns {boolean}
+ * @constructor
+ */
+export function ISNA(value) {
+  return value === Error(ERROR_NA) || value === Error(ERROR_NA).message;
+  ;
 };
 
-exports.ISNONTEXT = function(value) {
+/**
+ *
+ * @param value 必需。 指的是要测试的值。
+ * @returns {boolean}
+ * @constructor
+ */
+export function ISNONTEXT(value) {
   return typeof(value) !== 'string';
 };
 
-exports.ISNUMBER = function(value) {
+/**
+ *
+ * @param value 必需。 指的是要测试的值。
+ * @returns {boolean}
+ * @constructor
+ */
+export function ISNUMBER(value) {
   return typeof(value) === 'number' && !isNaN(value) && isFinite(value);
 };
 
-exports.ISODD = function(number) {
+/**
+ *
+ * @param {number}number 必需。 要测试的值。 如果 number 不是整数，将被截尾取整。
+ * @returns {boolean}
+ * @constructor
+ */
+export function ISODD(number) {
   return (Math.floor(Math.abs(number)) & 1) ? true : false;
 };
 
 // TODO
-exports.ISREF = function() {
+/**
+ * @param value 必需。 指的是要测试的值。
+ * @returns {boolean}
+ * @constructor
+ */
+export function ISREF(value) {
+  if (value === undefined) {
+    return false
+  }
   return arguments['0'] !== null
 };
 
-exports.ISTEXT = function(value) {
+/**
+ *
+ * @param value 必需。 指的是要测试的值。
+ * @returns {boolean}
+ * @constructor
+ */
+export function ISTEXT(value) {
   return typeof(value) === 'string';
 };
 
@@ -107,7 +181,7 @@ exports.N = function (value) {
 };
 
 exports.NA = function() {
-  return errorObj.ERROR_NA;
+  return Error(ERROR_NA);
 };
 
 
@@ -144,7 +218,7 @@ exports.TYPE = function (value) {
   if (value == true || value == false) {
     return 4;
   }
-  if (exports.ISERR(value) || value === errorObj.ERROR_NA) {
+  if (exports.ISERR(value) || value === Error(ERROR_NA)) {
     return 16;
   }
   if (Array.isArray(arr)) {

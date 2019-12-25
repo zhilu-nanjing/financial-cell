@@ -626,9 +626,14 @@ exports.ISO = {
   CEILING: exports.CEILING
 };
 
-exports.LCM = function() {
+/**
+ *
+ * @returns {Error|*}
+ * @constructor
+ */
+export function LCM() {
   // Credits: Jonas Raoni Soares Silva
-  let o = parseNumberArray(utils.flatten(arguments));
+  let o = parseNumberArray(flatten(arguments));
   if (o instanceof Error) {
     return o;
   }
