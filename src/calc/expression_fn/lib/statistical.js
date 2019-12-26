@@ -2,14 +2,15 @@ import * as mathTrig from './math-trig';
 import * as text from './text';
 import * as jStat from 'jstat';
 import * as utils from '../../calc_utils/helper';
-import {ERROR_DIV0, ERROR_NA, ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/error_config';
+import {ERROR_DIV0, ERROR_NA, ERROR_NAME, ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/error_config';
 import * as misc from './miscellaneous';
 import * as evalExpression from './expression';
 import { parseBool, parseNumber, parseNumberArray } from '../../calc_utils/parse_helper';
-import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
-import {anyIsError, flatten, flattenNum} from "../../calc_utils/helper";
+import {NotConvertExpFunction, OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
+import {anyIsError, flatten, flattenNum, arrayValuesToNumbers} from "../../calc_utils/helper";
 import* as helper from "../../calc_utils/helper";
 import {days_str2date} from "../../calc_utils/parse_helper";
+import {ISODD_} from "./information";
 
 let SQRT2PI = 2.5066282746310002;
 
@@ -518,7 +519,7 @@ export function CONFIDENCE__T(alpha, sd, n) {
  * @returns {Error|any}
  * @constructor
  */
-export function IFS() {
+export function IFS_() {
   for (let i = 0; i + 1 < arguments.length; i += 2) {
     let cond = arguments[i];
     let val = arguments[i + 1];
@@ -528,6 +529,8 @@ export function IFS() {
   }
   return Error(ERROR_NA);
 }
+
+export const IFS = new NotConvertExpFunction(IFS_)
 
 /**
  *
@@ -1315,7 +1318,7 @@ export function LARGE(range, k) {
   })[k - 1];
 };
 
-exports.LINEST = function(data_y, data_x) {
+export function LINEST(data_y, data_x) {
   data_y = parseNumberArray(flatten(data_y));
   data_x = parseNumberArray(flatten(data_x));
   if (anyIsError(data_y, data_x)) {
@@ -1339,7 +1342,14 @@ exports.LINEST = function(data_y, data_x) {
 // http://office.microsoft.com/en-us/starter-help/logest-function-HP010342665.aspx
 // LOGEST returns are based on the following linear model:
 // ln y = x1 ln m1 + ... + xn ln mn + ln b
-exports.LOGEST = function(data_y, data_x) {
+/**
+ *
+ * @param {array}data_y 必需。 关系表达式 y = b*m^x 中已知的 y 值集合。
+ * @param {array}data_x 可选。 关系表达式 y=b*m^x 中已知的 x 值集合，为可选参数。
+ * @returns {(Error | [*, *])|Error}
+ * @constructor
+ */
+export function LOGEST(data_y, data_x) {
   data_y = parseNumberArray(flatten(data_y));
   data_x = parseNumberArray(flatten(data_x));
   if (anyIsError(data_y, data_x)) {
@@ -1349,14 +1359,24 @@ exports.LOGEST = function(data_y, data_x) {
     data_y[i] = Math.log(data_y[i]);
   }
 
-  let result = exports.LINEST(data_y, data_x);
+  let result = LINEST(data_y, data_x);
   result[0] = Math.round(Math.exp(result[0])*1000000)/1000000;
-  result[1] = Math.round(Math.exp(result[1])*1000000)/1000000;
-  return result;
+  // result[1] = Math.round(Math.exp(result[1])*1000000)/1000000;
+  return result[0];
 };
 
 exports.LOGNORM = {};
 
+/**
+ *
+ * @param {number}x 必需。 用来计算函数的值。
+ * @param {number}mean 必需。 ln(x) 的平均值。
+ * @param {number}sd 必需。 ln(x) 的标准偏差。
+ * @param {boolean}cumulative 必需。 决定函数形式的逻辑值。 如果 cumulative 为 TRUE，
+ * 则 LOGNORM.DIST 返回累积分布函数；如果为 FALSE，则返回概率密度函数。
+ * @returns {Error|*|number}
+ * @constructor
+ */
 exports.LOGNORM.DIST = function(x, mean, sd, cumulative) {
   cumulative = parseBool(cumulative)
   x = parseNumber(x);
@@ -1365,9 +1385,20 @@ exports.LOGNORM.DIST = function(x, mean, sd, cumulative) {
   if (anyIsError(x, mean, sd)) {
     return Error(ERROR_VALUE);
   }
+  if (x <= 0 || sd <= 0) {
+    return Error(ERROR_NUM)
+  }
   return (cumulative) ? jStat.lognormal.cdf(x, mean, sd) : jStat.lognormal.pdf(x, mean, sd);
 };
 
+/**
+ *
+ * @param {number}probability 必需。 与对数分布相关的概率。
+ * @param {number}mean 必需。 ln(x) 的平均值。
+ * @param {number}sd 必需。 ln(x) 的标准偏差。
+ * @returns {Error|*}
+ * @constructor
+ */
 exports.LOGNORM.INV = function(probability, mean, sd) {
   probability = parseNumber(probability);
   mean = parseNumber(mean);
@@ -1375,43 +1406,84 @@ exports.LOGNORM.INV = function(probability, mean, sd) {
   if (anyIsError(probability, mean, sd)) {
     return Error(ERROR_VALUE);
   }
+  if (probability <= 0 || probability >= 1 || sd <= 0) {
+    return Error(ERROR_NUM)
+  }
   return jStat.lognormal.inv(probability, mean, sd);
 };
 
-exports.MAX = function() {
-  let range = utils.arrayValuesToNumbers(flatten(arguments));
+
+/**
+ * number1, number2, ...    Number1 是必需的，后续数字是可选的。 要从中查找最大值的 1 到 255 个数字。
+ * @returns {number}
+ * @constructor
+ */
+export function MAX() {
+  let range = arrayValuesToNumbers(flatten(arguments))
+  let k
+  for (k = 0; k < range.length; k++) {
+    if (range[k] === 'string') {
+      return Error(ERROR_NAME)
+    }
+  }
   return (range.length === 0) ? 0 : Math.max.apply(Math, range);
 };
 
-exports.MAXA = function() {
-  let range = utils.arrayValuesToNumbers(flatten(arguments));
+/**
+ * Value1     必需。 要从中找出最大值的第一个数值参数。Value2,...     可选。 要从中找出最大值的 2 到 255 个数值参数。
+ * @returns {number}
+ * @constructor
+ */
+export function MAXA() {
+  let range = arrayValuesToNumbers(flatten(arguments));
   return (range.length === 0) ? 0 : Math.max.apply(Math, range);
 };
 
-exports.MEDIAN = function() {
-  let arr = utils.arrayValuesToNumbers(flatten(arguments));
+/**
+ * number1, number2, ...    Number1 是必需的，后续数字是可选的。 要计算中值的 1 到 255 个数字。
+ * @returns {*}
+ * @constructor
+ */
+export function MEDIAN() {
+  let arr = arrayValuesToNumbers(flatten(arguments));
   let arr2 = []
   for (let i=0;i<arr.length;i++){
     if (typeof arr[i] === 'number'){
       arr2.push(arr[i])
     }
   }
-  let range = utils.arrayValuesToNumbers(flatten(arr2));
+  let range = arrayValuesToNumbers(flatten(arr2));
   return jStat.median(range);
 };
 
-exports.MIN = function() {
-  let range = flatten(arguments);
+/**
+ * number1, number2, ...    number1 是可选的，后续数字是可选的。 要从中查找最小值的 1 到 255 个数字。
+ * @returns {number}
+ * @constructor
+ */
+export function MIN() {
+  let range = arrayValuesToNumbers(flatten(arguments));
   return (range.length === 0) ? 0 : Math.min.apply(Math, range);
 };
 
-exports.MINA = function() {
-  let range = utils.arrayValuesToNumbers(flatten(arguments));
+/**
+ *Value1, value2, ...    Value1 是必需的，后续值是可选的。 要从中查找最小值的 1 到 255 个数值。
+ * @returns {number}
+ * @constructor
+ */
+export function MINA() {
+  let range = arrayValuesToNumbers(flatten(arguments));
   return (range.length === 0) ? 0 : Math.min.apply(Math, range);
 };
 
 exports.MODE = {};
 
+/**
+ * Number1    必需。要计算其众数的第一个数字参数。
+ Number2, ...    可选。要计算其众数的 2 到 254 个数字参数。也可以用单一数组或对某个数组的引用来代替用逗号分隔的参数。
+ * @returns {Error|(number&Error)|[]}
+ * @constructor
+ */
 exports.MODE.MULT = function() {
   // Credits: Roönaän
   let range = parseNumberArray(flatten(arguments));
@@ -1423,7 +1495,6 @@ exports.MODE.MULT = function() {
   let maxItems = [];
   let max = 0;
   let currentItem;
-
   for (let i = 0; i < n; i++) {
     currentItem = range[i];
     count[currentItem] = count[currentItem] ? count[currentItem] + 1 : 1;
@@ -1438,6 +1509,12 @@ exports.MODE.MULT = function() {
   return maxItems;
 };
 
+/**
+ * Number1    必需。要计算其众数的第一个数字参数。
+ Number2, ...    可选。要计算其众数的 2 到 254 个数字参数。也可以用单一数组或对某个数组的引用来代替用逗号分隔的参数。
+ * @returns {Error|(number&Error)|T}
+ * @constructor
+ */
 exports.MODE.SNGL = function() {
   let range = parseNumberArray(flatten(arguments));
   if (range instanceof Error) {

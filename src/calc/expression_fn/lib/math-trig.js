@@ -4,8 +4,8 @@ import {ERROR_DIV0, ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/err
 import * as statistical from './statistical'
 import * as information from './information'
 import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
-import {parseNumber, parseNumberArray} from "../../calc_utils/parse_helper";
-import {flatten} from '../../calc_utils/helper'
+import {parseNumber, parseNumberArray, parseMatrix} from "../../calc_utils/parse_helper";
+import {flatten, anyIsError} from '../../calc_utils/helper'
 
 /**
  * @return {number}
@@ -88,7 +88,7 @@ exports.AGGREGATE = function(function_num, options, ref1, ref2) {
   if (typeof ref1 == 'string') {
     return Error(ERROR_VALUE)
   }//XW:end
-  if (utils.anyIsError(function_num, options)) {
+  if (anyIsError(function_num, options)) {
     return Error(ERROR_VALUE);
   }
   switch (function_num) {
@@ -247,7 +247,7 @@ export function BASE(number, radix, min_length) {
   number = parseNumber(number);
   radix = parseNumber(radix);
   min_length = parseNumber(min_length);
-  if (utils.anyIsError(number, radix, min_length)) {
+  if (anyIsError(number, radix, min_length)) {
     return new Error(ERROR_VALUE);
   }
   min_length = (min_length === undefined) ? 0 : min_length;
@@ -633,11 +633,18 @@ exports.ISO = {
  */
 export function LCM() {
   // Credits: Jonas Raoni Soares Silva
+  let r = 1
   let o = parseNumberArray(flatten(arguments));
   if (o instanceof Error) {
     return o;
   }
-  for (let i, j, n, d, r = 1;
+  let k
+  for (k = 0; k <= o.length; k++) {
+    if (o[k] < 0) {
+      return Error(ERROR_NUM)
+    }
+  }
+  for (let i, j, n, d = 1;
     (n = o.pop()) !== undefined;) {
     while (n > 1) {
       if (n % 2) {
@@ -657,28 +664,57 @@ export function LCM() {
   return r;
 };
 
-exports.LN = function(number) {
+/**
+ *
+ * @param {number}number 必需。 想要计算其自然对数的正实数。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function LN(number) {
   number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
+  if (number <= 0) {
+    return Error(ERROR_NUM)
+  }
+
   return Math.log(number);
 };
 
-exports.LOG = function (number, base) {
+/**
+ *
+ * @param {number}number 必需。 想要计算其对数的正实数。
+ * @param base {number}可选。 对数的底数。 如果省略 base，则假定其值为 10。
+ * @returns {number}
+ * @constructor
+ */
+export function LOG(number, base) {
   number = parseNumber(number);
   base = parseNumber(base);
-  if (utils.anyIsError(base)) {
+  if (anyIsError(base)) {
     base = 10
+  }
+  if (number <= 0 || base <= 1) {
+    return Error(ERROR_NUM)
   }
   base = (base === undefined) ? 10 : base;
   return Math.log(number) / Math.log(base);
 };
 
-exports.LOG10 = function(number) {
+/**
+ *
+ * @param{number} number 必需。 想要计算其以 10 为底的对数的正实数。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function LOG10(number) {
   number = parseNumber(number);
   if (number instanceof Error) {
     return number;
+  }
+  if (number <= 0) {
+    return Error(ERROR_NUM)
   }
   return Math.log(number) / Math.log(10);
 };
@@ -694,8 +730,14 @@ exports.MDETERM = function(matrix) {
   }
 };
 
-exports.MINVERSE = function(matrix) {
-  matrix = utils.parseMatrix(matrix);
+/**
+ *
+ * @param {array}matrix 必需。 行数和列数相等的数值数组。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function MINVERSE(matrix) {
+  matrix = parseMatrix(matrix);
   if (matrix instanceof Error) {
     return matrix;
   }
@@ -703,56 +745,85 @@ exports.MINVERSE = function(matrix) {
 };
 
 exports.MMULT = function(matrix1, matrix2) {
-  matrix1 = utils.parseMatrix(matrix1);
-  matrix2 = utils.parseMatrix(matrix2);
-  if (utils.anyIsError(matrix1, matrix2)) {
+  matrix1 = parseMatrix(matrix1);
+  matrix2 = parseMatrix(matrix2);
+  if (anyIsError(matrix1, matrix2)) {
     return Error(ERROR_VALUE);
   }
   console.log(numeric.dot(matrix1, matrix2))
   return numeric.dot(matrix1, matrix2);
 };
 
-exports.MOD = function(dividend, divisor) {
+
+/**
+ *
+ * @param {number}dividend 必需。 要计算余数的被除数。
+ * @param {number}divisor 必需。 除数。
+ * @returns {*|Error|Error|number}
+ * @constructor
+ */
+export function MOD(dividend, divisor) {
   dividend = parseNumber(dividend);
   divisor = parseNumber(divisor);
-  if (utils.anyIsError(dividend, divisor)) {
+  if (anyIsError(dividend, divisor)) {
     return Error(ERROR_VALUE);
   }
   if (divisor === 0) {
-    return errorObj.ERROR_DIV0;
+    return Error(ERROR_DIV0);
   }
   let modulus = Math.abs(dividend % divisor);
   return (divisor > 0) ? modulus : -modulus;
 };
 
-  exports.MROUND = function(number, multiple) {
+/**
+ *
+ * @param {number}number 必需。 要舍入的值。
+ * @param {number}multiple 必需。 要舍入到的倍数。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function MROUND(number, multiple) {
   number = parseNumber(number);
   multiple = parseNumber(multiple);
-  if (utils.anyIsError(number, multiple)) {
+  if (anyIsError(number, multiple)) {
     return Error(ERROR_VALUE);
   }
   if (number * multiple < 0) {
-    return Error(ERROR_VALUE);
+    return Error(ERROR_NUM);
   }
 
   return Math.round(number / multiple) * multiple;
 };
 
-exports.MULTINOMIAL = function() {
-  let args = parseNumberArray(utils.flatten(arguments));
+/**
+ * number1, number2, ...    Number1 是必需的，后续数字是可选的。 要计算多项式的 1 到 255 个值。
+ * @returns {Error|(number&Error)|(process.versions.node&Error)|(string&Error)|number}
+ * @constructor
+ */
+export function MULTINOMIAL() {
+  let args = parseNumberArray(flatten(arguments));
   if (args instanceof Error) {
     return args;
   }
   let sum = 0;
   let divisor = 1;
   for (let i = 0; i < args.length; i++) {
+    if (args[i] < 0) {
+      return Error(ERROR_NUM)
+    }
     sum += args[i];
-    divisor *= exports.FACT(args[i]);
+    divisor *= FACT(args[i]);
   }
-  return exports.FACT(sum) / divisor;
+  return FACT(sum) / divisor;
 };
 
-exports.MUNIT = function(dimension) {
+/**
+ *
+ * @param {矩阵}dimension 必填。 Dimension 是一个整数, 指定要返回的单位矩阵的维度。 它返回一个数组。 维度必须大于零。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function MUNIT(dimension) {
   dimension = parseNumber(dimension);
   if (dimension instanceof Error) {
     return dimension;
@@ -777,7 +848,7 @@ exports.PI = function() {
 exports.POWER = function(number, power) {
   number = parseNumber(number);
   power = parseNumber(power);
-  if (utils.anyIsError(number, power)) {
+  if (anyIsError(number, power)) {
     return Error(ERROR_VALUE);
   }
   let result = Math.pow(number, power);
@@ -789,7 +860,7 @@ exports.POWER = function(number, power) {
 };
 
 exports.PRODUCT = function() {
-  let args = parseNumberArray(utils.flatten(arguments));
+  let args = parseNumberArray(flatten(arguments));
   if (args instanceof Error) {
     return args;
   }
@@ -803,7 +874,7 @@ exports.PRODUCT = function() {
 exports.QUOTIENT = function(numerator, denominator) {
   numerator = parseNumber(numerator);
   denominator = parseNumber(denominator);
-  if (utils.anyIsError(numerator, denominator)) {
+  if (anyIsError(numerator, denominator)) {
     return Error(ERROR_VALUE);
   }
   return parseInt(numerator / denominator, 10);
@@ -827,7 +898,7 @@ exports.RAND = function() {
 exports.RANDBETWEEN = function(bottom, top) {
   bottom = parseNumber(bottom);
   top = parseNumber(top);
-  if (utils.anyIsError(bottom, top)) {
+  if (anyIsError(bottom, top)) {
     return Error(ERROR_VALUE);
   }
   // Creative Commons Attribution 3.0 License
@@ -856,7 +927,7 @@ exports.ROMAN = function(number) {
 exports.ROUND = function (number, digits) {
   number = parseNumber(number);
   digits = parseNumber(digits);
-  if (utils.anyIsError(number, digits)) {
+  if (anyIsError(number, digits)) {
     return Error(ERROR_VALUE);
   }
   if (number < 0){
@@ -869,7 +940,7 @@ exports.ROUND = function (number, digits) {
 exports.ROUNDDOWN = function(number, digits) {
   number = parseNumber(number);
   digits = parseNumber(digits);
-  if (utils.anyIsError(number, digits)) {
+  if (anyIsError(number, digits)) {
     return Error(ERROR_VALUE);
   }
   let sign = (number > 0) ? 1 : -1;
@@ -879,7 +950,7 @@ exports.ROUNDDOWN = function(number, digits) {
 exports.ROUNDUP = function(number, digits) {
   number = parseNumber(number);
   digits = parseNumber(digits);
-  if (utils.anyIsError(number, digits)) {
+  if (anyIsError(number, digits)) {
     return Error(ERROR_VALUE);
   }
   let sign = (number > 0) ? 1 : -1;
@@ -907,7 +978,7 @@ exports.SERIESSUM = function(x, n, m, coefficients) {
   n = parseNumber(n);
   m = parseNumber(m);
   coefficients = parseNumberArray(coefficients);
-  if (utils.anyIsError(x, n, m, coefficients)) {
+  if (anyIsError(x, n, m, coefficients)) {
     return Error(ERROR_VALUE);
   }
   let result = coefficients[0] * Math.pow(x, n);
@@ -1029,7 +1100,7 @@ exports.MINUS = function (num1, num2) {
 
   num1 = parseNumber(num1);
   num2 = parseNumber(num2);
-  if (utils.anyIsError(num1, num2)) {
+  if (anyIsError(num1, num2)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1043,7 +1114,7 @@ exports.DIVIDE = function (dividend, divisor) {
 
   dividend = parseNumber(dividend);
   divisor = parseNumber(divisor);
-  if (utils.anyIsError(dividend, divisor)) {
+  if (anyIsError(dividend, divisor)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1061,7 +1132,7 @@ exports.MULTIPLY = function (factor1, factor2) {
 
   factor1 = parseNumber(factor1);
   factor2 = parseNumber(factor2);
-  if (utils.anyIsError(factor1, factor2)) {
+  if (anyIsError(factor1, factor2)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1075,7 +1146,7 @@ exports.GTE = function (num1, num2) {
 
   num1 = parseNumber(num1);
   num2 = parseNumber(num2);
-  if (utils.anyIsError(num1, num2)) {
+  if (anyIsError(num1, num2)) {
     return errorObj.ERROR_ERROR;
   }
 
@@ -1089,7 +1160,7 @@ exports.LT = function (num1, num2) {
 
   num1 = parseNumber(num1);
   num2 = parseNumber(num2);
-  if (utils.anyIsError(num1, num2)) {
+  if (anyIsError(num1, num2)) {
     return errorObj.ERROR_ERROR;
   }
 
@@ -1104,7 +1175,7 @@ exports.LTE = function (num1, num2) {
 
   num1 = parseNumber(num1);
   num2 = parseNumber(num2);
-  if (utils.anyIsError(num1, num2)) {
+  if (anyIsError(num1, num2)) {
     return errorObj.ERROR_ERROR;
   }
 
@@ -1134,7 +1205,7 @@ exports.POW = function (base, exponent) {
 
   base = parseNumber(base);
   exponent = parseNumber(exponent);
-  if (utils.anyIsError(base, exponent)) {
+  if (anyIsError(base, exponent)) {
     return errorObj.ERROR_ERROR;
   }
 
@@ -1159,7 +1230,7 @@ exports.SUM = function() {
 };
 
 exports.SUMIF = function(range, criteria) {
-  range = parseNumberArray(utils.flatten(range));
+  range = parseNumberArray(flatten(range));
   if (range instanceof Error) {
     return range;
   }
@@ -1172,7 +1243,7 @@ exports.SUMIF = function(range, criteria) {
 //XW： SUMIFS函数
 exports.SUMIFS = function() {
   let args = utils.argsToArray(arguments);
-  let range = utils.flatten(args.shift());
+  let range = flatten(args.shift());
   if (range instanceof Error) {
     return range;
   }
@@ -1338,7 +1409,7 @@ exports.SUMPRODUCT = function() {
 };
 
 exports.SUMSQ = function() {
-  let numbers = parseNumberArray(utils.flatten(arguments));
+  let numbers = parseNumberArray(flatten(arguments));
   if (numbers instanceof Error) {
     return numbers;
   }
@@ -1357,12 +1428,12 @@ exports.SUMX2MY2 = function (array_x, array_y) {
   if (typeof array_y === "string") {
     array_y = utils.strToMatrix(array_y);
   }
-  if (utils.anyIsError(array_x, array_y)) {
+  if (anyIsError(array_x, array_y)) {
     return Error(ERROR_VALUE);
   }
   let result = 0;
-  array_x = parseNumberArray(utils.flatten(array_x));
-  array_y = parseNumberArray(utils.flatten(array_y));
+  array_x = parseNumberArray(flatten(array_x));
+  array_y = parseNumberArray(flatten(array_y));
   for (let i = 0; i < array_x.length; i++) {
     result += array_x[i] * array_x[i] - array_y[i] * array_y[i];
   }
@@ -1378,12 +1449,12 @@ exports.SUMX2PY2 = function (array_x, array_y) {
     array_y = utils.strToMatrix(array_y);
   }
   //XW：end
-  if (utils.anyIsError(array_x, array_y)) {
+  if (anyIsError(array_x, array_y)) {
     return Error(ERROR_VALUE);
   }
   let result = 0;
-  array_x = parseNumberArray(utils.flatten(array_x));
-  array_y = parseNumberArray(utils.flatten(array_y));
+  array_x = parseNumberArray(flatten(array_x));
+  array_y = parseNumberArray(flatten(array_y));
   for (let i = 0; i < array_x.length; i++) {
     result += array_x[i] * array_x[i] + array_y[i] * array_y[i];
   }
@@ -1397,14 +1468,14 @@ exports.SUMXMY2 = function(array_x, array_y) {
   if (typeof array_y === "string") {
     array_y = utils.strToMatrix(array_y);
   }
-  array_x = parseNumberArray(utils.flatten(array_x));
-  array_y = parseNumberArray(utils.flatten(array_y));
-  if (utils.anyIsError(array_x, array_y)) {
+  array_x = parseNumberArray(flatten(array_x));
+  array_y = parseNumberArray(flatten(array_y));
+  if (anyIsError(array_x, array_y)) {
     return Error(ERROR_VALUE);
   }
   let result = 0;
-  array_x = utils.flatten(array_x);
-  array_y = utils.flatten(array_y);
+  array_x = flatten(array_x);
+  array_y = flatten(array_y);
   for (let i = 0; i < array_x.length; i++) {
     result += Math.pow(array_x[i] - array_y[i], 2);
   }
@@ -1432,9 +1503,40 @@ exports.TRUNC = function(number, digits) {
   digits = (digits === undefined) ? 0 : digits;
   number = parseNumber(number);
   digits = parseNumber(digits);
-  if (utils.anyIsError(number, digits)) {
+  if (anyIsError(number, digits)) {
     return Error(ERROR_VALUE);
   }
   let sign = (number > 0) ? 1 : -1;
   return sign * (Math.floor(Math.abs(number) * Math.pow(10, digits))) / Math.pow(10, digits);
 };
+
+/**
+ *
+ * @param {number}number 必需。 要舍入的值。
+ * @param {number}significance 必需。 要舍入到的倍数。
+ * @param mode
+ * @returns {*|Error|number}
+ * @constructor
+ */
+export function isoCEILING_(number, significance, mode) {
+  let a = significance
+  significance = (significance === undefined) ? 1 : Math.abs(significance);
+  mode = mode || 0;
+  number = parseNumber(number);
+  significance = parseNumber(significance);
+  mode = parseNumber(mode);
+  if (significance === 0) {
+    return 0;
+  }
+  let precision = -Math.floor(Math.log(significance) / Math.log(10));
+  if (number >= 0) {
+    return exports.ROUND(Math.ceil(number / significance) * significance, precision);
+  } else {
+    if (mode === 0) {
+      return -exports.ROUND(Math.floor(Math.abs(number) / significance) * significance, precision);
+    } else {
+      return -exports.ROUND(Math.ceil(Math.abs(number) / significance) * significance, precision);
+    }
+  }
+};
+export const isoCEILING = new OnlyNumberExpFunction(isoCEILING_)
