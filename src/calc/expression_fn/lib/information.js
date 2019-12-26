@@ -31,13 +31,14 @@ exports.INFO = function() {
  * @param arg 必需。 指的是要测试的值。 参数 value 可以是空白（空单元格）、错误值、逻辑值、文本、数字、引用值，或者引用要测试的以上任意值的名称。
  * @returns {boolean}
  */
-function isBlank(arg){ // 仿照这个写法
+function ISBlank_(arg) { // 仿照这个写法
   if(arg.hasOwnProperty("cellVTypeName")){
     return ["CellVEmpty", "CellVError"].includes(arg.cellVTypeName)
   }
   return false
 }
-export const ISBLANK = new NotConvertExpFunction(isBlank) // 所有的数值都不会转化
+
+export const ISBLANK = new NotConvertExpFunction(ISBlank_) // 所有的数值都不会转化
 
 /**
  *
@@ -74,10 +75,10 @@ exports.ISBINARY = function (number) {
  * @returns {boolean}
  * @constructor
  */
-export function ISEVEN(number) {
+export function ISEVEN_(number) {
   return (Math.floor(Math.abs(number)) & 1) ? false : true;
 };
-
+export const ISEVEN = new NotConvertExpFunction(ISEVEN_)
 
 // TODO
 exports.ISFORMULA = function() {
@@ -90,7 +91,7 @@ exports.ISFORMULA = function() {
  * @returns {boolean}
  * @constructor
  */
-export function ISLOGICAL(value) {
+export function ISLOGICAL_(value) {
   //
   if (value === true || value === "TRUE" || value === false || value === "FALSE") {
     return true
@@ -99,27 +100,28 @@ export function ISLOGICAL(value) {
     // return value === true || value === false;
   }
 };
-
+export const ISLOGICAL = new NotConvertExpFunction(ISLOGICAL_)
 /**
  *
  * @param value 必需。 指的是要测试的值。
  * @returns {boolean}
  * @constructor
  */
-export function ISNA(value) {
+export function ISNA_(value) {
   return value === Error(ERROR_NA) || value === Error(ERROR_NA).message;
   ;
 };
-
+export const ISNA = new NotConvertExpFunction(ISNA_)
 /**
  *
  * @param value 必需。 指的是要测试的值。
  * @returns {boolean}
  * @constructor
  */
-export function ISNONTEXT(value) {
+export function ISNONTEXT_(value) {
   return typeof(value) !== 'string';
 };
+export const ISNONTEXT = new NotConvertExpFunction(ISNONTEXT_)
 
 /**
  *
@@ -127,9 +129,10 @@ export function ISNONTEXT(value) {
  * @returns {boolean}
  * @constructor
  */
-export function ISNUMBER(value) {
+export function ISNUMBER_(value) {
   return typeof(value) === 'number' && !isNaN(value) && isFinite(value);
 };
+export const ISNUMBER = new NotConvertExpFunction(ISNUMBER_)
 
 /**
  *
@@ -137,9 +140,10 @@ export function ISNUMBER(value) {
  * @returns {boolean}
  * @constructor
  */
-export function ISODD(number) {
+export function ISODD_(number) {
   return (Math.floor(Math.abs(number)) & 1) ? true : false;
 };
+export const ISODD = new NotConvertExpFunction(ISODD_)
 
 // TODO
 /**
@@ -147,12 +151,13 @@ export function ISODD(number) {
  * @returns {boolean}
  * @constructor
  */
-export function ISREF(value) {
+export function ISREF_(value) {
   if (value === undefined) {
     return false
   }
   return arguments['0'] !== null
 };
+export const ISREF = new NotConvertExpFunction(ISREF_)
 
 /**
  *
@@ -160,11 +165,18 @@ export function ISREF(value) {
  * @returns {boolean}
  * @constructor
  */
-export function ISTEXT(value) {
+export function ISTEXT_(value) {
   return typeof(value) === 'string';
 };
+export const ISTEXT = new NotConvertExpFunction(ISTEXT_)
 
-exports.N = function (value) {
+/**
+ *
+ * @param {string/number}value 必需。 要转换的值。 N 转换下表中列出的值。
+ * @returns {number|*}
+ * @constructor
+ */
+export function N_(value) {
   if (typeof(value) === 'number' && !isNaN(value) && isFinite(value)) {
     return value;
   }
@@ -182,6 +194,7 @@ exports.N = function (value) {
   }
   return 0;
 };
+export const N = new NotConvertExpFunction(N_)
 
 exports.NA = function() {
   return Error(ERROR_NA);

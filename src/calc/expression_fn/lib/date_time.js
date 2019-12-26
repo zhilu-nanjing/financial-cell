@@ -288,12 +288,27 @@ export function ISOWEEKNUM(date) {
   return Math.ceil((((date - yearStart) / cf.MS_PER_DAY) + 1) / 7);
 };
 
-exports.MINUTE = function(serial_number) {
+
+/**
+ *
+ * @param {string}serial_number 必需。 一个时间值，其中包含要查找的分钟。 时间值有多种输入方式：带引号的文本字符串（例如 "6:45 PM"）、
+ * 十进制数（例如 0.78125 表示 6:45 PM）或其他公式或函数的结果（例如 TIMEVALUE("6:45 PM")）。
+ * @returns {*}
+ * @constructor
+ */
+export function MINUTE(serial_number) {
     let Formulas = window.jsSpreadsheet.AllFormulas;
     return Formulas.MINUTE(serial_number);
 };
 
-exports.MONTH = function(serial_number) {
+/**
+ *
+ * @param {string}serial_number 必需。 您尝试查找的月份的日期。 应使用 DATE 函数输入日期，或者将日期作为其他公式或函数的结果输入。
+ * 例如，使用函数 DATE(2008,5,23) 输入 2008 年 5 月 23 日。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function MONTH(serial_number) {
   serial_number = days_str2date(serial_number);
   if (serial_number instanceof Error) {
     return serial_number;
