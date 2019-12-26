@@ -1,5 +1,8 @@
 import {errorObj, errorMsgArr, ERROR_NA} from '../../calc_utils/error_config'
-import { AllowErrorExpFunction } from '../../calc_data_proxy/exp_function_proxy';
+import {
+  AllowErrorExpFunction,
+  NotConvertExpFunction
+} from '../../calc_data_proxy/exp_function_proxy';
 
 // TODO
 exports.CELL = function() {
@@ -28,13 +31,13 @@ exports.INFO = function() {
  * @param arg 必需。 指的是要测试的值。 参数 value 可以是空白（空单元格）、错误值、逻辑值、文本、数字、引用值，或者引用要测试的以上任意值的名称。
  * @returns {boolean}
  */
-function isBlank(arg){
+function isBlank(arg){ // 仿照这个写法
   if(arg.hasOwnProperty("cellVTypeName")){
     return ["CellVEmpty", "CellVError"].includes(arg.cellVTypeName)
   }
   return false
 }
-export const ISBLANK = new AllowErrorExpFunction(isBlank) // 函数名字都会大写
+export const ISBLANK = new NotConvertExpFunction(isBlank) // 所有的数值都不会转化
 
 /**
  *
@@ -47,7 +50,7 @@ function ISERR_(value) { // 是否是错误1
   return errorMsgArr.indexOf(value) >= 0 ||
     (typeof value === 'number' && (isNaN(value) || !isFinite(value)));
 };
-export const ISERR = new AllowErrorExpFunction(ISERR_)
+export const ISERR = new NotConvertExpFunction(ISERR_)
 
 /**
  *
@@ -59,7 +62,7 @@ export const ISERR = new AllowErrorExpFunction(ISERR_)
 export function ISERROR_(value) { // 是否是错误2
   return ISERR_(value) || value === Error(ERROR_NA);
 };
-export const ISERROR = new AllowErrorExpFunction(ISERROR_)
+export const ISERROR = new NotConvertExpFunction(ISERROR_)
 
 exports.ISBINARY = function (number) {
   return (/^[01]{1,10}$/).test(number);

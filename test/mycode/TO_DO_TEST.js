@@ -1,6 +1,6 @@
 import assert from 'assert'
 import * as myfunc from "./myfunc";
-import {default as information, ISBLANK} from '../../src/calc/expression_fn/lib/information';
+import * as information from '../../src/calc/expression_fn/lib/information';
 import {
     CellVEmpty,
     CellVError,

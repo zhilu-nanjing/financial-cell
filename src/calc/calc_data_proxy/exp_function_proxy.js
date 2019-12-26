@@ -129,6 +129,16 @@ export class AllowErrorExpFunction extends BaseExpFunction {
   }
 }
 
+export class NotConvertExpFunction extends BaseExpFunction {
+  defaultConvert(arg){
+    return arg
+  }
+  getIsAllowErrorArg() {
+    return true;
+  }
+}
+
+
 export class StringExpFunction extends BaseExpFunction {
   getExpFnArgConfig() {
     return [TO_PARA_TYPE.string, TO_PARA_TYPE.string]; // 参数需要都转换为string 类型
@@ -144,7 +154,7 @@ export class NotConvertEmptyExpFunction extends BaseExpFunction { // 空类型�
   }
 }
 
-export class OnlyNumberExpFunction extends BaseExpFunction { // 空类型不转换，其他按照默认行为来
+export class OnlyNumberExpFunction extends BaseExpFunction { // 只允许数字
   checkFuncArg(newArgArray) {
     for (let arg of newArgArray) {
       if (typeof arg !== 'number') {
