@@ -1,10 +1,11 @@
 import {ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/error_config';
 import * as cf from '../../calc_utils/config';
 import { d18991230MS, MS_PER_DAY } from '../../calc_utils/config';
-import utils from '../../calc_utils/helper';
+import * as utils from '../../calc_utils/helper';
 import {dayNum2Date, days_str2date, parseBool, parseNumber} from '../../calc_utils/parse_helper';
 import {anyIsError} from "../../calc_utils/helper";
 import {parseDate} from "numeric";
+
 
 let WEEK_STARTS = [
   undefined,
@@ -112,7 +113,7 @@ export function DATEVALUE(date_text) {
 };
 
 export function DAY(serial_number) {
-  let date = utils.parseDate(serial_number);
+  let date = days_str2date(serial_number);
   return date.getDate();
 };
 
@@ -176,8 +177,16 @@ export function DAYS360(start_date, end_date, method) {
     30 * (em - sm) + (ed - sd);
 };
 
-exports.EDATE = function(start_date, months) {
-  start_date = utils.parseDate(start_date);
+/**
+ *
+ * @param {number/string}start_date 必需。 一个代表开始日期的日期。 应使用 DATE 函数输入日期，或者将日期作为其他公式或函数的结果输入。
+ * 例如，使用函数 DATE(2008,5,23) 输入 2008 年 5 月 23 日。 如果日期以文本形式输入，则会出现问题。
+ * @param{number} months 必需。 start_date 之前或之后的月份数。 months 为正值将生成未来日期；为负值将生成过去日期。
+ * @returns {Error|(number&Error)|*}
+ * @constructor
+ */
+export function EDATE(start_date, months) {
+  start_date = days_str2date(start_date);
   if (start_date instanceof Error) {
     return start_date;
   }
@@ -186,11 +195,20 @@ exports.EDATE = function(start_date, months) {
   }
   months = parseInt(months, 10);
   start_date.setMonth(start_date.getMonth() + months);
-  return stamp2DayNum(start_date);
+  return start_date.toLocaleString();
 };
 
-exports.EOMONTH = function(start_date, months) {
-  start_date = utils.parseDate(start_date);
+
+/**
+ *
+ * @param {number/string}start_date 必需。 表示开始日期的日期。 应使用 DATE 函数输入日期，或者将日期作为其他公式或函数的结果输入。
+ * 例如，使用函数 DATE(2008,5,23) 输入 2008 年 5 月 23 日。 如果日期以文本形式输入，则会出现问题。
+ * @param {number}months 必需。 start_date 之前或之后的月份数。 months 为正值将生成未来日期；为负值将生成过去日期。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function EOMONTH(start_date, months) {
+  start_date = days_str2date(start_date);
   if (start_date instanceof Error) {
     return start_date;
   }
@@ -198,16 +216,23 @@ exports.EOMONTH = function(start_date, months) {
     return Error(ERROR_VALUE);
   }
   months = parseInt(months, 10);
-  return stamp2DayNum(new Date(start_date.getFullYear(), start_date.getMonth() + months + 1, 0));
+  return (new Date(start_date.getFullYear(), start_date.getMonth() + months + 1, 0)).toLocaleString();
 };
 
-exports.HOUR = function(serial_number) {
+/**
+ *
+ * @param {number/string}serial_number 必需。 时间值，其中包含要查找的小时数。 时间值有多种输入方式：带引号的文本字符串（例如 "6:45 PM"）、十进制数
+ * （例如 0.78125 表示 6:45 PM）或其他公式或函数的结果（例如 TIMEVALUE("6:45 PM")）。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function HOUR(serial_number) {
   if (typeof serial_number === 'number' && !isNaN(serial_number)){
     //XW: 参数为数字时获取对应的小时数
     return parseInt((parseFloat(serial_number)-parseInt(serial_number)) * 24)
     //XW: end
   }
-  serial_number = utils.parseDate(serial_number);
+  serial_number = days_str2date(serial_number);
   if (serial_number instanceof Error) {
     return serial_number;
   }
@@ -245,8 +270,14 @@ exports.INTERVAL = function (second) {
   'T' + hour + min + sec;
 };
 
-exports.ISOWEEKNUM = function(date) {
-  date = utils.parseDate(date);
+/**
+ *
+ * @param {string/number}date 必需。 日期是 Excel 用于日期和时间计算的日期-时间代码。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function ISOWEEKNUM(date) {
+  date = days_str2date(date);
   if (date instanceof Error) {
     return date;
   }
@@ -257,13 +288,28 @@ exports.ISOWEEKNUM = function(date) {
   return Math.ceil((((date - yearStart) / cf.MS_PER_DAY) + 1) / 7);
 };
 
-exports.MINUTE = function(serial_number) {
+
+/**
+ *
+ * @param {string}serial_number 必需。 一个时间值，其中包含要查找的分钟。 时间值有多种输入方式：带引号的文本字符串（例如 "6:45 PM"）、
+ * 十进制数（例如 0.78125 表示 6:45 PM）或其他公式或函数的结果（例如 TIMEVALUE("6:45 PM")）。
+ * @returns {*}
+ * @constructor
+ */
+export function MINUTE(serial_number) {
     let Formulas = window.jsSpreadsheet.AllFormulas;
     return Formulas.MINUTE(serial_number);
 };
 
-exports.MONTH = function(serial_number) {
-  serial_number = utils.parseDate(serial_number);
+/**
+ *
+ * @param {string}serial_number 必需。 您尝试查找的月份的日期。 应使用 DATE 函数输入日期，或者将日期作为其他公式或函数的结果输入。
+ * 例如，使用函数 DATE(2008,5,23) 输入 2008 年 5 月 23 日。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function MONTH(serial_number) {
+  serial_number = days_str2date(serial_number);
   if (serial_number instanceof Error) {
     return serial_number;
   }
@@ -279,14 +325,14 @@ exports.NETWORKDAYS = function (start_date, end_date, holidays) {
 };
 exports.NETWORKDAYSINTL = function (start_date, end_date, weekend, holidays) {
   if (typeof holidays == 'string' && holidays.indexOf('{') >=0){
-    holidays = utils.parseDateArray(utils.strToMatrix(holidays)[0])
+    holidays = days_str2dateArray(utils.strToMatrix(holidays)[0])
   }
   try{
     let Formulas = window.jsSpreadsheet.AllFormulas;
     return Formulas.NETWORKDAYS$INTL(start_date, end_date, weekend, holidays);
   }catch (e) {
-    start_date = utils.ExcelDateToJSDate(utils.parseDate(start_date));
-    end_date = utils.ExcelDateToJSDate(utils.parseDate(end_date));
+    start_date = utils.ExcelDateToJSDate(days_str2date(start_date));
+    end_date = utils.ExcelDateToJSDate(days_str2date(end_date));
     if (start_date instanceof Error) {
       return start_date;
     }
@@ -315,7 +361,7 @@ exports.NETWORKDAYSINTL = function (start_date, end_date, weekend, holidays) {
       holidays = [holidays];
     }
     for (let i = 0; i < holidays.length; i++) {
-      let h = utils.parseDate(holidays[i]);
+      let h = days_str2date(holidays[i]);
       if (h instanceof Error) {
         return h;
       }
@@ -351,7 +397,7 @@ exports.NETWORKDAYSINTL = function (start_date, end_date, weekend, holidays) {
 
 exports.NETWORKDAYS.INTL = function (start_date, end_date, weekend, holidays) {
   if (typeof holidays == 'string' && holidays.indexOf('{') >=0){
-    holidays = utils.parseDateArray(utils.strToMatrix(holidays))
+    holidays = days_str2dateArray(utils.strToMatrix(holidays))
   }
   start_date = utils.ExcelDateToJSDate(start_date);
   end_date = utils.ExcelDateToJSDate(end_date);
@@ -375,7 +421,7 @@ exports.NETWORKDAYS.INTL = function (start_date, end_date, weekend, holidays) {
     holidays = [holidays];
   }
   for (let i = 0; i < holidays.length; i++) {
-    let h = utils.parseDate(holidays[i]);
+    let h = days_str2date(holidays[i]);
     if (h instanceof Error) {
       return h;
     }
@@ -412,7 +458,7 @@ exports.NOW = function() {
 };
 
 exports.SECOND = function(serial_number) {
-  serial_number = utils.parseDate(serial_number);
+  serial_number = days_str2date(serial_number);
   if (serial_number instanceof Error) {
     return serial_number;
   }
@@ -447,7 +493,7 @@ exports.TODAY = function() {
 };
 
 exports.WEEKDAY = function(serial_number, return_type) {
-  serial_number = utils.parseDate(serial_number);
+  serial_number = days_str2date(serial_number);
   if (serial_number instanceof Error) {
     return serial_number;
   }
@@ -459,7 +505,7 @@ exports.WEEKDAY = function(serial_number, return_type) {
 };
 
 exports.WEEKNUM = function(serial_number, return_type) {
-  serial_number = utils.parseDate(serial_number);
+  serial_number = days_str2date(serial_number);
   if (serial_number instanceof Error) {
     return serial_number;
   }
@@ -486,7 +532,7 @@ exports.WORKDAY = function (start_date, days, holidays) {
 exports.WORKDAYINTL = function (start_date, days, weekend, holidays) {
   // let Formulas = window.jsSpreadsheet.AllFormulas;
   // return Formulas.WORKDAY$INTL(start_date, days, weekend, holidays);
-  start_date = utils.parseDate(start_date);
+  start_date = days_str2date(start_date);
   if (start_date instanceof Error) {
     return start_date;
   }
@@ -514,7 +560,7 @@ exports.WORKDAYINTL = function (start_date, days, weekend, holidays) {
     holidays = [holidays];
   }
   for (let i = 0; i < holidays.length; i++) {
-    let h = utils.parseDate(holidays[i]);
+    let h = days_str2date(holidays[i]);
     if (h instanceof Error) {
       return h;
     }
@@ -545,7 +591,7 @@ exports.WORKDAYINTL = function (start_date, days, weekend, holidays) {
 };
 
 exports.YEAR = function(serial_number) {
-  serial_number = utils.parseDate(serial_number);
+  serial_number = days_str2date(serial_number);
   if (serial_number instanceof Error) {
     return serial_number;
   }

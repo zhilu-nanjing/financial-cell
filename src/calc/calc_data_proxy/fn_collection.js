@@ -27,12 +27,20 @@ export class FnCollection { // 封装的统一管理exp_fn的函数。
       }
       let curFunc = toAddFnObj[fnName];
       if( (typeof curFunc === "function")||(curFunc instanceof BaseExpFunction)){
-        this.fnObj[toAddFnName] = toAddFnObj[fnName];
+        this.fnObj[this.convertFnName(toAddFnName)] = toAddFnObj[fnName];
       }
       else if(typeof curFunc === "object"){
         this.addFnObj(toAddFnObj[fnName], ignoreDuplicate, fnName + "."); // fnName加一个点作为前缀
       }
     }
+  }
+
+  /**
+   *
+   * @param {string} oldToAddFnName
+   */
+  convertFnName(oldToAddFnName){ // 对原来的FnName进行处理
+    return oldToAddFnName.replace("__",".")
   }
 
   updateFnObj(toAddFnObj) { // 允许重复定义，后面的定义会覆盖之前的定义

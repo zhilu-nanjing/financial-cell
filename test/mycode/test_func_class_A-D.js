@@ -24,7 +24,7 @@ import {ERROR_DIV0, ERROR_NA, ERROR_NUM, ERROR_VALUE} from "../../src/calc/calc_
 describe('expression_fn integration', function () {
     describe('func', function () {
         it('ISBLANK', function () {
-            let res = easySolve(ISBLANK, [new CellVEmpty()])
+            let res = easySolve(ISBLANK, ['2'])
             assert.equal(res, false)
         })
         it('ABS', function () {
@@ -792,6 +792,11 @@ describe('expression_fn integration', function () {
             let res1 = easySolve(database.DVARP, [[['树种', '高度', '年数', '产量'], ['苹果树', 18, 20, 14], ['梨树', 12, 12, 10], ['樱桃树', 13, 14, 9], ['苹果树', 14, 15, 10], ['梨树', 9, 8, 8], ['苹果树', 8, 9, 6]], '产量', [['树种', '高度'], ['=苹果树', '>10']]])
             console.log(res1)
             assert.equal(res1, 4)
+        })
+        it('AGGREGATE', function () {
+            let res2 = easySolve(mathtrig.AGGREGATE, [4, 6, ['#DIV/0!', 72, '大约', '#NUM!', '之前', 96, 32, 81, 33, 53, 34]])
+            console.log(res2)
+            assert.equal(res2, 96)  //option参数未实现
         })
 
 

@@ -53,6 +53,10 @@ export default class PreAction {
         return this.type === 999;
     }
 
+    isDelete(){
+        return this.type === 2 // jobs; 我加的，判定是否是删除
+    }
+
     findAllNeedCalcCell() {
         let changeArr = [];
         let {oldCell, newCell, ri, ci} = this; // 应该得到多个sheet的变更结果

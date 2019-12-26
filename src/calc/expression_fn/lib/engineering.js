@@ -5,6 +5,7 @@ import * as utils from '../../calc_utils/helper'
 import bessel from 'bessel'
 import {parseNumber} from "../../calc_utils/parse_helper";
 import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
+import {anyIsError} from "../../calc_utils/helper";
 
 function isValidBinaryNumber(number) {
   return (/^[01]{1,10}$/).test(number);
@@ -746,24 +747,30 @@ export function DELTA(number1, number2) {
   number2 = (number2 === undefined) ? 0 : number2;
   number1 = parseNumber(number1);
   number2 = parseNumber(number2);
-  if (utils.anyIsError(number1, number2)) {
+  if (anyIsError(number1, number2)) {
     return Error(ERROR_VALUE);
   }
   return (number1 === number2) ? 1 : 0;
 };
 
 // TODO: why is upper_bound not used ? The excel documentation has no examples with upper_bound
-exports.ERF = function(lower_bound, upper_bound) {
-  // Set number2 to zero if undefined
-  upper_bound = (upper_bound === undefined) ? 0 : upper_bound;
-
+/**
+ *
+ * @param {number}lower_bound 必需。 ERF 函数的积分下限。
+ * @param {number}upper_bound 可选。 ERF 函数的积分上限。 如果省略，ERF 积分将在零到 lower_limit 之间。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function ERF(lower_bound, upper_bound) {
   lower_bound = parseNumber(lower_bound);
-  upper_bound = parseNumber(upper_bound);
-  if (utils.anyIsError(lower_bound, upper_bound)) {
+  if (anyIsError(lower_bound, upper_bound)) {
     return Error(ERROR_VALUE);
   }
-
-  return jStat.erf(lower_bound);
+  if (upper_bound === undefined) {
+    return jStat.erf(lower_bound)
+  } else {
+    return jStat.erf(upper_bound) - jStat.erf(lower_bound);
+  }
 };
 
 // TODO
@@ -775,7 +782,13 @@ exports.ERF.PRECISE = function(x) {
   return Formulas.ERF(x)
 };
 
-exports.ERFC = function(x) {
+/**
+ *
+ * @param {number}x 必需。 ERFC 函数的积分下限。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function ERFC(x) {
   // Return error if x is not a number
   if (isNaN(x)) {
     return Error(ERROR_VALUE);
@@ -793,18 +806,32 @@ exports.ERFC.PRECISE = function(x) {
   return Formulas.ERFC(x)
 };
 
-exports.GESTEP = function(number, step) {
+/**
+ *
+ * @param {number}number 必需。 要针对步骤进行测试的值。
+ * @param {number}step 可选。 阈值。 如果省略 step 值，则 GESTEP 使用零。
+ * @returns {number|*|Error|number}
+ * @constructor
+ */
+export function GESTEP(number, step) {
   step = step || 0;
   number = parseNumber(number);
-  if (utils.anyIsError(step, number)) {
+  if (anyIsError(step, number)) {
     return number;
   }
-
-  // Return delta
   return (number >= step) ? 1 : 0;
 };
 
-exports.HEX2BIN = function(number, places) {
+/**
+ *
+ * @param {number}number 必需。 要转换的十六进制数。 Number 不能包含超过 10 个字符。
+ * number 的最高位为符号位（从右侧起第 40 位）。 其余 9 位是数量位。 负数用二进制补码记数法表示。
+ * @param {number}places 可选。 要使用的字符数。 如果省略 places，
+ * 则 HEX2BIN 使用必要的最小字符数。 Places 可用于在返回的值前置 0（零）。
+ * @returns {string|Error|*}
+ * @constructor
+ */
+export function HEX2BIN(number, places) {
   // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
   if (!/^[0-9A-Fa-f]{1,10}$/.test(number)) {
     return Error(ERROR_NUM);
@@ -818,6 +845,9 @@ exports.HEX2BIN = function(number, places) {
 
   // Return error if number is lower than -512 or greater than 511
   if (decimal < -512 || decimal > 511) {
+    return Error(ERROR_NUM);
+  }
+  if (places < 0) {
     return Error(ERROR_NUM);
   }
 
@@ -839,9 +869,7 @@ exports.HEX2BIN = function(number, places) {
     }
 
     // Return error if places is negative
-    if (places < 0) {
-      return Error(ERROR_NUM);
-    }
+
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
@@ -851,7 +879,15 @@ exports.HEX2BIN = function(number, places) {
   }
 };
 
-exports.HEX2DEC = function(number) {
+
+/**
+ *
+ * @param {number}number 必需。 要转换的十六进制数。 Number 不能包含超过 10 个字符（40 位）。
+ * Number 的最高位为符号位。 其余 39 位是数量位。 负数由二进制补码记数法表示。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function HEX2DEC(number) {
   // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
   if (!/^[0-9A-Fa-f]{1,10}$/.test(number)) {
     return Error(ERROR_NUM);
@@ -864,7 +900,16 @@ exports.HEX2DEC = function(number) {
   return (decimal >= 549755813888) ? decimal - 1099511627776 : decimal;
 };
 
-exports.HEX2OCT = function(number, places) {
+
+/**
+ *
+ * @param {number}number  必需。 要转换的十六进制数。 Number 不能包含超过 10 个字符。 Number 的最高位为符号位。
+ * 其余 39 位是数量位。 负数由二进制补码记数法表示。
+ * @param {number}places 可选。 要使用的字符数。 如果省略 places，则 HEX2OCT 使用必要的最小字符数。 Places 可用于在返回的值前置 0（零）。
+ * @returns {string|Error|*}
+ * @constructor
+ */
+export function HEX2OCT(number, places) {
   // Return error if number is not hexadecimal or contains more than ten characters (10 digits)
   if (!/^[0-9A-Fa-f]{1,10}$/.test(number)) {
     return Error(ERROR_NUM);
@@ -875,6 +920,9 @@ exports.HEX2OCT = function(number, places) {
 
   // Return error if number is positive and greater than 0x1fffffff (536870911)
   if (decimal > 536870911 && decimal < 1098974756864) {
+    return Error(ERROR_NUM);
+  }
+  if (places < 0) {
     return Error(ERROR_NUM);
   }
 
@@ -896,9 +944,6 @@ exports.HEX2OCT = function(number, places) {
     }
 
     // Return error if places is negative
-    if (places < 0) {
-      return Error(ERROR_NUM);
-    }
 
     // Truncate places in case it is not an integer
     places = Math.floor(places);
@@ -927,14 +972,19 @@ function trans_num(inumber){
   inumber = inumber.replace('I', 'i').replace('J', 'j')
   return inumber
 }
-exports.IMABS = function (inumber) {
+
+/**
+ * {number}Inumber    必需。 需要计算其绝对值的复数。
+ * @constructor
+ */
+export function IMABS(inumber) {
   // Lookup real and imaginary coefficients using exports.js [http://formulajs.org]
   inumber = trans_num(inumber)
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
   // Return error if either coefficient is not a number
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -942,7 +992,13 @@ exports.IMABS = function (inumber) {
   return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 };
 
-exports.IMAGINARY = function (inumber) {
+/**
+ *
+ * @param {number}inumber 必需。 需要计算其虚系数的复数。
+ * @returns {Error|number|any}
+ * @constructor
+ */
+export function IMAGINARY(inumber) {
   inumber = trans_num(inumber)
   if (inumber === undefined || inumber === true || inumber === false) {
     return Error(ERROR_VALUE);
@@ -1001,14 +1057,20 @@ exports.IMAGINARY = function (inumber) {
   }
 };
 
-exports.IMARGUMENT = function (inumber) {
+/**
+ *
+ * @param {number/sting}inumber 必需。需要计算其参数 Theta 的复数。
+ * @returns {*|Error|Error|number}
+ * @constructor
+ */
+export function IMARGUMENT(inumber) {
   inumber = trans_num(inumber)
   // Lookup real and imaginary coefficients using exports.js [http://formulajs.org]
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
   // Return error if either coefficient is not a number
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1047,13 +1109,19 @@ exports.IMARGUMENT = function (inumber) {
   }
 };
 
-exports.IMCONJUGATE = function (inumber) {
+/**
+ *
+ * @param {number/string}inumber 必需。 需要计算其共轭数的复数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMCONJUGATE(inumber) {
   inumber = trans_num(inumber)
   // Lookup real and imaginary coefficients using exports.js [http://formulajs.org]
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1065,13 +1133,19 @@ exports.IMCONJUGATE = function (inumber) {
   return (y !== 0) ? exports.COMPLEX(x, -y, unit) : inumber;
 };
 
-exports.IMCOS = function (inumber) {
+/**
+ *
+ * @param {number/string}inumber 必需。 需要计算其余弦的复数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMCOS(inumber) {
   // Lookup real and imaginary coefficients using exports.js [http://formulajs.org]
   inumber = trans_num(inumber)
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1083,13 +1157,19 @@ exports.IMCOS = function (inumber) {
   return exports.COMPLEX(Math.cos(x) * (Math.exp(y) + Math.exp(-y)) / 2, -Math.sin(x) * (Math.exp(y) - Math.exp(-y)) / 2, unit);
 };
 
-exports.IMCOSH = function (inumber) {
+/**
+ *
+ * @param {number/string}inumber 必需。 需要计算其双曲余弦值的复数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMCOSH(inumber) {
   // Lookup real and imaginary coefficients using exports.js [http://formulajs.org]
   inumber = trans_num(inumber)
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1101,13 +1181,19 @@ exports.IMCOSH = function (inumber) {
   return exports.COMPLEX(Math.cos(y) * (Math.exp(x) + Math.exp(-x)) / 2, Math.sin(y) * (Math.exp(x) - Math.exp(-x)) / 2, unit);
 };
 
-exports.IMCOT = function (inumber) {
+/**
+ *
+ * @param {number/string}inumber 必需。 要对其余切值的复数。
+ * @returns {Error}
+ * @constructor
+ */
+export function IMCOT(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber = trans_num(inumber)
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1115,14 +1201,21 @@ exports.IMCOT = function (inumber) {
   return exports.IMDIV(exports.IMCOS(inumber), exports.IMSIN(inumber));
 };
 
-exports.IMDIV = function(inumber1, inumber2) {
+/**
+ *
+ * @param {number/string}inumber1 必需。 复数分子或被除数。
+ * @param {number/string}inumber2 必需。 复数分母或除数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMDIV(inumber1, inumber2) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   let a = exports.IMREAL(inumber1);
   let b = exports.IMAGINARY(inumber1);
   let c = exports.IMREAL(inumber2);
   let d = exports.IMAGINARY(inumber2);
 
-  if (utils.anyIsError(a, b, c, d)) {
+  if (anyIsError(a, b, c, d)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1146,13 +1239,19 @@ exports.IMDIV = function(inumber1, inumber2) {
   return exports.COMPLEX((a * c + b * d) / den, (b * c - a * d) / den, unit);
 };
 
-exports.IMEXP = function(inumber) {
+/**
+ *
+ * @param {number/string}inumber 必需。 需要计算其指数的复数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMEXP(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber = trans_num(inumber)
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1165,12 +1264,18 @@ exports.IMEXP = function(inumber) {
   return exports.COMPLEX(e * Math.cos(y), e * Math.sin(y), unit);
 };
 
-exports.IMLN = function(inumber) {
+/**
+ *
+ * @param {number/string}inumber 必需。 需要计算其自然对数的复数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMLN(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1182,13 +1287,20 @@ exports.IMLN = function(inumber) {
   return exports.COMPLEX(Math.log(Math.sqrt(x * x + y * y)), Math.atan(y / x), unit);
 };
 
-exports.IMLOG10 = function(inumber) {
+
+/**
+ *
+ * @param {number/string}inumber 必需。 需要计算其自然对数的复数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMLOG10(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber = trans_num(inumber)
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1200,13 +1312,19 @@ exports.IMLOG10 = function(inumber) {
   return exports.COMPLEX(Math.log(Math.sqrt(x * x + y * y)) / Math.log(10), Math.atan(y / x) / Math.log(10), unit);
 };
 
-exports.IMLOG2 = function(inumber) {
+/**
+ *
+ * @param {number/string}inumber 必需。 需要计算其自然对数的复数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMLOG2(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber = trans_num(inumber)
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1218,12 +1336,19 @@ exports.IMLOG2 = function(inumber) {
   return exports.COMPLEX(Math.log(Math.sqrt(x * x + y * y)) / Math.log(2), Math.atan(y / x) / Math.log(2), unit);
 };
 
-exports.IMPOWER = function(inumber, number) {
+/**
+ *
+ * @param {number/string}inumber 必需。 需要计算其自然对数的复数。
+ * @param {number}number 必需。需要对复数应用的幂次。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMPOWER(inumber, number) {
   inumber = trans_num(inumber)
   number = parseNumber(number);
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
-  if (utils.anyIsError(number, x, y)) {
+  if (anyIsError(number, x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1241,7 +1366,12 @@ exports.IMPOWER = function(inumber, number) {
   return exports.COMPLEX(p * Math.cos(number * t), p * Math.sin(number * t), unit);
 };
 
-exports.IMPRODUCT = function() {
+/**
+ * Inumber1, [inumber2], …     Inumber1 是必需的，后续 inumber 不是必需的。 1 到 255 个要相乘的复数。
+ * @returns {Error|any}
+ * @constructor
+ */
+export function IMPRODUCT() {
   // Initialize result
   let result = arguments[0];
 
@@ -1253,7 +1383,7 @@ exports.IMPRODUCT = function() {
     let c = exports.IMREAL(arguments[i]);
     let d = exports.IMAGINARY(arguments[i]);
 
-    if (utils.anyIsError(a, b, c, d)) {
+    if (anyIsError(a, b, c, d)) {
       return Error(ERROR_VALUE);
     }
 
@@ -1265,7 +1395,13 @@ exports.IMPRODUCT = function() {
   return result;
 };
 
-exports.IMREAL = function(inumber) {
+/**
+ *
+ * @param {number/string}inumber 必需。 需要计算其自然对数的复数。
+ * @returns {Error|number|any}
+ * @constructor
+ */
+export function IMREAL(inumber) {
   inumber = trans_num(inumber)
   if (inumber === undefined || inumber === true || inumber === false) {
     return Error(ERROR_VALUE);
@@ -1320,7 +1456,13 @@ exports.IMREAL = function(inumber) {
   }
 };
 
-exports.IMSEC = function(inumber) {
+/**
+ *
+ * @param {number/string}inumber 必需。 需要计算其自然对数的复数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMSEC(inumber) {
   inumber = trans_num(inumber)
   // Return error if inumber is a logical value
   if (inumber === true || inumber === false) {
@@ -1331,7 +1473,7 @@ exports.IMSEC = function(inumber) {
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1339,13 +1481,19 @@ exports.IMSEC = function(inumber) {
   return exports.IMDIV('1', exports.IMCOS(inumber));
 };
 
-exports.IMSECH = function(inumber) {
+/**
+ *
+ * @param {number/string}inumber 必需。 需要计算其自然对数的复数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMSECH(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber = trans_num(inumber)
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1353,13 +1501,20 @@ exports.IMSECH = function(inumber) {
   return exports.IMDIV('1', exports.IMCOSH(inumber));
 };
 
-exports.IMSIN = function(inumber) {
+
+/**
+ *
+ * @param {number/string}inumber 必需。 需要计算其自然对数的复数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMSIN(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber = trans_num(inumber)
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1371,13 +1526,19 @@ exports.IMSIN = function(inumber) {
   return exports.COMPLEX(Math.sin(x) * (Math.exp(y) + Math.exp(-y)) / 2, Math.cos(x) * (Math.exp(y) - Math.exp(-y)) / 2, unit);
 };
 
-exports.IMSINH = function(inumber) {
+/**
+ *
+ * @param {number/string}inumber 必需。 需要计算其自然对数的复数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMSINH(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber = trans_num(inumber)
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1389,13 +1550,19 @@ exports.IMSINH = function(inumber) {
   return exports.COMPLEX(Math.cos(y) * (Math.exp(x) - Math.exp(-x)) / 2, Math.sin(y) * (Math.exp(x) + Math.exp(-x)) / 2, unit);
 };
 
-exports.IMSQRT = function(inumber) {
+/**
+ *
+ * @param {number/string}inumber 必需。 需要计算其自然对数的复数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMSQRT(inumber) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber = trans_num(inumber)
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1413,7 +1580,13 @@ exports.IMSQRT = function(inumber) {
   return exports.COMPLEX(s * Math.cos(t / 2), s * Math.sin(t / 2), unit);
 };
 
-exports.IMCSC = function (inumber) {
+/**
+ *
+ * @param {number/string}inumber 必需。 要对其余割值的复数。
+ * @returns {Error}
+ * @constructor
+ */
+export function IMCSC(inumber) {
   // Return error if inumber is a logical value
   inumber = trans_num(inumber)
   if (inumber === true || inumber === false) {
@@ -1425,7 +1598,7 @@ exports.IMCSC = function (inumber) {
   let y = exports.IMAGINARY(inumber);
 
   // Return error if either coefficient is not a number
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_NUM);
   }
 
@@ -1433,7 +1606,13 @@ exports.IMCSC = function (inumber) {
   return exports.IMDIV('1', exports.IMSIN(inumber));
 };
 
-exports.IMCSCH = function (inumber) {
+/**
+ *
+ * @param {number/string}inumber 必需。 要对其余割值的复数。
+ * @returns {Error}
+ * @constructor
+ */
+export function IMCSCH(inumber) {
   // Return error if inumber is a logical value
   inumber = trans_num(inumber)
   if (inumber === true || inumber === false) {
@@ -1445,7 +1624,7 @@ exports.IMCSCH = function (inumber) {
   let y = exports.IMAGINARY(inumber);
 
   // Return error if either coefficient is not a number
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_NUM);
   }
 
@@ -1453,7 +1632,14 @@ exports.IMCSCH = function (inumber) {
   return exports.IMDIV('1', exports.IMSINH(inumber));
 };
 
-exports.IMSUB = function(inumber1, inumber2) {
+/**
+ *
+ * @param {number/string}inumber1 必需。 从（复）数中减去 inumber2。
+ * @param {number/string}inumber2 必需。 从 inumber1 中减（复）数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMSUB(inumber1, inumber2) {
   // Lookup real and imaginary coefficients using Formula.js [http://formulajs.org]
   inumber1 = trans_num(inumber1)
   inumber2 = trans_num(inumber2)
@@ -1463,7 +1649,7 @@ exports.IMSUB = function(inumber1, inumber2) {
   let c = exports.IMREAL(inumber2);
   let d = exports.IMAGINARY(inumber2);
 
-  if (utils.anyIsError(a, b, c, d)) {
+  if (anyIsError(a, b, c, d)) {
     return Error(ERROR_VALUE);
   }
 
@@ -1481,7 +1667,14 @@ exports.IMSUB = function(inumber1, inumber2) {
   return exports.COMPLEX(a - c, b - d, unit);
 };
 
-exports.IMSUM = function (inumber) {
+
+/**
+ *
+ * @param {number/string}inumber Inumber1, [inumber2], ...    Inumber1 是必需的，后续数值不是必须的。 1 到 255 个要相加的复数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMSUM(inumber) {
   inumber = trans_num(inumber)
   let args = utils.flatten(arguments);
 
@@ -1496,7 +1689,7 @@ exports.IMSUM = function (inumber) {
     let c = exports.IMREAL(args[i]);
     let d = exports.IMAGINARY(args[i]);
 
-    if (utils.anyIsError(a, b, c, d)) {
+    if (anyIsError(a, b, c, d)) {
       return Error(ERROR_VALUE);
     }
 
@@ -1508,7 +1701,13 @@ exports.IMSUM = function (inumber) {
   return result;
 };
 
-exports.IMTAN = function (inumber) {
+/**
+ *
+ * @param {number/string} inumber必需。 要对其进行切线的复数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function IMTAN(inumber) {
   inumber = trans_num(inumber)
   // Return error if inumber is a logical value
   if (inumber === true || inumber === false) {
@@ -1519,7 +1718,7 @@ exports.IMTAN = function (inumber) {
   let x = exports.IMREAL(inumber);
   let y = exports.IMAGINARY(inumber);
 
-  if (utils.anyIsError(x, y)) {
+  if (anyIsError(x, y)) {
     return Error(ERROR_VALUE);
   }
 

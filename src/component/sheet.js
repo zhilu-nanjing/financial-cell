@@ -12,8 +12,8 @@ import ModalValidation from './modal_validation';
 import SortFilter from './sort_filter';
 import {xtoast} from './message';
 import {cssPrefix, offsetLeft, offsetTop} from '../config';
-// import {fnNameArrayWithKey} from '../calc/calc_cmd/formula';
-import {fnNameArrayWithKey} from '../calc/calc_cmd/mock_calc';
+import {calc} from '../calc';
+// import {fnNameArrayWithKey} from '../calc/calc_cmd/mock_calc';
 import {getFontSizePxByPt} from "../core/font";
 // import {baseFormats, multiply} from "../core/format";
 import Advice from "../component/advice";
@@ -1605,7 +1605,7 @@ export default class Sheet {
         this.horizontalScrollbar = new Scrollbar(false);
         // editor
         this.editor = new Editor(
-            fnNameArrayWithKey,
+            calc.fnNameArrayWithKey,
             () => this.getTableOffset(),
             data.rows.height,
             data.cols.width,

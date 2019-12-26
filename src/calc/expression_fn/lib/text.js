@@ -1,5 +1,6 @@
 import * as utils from '../../calc_utils/helper'
-import {errorObj} from '../../calc_utils/error_config'
+import {strToMatrix, anyIsError} from '../../calc_utils/helper'
+import {ERROR_VALUE, errorObj} from '../../calc_utils/error_config'
 import numeral from 'numeral'
 import {parseNumber} from "../../calc_utils/parse_helper";
 import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
@@ -115,8 +116,8 @@ export function DOLLAR(number, decimals) {
   decimals = (decimals === undefined) ? 2 : decimals;
   number = parseNumber(number);
   decimals = parseNumber(decimals);
-  if (utils.anyIsError(number, decimals)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(number, decimals)) {
+    return Error(ERROR_VALUE);
   }
   let format = '';
   if (decimals <= 0) {
@@ -128,23 +129,40 @@ export function DOLLAR(number, decimals) {
   return numeral(number).format(format);
 };
 
-exports.EXACT = function(text1, text2) {
+/**
+ *
+ * @param {string}text1 必需。 第一个文本字符串。
+ * @param {string}text2 必需。 第二个文本字符串。
+ * @returns {boolean}
+ * @constructor
+ */
+export function EXACT(text1, text2) {
   return text1 === text2;
 };
 
-exports.FIND = function (find_text, within_text, position) {
+/**
+ *
+ * @param {string}find_text 必需。 要查找的文本。
+ * @param {string}within_text 必需。 包含要查找文本的文本。
+ * @param {number}position 可选。 指定开始进行查找的字符。 within_text 中的首字符是编号为 1 的字符。 如果省略 start_num，则假定其值为 1。
+ * @returns {null}
+ * @constructor
+ */
+export function FIND(find_text, within_text, position) {
   position = (position === undefined) ? 0 : position;
   within_text.indexOf(find_text)
   return within_text ? within_text.indexOf(find_text, position - 1) + 1 : null;
 };
+
+
 exports.FIXED = function(number, decimals, no_commas) {
   decimals = (decimals === undefined) ? 2 : decimals;
   no_commas = (no_commas === undefined) ? false : no_commas;
 
   number = parseNumber(number);
   decimals = parseNumber(decimals);
-  if (utils.anyIsError(number, decimals)) {
-    return errorObj.ERROR_VALUE;
+  if (anyIsError(number, decimals)) {
+    return Error(ERROR_VALUE);
   }
 
   let format = no_commas ? '0' : '0,0';
@@ -174,24 +192,47 @@ exports.HTML2TEXT = function (value) {
 
   return result;
 };
-exports.INDEX = function (matrix, row_num, column_num) {
+
+/**
+ *
+ * @param {array}matrix 必需。 单元格区域或数组常量。
+ * @param {number}row_num 必需。 选择数组中的某行，函数从该行返回数值。 如果省略 row_num, 则需要 column_num。
+ * @param {number}column_num 可选。 选择数组中的某列，函数从该列返回数值。 如果省略 column_num, 则需要 row_num。
+ * @returns {*}
+ * @constructor
+ */
+export function INDEX(matrix, row_num, column_num) {
   if (typeof matrix == 'string'){
-    matrix = utils.strToMatrix(matrix)
+    matrix = strToMatrix(matrix)
   }
   return matrix[row_num][column_num-1]
 };
-exports.LEFT = function(text, number) {
+
+/**
+ *
+ * @param text 必需。 包含要提取的字符的文本字符串。
+ * @param number 可选。 指定要由 LEFT 提取的字符的数量。
+ * @returns {*|Error}
+ * @constructor
+ */
+export function LEFT(text, number) {
   number = (number === undefined) ? 1 : number;
   number = parseNumber(number);
   if (number instanceof Error || typeof text !== 'string') {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   return text ? text.substring(0, number) : null;
 };
 
-exports.LEN = function(text) {
+/**
+ *
+ * @param {string}text 必需。 要查找其长度的文本。 空格将作为字符进行计数。
+ * @returns {module:jsdoc/util/logger.LEVELS.ERROR|module:jsdoc/util/logger.LEVELS|number|string|*|Error|number}
+ * @constructor
+ */
+export function LEN(text) {
   if (arguments.length === 0) {
-    return errorObj.ERROR;
+    return Error;
   }
 
   if (typeof text === 'string') {
@@ -202,26 +243,42 @@ exports.LEN = function(text) {
     return text.length;
   }
 
-  return errorObj.ERROR_VALUE;
+  return Error(ERROR_VALUE);
 };
 
-exports.LOWER = function(text) {
+/**
+ *
+ * @param {string}text 必需。 要转换为小写字母的文本。 LOWER 不改变文本中的非字母字符。
+ * @returns {string|Error}
+ * @constructor
+ */
+export function LOWER(text) {
   if (typeof text !== 'string') {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   return text ? text.toLowerCase() : text;
 };
 
-exports.MID = function(text, start, number) {
+
+/**
+ *
+ * @param {string}text 必需。 包含要提取字符的文本字符串。
+ * @param {number}start 必需。 文本中要提取的第一个字符的位置。 文本中第一个字符的 start_num 为 1，以此类推。
+ * @param {number}number 必需。 指定希望 MID 从文本中返回字符的个数。
+ * @returns {string|*|Error|number}
+ * @constructor
+ */
+export function MID(text, start, number) {
   start = parseNumber(start);
   number = parseNumber(number);
-  if (utils.anyIsError(start, number) || typeof text !== 'string') {
+  if (anyIsError(start, number) || typeof text !== 'string') {
     return number;
   }
-
+  if (start < 1 || number < 0) {
+    return Error(ERROR_VALUE)
+  }
   let begin = start - 1;
   let end = begin + number;
-
   return text.substring(begin, end);
 };
 
@@ -243,7 +300,7 @@ exports.PRONETIC = function() {
 
 exports.PROPER = function(text) {
   if (text === undefined || text.length === 0) {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   if (text === true) {
     text = 'TRUE';
@@ -252,7 +309,7 @@ exports.PROPER = function(text) {
     text = 'FALSE';
   }
   if (isNaN(text) && typeof text === 'number') {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   if (typeof text === 'number') {
     text = '' + text;
@@ -280,10 +337,10 @@ exports.REGEXREPLACE = function (text, regular_expression, replacement) {
 exports.REPLACE = function(text, position, length, new_text) {
   position = parseNumber(position);
   length = parseNumber(length);
-  if (utils.anyIsError(position, length) ||
+  if (anyIsError(position, length) ||
     typeof text !== 'string' ||
     typeof new_text !== 'string') {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   return text.substr(0, position - 1) + new_text + text.substr(position - 1 + length);
 };
@@ -308,11 +365,11 @@ exports.RIGHT = function(text, number) {
 exports.SEARCH = function(find_text, within_text, position) {
   let foundAt;
   if (typeof find_text !== 'string' || typeof within_text !== 'string') {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   position = (position === undefined) ? 0 : position;
   foundAt = within_text.toLowerCase().indexOf(find_text.toLowerCase(), position - 1)+1;
-  return (foundAt === 0)?errorObj.ERROR_VALUE:foundAt;
+  return (foundAt === 0) ? Error(ERROR_VALUE) : foundAt;
 };
 
 exports.SPLIT = function (text, separator) {
@@ -458,14 +515,14 @@ exports.TEXT = function (value, format) {
 
 exports.TRIM = function(text) {
   if (typeof text !== 'string') {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   return text.replace(/ +/g, ' ').trim();
 };
 
 exports.UNICHAR = function (text) {
   if (text == 0){
-    return errorObj.ERROR_VALUE
+    return Error(ERROR_VALUE)
   }
   return String.fromCharCode(text);
 };
@@ -476,14 +533,14 @@ exports.UNICODE = function (text){
 
 exports.UPPER = function(text) {
   if (typeof text !== 'string') {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   return text.toUpperCase();
 };
 
 exports.VALUE = function(text) {
   if (typeof text !== 'string') {
-    return errorObj.ERROR_VALUE;
+    return Error(ERROR_VALUE);
   }
   return numeral().unformat(text);
 };

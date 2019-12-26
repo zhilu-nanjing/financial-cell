@@ -2,13 +2,17 @@ import * as mathTrig from './math-trig';
 import * as text from './text';
 import * as jStat from 'jstat';
 import * as utils from '../../calc_utils/helper';
-import {ERROR_DIV0, ERROR_NA, ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/error_config';
+import {ERROR_DIV0, ERROR_NA, ERROR_NAME, ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/error_config';
 import * as misc from './miscellaneous';
 import * as evalExpression from './expression';
 import { parseBool, parseNumber, parseNumberArray } from '../../calc_utils/parse_helper';
-import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
-import{anyIsError} from "../../calc_utils/helper";
+import {NotConvertExpFunction,NotConvertEmptyExpFunction, OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
+import {anyIsError, flatten, flattenNum, arrayValuesToNumbers} from "../../calc_utils/helper";
 import* as helper from "../../calc_utils/helper";
+import {days_str2date} from "../../calc_utils/parse_helper";
+import { to1DArray } from '../../calc_utils/helper';
+import { CellVTypeObj } from '../../calc_utils/config';
+import {ISODD_} from "./information";
 
 let SQRT2PI = 2.5066282746310002;
 
@@ -19,7 +23,7 @@ let SQRT2PI = 2.5066282746310002;
  * @constructor
  */
 export function AVEDEV() {
-  let range = parseNumberArray(utils.flatten(arguments));
+  let range = parseNumberArray(flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
@@ -32,8 +36,9 @@ export function AVEDEV() {
  * @returns {Error|(string&Error)|undefined|([]&Error)|number|*}
  * @constructor
  */
-export function AVERAGE() {
-  let range = utils.flattenNum(arguments); // 这个arguments是通过function.call传递过来的
+function AVERAGE_() {
+  let rangeWithEmpty = to1DArray(arguments); // 这个arguments是通过function.call传递过来的
+  let range = rangeWithEmpty.filter(elm =>elm.cellVTypeName === CellVTypeObj.CellVNumber || typeof elm === "number")
   if (range instanceof Error) {
     return range;
   }
@@ -50,6 +55,7 @@ export function AVERAGE() {
   return sum / count;
 };
 
+export const AVERAGE = new NotConvertEmptyExpFunction(AVERAGE_)
 
 /**
  * Value1, value2, ...    Value1 是必需的，后续值是可选的。 需要计算平均值的 1 到 255 个单元格、单元格区域或值。
@@ -57,7 +63,7 @@ export function AVERAGE() {
  * @constructor
  */
 export function AVERAGEA() {
-  // let range = utils.flattenNum(arguments);
+  // let range = flattenNum(arguments);
   let range = arguments
   if (range.length === 1 && isNaN(range[0])){
     return Error(ERROR_VALUE)
@@ -92,11 +98,11 @@ export function AVERAGEA() {
  */
 export function AVERAGEIF (range, criteria, average_range) {
   if (arguments.length <= 1) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
   average_range = average_range || range;
-  range = utils.flatten(range);
-  average_range = parseNumberArray(utils.flatten(average_range));
+  range = flatten(range);
+  average_range = parseNumberArray(flatten(average_range));
 
   if (average_range instanceof Error) {
     return average_range;
@@ -147,7 +153,7 @@ export function AVERAGEIFS() {
   //http://office.microsoft.com/en-001/excel-help/averageifs-function-HA010047493.aspx
   let args = utils.argsToArray(arguments);
   let criteriaLength = (args.length - 1) / 2;
-  let range = utils.flatten(args[0]);
+  let range = flatten(args[0]);
   let count = 0;
   let result = 0;
   for (let i = 0; i < range.length; i++) {
@@ -511,8 +517,13 @@ export function CONFIDENCE__T(alpha, sd, n) {
   return jStat.tci(1, alpha, sd, n)[1] - 1;
 };
 
-
-exports.IFS = function() {
+/**
+ IFS 函数检查是否满足一个或多个条件，且返回符合第一个 TRUE 条件的值。
+ IFS 可以取代多个嵌套 IF 语句，并且有多个条件时更方便阅读。
+ * @returns {Error|any}
+ * @constructor
+ */
+export function IFS_() {
   for (let i = 0; i + 1 < arguments.length; i += 2) {
     let cond = arguments[i];
     let val = arguments[i + 1];
@@ -520,8 +531,10 @@ exports.IFS = function() {
       return val;
     }
   }
-  return errorObj.ERROR_NA;
+  return Error(ERROR_NA);
 }
+
+export const IFS = new NotConvertExpFunction(IFS_)
 
 /**
  *
@@ -531,8 +544,8 @@ exports.IFS = function() {
  * @constructor
  */
 export function CORREL(array1, array2) {
-  array1 = parseNumberArray(utils.flatten(array1));
-  array2 = parseNumberArray(utils.flatten(array2));
+  array1 = parseNumberArray(flatten(array1));
+  array2 = parseNumberArray(flatten(array2));
   if (anyIsError(array1, array2)) {
     return Error(ERROR_VALUE);
   }
@@ -574,7 +587,7 @@ exports.COUNTIN = function (range, value) {
  * @constructor
  */
 export function COUNTBLANK() {
-  let range = utils.flatten(arguments);
+  let range = flatten(arguments);
   let blanks = 0;
   let element;
   for (let i = 0; i < range.length; i++) {
@@ -617,13 +630,13 @@ export function COUNTIF(range, criteria) {
 
 exports.COUNTIFS = function () {
   let args = utils.argsToArray(arguments);
-  let results = new Array(utils.flatten(args[0]).length);
+  let results = new Array(flatten(args[0]).length);
 
   for (let i = 0; i < results.length; i++) {
     results[i] = true;
   }
   for (i = 0; i < args.length; i += 2) {
-    let range = utils.flatten(args[i]);
+    let range = flatten(args[i]);
     let criteria = args[i + 1];
     let isWildcard = criteria === void 0 || criteria === '*';
 
@@ -647,7 +660,7 @@ exports.COUNTIFS = function () {
 };
 
 exports.COUNTUNIQUE = function () {
-  return misc.UNIQUE.apply(null, utils.flatten(arguments)).length;
+  return misc.UNIQUE.apply(null, flatten(arguments)).length;
 };
 
 exports.COVARIANCE = {};
@@ -660,8 +673,8 @@ exports.COVARIANCE = {};
  * @constructor
  */
 export function COVARIANCE__P(array1, array2) {
-  array1 = parseNumberArray(utils.flatten(array1));
-  array2 = parseNumberArray(utils.flatten(array2));
+  array1 = parseNumberArray(flatten(array1));
+  array2 = parseNumberArray(flatten(array2));
   if (anyIsError(array1, array2)) {
     return Error(ERROR_VALUE);
   }
@@ -689,8 +702,8 @@ export function COVARIANCE__S(array1, array2) {
   if (typeof array2 === "string") {
     array2 = utils.strToMatrix(array2);
   }
-  array1 = parseNumberArray(utils.flatten(array1));
-  array2 = parseNumberArray(utils.flatten(array2));
+  array1 = parseNumberArray(flatten(array1));
+  array2 = parseNumberArray(flatten(array2));
   if (anyIsError(array1, array2)) {
     return Error(ERROR_VALUE);
   }
@@ -703,7 +716,7 @@ export function COVARIANCE__S(array1, array2) {
  * @constructor
  */
 export function DEVSQ() {
-  let range = parseNumberArray(utils.flatten(arguments));
+  let range = parseNumberArray(flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
@@ -717,6 +730,15 @@ export function DEVSQ() {
 
 exports.EXPON = {};
 
+/**
+ *
+ * @param {number}x 必需。 函数值。
+ * @param {number}lambda 必需。 参数值。
+ * @param {boolean}cumulative 必需。 逻辑值，用于指定指数函数的形式。
+ * 如果 cumulative 为 TRUE，则 EXPON.DIST 返回累积分布函数；如果为 FALSE，则返回概率密度函数。
+ * @returns {Error|*|number}
+ * @constructor
+ */
 exports.EXPON.DIST = function(x, lambda, cumulative) {
   cumulative = parseBool(cumulative)
   x = parseNumber(x);
@@ -724,11 +746,24 @@ exports.EXPON.DIST = function(x, lambda, cumulative) {
   if (anyIsError(x, lambda)) {
     return Error(ERROR_VALUE);
   }
+  if (x < 0 || lambda < 0) {
+    return Error(ERROR_NUM)
+  }
   return (cumulative) ? jStat.exponential.cdf(x, lambda) : jStat.exponential.pdf(x, lambda);
 };
 
 exports.F = {};
 
+/**
+ *
+ * @param {number}x 必需。 用来计算函数的值。
+ * @param {number}d1 必需。 分子自由度。
+ * @param {number}d2 必需。 分母自由度。
+ * @param {boolean}cumulative 必需。 决定函数形式的逻辑值。 如果 cumulative 为 TRUE，则 F.DIST 返回累积分布函数；
+ * 如果为 FALSE，则返回概率密度函数。
+ * @returns {Error|*|number}
+ * @constructor
+ */
 exports.F.DIST = function (x, d1, d2, cumulative) {
   x = parseNumber(x);
   d1 = parseNumber(d1);
@@ -739,22 +774,27 @@ exports.F.DIST = function (x, d1, d2, cumulative) {
   if (cumulative === undefined){
     cumulative = true
   }
-  if(typeof cumulative === 'string' && !(cumulative === 'FALSE' || cumulative === 'TRUE')){
-    return Error(ERROR_VALUE)
-  }
   if (cumulative === 'FALSE'){
     cumulative = false
   }
   return (cumulative) ? jStat.centralF.cdf(x, d1, d2) : jStat.centralF.pdf(x, d1, d2);
 };
 
+/**
+ *
+ * @param {number}x 必需。 用来计算函数的值。
+ * @param {number}d1 必需。 分子自由度。
+ * @param {number}d2 必需。 分母自由度。
+ * @returns {Error|number}
+ * @constructor
+ */
 exports.F.DIST.RT = function (x, d1, d2) {
   if (arguments.length !== 3) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
 
   if (x < 0 || d1 < 1 || d2 < 1) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   if ((typeof x !== 'number') || (typeof d1 !== 'number') || (typeof d2 !== 'number')) {
@@ -764,29 +804,42 @@ exports.F.DIST.RT = function (x, d1, d2) {
   return 1 - jStat.centralF.cdf(x, d1, d2);
 };
 
+/**
+ *
+ * @param {number}p  必需。 F 累积分布的概率值。
+ * @param {number}d1 必需。 分子自由度。
+ * @param {number}d2 必需。 分母自由度。
+ * @returns {*|Error|Error}
+ * @constructor
+ */
 exports.F.INV = function (p, d1, d2) {
   if (arguments.length !== 3) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
-
   if (p < 0 || p > 1 || d1 < 1 || d1 > Math.pow(10, 10) || d2 < 1 || d2 > Math.pow(10, 10)) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
   if ((typeof p !== 'number') || (typeof d1 !== 'number') || (typeof d2 !== 'number')) {
     return Error(ERROR_VALUE);
   }
-
-  return jStat.centralF.inv(1.0 - p, d1, d2);
+  return jStat.centralF.inv(p, d1, d2);
 };
 
+/**
+ *
+ * @param {number}p 必需。 F 累积分布的概率值。
+ * @param {number}d1 必需。 分子自由度。
+ * @param {number}d2 必需。 分母自由度。
+ * @returns {Error|*}
+ * @constructor
+ */
 exports.F.INV.RT = function (p, d1, d2) {
   if (arguments.length !== 3) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
 
   if (p < 0 || p > 1 || d1 < 1 || d1 > Math.pow(10, 10) || d2 < 1 || d2 > Math.pow(10, 10)) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   if ((typeof p !== 'number') || (typeof d1 !== 'number') || (typeof d2 !== 'number')) {
@@ -796,44 +849,59 @@ exports.F.INV.RT = function (p, d1, d2) {
   return jStat.centralF.inv(1.0 - p, d1, d2);
 };
 
+/**
+ *
+ * @param {array}array1 必需。 第一个数组或数据区域。
+ * @param {array}array2  必需。 第二个数组或数据区域。
+ * @returns {*|Error|number}
+ * @constructor
+ */
 exports.F.TEST = function (array1, array2) {
   if (!array1 || !array2) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
-
   if (!(array1 instanceof Array) || !(array2 instanceof Array)) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
-
   if (array1.length < 2 || array2.length < 2) {
-    return errorObj.ERROR_DIV0;
+    return Error(ERROR_DIV0);
+  }
+  let sum1 = jStat.variance(array1);
+  let sum2 = jStat.variance(array2);
+  if (sum1 >= sum2) {
+    return 2 * jStat.ftest(sum1 / sum2, array1.length - 1, array2.length - 1);
+  }
+  if (sum2 > sum1) {
+    return 2 * jStat.ftest(sum2 / sum1, array2.length - 1, array1.length - 1);
   }
 
-  let sumOfSquares = function (values, x1) {
-    let sum = 0;
-    for (let i = 0; i < values.length; i++) {
-      sum += Math.pow((values[i] - x1), 2);
-    }
-    return sum;
-  };
-
-  let x1 = mathTrig.SUM(array1) / array1.length;
-  let x2 = mathTrig.SUM(array2) / array2.length;
-  let sum1 = sumOfSquares(array1, x1) / (array1.length - 1);
-  let sum2 = sumOfSquares(array2, x2) / (array2.length - 1);
-
-  return sum1 / sum2;
 };
 
-exports.FISHER = function(x) {
+/**
+ *
+ * @param {number}x 必需。 要对其进行变换的数值。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function FISHER(x) {
   x = parseNumber(x);
   if (x instanceof Error) {
     return x;
   }
+  if (x <= -1 || x >= 1) {
+    return Error(ERROR_NUM)
+  }
   return Math.log((1 + x) / (1 - x)) / 2;
 };
 
-exports.FISHERINV = function(y) {
+
+/**
+ *
+ * @param {number}y 必需。 要对其进行逆变换的数值。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function FISHERINV(y) {
   y = parseNumber(y);
   if (y instanceof Error) {
     return y;
@@ -842,10 +910,19 @@ exports.FISHERINV = function(y) {
   return (e2y - 1) / (e2y + 1);
 };
 
-exports.FORECAST = function(x, data_y, data_x) {
+
+/**
+ *
+ * @param {number}x 必需。 需要进行值预测的数据点。
+ * @param {区域}data_y 必需。 相关数组或数据区域。
+ * @param {区域}data_x 必需。 独立数组或数据区域。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function FORECAST(x, data_y, data_x) {
   x = parseNumber(x);
-  data_y = parseNumberArray(utils.flatten(data_y));
-  data_x = parseNumberArray(utils.flatten(data_x));
+  data_y = parseNumberArray(flatten(data_y));
+  data_x = parseNumberArray(flatten(data_x));
   if (anyIsError(x, data_y, data_x)) {
     return Error(ERROR_VALUE);
   }
@@ -864,8 +941,8 @@ exports.FORECAST = function(x, data_y, data_x) {
 };
 
 exports.FREQUENCY = function(data, bins) {
-  data = parseNumberArray(utils.flatten(data));
-  bins = parseNumberArray(utils.flatten(bins));
+  data = parseNumberArray(flatten(data));
+  bins = parseNumberArray(flatten(bins));
   if (anyIsError(data, bins)) {
     return Error(ERROR_VALUE);
   }
@@ -893,28 +970,40 @@ exports.FREQUENCY = function(data, bins) {
   return r;
 };
 
-
-exports.GAMMA = function(number) {
+/**
+ *
+ * @param {number}number 必需。 返回一个数字。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function GAMMA(number) {
   number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
-
   if (number === 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
   if (parseInt(number, 10) === number && number < 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
   return jStat.gammafn(number);
 };
 
+/**
+ *
+ * @param {number}value 必需。 用来计算分布的数值。
+ * @param {number}alpha 必需。 分布参数。
+ * @param {number}beta 必需。 分布参数。 如果 beta = 1，则 GAMMA.DIST 返回标准伽玛分布。
+ * @param {boolean}cumulative 必需。 决定函数形式的逻辑值。 如果 cumulative 为 TRUE，
+ * 则 GAMMA.DIST 返回累积分布函数；如果为 FALSE，则返回概率密度函数。
+ * @returns {Error|*|number}
+ * @constructor
+ */
 exports.GAMMA.DIST = function(value, alpha, beta, cumulative) {
   cumulative = parseBool(cumulative)
   if (arguments.length !== 4) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
 
   if (value < 0 || alpha <= 0 || beta <= 0) {
@@ -928,37 +1017,58 @@ exports.GAMMA.DIST = function(value, alpha, beta, cumulative) {
   return cumulative ? jStat.gamma.cdf(value, alpha, beta, true) : jStat.gamma.pdf(value, alpha, beta, false);
 };
 
+/**
+ *
+ * @param {number}probability 必需。 伽玛分布相关的概率。
+ * @param {number}alpha 必需。 分布参数。
+ * @param {number}beta 必需。 分布参数。 如果 beta = 1，则 GAMMAINV 返回标准伽玛分布。
+ * @returns {Error|*}
+ * @constructor
+ */
 exports.GAMMA.INV = function(probability, alpha, beta) {
   if (arguments.length !== 3) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
-
   if (probability < 0 || probability > 1 || alpha <= 0 || beta <= 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
-
   if ((typeof probability !== 'number') || (typeof alpha !== 'number') || (typeof beta !== 'number')) {
     return Error(ERROR_VALUE);
   }
-
   return jStat.gamma.inv(probability, alpha, beta);
 };
 
-exports.GAMMALN = function(number) {
+
+/**
+ *
+ * @param {number}number  * @param number
+ * @returns {Error|*}
+ * @constructor
+ */
+export function GAMMALN(number) {
   number = parseNumber(number);
   if (number instanceof Error) {
     return number;
   }
+  if (number <= 0) {
+    return Error(ERROR_NUM)
+  }
   return jStat.gammaln(number);
 };
 
+
+/**
+ *
+ * @param {number}x 必需。 要计算其 GAMMALN.PRECISE 的数值。
+ * @returns {Error|*}
+ * @constructor
+ */
 exports.GAMMALN.PRECISE = function(x) {
   if (arguments.length !== 1) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
-
   if (x <= 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   if (typeof x !== 'number') {
@@ -968,7 +1078,14 @@ exports.GAMMALN.PRECISE = function(x) {
   return jStat.gammaln(x);
 };
 
-exports.GAUSS = function(z) {
+
+/**
+ *
+ * @param {number}z 必需。返回一个数字。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function GAUSS(z) {
   z = parseNumber(z);
   if (z instanceof Error) {
     return z;
@@ -976,13 +1093,28 @@ exports.GAUSS = function(z) {
   return jStat.normal.cdf(z, 0, 1) - 0.5;
 };
 
-exports.GEOMEAN = function() {
-  let args = parseNumberArray(utils.flatten(arguments));
+
+/**
+ * number1, number2, ...    Number1 是必需的，后续数字是可选的。 用于计算平均值的 1 到 255 个参数。
+ * 也可以用单一数组或对某个数组的引用来代替用逗号分隔的参数。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function GEOMEAN() {
+  let args = parseNumberArray(flatten(arguments));
   if (args instanceof Error) {
     return args;
   }
+  let n = args.length;
+  for (let i = 0; i < n; i++) {
+    if (args[i] <= 0) {
+      return Error(ERROR_NUM)
+    }
+  }
   return jStat.geomean(args);
-};
+
+  ;
+}
 
 exports.GROWTH = function(known_y, known_x, new_x, use_const) {
   // Credits: Ilmari Karonen (http://stackoverflow.com/questions/14161990/how-to-implement-growth-function-in-javascript)
@@ -1056,14 +1188,23 @@ exports.GROWTH = function(known_y, known_x, new_x, use_const) {
   return new_y;
 };
 
-exports.HARMEAN = function() {
-  let range = parseNumberArray(utils.flatten(arguments));
+/**
+ * number1, number2, ...    Number1 是必需的，后续数字是可选的。 用于计算平均值的 1 到 255 个参数。
+ * 也可以用单一数组或对某个数组的引用来代替用逗号分隔的参数。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function HARMEAN() {
+  let range = parseNumberArray(flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
   let n = range.length;
   let den = 0;
   for (let i = 0; i < n; i++) {
+    if (range[i] <= 0) {
+      return Error(ERROR_NUM)
+    }
     den += 1 / range[i];
   }
   return n / den;
@@ -1071,6 +1212,17 @@ exports.HARMEAN = function() {
 
 exports.HYPGEOM = {};
 
+/**
+ *
+ * @param {number}x 必需。 样本中成功的次数。
+ * @param {number}n 必需。 样本量。
+ * @param {number}M 必需。 总体中成功的次数。
+ * @param {number}N 必需。 总体大小。
+ * @param {boolean}cumulative 必需。 决定函数形式的逻辑值。 如果 cumulative 为 TRUE，
+ * 则 HYPGEOM.DIST 返回累积分布函数；如果为 FALSE，则返回概率密度函数。
+ * @returns {Error|number}
+ * @constructor
+ */
 exports.HYPGEOM.DIST = function(x, n, M, N, cumulative) {
   cumulative = parseBool(cumulative)
   x = parseNumber(x);
@@ -1079,6 +1231,9 @@ exports.HYPGEOM.DIST = function(x, n, M, N, cumulative) {
   N = parseNumber(N);
   if (anyIsError(x, n, M, N)) {
     return Error(ERROR_VALUE);
+  }
+  if (x < 0 || x > Math.min(n, M) || x < Math.max(0, n - N + M) || n <= 0 || n > N || M <= 0 || M > N || N <= 0) {
+    return Error(ERROR_NUM);
   }
 
   function pdf(x, n, M, N) {
@@ -1096,22 +1251,38 @@ exports.HYPGEOM.DIST = function(x, n, M, N, cumulative) {
   return (cumulative) ? cdf(x, n, M, N) : pdf(x, n, M, N);
 };
 
-exports.INTERCEPT = function(known_y, known_x) {
+/**
+ *
+ * @param {array}known_y 必需。 因变的观察值或数据的集合。
+ * @param {array}known_x 必需。 因变的观察值或数据的集合。
+ * @returns {Error|*}
+ * @constructor
+ */
+export function INTERCEPT(known_y, known_x) {
   known_y = parseNumberArray(known_y);
   known_x = parseNumberArray(known_x);
   if (anyIsError(known_y, known_x)) {
     return Error(ERROR_VALUE);
   }
   if (known_y.length !== known_x.length) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
   return exports.FORECAST(0, known_y, known_x);
 };
 
-exports.KURT = function() {
-  let range = parseNumberArray(utils.flatten(arguments));
+/**
+ * number1, number2, ...    Number1 是必需的，后续数字是可选的。
+ * 用于计算峰值的 1 到 255 个参数。 也可以用单一数组或对某个数组的引用来代替用逗号分隔的参数。
+ * @returns {Error|number}
+ * @constructor
+ */
+export function KURT() {
+  let range = parseNumberArray(flatten(arguments));
   if (range instanceof Error) {
     return range;
+  }
+  if (range.length < 4) {
+    return Error(ERROR_DIV0)
   }
   let mean = jStat.mean(range);
   let n = range.length;
@@ -1123,8 +1294,18 @@ exports.KURT = function() {
   return ((n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3))) * sigma - 3 * (n - 1) * (n - 1) / ((n - 2) * (n - 3));
 };
 
-exports.LARGE = function(range, k) {
-  range = utils.flatten(range)
+/**
+ *
+ * @param {array}range 必需。 需要确定第 k 个最大值的数组或数据区域。
+ * @param {number}k 必需。 返回值在数组或数据单元格区域中的位置（从大到小排）。
+ * @returns {[]|T}
+ * @constructor
+ */
+export function LARGE(range, k) {
+  range = flatten(range)
+  if (range === undefined || k <= 0 || k > range.length) {
+    return Error(ERROR_NUM)
+  }
   let arr = []
   for ( let i=0;i<range.length;i++){
     if (parseFloat(range[i])){
@@ -1141,9 +1322,9 @@ exports.LARGE = function(range, k) {
   })[k - 1];
 };
 
-exports.LINEST = function(data_y, data_x) {
-  data_y = parseNumberArray(utils.flatten(data_y));
-  data_x = parseNumberArray(utils.flatten(data_x));
+export function LINEST(data_y, data_x) {
+  data_y = parseNumberArray(flatten(data_y));
+  data_x = parseNumberArray(flatten(data_x));
   if (anyIsError(data_y, data_x)) {
     return Error(ERROR_VALUE);
   }
@@ -1165,9 +1346,16 @@ exports.LINEST = function(data_y, data_x) {
 // http://office.microsoft.com/en-us/starter-help/logest-function-HP010342665.aspx
 // LOGEST returns are based on the following linear model:
 // ln y = x1 ln m1 + ... + xn ln mn + ln b
-exports.LOGEST = function(data_y, data_x) {
-  data_y = parseNumberArray(utils.flatten(data_y));
-  data_x = parseNumberArray(utils.flatten(data_x));
+/**
+ *
+ * @param {array}data_y 必需。 关系表达式 y = b*m^x 中已知的 y 值集合。
+ * @param {array}data_x 可选。 关系表达式 y=b*m^x 中已知的 x 值集合，为可选参数。
+ * @returns {(Error | [*, *])|Error}
+ * @constructor
+ */
+export function LOGEST(data_y, data_x) {
+  data_y = parseNumberArray(flatten(data_y));
+  data_x = parseNumberArray(flatten(data_x));
   if (anyIsError(data_y, data_x)) {
     return Error(ERROR_VALUE);
   }
@@ -1175,14 +1363,24 @@ exports.LOGEST = function(data_y, data_x) {
     data_y[i] = Math.log(data_y[i]);
   }
 
-  let result = exports.LINEST(data_y, data_x);
+  let result = LINEST(data_y, data_x);
   result[0] = Math.round(Math.exp(result[0])*1000000)/1000000;
-  result[1] = Math.round(Math.exp(result[1])*1000000)/1000000;
-  return result;
+  // result[1] = Math.round(Math.exp(result[1])*1000000)/1000000;
+  return result[0];
 };
 
 exports.LOGNORM = {};
 
+/**
+ *
+ * @param {number}x 必需。 用来计算函数的值。
+ * @param {number}mean 必需。 ln(x) 的平均值。
+ * @param {number}sd 必需。 ln(x) 的标准偏差。
+ * @param {boolean}cumulative 必需。 决定函数形式的逻辑值。 如果 cumulative 为 TRUE，
+ * 则 LOGNORM.DIST 返回累积分布函数；如果为 FALSE，则返回概率密度函数。
+ * @returns {Error|*|number}
+ * @constructor
+ */
 exports.LOGNORM.DIST = function(x, mean, sd, cumulative) {
   cumulative = parseBool(cumulative)
   x = parseNumber(x);
@@ -1191,9 +1389,20 @@ exports.LOGNORM.DIST = function(x, mean, sd, cumulative) {
   if (anyIsError(x, mean, sd)) {
     return Error(ERROR_VALUE);
   }
+  if (x <= 0 || sd <= 0) {
+    return Error(ERROR_NUM)
+  }
   return (cumulative) ? jStat.lognormal.cdf(x, mean, sd) : jStat.lognormal.pdf(x, mean, sd);
 };
 
+/**
+ *
+ * @param {number}probability 必需。 与对数分布相关的概率。
+ * @param {number}mean 必需。 ln(x) 的平均值。
+ * @param {number}sd 必需。 ln(x) 的标准偏差。
+ * @returns {Error|*}
+ * @constructor
+ */
 exports.LOGNORM.INV = function(probability, mean, sd) {
   probability = parseNumber(probability);
   mean = parseNumber(mean);
@@ -1201,46 +1410,87 @@ exports.LOGNORM.INV = function(probability, mean, sd) {
   if (anyIsError(probability, mean, sd)) {
     return Error(ERROR_VALUE);
   }
+  if (probability <= 0 || probability >= 1 || sd <= 0) {
+    return Error(ERROR_NUM)
+  }
   return jStat.lognormal.inv(probability, mean, sd);
 };
 
-exports.MAX = function() {
-  let range = utils.arrayValuesToNumbers(utils.flatten(arguments));
+
+/**
+ * number1, number2, ...    Number1 是必需的，后续数字是可选的。 要从中查找最大值的 1 到 255 个数字。
+ * @returns {number}
+ * @constructor
+ */
+export function MAX() {
+  let range = arrayValuesToNumbers(flatten(arguments))
+  let k
+  for (k = 0; k < range.length; k++) {
+    if (range[k] === 'string') {
+      return Error(ERROR_NAME)
+    }
+  }
   return (range.length === 0) ? 0 : Math.max.apply(Math, range);
 };
 
-exports.MAXA = function() {
-  let range = utils.arrayValuesToNumbers(utils.flatten(arguments));
+/**
+ * Value1     必需。 要从中找出最大值的第一个数值参数。Value2,...     可选。 要从中找出最大值的 2 到 255 个数值参数。
+ * @returns {number}
+ * @constructor
+ */
+export function MAXA() {
+  let range = arrayValuesToNumbers(flatten(arguments));
   return (range.length === 0) ? 0 : Math.max.apply(Math, range);
 };
 
-exports.MEDIAN = function() {
-  let arr = utils.arrayValuesToNumbers(utils.flatten(arguments));
+/**
+ * number1, number2, ...    Number1 是必需的，后续数字是可选的。 要计算中值的 1 到 255 个数字。
+ * @returns {*}
+ * @constructor
+ */
+export function MEDIAN() {
+  let arr = arrayValuesToNumbers(flatten(arguments));
   let arr2 = []
   for (let i=0;i<arr.length;i++){
     if (typeof arr[i] === 'number'){
       arr2.push(arr[i])
     }
   }
-  let range = utils.arrayValuesToNumbers(utils.flatten(arr2));
+  let range = arrayValuesToNumbers(flatten(arr2));
   return jStat.median(range);
 };
 
-exports.MIN = function() {
-  let range = utils.flatten(arguments);
+/**
+ * number1, number2, ...    number1 是可选的，后续数字是可选的。 要从中查找最小值的 1 到 255 个数字。
+ * @returns {number}
+ * @constructor
+ */
+export function MIN() {
+  let range = arrayValuesToNumbers(flatten(arguments));
   return (range.length === 0) ? 0 : Math.min.apply(Math, range);
 };
 
-exports.MINA = function() {
-  let range = utils.arrayValuesToNumbers(utils.flatten(arguments));
+/**
+ *Value1, value2, ...    Value1 是必需的，后续值是可选的。 要从中查找最小值的 1 到 255 个数值。
+ * @returns {number}
+ * @constructor
+ */
+export function MINA() {
+  let range = arrayValuesToNumbers(flatten(arguments));
   return (range.length === 0) ? 0 : Math.min.apply(Math, range);
 };
 
 exports.MODE = {};
 
+/**
+ * Number1    必需。要计算其众数的第一个数字参数。
+ Number2, ...    可选。要计算其众数的 2 到 254 个数字参数。也可以用单一数组或对某个数组的引用来代替用逗号分隔的参数。
+ * @returns {Error|(number&Error)|[]}
+ * @constructor
+ */
 exports.MODE.MULT = function() {
   // Credits: Roönaän
-  let range = parseNumberArray(utils.flatten(arguments));
+  let range = parseNumberArray(flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
@@ -1264,8 +1514,14 @@ exports.MODE.MULT = function() {
   return maxItems;
 };
 
+/**
+ * Number1    必需。要计算其众数的第一个数字参数。
+ Number2, ...    可选。要计算其众数的 2 到 254 个数字参数。也可以用单一数组或对某个数组的引用来代替用逗号分隔的参数。
+ * @returns {Error|(number&Error)|T}
+ * @constructor
+ */
 exports.MODE.SNGL = function() {
-  let range = parseNumberArray(utils.flatten(arguments));
+  let range = parseNumberArray(flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
@@ -1298,7 +1554,7 @@ exports.NORM.DIST = function(x, mean, sd, cumulative) {
     return Error(ERROR_VALUE);
   }
   if (sd <= 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   // Return normal distribution computed by jStat [http://jstat.org]
@@ -1335,8 +1591,8 @@ exports.NORM.S.INV = function(probability) {
 };
 
 exports.PEARSON = function(data_x, data_y) {
-  data_y = parseNumberArray(utils.flatten(data_y));
-  data_x = parseNumberArray(utils.flatten(data_x));
+  data_y = parseNumberArray(flatten(data_y));
+  data_x = parseNumberArray(flatten(data_x));
   if (anyIsError(data_y, data_x)) {
     return Error(ERROR_VALUE);
   }
@@ -1357,7 +1613,7 @@ exports.PEARSON = function(data_x, data_y) {
 exports.PERCENTILE = {};
 
 exports.PERCENTILE.EXC = function(array, k) {
-  array = parseNumberArray(utils.flatten(array));
+  array = parseNumberArray(flatten(array));
   k = parseNumber(k);
   if (anyIsError(array, k)) {
     return Error(ERROR_VALUE);
@@ -1369,7 +1625,7 @@ exports.PERCENTILE.EXC = function(array, k) {
   });
   let n = array.length;
   if (k < 1 / (n + 1) || k > 1 - 1 / (n + 1)) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   let l = k * (n + 1) - 1;
   let fl = Math.floor(l);
@@ -1377,7 +1633,7 @@ exports.PERCENTILE.EXC = function(array, k) {
 };
 
 exports.PERCENTILE.INC = function(array, k) {
-  array = parseNumberArray(utils.flatten(array));
+  array = parseNumberArray(flatten(array));
   k = parseNumber(k);
   if (anyIsError(array, k)) {
     return Error(ERROR_VALUE);
@@ -1395,7 +1651,7 @@ exports.PERCENTRANK = {};
 
 exports.PERCENTRANK.EXC = function(array, x, significance) {
   significance = (significance === undefined) ? 3 : significance;
-  array = parseNumberArray(utils.flatten(array));
+  array = parseNumberArray(flatten(array));
   x = parseNumber(x);
   significance = parseNumber(significance);
   if (anyIsError(array, x, significance)) {
@@ -1426,7 +1682,7 @@ exports.PERCENTRANK.EXC = function(array, x, significance) {
 
 exports.PERCENTRANK.INC = function(array, x, significance) {
   significance = (significance === undefined) ? 3 : significance;
-  array = parseNumberArray(utils.flatten(array));
+  array = parseNumberArray(flatten(array));
   x = parseNumber(x);
   significance = parseNumber(significance);
   if (anyIsError(array, x, significance)) {
@@ -1499,8 +1755,8 @@ exports.PROB = function(range, probability, lower, upper) {
   }
   upper = (upper === undefined) ? lower : upper;
 
-  range = parseNumberArray(utils.flatten(range));
-  probability = parseNumberArray(utils.flatten(probability));
+  range = parseNumberArray(flatten(range));
+  probability = parseNumberArray(flatten(probability));
   lower = parseNumber(lower);
   upper = parseNumber(upper);
   if (anyIsError(range, probability, lower, upper)) {
@@ -1527,7 +1783,7 @@ exports.PROB = function(range, probability, lower, upper) {
 exports.QUARTILE = {};
 
 exports.QUARTILE.EXC = function(range, quart) {
-  range = parseNumberArray(utils.flatten(range));
+  range = parseNumberArray(flatten(range));
   quart = parseNumber(quart);
   if (anyIsError(range, quart)) {
     return Error(ERROR_VALUE);
@@ -1540,12 +1796,12 @@ exports.QUARTILE.EXC = function(range, quart) {
     case 3:
       return exports.PERCENTILE.EXC(range, 0.75);
     default:
-      return errorObj.ERROR_NUM;
+      return Error(ERROR_NUM);
   }
 };
 
 exports.QUARTILE.INC = function(range, quart) {
-  range = parseNumberArray(utils.flatten(range));
+  range = parseNumberArray(flatten(range));
   quart = parseNumber(quart);
   if (anyIsError(range, quart)) {
     return Error(ERROR_VALUE);
@@ -1558,7 +1814,7 @@ exports.QUARTILE.INC = function(range, quart) {
     case 3:
       return exports.PERCENTILE.INC(range, 0.75);
     default:
-      return errorObj.ERROR_NUM;
+      return Error(ERROR_NUM);
   }
 };
 
@@ -1566,11 +1822,11 @@ exports.RANK = {};
 
 exports.RANK.AVG = function(number, range, order) {
   number = parseNumber(number);
-  range = parseNumberArray(utils.flatten(range));
+  range = parseNumberArray(flatten(range));
   if (anyIsError(number, range)) {
     return Error(ERROR_VALUE);
   }
-  range = utils.flatten(range);
+  range = flatten(range);
   order = order || false;
   let sort = (order) ? function(a, b) {
     return a - b;
@@ -1592,7 +1848,7 @@ exports.RANK.AVG = function(number, range, order) {
 
 exports.RANK.EQ = function(number, range, order) {
   number = parseNumber(number);
-  range = parseNumberArray(utils.flatten(range));
+  range = parseNumberArray(flatten(range));
   if (anyIsError(number, range)) {
     return Error(ERROR_VALUE);
   }
@@ -1608,11 +1864,11 @@ exports.RANK.EQ = function(number, range, order) {
 
 exports.ROW = function(matrix, index) {
   if (arguments.length !== 2) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
 
   if (index < 0) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   if (!(matrix instanceof Array) || (typeof index !== 'number')) {
@@ -1628,7 +1884,7 @@ exports.ROW = function(matrix, index) {
 
 exports.ROWS = function(matrix) {
   if (arguments.length !== 1) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
 
   if (!(matrix instanceof Array)) {
@@ -1643,8 +1899,8 @@ exports.ROWS = function(matrix) {
 };
 
 exports.RSQ = function(data_x, data_y) { // no need to flatten here, PEARSON will take care of that
-  data_x = parseNumberArray(utils.flatten(data_x));
-  data_y = parseNumberArray(utils.flatten(data_y));
+  data_x = parseNumberArray(flatten(data_x));
+  data_y = parseNumberArray(flatten(data_y));
   if (anyIsError(data_x, data_y)) {
     return Error(ERROR_VALUE);
   }
@@ -1652,7 +1908,7 @@ exports.RSQ = function(data_x, data_y) { // no need to flatten here, PEARSON wil
 };
 
 exports.SKEW = function() {
-  let range = parseNumberArray(utils.flatten(arguments));
+  let range = parseNumberArray(flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
@@ -1666,7 +1922,7 @@ exports.SKEW = function() {
 };
 
 exports.SKEW.P = function() {
-  let range = parseNumberArray(utils.flatten(arguments));
+  let range = parseNumberArray(flatten(arguments));
   if (range instanceof Error) {
     return range;
   }
@@ -1684,8 +1940,8 @@ exports.SKEW.P = function() {
 };
 
 exports.SLOPE = function(data_y, data_x) {
-  data_y = parseNumberArray(utils.flatten(data_y));
-  data_x = parseNumberArray(utils.flatten(data_x));
+  data_y = parseNumberArray(flatten(data_y));
+  data_x = parseNumberArray(flatten(data_x));
   if (anyIsError(data_y, data_x)) {
     return Error(ERROR_VALUE);
   }
@@ -1702,7 +1958,7 @@ exports.SLOPE = function(data_y, data_x) {
 };
 
 exports.SMALL = function(range, k) {
-  range = parseNumberArray(utils.flatten(range));
+  range = parseNumberArray(flatten(range));
   k = parseNumber(k);
   if (anyIsError(range, k)) {
     return range;
@@ -1734,7 +1990,7 @@ exports.STDEV.S = function() {
   return Math.sqrt(v);
 };
 
-exports.STDEVA = function() {
+export function STDEVA() {
   let v = exports.VARA.apply(this, arguments);
   return Math.sqrt(v);
 };
@@ -1746,8 +2002,8 @@ exports.STDEVPA = function() {
 
 
 exports.STEYX = function(data_y, data_x) {
-  data_y = parseNumberArray(utils.flatten(data_y));
-  data_x = parseNumberArray(utils.flatten(data_x));
+  data_y = parseNumberArray(flatten(data_y));
+  data_x = parseNumberArray(flatten(data_x));
   if (anyIsError(data_y, data_x)) {
     return Error(ERROR_VALUE);
   }
@@ -1767,7 +2023,7 @@ exports.STEYX = function(data_y, data_x) {
 
 exports.TRANSPOSE = function(matrix) {
   if (!matrix) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
   return jStat.transpose(matrix);
 };
@@ -1786,11 +2042,11 @@ exports.T.DIST = function (x, df, cumulative) {
 
 exports.T.DIST['2T'] = function(x, df) {
   if (arguments.length !== 2) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
 
   if (x < 0 || df < 1) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   if ((typeof x !== 'number') || (typeof df !== 'number')) {
@@ -1802,11 +2058,11 @@ exports.T.DIST['2T'] = function(x, df) {
 
 exports.T.DIST.RT = function(x, df) {
   if (arguments.length !== 2) {
-    return errorObj.ERROR_NA;
+    return Error(ERROR_NA);
   }
 
   if (x < 0 || df < 1) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
 
   if ((typeof x !== 'number') || (typeof df !== 'number')) {
@@ -1827,7 +2083,7 @@ exports.T.INV = function (probability, df) {
   probability = parseNumber(probability);
   df = parseNumber(df);
   if (probability <= 0 || probability > 1 || df < 1) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   if (anyIsError(probability, df)) {
     return Error(ERROR_VALUE);
@@ -1839,7 +2095,7 @@ exports.T.INV['2T'] = function(probability, df) {
   probability = parseNumber(probability);
   df = parseNumber(df);
   if (probability <= 0 || probability > 1 || df < 1) {
-    return errorObj.ERROR_NUM;
+    return Error(ERROR_NUM);
   }
   if (anyIsError(probability, df)) {
     return Error(ERROR_VALUE);
@@ -1850,8 +2106,8 @@ exports.T.INV['2T'] = function(probability, df) {
 // The algorithm can be found here:
 // http://www.chem.uoa.gr/applets/AppletTtest/Appl_Ttest2.html
 exports.T.TEST = function(data_x, data_y) {
-  data_x = parseNumberArray(utils.flatten(data_x));
-  data_y = parseNumberArray(utils.flatten(data_y));
+  data_x = parseNumberArray(flatten(data_x));
+  data_y = parseNumberArray(flatten(data_y));
   if (anyIsError(data_x, data_y)) {
     return Error(ERROR_VALUE);
   }
@@ -1878,8 +2134,8 @@ exports.T.TEST = function(data_x, data_y) {
 };
 
 exports.TREND = function (data_y, data_x, new_data_x) {
-  data_y = parseNumberArray(utils.flatten(data_y));
-  data_x = parseNumberArray(utils.flatten(data_x));
+  data_y = parseNumberArray(flatten(data_y));
+  data_x = parseNumberArray(flatten(data_x));
   let linest = exports.LINEST(data_y, data_x);
   let m = linest[0];
   let b = linest[1];
@@ -1887,7 +2143,7 @@ exports.TREND = function (data_y, data_x, new_data_x) {
 };
 
 exports.TRIMMEAN = function (range, percent) {
-  range = parseNumberArray(utils.flatten(range));
+  range = parseNumberArray(flatten(range));
   percent = parseNumber(percent);
   if (anyIsError(range, percent)) {
     return Error(ERROR_VALUE);
@@ -1901,7 +2157,7 @@ exports.TRIMMEAN = function (range, percent) {
 exports.VAR = {};
 
 exports.VAR.P = function () {
-  let range = utils.numbers(utils.flatten(arguments));
+  let range = utils.numbers(flatten(arguments));
   if (range.length===0){
     return Error(ERROR_VALUE)
   }
@@ -1919,7 +2175,7 @@ exports.VAR.P = function () {
 };
 
 exports.VAR.S = function() {
-  let range = utils.numbers(utils.flatten(arguments));
+  let range = utils.numbers(flatten(arguments));
   let n = range.length;
   let sigma = 0;
   let mean = exports.AVERAGE(range);
@@ -1930,11 +2186,11 @@ exports.VAR.S = function() {
 };
 
 exports.VARA = function() {
-  let range = utils.flatten(arguments);
+  let range = flatten(arguments);
   let n = range.length;
   let sigma = 0;
   let count = 0;
-  let mean = exports.AVERAGEA(range);
+  let mean = AVERAGEA(range);
   for (let i = 0; i < n; i++) {
     let el = range[i];
     if (typeof el === 'number') {
@@ -1953,7 +2209,7 @@ exports.VARA = function() {
 };
 
 exports.VARPA = function() {
-  let range = utils.flatten(arguments);
+  let range = flatten(arguments);
   let n = range.length;
   let sigma = 0;
   let count = 0;
@@ -1993,7 +2249,7 @@ exports.WEIBULL.DIST = function(x, alpha, beta, cumulative) {
 exports.Z = {};
 
 exports.Z.TEST = function (range, x, sd) {
-  range = parseNumberArray(utils.flatten(range));
+  range = parseNumberArray(flatten(range));
   x = parseNumber(x);
   if (anyIsError(range, x)) {
     return Error(ERROR_VALUE);

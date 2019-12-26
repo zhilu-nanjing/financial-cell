@@ -106,9 +106,18 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.C835 = {v: 10};
       workbook.Sheets.Sheet1.H845 = {f: '=FACTORIAL(C835)'};
       easyCalcWorkbook(workbook);
-      assert.equal(workbook.Sheets.Sheet1.H845.v, 3628800);
-      assert.equal(workbook.Sheets.Sheet1.H845.v, 3628800);
+      assert.equal(workbook.Sheets.Sheet1.H845.v.toNumber(), 3628800);
+      assert.equal(workbook.Sheets.Sheet1.H845.v.toNumber(), 3628800);
     });
+
+    it("BETA__DIST",function () {
+      let workbook = {};
+      workbook.Sheets = {};
+      workbook.Sheets.Sheet1 = {};
+      workbook.Sheets.Sheet1.A2 = {f: '=BETA.DIST(2,8,10,true,1,3)'};
+      easyCalcWorkbook(workbook);
+      assert(Math.abs(workbook.Sheets.Sheet1.A2.v.toNumber() - 0.6854706) < 0.001)
+    })
     it('ABS', function() {
 
       let workbook = {};

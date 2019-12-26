@@ -125,3 +125,13 @@ export const SHEET_NAME = 'sheet_name';
 export const COL_NAME = 'col_name';
 export const ROW_NAME = 'row_name';
 export const ABSOLUTE_MARK = 'absolute_mark';
+export const CellVTypeObj = {
+  CellVDateTime: 'CellVDateTime',
+  CellVError: 'CellVError',
+  CellVEmpty: 'CellVEmpty',
+  CellVNumber: 'CellVNumber',
+  CellVString: 'CellVString',
+  CellVHyperLink: 'CellVHyperLink',
+  CellVBool: 'CellVBool',
+  CellVArray: 'CellVArray',
+};

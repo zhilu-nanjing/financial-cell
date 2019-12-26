@@ -1,10 +1,10 @@
 // 所有的算符都会转化为函数
-import { CellVTypeObj } from '../cell_value_type/cell_value';
 import { ERROR_DIV0 } from '../calc_utils/error_config';
 import {
   NotConvertEmptyExpFunction,
   StringExpFunction
 } from './exp_function_proxy';
+import { CellVTypeObj } from '../calc_utils/config';
 
 export function opIsLessThan(a, b) {
   return a < b;

@@ -48,12 +48,27 @@ exports.FALSE = function() {
   return false;
 };
 
-exports.IF = function(test, then_value, otherwise_value) {
+/**
+ *
+ * @param {string}test 要测试的条件。
+ * @param {number/string}then_value logical_test 的结果为 TRUE 时，您希望返回的值。
+ * @param {number/string}otherwise_value logical_test 的结果为 FALSE 时，您希望返回的值。
+ * @returns {*}
+ * @constructor
+ */
+export function IF(test, then_value, otherwise_value) {
   return test ? then_value : otherwise_value;
 };
 
-exports.IFERROR = function(value, valueIfError) {
-  if (information.ISERROR(value)) {
+/**
+ *
+ * @param {number}value 必需。 检查是否存在错误的参数。
+ * @param {number/string}valueIfError 必需。 公式计算错误时返回的值。 计算以下错误类型: #N/A、#VALUE!、#REF!、#DIV/0!、#NUM!、#NAME？或 #NULL!。
+ * @returns {*}
+ * @constructor
+ */
+export function IFERROR(value, valueIfError) {
+  if (information.ISERROR_(value)) {
     return valueIfError;
   }
   return value;

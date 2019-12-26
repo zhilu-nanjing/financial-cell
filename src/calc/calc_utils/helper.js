@@ -80,6 +80,31 @@ export function flattenNum(args) { // todo: 这个函数有点复杂，需要优
 }
 //XW:end
 
+export function to1DArray(args) { // todo: 这个函数有点复杂，需要优化
+  let newArgArray = []
+  let argArray = []
+  for( let i=0;i<args.length;i++) {
+    argArray.push(args[i])
+  }
+  newArgArray = reduce1D(argArray)
+  newArgArray = reduce1D(newArgArray)
+  return newArgArray
+}
+
+function reduce1D(argArray){
+  let newArgArray = []
+  argArray.map(arg => {
+    if(arg instanceof Array){
+      arg.map(elm => newArgArray.push(elm))
+    }
+    else {
+      newArgArray.push(arg)
+    }
+  })
+  return newArgArray
+}
+
+
 export function cleanFloat(number) {
   let power = 1e14;
   return Math.round(number * power) / power;

@@ -55,6 +55,10 @@ export function xy2expr(x, y, ab = 0) {
   return `${stringAt(x)}${y + 1}`;
 }
 
+export function getColNumFromA1(A1Str){
+  return parseInt(A1Str.replace(/^[A-Z]+/, ''))
+}
+
 export default {
   expr2xy,
   xy2expr,

@@ -298,7 +298,7 @@ export class StructuralExpressionBuilder {
     let v;
     let res1 = new BoolParser(calcCell, astNodeStr).parseString();
     if (res1.msg !== PARSE_FAIL) { // true, false --> boll 变量
-      v = new RawValue(CellVBool(res1));
+      v = new RawValue(new CellVBool(res1));
       this.lastUnitTypeArray = [RAW_VALUE, BOOL]
 
     } else if (astNodeStr.trim() // 表示一个Range

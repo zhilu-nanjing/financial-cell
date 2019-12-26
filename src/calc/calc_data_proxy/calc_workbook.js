@@ -6,6 +6,7 @@ import { SimpleExpressionBuilder } from '../calc_deal/simple_expression/deal_sim
 import { StructuralExpressionBuilder } from '../calc_deal/structural_expression/deal_structural_expression';
 import { EmptyMultiSheetObj, FORMULA_STATUS } from '../calc_utils/config';
 import { convertToCellV } from '../cell_value_type/cell_value';
+import { expr2xy, getColNumFromA1 } from '../../utils/alphabet';
 
 
 /**
@@ -21,15 +22,6 @@ export class CalcSheet {
     this.name2CellProxy = this.createName2CellProxy(name2CellObj)
   }
 
-  updateACell(cellName, cellObj){
-    let theCell = this.getCellByName(cellName)
-    if(typeof theCell === "undefined"){
-      this.addCalcCell(cellName, cellObj)
-    }
-    else{
-      theCell.updateByCellObj(cellObj)
-    }
-  }
 
   createName2CellProxy(name2CellObj){
     let name2CellProxy = {}
@@ -68,6 +60,30 @@ export class CalcSheet {
     return this.name2CellProxy[cellName]
   }
 
+  getMaxRowNum(){ // 最大的行号码
+    let allCellNameArray = this.getCellNames()
+    let maxRow = 0
+    allCellNameArray.map(cellName => {
+      let curNum = getColNumFromA1(cellName)
+      maxRow = curNum > maxRow ? curNum:maxRow
+    })
+    return maxRow
+  }
+
+  getMaxRowColNum(){ // 最大的列号码
+    let allCellNameArray = this.getCellNames()
+    let maxCol = 0
+    let maxRow = 0
+    allCellNameArray.map(cellName => {
+      let curColRowNumArray = expr2xy(cellName)
+      maxCol = curColRowNumArray[0] > maxCol ? curColRowNumArray[0]:maxCol
+      maxRow = curColRowNumArray[1] > maxRow ? curColRowNumArray[1]:maxRow
+    })
+    return [maxCol, maxRow]
+
+  }
+
+  // 变更值
   addCalcCell(cellName, cellObj, status = FORMULA_STATUS.created){
     this.name2CellProxy[cellName] = new CalcCell(
       this.workbookProxy,
@@ -78,6 +94,17 @@ export class CalcSheet {
     )
 
   }
+  updateACell(cellName, cellObj){
+    let theCell = this.getCellByName(cellName)
+    if(typeof theCell === "undefined"){
+      this.addCalcCell(cellName, cellObj)
+    }
+    else{
+      theCell.updateByCellObj(cellObj)
+    }
+  }
+
+
 }
 /**
  * @property{SimpleExpressionBuilder} simpleExpressionBuilder
@@ -154,11 +181,19 @@ export class CalcWorkbookProxy { // 对workbook的数据代理
   convertPreAction2name2CellObj(preAction){
     let oldName2CellObj = {}
     let oldCell = preAction.oldCell // newCell是单元格的f发生更改的cellProp实例的集合
-    oldCell.map((aCell) => {oldName2CellObj[aCell.expr] = {f: aCell.cell.formulas}})
+    if(oldCell.hasOwnProperty("map")){ // 为空
+      oldCell.map((aCell) => {oldName2CellObj[aCell.expr] = {f: aCell.cell.formulas}})
+    }
 
     let newName2CellObj = {}
     let newCell = preAction.newCell // newCell是单元格的f发生更改的cellProp实例的集合
-    newCell.map((aCell) => {newName2CellObj[aCell.expr] = {f: aCell.cell.formulas}})
+    if(preAction.isDelete()){
+      newCell.map((aCell) => {newName2CellObj[aCell.expr] = {f: ""}}) // 删除了，formula 变为空
+    }
+    else {
+      newCell.map((aCell) => {newName2CellObj[aCell.expr] = {f: aCell.cell.formulas}})
+    }
+
     Object.assign(oldName2CellObj, newName2CellObj)
 
     let name2CellObj = {}
