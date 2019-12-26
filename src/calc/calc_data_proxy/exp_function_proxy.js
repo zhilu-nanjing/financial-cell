@@ -1,5 +1,6 @@
-import { NOT_CONVERT, TO_PARA_TYPE } from '../calc_utils/config';
-import { ERROR_VALUE } from '../calc_utils/error_config'; // 不能依赖cellV
+import { CellVTypeObj, NOT_CONVERT, TO_PARA_TYPE } from '../calc_utils/config';
+import { ERROR_VALUE } from '../calc_utils/error_config';
+// 不能依赖cellV
 
 export class BaseExpFunction { // 默认行为; 如果不符合默认行为的函数，需要继承这个类，然后写相关逻辑。
   constructor(user_function) {
@@ -147,8 +148,11 @@ export class StringExpFunction extends BaseExpFunction {
 
 export class NotConvertEmptyExpFunction extends BaseExpFunction { // 空类型不转换，其他按照默认行为来
   defaultConvert(arg) {
-    if (arg.cellVTypeName === 'CellVEmpty') {
+    if (arg.cellVTypeName === CellVTypeObj.CellVEmpty) {
       return arg;
+    }
+    else if(arg.cellVTypeName === CellVTypeObj.CellVArray){
+      return arg.convertToStringAndNumberExceptEmpty()
     }
     return this.convertToStringAndNumber(arg);
   }

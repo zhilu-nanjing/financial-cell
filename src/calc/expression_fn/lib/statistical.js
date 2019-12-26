@@ -6,10 +6,15 @@ import {ERROR_DIV0, ERROR_NA, ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc
 import * as misc from './miscellaneous';
 import * as evalExpression from './expression';
 import { parseBool, parseNumber, parseNumberArray } from '../../calc_utils/parse_helper';
-import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
+import {
+  NotConvertEmptyExpFunction,
+  OnlyNumberExpFunction
+} from '../../calc_data_proxy/exp_function_proxy';
 import {anyIsError, flatten, flattenNum} from "../../calc_utils/helper";
 import* as helper from "../../calc_utils/helper";
 import {days_str2date} from "../../calc_utils/parse_helper";
+import { to1DArray } from '../../calc_utils/helper';
+import { CellVTypeObj } from '../../calc_utils/config';
 
 let SQRT2PI = 2.5066282746310002;
 
@@ -33,8 +38,9 @@ export function AVEDEV() {
  * @returns {Error|(string&Error)|undefined|([]&Error)|number|*}
  * @constructor
  */
-export function AVERAGE() {
-  let range = flattenNum(arguments); // 这个arguments是通过function.call传递过来的
+function AVERAGE_() {
+  let rangeWithEmpty = to1DArray(arguments); // 这个arguments是通过function.call传递过来的
+  let range = rangeWithEmpty.filter(elm => elm.cellVTypeName !== CellVTypeObj.CellVEmpty)
   if (range instanceof Error) {
     return range;
   }
@@ -51,6 +57,7 @@ export function AVERAGE() {
   return sum / count;
 };
 
+export const AVERAGE = new NotConvertEmptyExpFunction(AVERAGE_)
 
 /**
  * Value1, value2, ...    Value1 是必需的，后续值是可选的。 需要计算平均值的 1 到 255 个单元格、单元格区域或值。

@@ -1,5 +1,5 @@
 import * as cf from '../calc_utils/config';
-import { d18991230MS, d18991230STR } from '../calc_utils/config';
+import { CellVTypeObj, d18991230MS, d18991230STR } from '../calc_utils/config';
 import {
   ERROR_NA,
   ERROR_VALUE,
@@ -9,17 +9,6 @@ import {
 } from '../calc_utils/error_config';
 import { dayNum2Date } from '../calc_utils/parse_helper';
 import { MatrixValue } from '../calc_data_proxy/matrix_math';
-
-export const CellVTypeObj = {
-  CellVDateTime: 'CellVDateTime',
-  CellVError: 'CellVError',
-  CellVEmpty: 'CellVEmpty',
-  CellVNumber: 'CellVNumber',
-  CellVString: 'CellVString',
-  CellVHyperLink: 'CellVHyperLink',
-  CellVBool: 'CellVBool',
-  CellVArray: 'CellVArray',
-};
 
 // 如果格式转化失败，会调用reportConvertFail方法来汇报错误
 /**
@@ -345,6 +334,15 @@ export class CellVArray {
 
   toNumberOrString() {
     return this.applyToAll(aValue => this.convertAValueToNumberOrString(aValue)
+    );
+  }
+  convertToStringAndNumberExceptEmpty(){
+    return this.applyToAll(aValue => {
+      if(aValue.cellVTypeName === CellVTypeObj.CellVEmpty){
+        return aValue
+      }
+      return this.convertAValueToNumberOrString(aValue)
+    }
     );
   }
 

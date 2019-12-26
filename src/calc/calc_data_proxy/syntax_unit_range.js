@@ -3,6 +3,7 @@ import {getSanitizedSheetName} from '../calc_utils/get_sheetname.js'
 import {ERROR_CIRCULAR} from '../calc_utils/error_config.js'
 import { FORMULA_STATUS,RANG_REF } from '../calc_utils/config';
 import { ColIndexProxy } from './col_index';
+import {CellVEmpty} from '../cell_value_type/cell_value';
 
 /**
  * @property {CalcCell} calcCell
@@ -39,7 +40,12 @@ export class SUnitRangeRef{
         let str_max_row = arr[1].replace(/^[A-Z]+/, '');
         let max_row;
         // the max is 1048576, but TLE
-        max_row = parseInt(str_max_row === '' ? '500000' : str_max_row, 10);
+        if(str_max_row === ""){
+            max_row = this.calcCell.calcSheet.getMaxRowNum() // 最大的行号
+        }
+        else {
+            max_row = parseInt(str_max_row)
+        }
         let min_col = new ColIndexProxy(arr[0]).colNum;
         let max_col = new ColIndexProxy(arr[0]).colNum;
         let matrix = [];
@@ -64,7 +70,7 @@ export class SUnitRangeRef{
                     }
                 }
                 else {
-                    row.push(null);
+                    row.push(new CellVEmpty());
                 }
             }
         }

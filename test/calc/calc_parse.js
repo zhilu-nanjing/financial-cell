@@ -133,9 +133,24 @@ describe('新的解析算法', function () {
     // assert.equal(workbook.Sheets.Sheet1.A2.v.toNumber(), 6.5);
     // assert.equal(workbook.Sheets.Sheet1.A3.v.toNumber(), 7);
     assert.equal(workbook.Sheets.Sheet1.A4.v.toNumber(), 5);
-
-
   });
+  it('A:B引用', function () { // todo: 直接输入数组，要能够解析出来
+    let workbook = {};
+    workbook.Sheets = {};
+    workbook.Sheets.Sheet1 = {};
+    workbook.Sheets.Sheet1.A1 = {f: '8'};
+    workbook.Sheets.Sheet1.A2 = {f: '9'};
+    workbook.Sheets.Sheet1.A3 = {f: '10'};
+    workbook.Sheets.Sheet1.B1 = { f: '=average(A:A)' };
+
+
+    let calc = new Calc();
+    calc.calculateWorkbook(workbook);
+    assert.equal(workbook.Sheets.Sheet1.B1.v.toNumber(), 9);
+  });
+
+
+
 
 
   it('circular', function () { // 检查循环依赖的判定;
