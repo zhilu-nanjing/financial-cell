@@ -181,11 +181,19 @@ export class CalcWorkbookProxy { // 对workbook的数据代理
   convertPreAction2name2CellObj(preAction){
     let oldName2CellObj = {}
     let oldCell = preAction.oldCell // newCell是单元格的f发生更改的cellProp实例的集合
-    oldCell.map((aCell) => {oldName2CellObj[aCell.expr] = {f: aCell.cell.formulas}})
+    if(oldCell.hasOwnProperty("map")){ // 为空
+      oldCell.map((aCell) => {oldName2CellObj[aCell.expr] = {f: aCell.cell.formulas}})
+    }
 
     let newName2CellObj = {}
     let newCell = preAction.newCell // newCell是单元格的f发生更改的cellProp实例的集合
-    newCell.map((aCell) => {newName2CellObj[aCell.expr] = {f: aCell.cell.formulas}})
+    if(preAction.isDelete()){
+      newCell.map((aCell) => {newName2CellObj[aCell.expr] = {f: ""}}) // 删除了，formula 变为空
+    }
+    else {
+      newCell.map((aCell) => {newName2CellObj[aCell.expr] = {f: aCell.cell.formulas}})
+    }
+
     Object.assign(oldName2CellObj, newName2CellObj)
 
     let name2CellObj = {}

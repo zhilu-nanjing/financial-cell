@@ -6,12 +6,7 @@ import {ERROR_DIV0, ERROR_NA, ERROR_NAME, ERROR_NUM, ERROR_VALUE, errorObj} from
 import * as misc from './miscellaneous';
 import * as evalExpression from './expression';
 import { parseBool, parseNumber, parseNumberArray } from '../../calc_utils/parse_helper';
-import {
-  NotConvertEmptyExpFunction,
-  OnlyNumberExpFunction
-} from '../../calc_data_proxy/exp_function_proxy';
-import {anyIsError, flatten, flattenNum} from "../../calc_utils/helper";
-import {NotConvertExpFunction, OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
+import {NotConvertExpFunction,NotConvertEmptyExpFunction, OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
 import {anyIsError, flatten, flattenNum, arrayValuesToNumbers} from "../../calc_utils/helper";
 import* as helper from "../../calc_utils/helper";
 import {days_str2date} from "../../calc_utils/parse_helper";
@@ -43,7 +38,7 @@ export function AVEDEV() {
  */
 function AVERAGE_() {
   let rangeWithEmpty = to1DArray(arguments); // 这个arguments是通过function.call传递过来的
-  let range = rangeWithEmpty.filter(elm => elm.cellVTypeName !== CellVTypeObj.CellVEmpty)
+  let range = rangeWithEmpty.filter(elm =>elm.cellVTypeName === CellVTypeObj.CellVNumber || typeof elm === "number")
   if (range instanceof Error) {
     return range;
   }

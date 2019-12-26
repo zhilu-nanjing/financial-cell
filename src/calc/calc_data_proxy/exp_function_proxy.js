@@ -152,7 +152,7 @@ export class NotConvertEmptyExpFunction extends BaseExpFunction { // 空类型�
       return arg;
     }
     else if(arg.cellVTypeName === CellVTypeObj.CellVArray){
-      return arg.convertToStringAndNumberExceptEmpty()
+      return arg.convertToStringAndNumberExceptEmptyBool()
     }
     return this.convertToStringAndNumber(arg);
   }

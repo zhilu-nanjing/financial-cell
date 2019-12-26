@@ -345,6 +345,16 @@ export class CellVArray {
     }
     );
   }
+  convertToStringAndNumberExceptEmptyBool(){
+    return this.applyToAll(aValue => {
+        if(aValue.cellVTypeName === CellVTypeObj.CellVEmpty || aValue.cellVTypeName === CellVTypeObj.CellVBool){
+          return aValue
+        }
+        return this.convertAValueToNumberOrString(aValue)
+      }
+    );
+  }
+
 
   exeElementOperator(other, operator) {
     return this.matrixValue.exeElementWiseOperator(other.matrixValue, operator);

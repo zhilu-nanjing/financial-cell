@@ -141,6 +141,9 @@ describe('新的解析算法', function () {
     workbook.Sheets.Sheet1.A1 = {f: '8'};
     workbook.Sheets.Sheet1.A2 = {f: '9'};
     workbook.Sheets.Sheet1.A3 = {f: '10'};
+    workbook.Sheets.Sheet1.A4 = {f: 'afsf'};
+    workbook.Sheets.Sheet1.A5 = {f: 'true'};
+
     workbook.Sheets.Sheet1.B1 = { f: '=average(A:A)' };
 
 
