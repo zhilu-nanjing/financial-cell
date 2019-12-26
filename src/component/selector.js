@@ -223,7 +223,8 @@ class SelectorElement {
             height: height - selectorHeightBorderWidth + 0.8,
             // left: left - 0.8,  // 选中区域的边框没有了
             left: left,
-            top: top - 0.8,
+            top: top,
+            // top: top - 0.8,
         }).show();
     }
 

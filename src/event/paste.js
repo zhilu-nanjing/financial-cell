@@ -465,7 +465,7 @@ function GetInfoFromTable(tableObj) { // class ClipboardTableProxy; .tableDom å±
     tableProxy.dealStyle(tableObj, {ri, ci});
     let {reference} = tableProxy.dealReference(tableObj, {ri, ci});
     this.setCellRange(reference, tableProxy, true, tableProxy.parseTableCellRange(tableObj, {ri, ci}));
-
+    this.footerContainerReset();
     const rect = data.getSelectedRect();
     let left = rect.left + rect.width + 60;
     let top = rect.top + rect.height + 31;

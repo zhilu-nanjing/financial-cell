@@ -226,8 +226,9 @@ function overlayerTouch(direction, distance) {
 
 function verticalScrollbarSet() {
     const {data, verticalScrollbar} = this;
+    const {footerContainerHeight} = this.data.settings;
     const {height} = this.getTableOffset();
-    verticalScrollbar.set(height, data.rows.totalHeight());
+    verticalScrollbar.set(height, data.rows.totalHeight() + footerContainerHeight);
 }
 
 function horizontalScrollbarSet() {
@@ -712,11 +713,26 @@ function editorSet() {
     });
 }
 
+function footerContainerIsShow(distance) {
+    let {data} = this;
+    let {footerContainerHeight} = data.settings;
+    let el = document.getElementById("foot-container");
+    let offset = footerContainerHeight - 20;
+
+    if (data.viewHeight() + distance - footerContainerHeight >= data.rows.totalHeight() - offset) {
+        el.style['display'] = 'block';
+        el.style['top'] = data.viewHeight() - (data.viewHeight() + distance - footerContainerHeight - data.rows.totalHeight() + offset) + "px";
+    } else {
+        el.style['display'] = 'none';
+    }
+}
+
 function verticalScrollbarMove(distance) {
     const {data, table, selector, editor} = this;
     data.scrolly(distance, () => {
         editor.display = false;
         selector.resetBRLAreaOffset();
+        footerContainerIsShow.call(this, distance);
         pictureSetOffset.call(this);
         adviceSetOffset.call(this);
         selectorsSetOffset.call(this);
@@ -968,7 +984,17 @@ export function insertDeleteRowColumn(type) {
         data.deleteCell('text');
     }
     clearClipboard.call(this);
+    footerContainerReset.call(this);
     sheetReset.call(this);
+}
+
+function footerContainerReset() {
+    const {verticalScrollbar, data} = this;
+    const {top} = verticalScrollbar.scroll();
+
+    const {rows} = data;
+    const ri = data.scroll.ri + 1;
+    footerContainerIsShow.call(this, top + rows.getHeight(ri) - data.settings.footerContainerHeight);
 }
 
 function toolbarChange(type, value) {
@@ -987,7 +1013,6 @@ function toolbarChange(type, value) {
         if (value === true) copy.call(this);
         else clearClipboard.call(this);
     } else if (type === 'chart') {
-        console.log("chaet");
         addChart.call(this);
         this.toolbar.reset();
         // if (value === true) copy.call(this);
@@ -1500,7 +1525,7 @@ function sheetInitEvents() {
                     break;
                 case 27: // esc
                     contextMenu.hide();
-                    clearClipboard.call(this);
+                    toolbar.trigger('paintformat');
                     break;
                 case 37: // left
                     selectorMove.call(this, shiftKey, 'left');
@@ -1761,6 +1786,19 @@ export default class Sheet {
     getRect() {
         const {data} = this;
         return {width: data.viewWidth(), height: data.viewHeight()};
+    }
+
+    footerContainerReset() {
+        footerContainerReset.call(this);
+    }
+
+    insertRows(len) {
+        let {data, verticalScrollbar } = this;
+        let {rows} = data;
+        data.insert('row', len * 1);
+        sheetReset.call(this);
+        verticalScrollbar.move({top: rows.totalHeight()});
+        // verticalScrollbarMove.call(this, data.rows.totalHeight() - data.viewHeight()  );
     }
 
     getTableOffset() {

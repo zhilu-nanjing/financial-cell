@@ -1,18 +1,18 @@
 /* global window, document */
-import {h} from './component/element';
-import DataProxy from './core/data_proxy';
-import Sheet from './component/sheet';
-import {cssPrefix} from './config';
-import {locale} from './locale/locale';
-import './index.less';
-import zhCN from './locale/zh-cn';
-import {bugout} from "./log/log_proxy";
-import Drag from "./external/drag";
+import {h} from '../component/element';
+import DataProxy from '../core/data_proxy';
+import Sheet from '../component/sheet';
+import {cssPrefix} from '../config';
+import {locale} from '../locale/locale';
+import '../index.less';
+import zhCN from '../locale/zh-cn';
+import {bugout} from "../log/log_proxy";
+import Drag from "../external/drag";
 
 class Spreadsheet {
     constructor(selectors, options = {}, methods = {}, alias = 'sheet1') {
         let targetEl = selectors;
-          if (typeof selectors === 'string') {
+        if (typeof selectors === 'string') {
             targetEl = document.querySelector(selectors);
         }
         this.locale('zh-cn', zhCN);
@@ -91,10 +91,6 @@ class Spreadsheet {
     //         editor.setCursorPos(cell.formulas.length);
     //     }, 100)
     // }
-
-    insertRows(len) {
-        this.sheet.insertRows(len);
-    }
 
     getText(alias, inputText, pos) {
         let {selectors, data, table} = this.sheet;

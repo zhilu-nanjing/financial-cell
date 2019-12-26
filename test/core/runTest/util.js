@@ -55,6 +55,8 @@ export async function loadActions(actions, page) {
             });
             await waitTime(delay);
         } else if (type === 'screenshot') {
+            await waitTime(delay * 20);
+
             let path = "/Users/wen/Desktop/work/sda/financial-cell/test/core/runTest/png/";
             let name = path + "asdd" + (Math.random() * delay * 500) + ".png";
             console.log(name, "   name");
