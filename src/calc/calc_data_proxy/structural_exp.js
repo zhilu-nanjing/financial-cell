@@ -69,7 +69,9 @@ export class StructuralExp {
         for (let i = 0; i < args.length; i++) {
             if (operators.includes(args[i])) {
                 try {
-                    let r = this.exeOperatorForArrayAndSingle(this.execCalcMethod(args[i-1]), this.execCalcMethod(args[i+1]),args[i]);// 这里存在递归
+                    let preSolution = this.execCalcMethod(args[i-1])
+                    let postSolution = this.execCalcMethod(args[i+1])
+                    let r = this.exeOperatorForArrayAndSingle(preSolution, postSolution,args[i]);// 这里存在递归
                     args.splice(i - 1, 3, new RawValue(r));
                     i--;
                 } catch (e) { // 上面一旦出现错误，就直接跳出了

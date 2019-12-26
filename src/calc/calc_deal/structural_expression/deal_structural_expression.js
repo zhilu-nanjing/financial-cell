@@ -2,13 +2,21 @@
 import { StructuralExp } from '../../calc_data_proxy/structural_exp';
 import { RawValue } from '../../calc_data_proxy/syntax_unit_raw_value';
 import {
+  A1A2,
+  AA,
+  BOOL,
   CONTAINER,
   EXP_FN,
   MARK_OBJ,
-  OPERATOR, RANG_REF,
+  OPERATOR,
+  RANG_REF,
   RAW_VALUE,
-  SINGLE_CHAR_OPERATOR, SINGLE_REF,
-  SPLIT_MARK
+  SHEET1A1,
+  SHEET1A1A2,
+  SHEET1AA,
+  SINGLE_CHAR_OPERATOR,
+  SINGLE_REF,
+  SPLIT_MARK, A1
 } from '../../calc_utils/config';
 import { SUnitRangeRef } from '../../calc_data_proxy/syntax_unit_range';
 import { SUnitRefValue } from '../../calc_data_proxy/syntax_unit_ref_value';
@@ -16,7 +24,8 @@ import { BoolParser } from '../../calc_data_proxy/parser_proxy';
 import { ERROR_SYNTAX, PARSE_FAIL } from '../../calc_utils/error_config';
 import { CellVBool } from '../../cell_value_type/cell_value';
 import { RawArray } from '../../calc_data_proxy/matrix_math';
-import { SyntaxStructureBuilder } from '../../calc_data_proxy/syntax_unit_proxy';
+import { SyntaxStructureBuilder } from '../../calc_data_proxy/syntax_builder_core';
+import { ExpSyntaxUnitProxy } from '../../calc_data_proxy/syntax_builder_for_exp';
 
 class StackProxy {
   constructor(stackArray = []) {
@@ -41,7 +50,7 @@ class StackProxy {
   }
 
   getLastExpression() {
-    return this.getLastStack()
+    return this.getLastStack();
   }
 
   getLastFnExecutor() {
@@ -52,7 +61,6 @@ class StackProxy {
     return this.isFnExecutorValid(this.getLastFnExecutor());
   }
 }
-
 
 
 /**
@@ -73,8 +81,9 @@ export class StructuralExpressionBuilder {
     this.position_i = 0;
     this.state = this.normalState;
     this.last_arg = '';
-    this.lastUnitTypeArray = []
-    this.synUnitBuilder = new SyntaxStructureBuilder();
+    this.lastUnitTypeArray = [];
+    // ExpSyntaxUnitProxy会依赖synatx_builder_for_reference,做更细的解析
+    this.synUnitBuilder = new SyntaxStructureBuilder(ExpSyntaxUnitProxy);
     this.char = '';
   }
 
@@ -83,10 +92,6 @@ export class StructuralExpressionBuilder {
     this.synUnitBuilder.addContainerUnit(char, [CONTAINER], false);
   }
 
-  addEndContainer(char) {
-    this.synUnitBuilder.addValueToCurUnit(this.last_arg, char, this.last_arg.unitType);
-    this.synUnitBuilder.addContainerUnit(char, [CONTAINER], true);
-  }
 
   returnToNormalState(char) {
     this.state = this.normalState;
@@ -127,16 +132,21 @@ export class StructuralExpressionBuilder {
       this.buffer += char;
     }
   }
+  dealStringEnd(){
+    let theRawValue = new RawValue(this.buffer);
+    this.push2ExpArgs(this.curExpression, theRawValue);
+    this.synUnitBuilder.addValueToCurUnit(theRawValue, this.buffer, [RAW_VALUE]);
+    this.synUnitBuilder.addContainerUnit('"', [CONTAINER], true);
+    this.buffer = ""
+  }
+
 
   stringMayEndState(char) {
     if (char === MARK_OBJ.doubleQue) { // 两个双引号代表一个双引号
       this.buffer += MARK_OBJ.doubleQue;
       this.state = this.stringState;
     } else { // 双引号之后不是双引号
-      let theValue = new RawValue(this.buffer);
-      this.push2ExpArgs(this.curExpression, theValue);
-      this.addEndContainer(char, theValue, [RAW_VALUE]);
-      this.buffer = '';
+      this.dealStringEnd()
       this.returnToNormalState(char);
     }
   }
@@ -165,7 +175,7 @@ export class StructuralExpressionBuilder {
   initOperator(char) {
     if (this.buffer.trim() !== '') {
       this.push2ExpArgs(this.curExpression, this.buffer, this.position_i);
-      this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer,this.lastUnitTypeArray);
+      this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer, this.lastUnitTypeArray);
     }
     this.buffer = char;
     this.state = this.endOperator;
@@ -173,13 +183,13 @@ export class StructuralExpressionBuilder {
 
   endOperator(char) {
     if (this.buffer + char in ['>=', '<=', '<>']) { // 双元运算符
-      let wholeStr = this.buffer + char
+      let wholeStr = this.buffer + char;
       this.pushOperator2ExpArgs(wholeStr);
-      this.synUnitBuilder.addStringToCurUnit(wholeStr,[OPERATOR])
+      this.synUnitBuilder.addStringToCurUnit(wholeStr, [OPERATOR]);
       this.buffer = '';
     } else {
       this.pushOperator2ExpArgs(this.buffer);// 单元运算符
-      this.synUnitBuilder.addStringToCurUnit(this.buffer,[OPERATOR])
+      this.synUnitBuilder.addStringToCurUnit(this.buffer, [OPERATOR]);
       this.buffer = '';
       this.returnToNormalState(char);
     }
@@ -193,39 +203,40 @@ export class StructuralExpressionBuilder {
     } else {
       trim_buffer = this.buffer.trim(); // buffer 是一个字符串，代表一个语义单元，例如average,不改变this.buff
       fnExecutor = this.multiCollFn.getFnExecutorByName(trim_buffer); // 获取expression 函数; todo: 没有获取到怎么办？
-      this.synUnitBuilder.addValueToCurUnit(fnExecutor, this.buffer, [EXP_FN])
+      this.synUnitBuilder.addValueToCurUnit(fnExecutor, this.buffer, [EXP_FN]);
     }
-    this.synUnitBuilder.addContainerUnit(this.char,[CONTAINER])
+    this.synUnitBuilder.addContainerUnit(this.char, [CONTAINER]);
     this.stackProxy.addStack(fnExecutor);
     this.curExpression = new StructuralExp(this.calcCell);
     this.stackProxy.addStack(this.curExpression);
-    this.synUnitBuilder.createNewChild()
+    this.synUnitBuilder.createNewChild();
     this.buffer = '';
   }
 
 
   endFnArg() { // 逗号结束
     this.push2ExpArgs(this.curExpression, this.buffer, this.position_i);  // (arg1,arg2)中的arg1 todo: 如果arg1中含有operator，就不对了
-    this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer, this.lastUnitTypeArray)
+    this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer, this.lastUnitTypeArray);
     this.stackProxy.popStack();
 
-    this.stackProxy.getLastFnExecutor().push(this.curExpression);
+    this.stackProxy.getLastFnExecutor()
+      .push(this.curExpression);
     this.curExpression = new StructuralExp(this.calcCell); // this.curExpression 状态变为一个新的expression
-    this.stackProxy.addStack(this.curExpression)
-    this.synUnitBuilder.returnToPreStack()
-    this.synUnitBuilder.addStringToCurUnit(this.char, [SPLIT_MARK])
-    this.synUnitBuilder.createNewChild()
+    this.stackProxy.addStack(this.curExpression);
+    this.synUnitBuilder.returnToPreStack();
+    this.synUnitBuilder.addStringToCurUnit(this.char, [SPLIT_MARK]);
+    this.synUnitBuilder.createNewChild();
     this.buffer = '';
   }
 
   endParentheses() { // 小括号结束
     // 处理 （arg1， arg2）中的arg2
-    let lastExp =  this.stackProxy.popStack()
+    let lastExp = this.stackProxy.popStack();
     this.push2ExpArgs(this.curExpression, this.buffer);
-    this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer, [])
+    this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer, this.lastUnitTypeArray);
 
 
-    let fnExecutor =this.stackProxy.popStack(); // 当前栈结束
+    let fnExecutor = this.stackProxy.popStack(); // 当前栈结束
     this.curExpression = this.stackProxy.getLastStack(); // 改变当前exp_obj的状态
     if (this.stackProxy.isFnExecutorValid(fnExecutor)) {
       fnExecutor.push(lastExp);
@@ -233,8 +244,8 @@ export class StructuralExpressionBuilder {
     } else {
       this.push2ExpArgs(this.curExpression, lastExp, this.position_i);
     }
-    this.synUnitBuilder.returnToPreStack()
-    this.synUnitBuilder.addContainerUnit(this.char, [CONTAINER],  true)
+    this.synUnitBuilder.returnToPreStack();
+    this.synUnitBuilder.addContainerUnit(this.char, [CONTAINER], true);
     this.buffer = '';
   }
 
@@ -242,17 +253,17 @@ export class StructuralExpressionBuilder {
     if (this.buffer.trim() !== '') {
       this.push2ExpArgs(this.curExpression, this.buffer);
     }
-    this.addInitContainer(this.char)
+    this.addInitContainer(this.char);
     this.state = this.insideBrace;
     this.buffer = '';
   }
 
   insideBrace(char) { // todo:
     if (char === '}') {
-      let theRawArray = new RawArray(this.buffer)
+      let theRawArray = new RawArray(this.buffer);
       this.push2ExpArgs(this.curExpression, theRawArray);
-      this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer, this.lastUnitTypeArray)
-      this.synUnitBuilder.addContainerUnit(char,[CONTAINER], true)
+      this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer, this.lastUnitTypeArray);
+      this.synUnitBuilder.addContainerUnit(char, [CONTAINER], true);
       this.buffer = '';
       this.state = this.normalState; // 恢复到正常的结果
     } else {
@@ -260,15 +271,13 @@ export class StructuralExpressionBuilder {
     }
   }
 
+
   endWholeFormula() {
     if (this.state.name === this.stringMayEndState.name) { // 字符串结束
-      let theRawValue =  new RawValue(this.buffer)
-      this.push2ExpArgs(this.curExpression,theRawValue);
-      this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer, this.lastUnitTypeArray)
-      this.synUnitBuilder.addContainerUnit(this.char, [CONTAINER], true)
-    } else if(this.buffer !== ""){
+      this.dealStringEnd()
+    } else if (this.buffer !== '') {
       this.push2ExpArgs(this.curExpression, this.buffer, this.position_i); // root_exp 是一个Exp实例，这个实例会引用一个Exp数组; 最后的处理
-      this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer, this.lastUnitTypeArray)
+      this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer, this.lastUnitTypeArray);
     }
   }
 
@@ -299,47 +308,47 @@ export class StructuralExpressionBuilder {
     let res1 = new BoolParser(calcCell, astNodeStr).parseString();
     if (res1.msg !== PARSE_FAIL) { // true, false --> boll 变量
       v = new RawValue(new CellVBool(res1));
-      this.lastUnitTypeArray = [RAW_VALUE, BOOL]
+      this.lastUnitTypeArray = [RAW_VALUE, BOOL];
 
     } else if (astNodeStr.trim() // 表示一个Range
       .replace(/\$/g, '')
       .match(/^[A-Z]+[0-9]+:[A-Z]+[0-9]+$/)) {
-      this.lastUnitTypeArray = [RANG_REF, A1A2]
+      this.lastUnitTypeArray = [RANG_REF, A1A2];
       v = new SUnitRangeRef(astNodeStr.trim()
         .replace(/\$/g, ''), calcCell, position_i); // todo: 把绝对引用去掉了
 
     } else if (astNodeStr.trim() // 跨sheet引用的Range
       .replace(/\$/g, '')
       .match(/^[^!]+![A-Z]+[0-9]+:[A-Z]+[0-9]+$/)) {
-      this.lastUnitTypeArray = [RANG_REF, SHEET1A1A2]
+      this.lastUnitTypeArray = [RANG_REF, SHEET1A1A2];
       v = new SUnitRangeRef(astNodeStr.trim()
         .replace(/\$/g, ''), calcCell, position_i);
 
     } else if (astNodeStr.trim() // A:A 这样形式的Range
       .replace(/\$/g, '')
       .match(/^[A-Z]+:[A-Z]+$/)) {
-      this.lastUnitTypeArray = [RANG_REF, AA]
+      this.lastUnitTypeArray = [RANG_REF, AA];
       v = new SUnitRangeRef(astNodeStr.trim()
         .replace(/\$/g, ''), calcCell, position_i);
 
     } else if (astNodeStr.trim() // sheet1!A:A 这样形式的Range
       .replace(/\$/g, '')
       .match(/^[^!]+![A-Z]+:[A-Z]+$/)) {
-      this.lastUnitTypeArray = [RANG_REF, SHEET1AA]
+      this.lastUnitTypeArray = [RANG_REF, SHEET1AA];
       v = new SUnitRangeRef(astNodeStr.trim()
         .replace(/\$/g, ''), calcCell, position_i);
 
     } else if (astNodeStr.trim() // 单元格引用
       .replace(/\$/g, '')
       .match(/^[A-Z]+[0-9]+$/)) {
-      this.lastUnitTypeArray = [SINGLE_REF, A1]
+      this.lastUnitTypeArray = [SINGLE_REF, A1];
       v = new SUnitRefValue(astNodeStr.trim()
         .replace(/\$/g, ''), calcCell);
 
     } else if (astNodeStr.trim() // 跨sheet单元格引用
       .replace(/\$/g, '')
       .match(/^[^!]+![A-Z]+[0-9]+$/)) {
-      this.lastUnitTypeArray = [SINGLE_REF, SHEET1A1]
+      this.lastUnitTypeArray = [SINGLE_REF, SHEET1A1];
       v = new SUnitRefValue(astNodeStr.trim()
         .replace(/\$/g, ''), calcCell);
     } else if (!isNaN(astNodeStr.trim() // 数字，允许百分号
@@ -388,15 +397,8 @@ export class StructuralExpressionBuilder {
       self.state(self.char); // 逐字符解析函数; self.state代表当前的解析状态
     }
     this.endWholeFormula();
-    this.calcCell.syntaxRootUnit = this.synUnitBuilder.rootUnit
+    this.calcCell.rootSyntaxUnit = this.synUnitBuilder.rootUnit;
     return this.root_exp;
   }
 
 }
-export const BOOL = "bool"
-export const A1A2 = "A1:A2"
-export const SHEET1A1A2 = "sheet1!A1:A2"
-export const SHEET1AA = "sheet1!A:A"
-export const AA = "A:A"
-export const A1 = "A1"
-export const SHEET1A1 = "sheet1!A1"

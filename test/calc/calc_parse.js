@@ -1,9 +1,11 @@
 // 这里需要把公式解析做对
 import assert from 'assert';
 import { Calc } from '../../src/calc/calc_cmd/calc';
+import { BaseRefactorBhv, calc } from '../../src/calc';
 import { MS_PER_DAY } from '../../src/calc/calc_utils/config';
 import { CellVDateTime, CellVNumber } from '../../src/calc/cell_value_type/cell_value';
 import { compareFloat } from '../../src/calc/calc_utils/helper';
+import { ERROR_DIV0 } from '../../src/calc/calc_utils/error_config';
 
 it('date', function () { // 检查符号的判定
   let dayNum = 400;
@@ -143,14 +145,51 @@ describe('新的解析算法', function () {
     workbook.Sheets.Sheet1.A3 = {f: '10'};
     workbook.Sheets.Sheet1.A4 = {f: 'afsf'};
     workbook.Sheets.Sheet1.A5 = {f: 'true'};
-
     workbook.Sheets.Sheet1.B1 = { f: '=average(A:A)' };
 
 
-    let calc = new Calc();
-    calc.calculateWorkbook(workbook);
+    let aCalc = new Calc();
+    aCalc.calculateWorkbook(workbook);
     assert.equal(workbook.Sheets.Sheet1.B1.v.toNumber(), 9);
+
+    class SimpleRefactorBhv extends BaseRefactorBhv{
+      getArgsForNewLocAA(aUnit) {
+        return [[0, 6]];
+      }
+    }
+
+    let aRefactor = new SimpleRefactorBhv()
+    let resString = aCalc.calcWorkbookProxy.getCellByName("Sheet1", "B1").getFormulaStringByRefactor(aRefactor)
+    assert.equal(resString, "average(A:G)")
   });
+
+  it('引用替换', function () { // 替换一个复杂的公式
+    let workbook = {};
+    workbook.Sheets = {};
+    workbook.Sheets.Sheet1 = {};
+    workbook.Sheets.Sheet1.B2 = { f: '=average(C:F)&"A:A"+A1+average(A1:B1)' };
+
+
+    let aCalc = new Calc();
+    aCalc.calculateWorkbook(workbook);
+    assert.equal(workbook.Sheets.Sheet1.B2.v.toString(), ERROR_DIV0);
+
+    class SimpleRefactorBhv extends BaseRefactorBhv{
+      getArgsForNewLocAA(aUnit) {
+        return [[0, 6]];
+      }
+      getArgsForNewLocA1(aUnit) {
+        return [0,2];
+      }
+      getArgsForNewLocA1B1(aUnit) {
+        return [[0,2],[3,8]];
+      }
+    }
+    let aRefactor = new SimpleRefactorBhv()
+    let resString2 = aCalc.calcWorkbookProxy.getCellByName("Sheet1", "B2").getFormulaStringByRefactor(aRefactor)
+    assert.equal(resString2, 'average(A:G)&"A:A"+A2+average(A3:C8)')
+  });
+
 
 
 

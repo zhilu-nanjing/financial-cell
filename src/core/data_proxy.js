@@ -99,6 +99,7 @@ const defaultSettings = {
     cellWidth: 0,
     ignoreRi: 0,
     minus: false,
+    footerContainerHeight: 0,
     row: {
         len: 100,
         height: 25,

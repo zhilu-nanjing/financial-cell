@@ -135,3 +135,10 @@ export const CellVTypeObj = {
   CellVBool: 'CellVBool',
   CellVArray: 'CellVArray',
 };
+export const SHEET1A1 = "sheet1!A1"
+export const A1 = "A1"
+export const BOOL = 'bool';
+export const A1A2 = 'A1:A2';
+export const SHEET1A1A2 = 'sheet1!A1:A2';
+export const SHEET1AA = 'sheet1!A:A';
+export const AA = 'A:A';

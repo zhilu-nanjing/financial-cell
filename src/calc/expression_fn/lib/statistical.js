@@ -13,6 +13,7 @@ import {days_str2date} from "../../calc_utils/parse_helper";
 import { to1DArray } from '../../calc_utils/helper';
 import { CellVTypeObj } from '../../calc_utils/config';
 import {ISODD_} from "./information";
+import { CellVError } from '../../cell_value_type/cell_value';
 
 let SQRT2PI = 2.5066282746310002;
 
@@ -43,7 +44,7 @@ function AVERAGE_() {
     return range;
   }
   if (range.length === 0){
-    return errorObj.e
+    return new Error(ERROR_DIV0)
   }
   let n = range.length;
   let sum = 0;
@@ -55,7 +56,7 @@ function AVERAGE_() {
   return sum / count;
 };
 
-export const AVERAGE = new NotConvertEmptyExpFunction(AVERAGE_)
+export const AVERAGE = new NotConvertEmptyExpFunction(AVERAGE_) // 对CellVEmpty不转化
 
 /**
  * Value1, value2, ...    Value1 是必需的，后续值是可选的。 需要计算平均值的 1 到 255 个单元格、单元格区域或值。

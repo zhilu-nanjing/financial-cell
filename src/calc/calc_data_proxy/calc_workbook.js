@@ -1,4 +1,4 @@
-import { CalcCell } from './cell_formula';
+import { CalcCell } from './calc_cell';
 import { FnCollection, MultiCollExpFn } from './fn_collection';
 import { fnObjArray } from '../expression_fn/normal_fn';
 import * as rawFnObj from '../expression_fn/raw_fn';

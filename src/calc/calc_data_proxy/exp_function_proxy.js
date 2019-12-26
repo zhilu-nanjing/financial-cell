@@ -1,5 +1,6 @@
 import { CellVTypeObj, NOT_CONVERT, TO_PARA_TYPE } from '../calc_utils/config';
 import { ERROR_VALUE } from '../calc_utils/error_config';
+
 // 不能依赖cellV
 
 export class BaseExpFunction { // 默认行为; 如果不符合默认行为的函数，需要继承这个类，然后写相关逻辑。
@@ -38,11 +39,16 @@ export class BaseExpFunction { // 默认行为; 如果不符合默认行为的�
       errorArg = this.errorArg;
     if (typeof this.expFnArgConfig === 'undefined') { // 没有类型转换方式配置
       newArgs = solvedArgs.map(arg => {
-        newArg = this.defaultConvert(arg);
-        if (newArg instanceof Error === true) {
-          errorArg = newArg;
+        if (arg instanceof Error === true) {
+          errorArg = arg;
+          return arg
+        } else {
+          newArg = this.defaultConvert(arg);
+          if (newArg instanceof Error === true) {
+            errorArg = newArg;
+          }
+          return newArg;
         }
-        return newArg;
       }); // 默认是把所有的arg转化为数字
     } else if (this.expFnArgConfig instanceof Array) {// 有类型转化方式配置
       let i = 0,
@@ -56,8 +62,8 @@ export class BaseExpFunction { // 默认行为; 如果不符合默认行为的�
         }
         newArgs.push(newArg);
       }
-      for (; i++; i < self.args.length) { // 其他没有配置的参数不做转换
-        newArgs.push(self.args[i]);
+      for (; i++; i < args.length) { // 其他没有配置的参数不做转换
+        newArgs.push(args[i]);
       }
     } else {
       throw new Error('expFnArgConfig');
@@ -97,11 +103,11 @@ export class BaseExpFunction { // 默认行为; 如果不符合默认行为的�
   }
 
   convertToStringAndNumber(arg) { // 这个是函数参数默认转换方式
-    let self = this
+    let self = this;
     if (['string', 'number'].includes(typeof arg)) {
       return arg;
     } else if (arg instanceof Array) {
-      return arg.map((elm) => self.convertToStringAndNumber(elm))
+      return arg.map((elm) => self.convertToStringAndNumber(elm));
     } else {
       return arg.toNumberOrString(); // 转换; 如果遇到其他的一些数据类型会报错
     }
@@ -110,13 +116,19 @@ export class BaseExpFunction { // 默认行为; 如果不符合默认行为的�
   checkFuncArg(newArgArray) { // 默认状态没有额外检查
     return null;
   }
+  isError(){
+    if(typeof this.errorArg === "undefined"){
+      return false
+    }
+    return (this.errorArg instanceof Error) || (this.errorArg.cellVTypeName === CellVTypeObj.CellVError)
+  }
 
 // todo: ['ISBLANK','ISERROR',"ifError"]处理error不返回所碰到的错误
   solveExpression(args) { // 核心的对外接口
     let self = this;
     let newArgArray = self.updateArgArray(args);// 每个arg元素需要调用他的solveExpression方法
     this.checkFuncArg(newArgArray);
-    if (isNaN(this.errorArg) || this.isAllowErrorArg) { // 参数中没有错误的处理
+    if (this.isError(this.errorArg) === false || this.isAllowErrorArg) { // 参数中没有错误的处理
       return this.expresionFunc(newArgArray);
     } else {
       return this.errorArg; // 参数中存在参数一般直接报错
@@ -131,9 +143,10 @@ export class AllowErrorExpFunction extends BaseExpFunction {
 }
 
 export class NotConvertExpFunction extends BaseExpFunction {
-  defaultConvert(arg){
-    return arg
+  defaultConvert(arg) {
+    return arg;
   }
+
   getIsAllowErrorArg() {
     return true;
   }
@@ -141,8 +154,15 @@ export class NotConvertExpFunction extends BaseExpFunction {
 
 
 export class StringExpFunction extends BaseExpFunction {
-  getExpFnArgConfig() {
-    return [TO_PARA_TYPE.string, TO_PARA_TYPE.string]; // 参数需要都转换为string 类型
+  defaultConvert(arg) {
+    if (typeof arg === 'number') {
+      return String(arg);
+    } else if (typeof arg === 'string') {
+      return arg;
+    }else if(arg.cellVTypeName === CellVTypeObj.CellVError){
+      return arg
+    }
+    return arg.toString(); // 参数需要都转换为string 类型
   }
 }
 
@@ -150,9 +170,9 @@ export class NotConvertEmptyExpFunction extends BaseExpFunction { // 空类型�
   defaultConvert(arg) {
     if (arg.cellVTypeName === CellVTypeObj.CellVEmpty) {
       return arg;
-    }
-    else if(arg.cellVTypeName === CellVTypeObj.CellVArray){
-      return arg.convertToStringAndNumberExceptEmptyBool()
+    } else if (arg.cellVTypeName === CellVTypeObj.CellVArray) {
+      // Excel中对于数组中的CellVBool当成空来处理，但是对于参数中的CellVBool会转化为1，AVERAGE({TRUE,14},TRUE) 结果为 7.5
+      return arg.convertToStringAndNumberExceptEmptyBool();
     }
     return this.convertToStringAndNumber(arg);
   }

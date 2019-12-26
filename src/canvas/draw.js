@@ -178,7 +178,7 @@ class Draw {
             vIndent: 200,
             canvasContext: this.ctx
         }
-
+        this.el.style['background-color'] = 'rgb(248, 248, 248)';
     }
 
     resize(width, height) {
@@ -507,6 +507,20 @@ class Draw {
         ctx.clip();
         ctx.fill();
         dtextcb();
+        ctx.restore();
+    }
+
+    rectWhite(box) {
+        const {ctx} = this;
+        const {
+            x, y, width, height
+        } = box;
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillStyle = '#fff';
+        ctx.rect(npxLine(x + 1), npxLine(y + 1), npx(width - 2), npx(height - 2));
+        ctx.clip();
+        ctx.fill();
         ctx.restore();
     }
 

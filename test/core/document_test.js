@@ -7,7 +7,7 @@ const PNG = require('pngjs').PNG;
 const pixelmatch = require('pixelmatch');
 
 const puppeteer = require('/Users/wen/Downloads/incubator-echarts/node_modules/puppeteer');
-const url = "http://192.168.31.33:8081/";
+const url = "http://www.baidu.com";
 
 describe('test', () => {
 
@@ -16,7 +16,7 @@ describe('test', () => {
         const page = await browser.newPage()
         await page.goto(url);
         await waitTime(500);
-        let pngArr = await loadActions(randowByClient, page);
+        let pngArr = await loadActions(action, page);
         console.log(pngArr);
         if (pngArr.length !== 2) {
             throw new Error('图片个数不正确');

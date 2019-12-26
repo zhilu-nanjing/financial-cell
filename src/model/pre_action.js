@@ -39,7 +39,6 @@ export default class PreAction {
         this.property = property;
         this.value = value;
         this.oldStep = oldStep;
-
         this.oldData = oldData;
         this.newData = newData;
         this.data = data;

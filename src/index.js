@@ -92,6 +92,10 @@ class Spreadsheet {
     //     }, 100)
     // }
 
+    insertRows(len) {
+        this.sheet.insertRows(len);
+    }
+
     getText(alias, inputText, pos) {
         let {selectors, data, table} = this.sheet;
         let text = "";

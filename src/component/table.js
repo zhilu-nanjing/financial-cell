@@ -118,12 +118,16 @@ function renderCell(rindex, cindex) {
     }
 
     const cell = data.getCell(nrindex, cindex);
-    if (!isHave(cell)) return;
+    const style = data.getCellStyleOrDefault(nrindex, cindex);
+    const dbox = getDrawBox.call(this, rindex, cindex);
+
+    if (!isHave(cell)) {
+        draw.rectWhite(dbox);
+        return;
+    }
     // data.rows.setHeight(1, 50);
 
     // console.log(rindex, nrindex, "63")
-    const style = data.getCellStyleOrDefault(nrindex, cindex);
-    const dbox = getDrawBox.call(this, rindex, cindex);
     dbox.bgcolor = style.bgcolor;
     if (style.border !== undefined) {
         dbox.setBorders(style.border);

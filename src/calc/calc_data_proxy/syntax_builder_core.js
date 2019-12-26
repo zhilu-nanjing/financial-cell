@@ -1,6 +1,5 @@
-import { USELESS } from '../calc_utils/config';
+import { SOLVE_FAIL_OBJ, USELESS } from '../calc_utils/config';
 import { isArrayBeginWithOther } from '../calc_utils/helper';
-import { SyntaxUnitProxy } from './sheet_row_cell_name'; // todo: 循环依赖！
 
 
 export class TypeArray { // 对应一个类型
@@ -49,10 +48,78 @@ export class MultiSyntaxUnitProxy { // 复合型节点
   updateByNewLoc(newCol, newRow) {
     this.childrenSynUnit.map((child) => child.updateByNewLoc(newCol, newRow));
   }
-
-
+  getAllBaseSyntaxUnit(){ // 获取所有基本单元
+    let syntaxUnitArray = []
+    this.childrenSynUnit.map(child =>{
+      if(child instanceof MultiSyntaxUnitProxy){
+        syntaxUnitArray = syntaxUnitArray.concat(child.getAllBaseSyntaxUnit())
+      }
+      else {
+        syntaxUnitArray.push(child)
+      }
+    })
+    return syntaxUnitArray
+  }
 }
 
+
+export class BaseSyntaxUnitProxy {
+  constructor(pstID, wholeStr, aTypeArray) {
+    this.pstID = pstID;
+    this.wholeStr = wholeStr;
+    this.typeArray = new TypeArray(aTypeArray); //归属的类别,因为存在一级，二级目录，所以是一个array
+    this.pairUnit = null; // 配对的unit的属性,例如大小括号配对等
+    this.parentSynUnit = null; // 所属的父语法点
+    // 对应的RawValue, Range, RefValue等； 具备计算功能，但不具备公式字符串修改功能
+    this.assciatedValue = null;
+    // 可以用来做公式字符串修改，但是不具备计算功能
+    this.syntaxParser = this.getParser();
+
+  }
+
+  getParser() {
+    return new Error('NotImplement');
+  }
+
+
+  addPair(pairUnit) {
+    this.pairUnit = pairUnit;
+    pairUnit.pairUnit = this;
+  }
+
+
+  getLength() {
+    return this.wholeStr.length;
+  }
+
+  isEmpty() {
+    return this.wholeStr === '';
+  }
+
+  getSolvedValue() {
+    if (typeof this.assciatedValue.solveExpression === 'function') {
+      return this.assciatedValue.solveExpression();
+    } else {
+      return SOLVE_FAIL_OBJ;
+    }
+  }
+
+  getWholeString() {
+    return this.wholeStr;
+  }
+
+  updateByNewLoc(args, inplace = false) {
+    let resStr = this.syntaxParser.updateStrByNewLoc(...args, inplace); // todo: this.syntaxParser可能为null
+    this.wholeStr = inplace? resStr: this.wholeStr
+    return resStr
+  }
+
+  updateByUserMove(args, inplace = false) {
+    let resStr = this.syntaxParser.updateStrByUserMove(...args, inplace);
+    this.wholeStr = inplace? resStr: this.wholeStr
+    return resStr
+  }
+}
 
 export class SyntaxStructureBuilder {
   constructor(SyntaxUnitCls) {
@@ -62,7 +129,7 @@ export class SyntaxStructureBuilder {
     this.containerStack = [];
     this.curUnitStack = [this.rootUnit];
     if(typeof SyntaxUnitCls === "undefined"){
-      SyntaxUnitCls = SyntaxUnitProxy
+      SyntaxUnitCls = BaseSyntaxUnitProxy
     }
     this.SyntaxUnitCls = SyntaxUnitCls
   }
@@ -112,6 +179,14 @@ export class SyntaxStructureBuilder {
     syntaxUnitProxy.assciatedValue = syntaxValue;
     return syntaxUnitProxy;
   }
+
+  addParserToCurUnit(syntaxParser, wholeStr, aTypeArray) {
+    let syntaxUnitProxy = this.addStringToCurUnit(wholeStr, aTypeArray);
+    syntaxUnitProxy.syntaxParser = syntaxParser;
+    syntaxParser.associateWithSyntaxUnit(syntaxUnitProxy)
+    return syntaxUnitProxy;
+  }
+
 
   addUseLessUnit(theStr) {
     if (theStr === '') {

@@ -1,8 +1,6 @@
-import checker from '../calc_utils/formula_check.js';
-import { errorObj } from '../calc_utils/error_config';
 import { expr2xy } from '../../utils/alphabet';
 import { FORMULA_STATUS } from '../calc_utils/config';
-import { isHave } from '../../helper/check_value';
+import { BaseRefactorProxy } from './syntax_refactor';
 
 /**
  *
@@ -20,7 +18,8 @@ export class CalcCell{
     this.celName = celName;
     this.cellStatus = cellStatus;
     this.formulaString = this.getFormulaString()// 公式字符串,可能为空
-    this.syntaxRootUnit = null
+    this.rootSyntaxUnit = null // 语法数解析结果
+    this.rootExp = null
   }
   getFormulaString(){
     return  this.cellObj.f || ""// 公式字符串,可能为空
@@ -66,13 +65,19 @@ export class CalcCell{
       return this.cellObj.v
     }
     this.cellStatus = FORMULA_STATUS.working; // 当前的状态是working
-    let root_exp = this.workbookProxy.parseCalcCell(this);
+    this.rootExp = this.workbookProxy.parseCalcCell(this);
     /**
      * @type {StructuralExp} root_exp
      */
-    root_exp.update_cell_value();
+    this.rootExp.update_cell_value();
     this.cellStatus = FORMULA_STATUS.solved; // 更新了之后，状态变为done
   }
-}
 
+  getFormulaStringByRefactor(aRefactorBhv){
+    let allUnitArray = this.rootSyntaxUnit.getAllBaseSyntaxUnit()
+    let theFunc = new BaseRefactorProxy(aRefactorBhv).getTheFunc()
+    allUnitArray.map(theFunc)
+    return this.rootSyntaxUnit.getWholeString()
+  }
+}
 

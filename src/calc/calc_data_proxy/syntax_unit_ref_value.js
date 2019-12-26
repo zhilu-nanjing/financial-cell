@@ -3,7 +3,7 @@
 import { getSanitizedSheetName } from '../calc_utils/get_sheetname.js';
 import * as error_cf from '../calc_utils/error_config.js';
 import { FORMULA_STATUS, SINGLE_REF, SPLIT_MARK } from '../calc_utils/config';
-import { MultiSyntaxUnitProxy, SyntaxStructureBuilder } from './syntax_unit_proxy';
+import { BaseSyntaxUnitProxy, SyntaxStructureBuilder } from './syntax_builder_core';
 
 /**
  *@property {CalcCell} calcCell
@@ -15,7 +15,7 @@ export class SUnitRefValue {
     this.str_expression = str_expression;
     this.calcCell = calcCell;
     this.unitType = SINGLE_REF;
-    this.subSyntaxBuilder = new SyntaxStructureBuilder()
+    this.subSyntaxBuilder = new SyntaxStructureBuilder(BaseSyntaxUnitProxy)
   }
 
   /**

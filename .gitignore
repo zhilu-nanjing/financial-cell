@@ -14,6 +14,10 @@ CODE_OF_CONDUCT.md
 # Distribution / packaging
 .Python
 env/
+test/core/runTest/png/
+financial-cell-with-footer/
+multi-financial-cell/
+request/
 test/chrome
 karma.conf.js
 old/

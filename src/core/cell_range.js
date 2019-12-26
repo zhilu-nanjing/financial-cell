@@ -1,6 +1,6 @@
 import {expr2xy, xy2expr} from '../utils/alphabet';
 
-class CellRange {
+export default class CellRange {
     constructor(sri, sci, eri, eci, w = 0, h = 0) {
         this.sri = sri;
         this.sci = sci;
@@ -55,13 +55,13 @@ class CellRange {
             sri, sci, eri, eci,
         } = this;
 
-        if(sri === eri && sci !== eci) {
+        if (sri === eri && sci !== eci) {
             return 1;
-        } else if(sri !== eri && sci === eci) {
+        } else if (sri !== eri && sci === eci) {
             return 2;
-        } else if(sri !== eri && sci !== eci) {
+        } else if (sri !== eri && sci !== eci) {
             return 3;
-        } else if(sri === eri && sci === eci) {
+        } else if (sri === eri && sci === eci) {
             return 1;
         }
 
@@ -163,19 +163,19 @@ class CellRange {
         let pos = 0;
         if (ri > eri && ci > eci) {
             pos = 1;        // 往下往右
-        } else if(ri > eri && ci < sci) {
+        } else if (ri > eri && ci < sci) {
             pos = 7;        // 往下往左
-        } else if(ri < sri && ci > eci) {
+        } else if (ri < sri && ci > eci) {
             pos = 8;        // 往上往右
-        } else if(ci < sci && ri < sri) {
+        } else if (ci < sci && ri < sri) {
             pos = 4;        // 往上往左
-        } else if(ri > eri) {
+        } else if (ri > eri) {
             pos = 2;        // 往下
-        } else if(ci > eci) {
+        } else if (ci > eci) {
             pos = 3;        // 往右
-        }  else if(ci < sci) {
+        } else if (ci < sci) {
             pos = 5;        // 往左
-        } else if(ri < sri) {
+        } else if (ri < sri) {
             pos = 6;        // 往上
         }
 
@@ -295,12 +295,12 @@ class CellRange {
         return sri <= ri && eri >= ri && sci <= ci && eci >= ci;
     }
 
-    // clone() {
-    //     const {
-    //         sri, sci, eri, eci, w, h,
-    //     } = this;
-    //     return created CellRange(sri, sci, eri, eci, w, h);
-    // }
+    clone() {
+        const {
+            sri, sci, eri, eci, w, h,
+        } = this;
+        return new CellRange(sri, sci, eri, eci, w, h);
+    }
 
     getLocationArray(sarr) {
         let darr = [];
@@ -338,7 +338,6 @@ class CellRange {
     }
 }
 
-export default CellRange;
 
 export {
     CellRange,

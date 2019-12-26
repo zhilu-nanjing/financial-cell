@@ -141,7 +141,7 @@ describe('expression_fn integration', function() {
       aCalc.calculateWorkbook(workbook)
       assert.equal(workbook.Sheets.Sheet1.A8.v.toNumber(), -1);
       let theCell = aCalc.calcWorkbookProxy.getCellByName("Sheet1","A8")
-      let wholeString = theCell.syntaxRootUnit.getWholeString()
+      let wholeString = theCell.rootSyntaxUnit.getWholeString()
       assert.equal(wholeString , workbook.Sheets.Sheet1.A8.f.slice(1))
     });
   });

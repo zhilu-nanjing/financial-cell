@@ -17,45 +17,10 @@ class SelectorElement {
         this.data = data;
         this.sheet = sheet;
         this._selector = selector;
-        this.l = h('div', `${cssPrefix}-selector-box-l`)
-            .on('mousedown.stop', evt => {
-                if (evt.detail === 2) {
-                    evt.stopPropagation();
-
-                } else {
-                    this.moveEvent(1);
-                }
-
-            });
-        this.r = h('div', `${cssPrefix}-selector-box-r`)
-            .on('mousedown.stop', evt => {
-                if (evt.detail === 2) {
-                    evt.stopPropagation();
-                } else {
-                    this.moveEvent(2);
-                }
-            }).on('click', (evt) => {
-                if (evt.detail === 2) {
-                    evt.stopPropagation();
-                }
-            });
-        this.t = h('div', `${cssPrefix}-selector-box-t`)
-            .on('mousedown.stop', evt => {
-                if (evt.detail === 2) {
-                    evt.stopPropagation();
-                } else {
-                    evt.stopPropagation();
-                }
-                this.moveEvent(3);
-            });
-        this.b = h('div', `${cssPrefix}-selector-box-b`)
-            .on('mousedown.stop', evt => {
-                if (evt.detail === 2) {
-                    evt.stopPropagation();
-                } else {
-                    this.moveEvent(4);
-                }
-            });
+        this.l = h('div', `${cssPrefix}-selector-box-l`);
+        this.r = h('div', `${cssPrefix}-selector-box-r`);
+        this.t = h('div', `${cssPrefix}-selector-box-t`);
+        this.b = h('div', `${cssPrefix}-selector-box-b`);
 
 
         this.cornerEl.on('mousedown', evt => {
@@ -256,8 +221,10 @@ class SelectorElement {
         this.areaEl.offset({
             width: width - selectorHeightBorderWidth + 0.8,
             height: height - selectorHeightBorderWidth + 0.8,
-            left: left - 0.8,
-            top: top - 0.8,
+            // left: left - 0.8,  // 选中区域的边框没有了
+            left: left,
+            top: top,
+            // top: top - 0.8,
         }).show();
     }
 
@@ -551,7 +518,7 @@ export default class Selector {
     }
 
     setEnd(ri, ci, moving = true, enter = false) {
-        const {data } = this;
+        const {data} = this;
         if (moving) {
             // if (ri === lastri && ci === lastci) return;
             this.lastri = ri;

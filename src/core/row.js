@@ -500,11 +500,11 @@ class Rows {
             if (isHave(cell)) {
                 let empty = isEmpty(cell);
                 cell = deepCopy(cell);
-                let cellProp = new CellProp(i, j, cell, xy2expr(i, j), empty);
+                let cellProp = new CellProp(i, j, cell, xy2expr(j, i), empty);
                 cells.push(cellProp);
             } else  {
                 cell = {};
-                let cellProp = new CellProp(i, j, cell, xy2expr(i, j), true);
+                let cellProp = new CellProp(i, j, cell, xy2expr(j, i), true);
                 cells.push(cellProp);
             }
         });
