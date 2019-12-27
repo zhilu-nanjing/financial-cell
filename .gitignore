@@ -15,6 +15,7 @@ CODE_OF_CONDUCT.md
 .Python
 env/
 test/core/runTest/png/
+test/core/runTest/actions/*
 financial-cell-with-footer/
 multi-financial-cell/
 request/
