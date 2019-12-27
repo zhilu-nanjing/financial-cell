@@ -124,7 +124,7 @@ function saveFile(action, path, fileName) {
     if(!fileName) {
         return;
     }
-    let m = showTime();
+    let m = showTime().split(":", "-");
     console.log(m);
     fs.writeFile(path + "/" + fileName + '.json', JSON.stringify(action), (err) => {
         if (err) throw err;

@@ -1,0 +1,251 @@
+{
+  "data": [
+    {
+      "x": 313,
+      "y": 295,
+      "type": "mousemove"
+    },
+    {
+      "x": 302,
+      "y": 286,
+      "type": "mousemove"
+    },
+    {
+      "x": 302,
+      "y": 286,
+      "type": "mousemove"
+    },
+    {
+      "x": 300,
+      "y": 303,
+      "type": "mousemove"
+    },
+    {
+      "x": 273,
+      "y": 357,
+      "type": "mousemove"
+    },
+    {
+      "x": 269,
+      "y": 359,
+      "type": "mousemove"
+    },
+    {
+      "x": 268,
+      "y": 359,
+      "type": "mousemove"
+    },
+    {
+      "x": 268,
+      "y": 359,
+      "type": "mousedown"
+    },
+    {
+      "type": "mouseup"
+    },
+    {
+      "type": "dbmousedown"
+    },
+    {
+      "type": "mouseup"
+    },
+    {
+      "world": "=",
+      "type": "input"
+    },
+    {
+      "world": "A",
+      "type": "input"
+    },
+    {
+      "world": "1",
+      "type": "input"
+    },
+    {
+      "world": "Enter",
+      "type": "keydown"
+    },
+    {
+      "x": 268,
+      "y": 357,
+      "type": "mousemove"
+    },
+    {
+      "x": 289,
+      "y": 177,
+      "type": "mousemove"
+    },
+    {
+      "x": 297,
+      "y": 60,
+      "type": "mousemove"
+    },
+    {
+      "type": "screenshot"
+    },
+    {
+      "x": 358,
+      "y": 302,
+      "type": "mousemove"
+    },
+    {
+      "x": 367,
+      "y": 418,
+      "type": "mousemove"
+    },
+    {
+      "x": 340,
+      "y": 409,
+      "type": "mousemove"
+    },
+    {
+      "x": 294,
+      "y": 358,
+      "type": "mousemove"
+    },
+    {
+      "x": 291,
+      "y": 356,
+      "type": "mousemove"
+    },
+    {
+      "x": 291,
+      "y": 356,
+      "type": "mousemove"
+    },
+    {
+      "x": 279,
+      "y": 343,
+      "type": "mousemove"
+    },
+    {
+      "x": 268,
+      "y": 332,
+      "type": "mousemove"
+    },
+    {
+      "x": 268,
+      "y": 332,
+      "type": "mousedown"
+    },
+    {
+      "type": "mouseup"
+    },
+    {
+      "x": 268,
+      "y": 333,
+      "type": "mousemove"
+    },
+    {
+      "x": 286,
+      "y": 351,
+      "type": "mousemove"
+    },
+    {
+      "x": 290,
+      "y": 356,
+      "type": "mousemove"
+    },
+    {
+      "x": 289,
+      "y": 359,
+      "type": "mousemove"
+    },
+    {
+      "x": 282,
+      "y": 374,
+      "type": "mousemove"
+    },
+    {
+      "x": 280,
+      "y": 379,
+      "type": "mousemove"
+    },
+    {
+      "x": 279,
+      "y": 379,
+      "type": "mousedown"
+    },
+    {
+      "type": "mouseup"
+    },
+    {
+      "x": 286,
+      "y": 320,
+      "type": "mousemove"
+    },
+    {
+      "x": 318,
+      "y": 158,
+      "type": "mousemove"
+    },
+    {
+      "x": 330,
+      "y": 102,
+      "type": "mousemove"
+    },
+    {
+      "x": 331,
+      "y": 95,
+      "type": "mousemove"
+    },
+    {
+      "x": 331,
+      "y": 92,
+      "type": "mousemove"
+    },
+    {
+      "x": 345,
+      "y": 47,
+      "type": "mousemove"
+    },
+    {
+      "x": 345,
+      "y": 44,
+      "type": "mousemove"
+    },
+    {
+      "type": "screenshot"
+    },
+    {
+      "x": 350,
+      "y": 32,
+      "type": "mousemove"
+    },
+    {
+      "x": 334,
+      "y": 43,
+      "type": "mousemove"
+    },
+    {
+      "x": 234,
+      "y": 46,
+      "type": "mousemove"
+    },
+    {
+      "x": 148,
+      "y": 43,
+      "type": "mousemove"
+    },
+    {
+      "x": 106,
+      "y": 43,
+      "type": "mousemove"
+    },
+    {
+      "x": 82,
+      "y": 35,
+      "type": "mousemove"
+    },
+    {
+      "x": 74,
+      "y": 34,
+      "type": "mousemove"
+    },
+    {
+      "x": 68,
+      "y": 34,
+      "type": "mousemove"
+    }
+  ]
+}
