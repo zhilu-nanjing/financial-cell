@@ -4,7 +4,7 @@ import * as text  from './text'
 import * as utils from '../../calc_utils/helper'
 import bessel from 'bessel'
 import {parseNumber} from "../../calc_utils/parse_helper";
-import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
+import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_warp";
 import {anyIsError} from "../../calc_utils/helper";
 
 function isValidBinaryNumber(number) {

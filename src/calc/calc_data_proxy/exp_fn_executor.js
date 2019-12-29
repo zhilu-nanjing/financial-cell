@@ -1,5 +1,5 @@
 "use strict";
-import { BaseExpFunction } from './exp_function_proxy';
+import { BaseExpFunction } from './exp_function_warp';
 
 // 不转换
 

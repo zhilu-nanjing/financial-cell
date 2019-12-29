@@ -6,7 +6,7 @@ import {ERROR_DIV0, ERROR_NA, ERROR_NAME, ERROR_NUM, ERROR_VALUE, errorObj} from
 import * as misc from './miscellaneous';
 import * as evalExpression from './expression';
 import { parseBool, parseNumber, parseNumberArray } from '../../calc_utils/parse_helper';
-import {NotConvertExpFunction,NotConvertEmptyExpFunction, OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
+import {NotConvertExpFunction,NotConvertEmptyExpFunction, OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_warp";
 import {anyIsError, flatten, flattenNum, arrayValuesToNumbers} from "../../calc_utils/helper";
 import* as helper from "../../calc_utils/helper";
 import {days_str2date} from "../../calc_utils/parse_helper";

@@ -110,7 +110,7 @@ export const NOT_CONVERT = 'NOT_CONVERT';
 
 
 
-export const OPERATOR = 'operator';
+export const OPERATOR = 'operator_single_func.js';
 export const SPLIT_MARK = 'split_mark';// 逗号，分号这样分割不同语法单元的标记
 export const CONTAINER = 'container';// 括号双引号能包含其他单元这样的标记， 字符串不含有标志起始结尾的双引号
 export const RAW_VALUE = 'raw_value';// 直接输入的数字。 {1,2,3}这样的矩阵属于复合型单元。

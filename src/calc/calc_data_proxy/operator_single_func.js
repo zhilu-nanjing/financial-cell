@@ -3,7 +3,7 @@ import { ERROR_DIV0 } from '../calc_utils/error_config';
 import {
   NotConvertEmptyExpFunction,
   StringExpFunction
-} from './exp_function_proxy';
+} from './exp_function_warp';
 import { CellVTypeObj } from '../calc_utils/config';
 
 export function opIsLessThan(a, b) {

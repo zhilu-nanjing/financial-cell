@@ -9,7 +9,7 @@ import {
 import { ERROR_SYNTAX, PARSE_FAIL } from '../calc_utils/error_config';
 import { RawValueParser, Str2NumberParser } from './base_parser';
 import { CellVError } from '../cell_value_type/cell_value';
-import {TwoArgOperatorColl} from './two_arg_operator';
+import {TwoArgOperatorColl} from './operator_coll';
 
 export class MatrixValue { // 二维数组
   constructor(aArray) { // 使用
@@ -60,7 +60,7 @@ export class MatrixValue { // 二维数组
     let firstLen = aArray[0].length
     let lenArray = aArray.map(f => {isSameLen =  f.length === firstLen ? firstLen:false});
     if (isSameLen) {
-      return [aArray.length, lenArray[0]]; // 行，与列的数量
+      return [aArray.length, firstLen]; // 行，与列的数量
     } else {
       return new Error(INVALID_MATRIX);
     }
@@ -111,7 +111,8 @@ export class MatrixValue { // 二维数组
   exeElementWiseFunc(other, func) {
     let otherMat = this.convertArgToMatrix(other);
     let thisMat = this.getACopy();
-    thisMat.growToLargeShape(otherMat);
+    thisMat.growToLargeShape(otherMat); // 形状匹配
+    // otherMat.growToLargeShape(thisMat)  // 形状匹配
     let resRowNum = Math.min(thisMat.shape[0], otherMat.shape[0]);
     let resColNum = Math.min(thisMat.shape[1], otherMat.shape[1]);
     let resArray = Array(resRowNum);
@@ -123,7 +124,7 @@ export class MatrixValue { // 二维数组
     }
     return resArray;
   }
-  exeElementWiseOperator(other, operator) {
+  exeElementWiseOperator(other, operator) { // 核心方法对每个元素进行运算得到结果
     let theFunc =  this.twoArgOperator.getFunc(operator)
     if (theFunc instanceof Error){
       return theFunc

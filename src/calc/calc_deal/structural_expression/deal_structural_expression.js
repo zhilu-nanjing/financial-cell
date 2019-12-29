@@ -81,10 +81,16 @@ export class StructuralExpressionBuilder {
     this.position_i = 0;
     this.state = this.normalState;
     this.last_arg = '';
+    this.trimmedStrDetailObj = {}
     this.lastUnitTypeArray = [];
     // ExpSyntaxUnitProxy会依赖synatx_builder_for_reference,做更细的解析
     this.synUnitBuilder = new SyntaxStructureBuilder(ExpSyntaxUnitProxy);
     this.char = '';
+  }
+  addUseLessStringIfNotEmpty(aStr){
+    if(aStr !== ""){
+      this.synUnitBuilder.addUseLessUnit(aStr)
+    }
   }
 
   addInitContainer(char) {
@@ -171,11 +177,22 @@ export class StructuralExpressionBuilder {
       this.returnToNormalState(char);
     }
   }
+  addStartSpace(){
+    this.addUseLessStringIfNotEmpty(this.trimmedStrDetailObj.startSpace)
+  }
+  addEndSpace(){
+    this.addUseLessStringIfNotEmpty(this.trimmedStrDetailObj.endSpace)
+  }
+  getTrimmedStr(){
+    return this.trimmedStrDetailObj.trimmedStr
+  }
 
   initOperator(char) {
-    if (this.buffer.trim() !== '') {
+    if (this.isBufferEmpty() === false) {
       this.push2ExpArgs(this.curExpression, this.buffer, this.position_i);
-      this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer, this.lastUnitTypeArray);
+      this.addStartSpace()
+      this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.getTrimmedStr() , this.lastUnitTypeArray);
+      this.addEndSpace()
     }
     this.buffer = char;
     this.state = this.endOperator;
@@ -201,9 +218,11 @@ export class StructuralExpressionBuilder {
     if (this.isBufferEmpty()) {
       fnExecutor = NaN;
     } else {
-      trim_buffer = this.buffer.trim(); // buffer 是一个字符串，代表一个语义单元，例如average,不改变this.buff
-      fnExecutor = this.multiCollFn.getFnExecutorByName(trim_buffer); // 获取expression 函数; todo: 没有获取到怎么办？
+      this.trimmedStrDetailObj = this.getTrimmedStrDetailObj(this.buffer)
+      fnExecutor = this.multiCollFn.getFnExecutorByName(this.getTrimmedStr()); // 获取expression 函数; todo: 没有获取到怎么办？
+      this.addStartSpace()
       this.synUnitBuilder.addValueToCurUnit(fnExecutor, this.buffer, [EXP_FN]);
+      this.addEndSpace()
     }
     this.synUnitBuilder.addContainerUnit(this.char, [CONTAINER]);
     this.stackProxy.addStack(fnExecutor);
@@ -216,7 +235,9 @@ export class StructuralExpressionBuilder {
 
   endFnArg() { // 逗号结束
     this.push2ExpArgs(this.curExpression, this.buffer, this.position_i);  // (arg1,arg2)中的arg1 todo: 如果arg1中含有operator，就不对了
-    this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer, this.lastUnitTypeArray);
+    this.addStartSpace()
+    this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.getTrimmedStr(), this.lastUnitTypeArray);
+    this.addEndSpace()
     this.stackProxy.popStack();
 
     this.stackProxy.getLastFnExecutor()
@@ -233,8 +254,9 @@ export class StructuralExpressionBuilder {
     // 处理 （arg1， arg2）中的arg2
     let lastExp = this.stackProxy.popStack();
     this.push2ExpArgs(this.curExpression, this.buffer);
-    this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer, this.lastUnitTypeArray);
-
+    this.addStartSpace()
+    this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.getTrimmedStr(), this.lastUnitTypeArray);
+    this.addEndSpace()
 
     let fnExecutor = this.stackProxy.popStack(); // 当前栈结束
     this.curExpression = this.stackProxy.getLastStack(); // 改变当前exp_obj的状态
@@ -277,7 +299,9 @@ export class StructuralExpressionBuilder {
       this.dealStringEnd()
     } else if (this.buffer !== '') {
       this.push2ExpArgs(this.curExpression, this.buffer, this.position_i); // root_exp 是一个Exp实例，这个实例会引用一个Exp数组; 最后的处理
-      this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.buffer, this.lastUnitTypeArray);
+      this.addStartSpace()
+      this.synUnitBuilder.addValueToCurUnit(this.last_arg, this.getTrimmedStr(), this.lastUnitTypeArray);
+      this.addEndSpace()
     }
   }
 
@@ -301,59 +325,72 @@ export class StructuralExpressionBuilder {
       this.buffer += char;
     }
   }
+  getTrimmedStrDetailObj(astNodeStr){
+    let startSpace = ""
+    let endSpace = ""
+    if(astNodeStr.startsWith(" ")){
+      startSpace = astNodeStr.match(/^ /)[0]
+    }
+    if(astNodeStr.endsWith(" ")) {
+      endSpace = astNodeStr.match(/ $/)[0]
+    }
+    let trimmedStr = astNodeStr.slice(startSpace.length, astNodeStr.length - endSpace.length)
+    return {startSpace:startSpace, endSpace:endSpace, trimmedStr:trimmedStr}
+  }
 
   str2Value(astNodeStr, calcCell, position_i) { // todo: 可以设计parseArray
     console.assert(typeof astNodeStr === 'string');
     let v;
+    let trimmedStrDetailObj = this.trimmedStrDetailObj = this.getTrimmedStrDetailObj(astNodeStr)
     let res1 = new BoolParser(calcCell, astNodeStr).parseString();
     if (res1.msg !== PARSE_FAIL) { // true, false --> boll 变量
       v = new RawValue(new CellVBool(res1));
       this.lastUnitTypeArray = [RAW_VALUE, BOOL];
 
-    } else if (astNodeStr.trim() // 表示一个Range
+    } else if (trimmedStrDetailObj.trimmedStr // 表示一个Range
       .replace(/\$/g, '')
       .match(/^[A-Z]+[0-9]+:[A-Z]+[0-9]+$/)) {
       this.lastUnitTypeArray = [RANG_REF, A1A2];
-      v = new SUnitRangeRef(astNodeStr.trim()
+      v = new SUnitRangeRef(trimmedStrDetailObj.trimmedStr
         .replace(/\$/g, ''), calcCell, position_i); // todo: 把绝对引用去掉了
 
-    } else if (astNodeStr.trim() // 跨sheet引用的Range
+    } else if (trimmedStrDetailObj.trimmedStr // 跨sheet引用的Range
       .replace(/\$/g, '')
       .match(/^[^!]+![A-Z]+[0-9]+:[A-Z]+[0-9]+$/)) {
       this.lastUnitTypeArray = [RANG_REF, SHEET1A1A2];
-      v = new SUnitRangeRef(astNodeStr.trim()
+      v = new SUnitRangeRef(trimmedStrDetailObj.trimmedStr
         .replace(/\$/g, ''), calcCell, position_i);
 
-    } else if (astNodeStr.trim() // A:A 这样形式的Range
+    } else if (trimmedStrDetailObj.trimmedStr // A:A 这样形式的Range
       .replace(/\$/g, '')
       .match(/^[A-Z]+:[A-Z]+$/)) {
       this.lastUnitTypeArray = [RANG_REF, AA];
-      v = new SUnitRangeRef(astNodeStr.trim()
+      v = new SUnitRangeRef(trimmedStrDetailObj.trimmedStr
         .replace(/\$/g, ''), calcCell, position_i);
 
-    } else if (astNodeStr.trim() // sheet1!A:A 这样形式的Range
+    } else if (trimmedStrDetailObj.trimmedStr // sheet1!A:A 这样形式的Range
       .replace(/\$/g, '')
       .match(/^[^!]+![A-Z]+:[A-Z]+$/)) {
       this.lastUnitTypeArray = [RANG_REF, SHEET1AA];
-      v = new SUnitRangeRef(astNodeStr.trim()
+      v = new SUnitRangeRef(trimmedStrDetailObj.trimmedStr
         .replace(/\$/g, ''), calcCell, position_i);
 
-    } else if (astNodeStr.trim() // 单元格引用
+    } else if (trimmedStrDetailObj.trimmedStr // 单元格引用
       .replace(/\$/g, '')
       .match(/^[A-Z]+[0-9]+$/)) {
       this.lastUnitTypeArray = [SINGLE_REF, A1];
-      v = new SUnitRefValue(astNodeStr.trim()
+      v = new SUnitRefValue(trimmedStrDetailObj.trimmedStr
         .replace(/\$/g, ''), calcCell);
 
-    } else if (astNodeStr.trim() // 跨sheet单元格引用
+    } else if (trimmedStrDetailObj.trimmedStr // 跨sheet单元格引用
       .replace(/\$/g, '')
       .match(/^[^!]+![A-Z]+[0-9]+$/)) {
       this.lastUnitTypeArray = [SINGLE_REF, SHEET1A1];
-      v = new SUnitRefValue(astNodeStr.trim()
+      v = new SUnitRefValue(trimmedStrDetailObj.trimmedStr
         .replace(/\$/g, ''), calcCell);
-    } else if (!isNaN(astNodeStr.trim() // 数字，允许百分号
+    } else if (!isNaN(trimmedStrDetailObj.trimmedStr // 数字，允许百分号
       .replace(/%$/, ''))) { // 处理公式中的百分号
-      v = new RawValue(+(astNodeStr.trim()
+      v = new RawValue(+(trimmedStrDetailObj.trimmedStr
         .replace(/%$/, '')) / 100.0);
 
     } else {

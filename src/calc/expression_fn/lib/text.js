@@ -3,7 +3,7 @@ import {strToMatrix, anyIsError} from '../../calc_utils/helper'
 import {ERROR_VALUE, errorObj} from '../../calc_utils/error_config'
 import numeral from 'numeral'
 import {parseNumber} from "../../calc_utils/parse_helper";
-import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
+import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_warp";
 
 //TODO
 /**

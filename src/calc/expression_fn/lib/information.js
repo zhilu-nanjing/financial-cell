@@ -2,7 +2,7 @@ import {errorObj, errorMsgArr, ERROR_NA} from '../../calc_utils/error_config'
 import {
   AllowErrorExpFunction,
   NotConvertExpFunction
-} from '../../calc_data_proxy/exp_function_proxy';
+} from '../../calc_data_proxy/exp_function_warp';
 
 // TODO
 exports.CELL = function() {

@@ -39,7 +39,7 @@ export default class Validator {
   equals(other) {
     let flag = this.type === other.type
       && this.required === other.required
-      && this.operator === other.operator;
+      && this.operator === other.operator_single_func;
     if (flag) {
       if (Array.isArray(this.value)) {
         flag = arrayEquals(this.value, other.value);

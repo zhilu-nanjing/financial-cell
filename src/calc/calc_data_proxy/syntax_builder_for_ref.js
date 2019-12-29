@@ -35,6 +35,9 @@ class BaseNameParser { // 可以用来重构的类
   }
 
   updateByShift(aShift, inplace = false) {
+    if(this.isAbsoluteRef === true){ // 绝对引用不会发生变更
+      return this.aName
+    }
     let res = this.getNameByNumber(this.getNumber() + aShift, inplace);
     return this.dealInplace(res, inplace)
   }
@@ -45,11 +48,9 @@ class CellColNameParser extends BaseNameParser {
   static fromStrMayWith$(aStr) { // 类似python的class method
     let aColName;
     if (aStr[0] === '$') {
-      aColName = new CellColNameParser(aStr.slice(1));
-      aColName.isAbsoluteRef = true;
+      aColName = new CellColNameParser(aStr.slice(1), true);
     } else {
-      aColName = new CellColNameParser(aStr);
-      aColName.isAbsoluteRef = false;
+      aColName = new CellColNameParser(aStr,false);
     }
     return aColName;
   }
@@ -72,21 +73,19 @@ class CellRowNameParser extends BaseNameParser {
   static fromStrMayWith$(aStr) { // 类似python的class method
     let aColName;
     if (aStr[0] === '$') {
-      aColName = new CellRowNameParser(aStr.slice(1));
-      aColName.isAbsoluteRef = true;
+      aColName = new CellRowNameParser(aStr.slice(1), true);
     } else {
-      aColName = new CellRowNameParser(aStr);
-      aColName.isAbsoluteRef = false;
+      aColName = new CellRowNameParser(aStr, false);
     }
     return aColName;
   }
 
   getNumber() {
-    return parseInt(this.aName);
+    return parseInt(this.aName) - 1; // A1 对应rowid为0
   }
 
   getNameByNumber(index, inplace) {
-    let aStr = String(index);
+    let aStr = String(index + 1);
     if (inplace === true) {
       this.aName = aStr;
     }
@@ -114,6 +113,9 @@ export class SingleCellRefer { // 对应一个对单元格的引用，考虑绝�
   getRootUnit() {
     return this.syntaxUnitBuilder.rootUnit;
   }
+  isBuffEmptyAfterTrim(){
+    return this.buff.trim() === ""
+  }
 
 
   normalState(char) {
@@ -122,13 +124,13 @@ export class SingleCellRefer { // 对应一个对单元格的引用，考虑绝�
       this.syntaxUnitBuilder.addStringToCurUnit(char, [SPLIT_MARK]);
       this.buff = '';
     } else if (char === '$') {
-      if (this.buff !== '') {
+      if (this.isBuffEmptyAfterTrim()===false) {
         this.addColNameProxy();
       }
       this.isAbosulte = true;
       this.syntaxUnitBuilder.addStringToCurUnit(char, [ABSOLUTE_MARK]);
     } else if (/[0-9]/.test(char)) {
-      if (this.buff !== '') {
+      if (this.isBuffEmptyAfterTrim()===false) {
         this.addColNameProxy();
       }
       this.state = this.insideRowName;
@@ -143,17 +145,16 @@ export class SingleCellRefer { // 对应一个对单元格的引用，考虑绝�
   }
 
   addRowNameProxy() {
-    this.cellRowNameParser = new CellRowNameParser(this.buff);
-    this.cellRowNameParser.isAbsoluteRef = this.isAbosulte;
+    this.cellRowNameParser = new CellRowNameParser(this.buff, this.isAbosulte);
     this.syntaxUnitBuilder.addParserToCurUnit(this.cellRowNameParser, this.buff, [ROW_NAME]);
     this.buff = ""
   }
 
   addColNameProxy() {
-    this.cellColNameParser = new CellColNameParser(this.buff);
-    this.cellColNameParser.isAbsoluteRef = this.isAbosulte;
+    this.cellColNameParser = new CellColNameParser(this.buff, this.isAbosulte);
     this.syntaxUnitBuilder.addParserToCurUnit(this.cellColNameParser, this.buff, [COL_NAME]);
     this.buff = ""
+    this.isAbosulte = false
   }
 
   parseRefString() {
@@ -183,8 +184,8 @@ export class SingleCellRefer { // 对应一个对单元格的引用，考虑绝�
   }
 
   updateStrByUserMove(colShift, rowShift, inplace = false) { // 用户复制黏贴，或者自动填充，要考虑绝对引用
-    this.cellColNameParser.getNameByNumber(colShift + this.cellColNameParser.getNumber(), inplace);
-    this.cellRowNameParser.getNameByNumber(rowShift + this.cellRowNameParser.getNumber(), inplace);
+    this.cellColNameParser.updateByShift(colShift, inplace);
+    this.cellRowNameParser.updateByShift(rowShift, inplace);
     return this.dealInplace(inplace);
   }
 
@@ -244,7 +245,7 @@ export class RangeRefer {
    * @param  {Array}rowShiftArray
    * @param {boolean} inplace
    */
-  updateByUserMove(colShiftArray, rowShiftArray, inplace = false) {
+  updateStrByUserMove(colShiftArray, rowShiftArray, inplace = false) {
     this.firstRef.updateStrByUserMove(colShiftArray[0], rowShiftArray[0], inplace);
     this.secondRef.updateStrByUserMove(colShiftArray[1], rowShiftArray[1], inplace);
     return this.dealInplace(inplace);
@@ -322,7 +323,7 @@ export class AARangeRefer { // 不支持Excel的average(1:4)这样的语法。
    * @param  {Array}rowShiftArray
    * @param {boolean} inplace
    */
-  updateByUserMove(colShiftArray, inplace = false) {
+  updateStrByUserMove(colShiftArray, inplace = false) {
     if (colShiftArray.length !== 2) {
       return new Error('newColArray should have two elements.');
     }

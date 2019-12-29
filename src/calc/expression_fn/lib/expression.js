@@ -1,6 +1,6 @@
 let defaultOperator = '=';
 let validSymbols = ['>', '>=', '<', '<=', '=', '<>'];
-let TOKEN_TYPE_OPERATOR = 'operator';
+let TOKEN_TYPE_OPERATOR = 'operator_single_func.js';
 let TOKEN_TYPE_LITERAL = 'literal';
 let SUPPORTED_TOKENS = [TOKEN_TYPE_OPERATOR, TOKEN_TYPE_LITERAL];
 

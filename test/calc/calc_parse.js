@@ -1,7 +1,7 @@
 // 这里需要把公式解析做对
 import assert from 'assert';
 import { Calc } from '../../src/calc/calc_cmd/calc';
-import { BaseRefactorBhv, calc } from '../../src/calc';
+import { NewLocRefactorBhv, calc, UserMoveRefactorBhv } from '../../src/calc';
 import { MS_PER_DAY } from '../../src/calc/calc_utils/config';
 import { CellVDateTime, CellVNumber } from '../../src/calc/cell_value_type/cell_value';
 import { compareFloat } from '../../src/calc/calc_utils/helper';
@@ -136,7 +136,7 @@ describe('新的解析算法', function () {
     // assert.equal(workbook.Sheets.Sheet1.A3.v.toNumber(), 7);
     assert.equal(workbook.Sheets.Sheet1.A4.v.toNumber(), 5);
   });
-  it('A:B引用', function () { // todo: 直接输入数组，要能够解析出来
+  it('average忽略非数字', function () {
     let workbook = {};
     workbook.Sheets = {};
     workbook.Sheets.Sheet1 = {};
@@ -151,48 +151,35 @@ describe('新的解析算法', function () {
     let aCalc = new Calc();
     aCalc.calculateWorkbook(workbook);
     assert.equal(workbook.Sheets.Sheet1.B1.v.toNumber(), 9);
-
-    class SimpleRefactorBhv extends BaseRefactorBhv{
-      getArgsForNewLocAA(aUnit) {
-        return [[0, 6]];
-      }
-    }
-
-    let aRefactor = new SimpleRefactorBhv()
-    let resString = aCalc.calcWorkbookProxy.getCellByName("Sheet1", "B1").getFormulaStringByRefactor(aRefactor)
-    assert.equal(resString, "average(A:G)")
   });
-
-  it('引用替换', function () { // 替换一个复杂的公式
+// 强制替换公式中的引用，绝对引用会发生变化。例如本单元格引用的某个单元格被移动
+  it('引用替换-newLoc', function () {
     let workbook = {};
     workbook.Sheets = {};
     workbook.Sheets.Sheet1 = {};
-    workbook.Sheets.Sheet1.B2 = { f: '=average(C:F)&"A:A"+A1+average(A1:B1)' };
+    workbook.Sheets.Sheet1.B2 = { f: '=average(C:$F)&"A:A"+A1+average($A1:B1)' };
 
 
     let aCalc = new Calc();
     aCalc.calculateWorkbook(workbook);
     assert.equal(workbook.Sheets.Sheet1.B2.v.toString(), ERROR_DIV0);
-
-    class SimpleRefactorBhv extends BaseRefactorBhv{
-      getArgsForNewLocAA(aUnit) {
-        return [[0, 6]];
-      }
-      getArgsForNewLocA1(aUnit) {
-        return [0,2];
-      }
-      getArgsForNewLocA1B1(aUnit) {
-        return [[0,2],[3,8]];
-      }
-    }
-    let aRefactor = new SimpleRefactorBhv()
+    let aRefactor = new NewLocRefactorBhv( [[0, 6]],[0,2],[[0,2],[3,8]])
     let resString2 = aCalc.calcWorkbookProxy.getCellByName("Sheet1", "B2").getFormulaStringByRefactor(aRefactor)
-    assert.equal(resString2, 'average(A:G)&"A:A"+A2+average(A3:C8)')
+    assert.equal(resString2, 'average(A:$G)&"A:A"+A3+average($A4:C9)')
   });
-
-
-
-
+// 提供公式中的引用，绝对引用不发生变化。例如本单元格被剪切黏贴
+  it('引用替换-shift', function () {
+    let workbook = {};
+    workbook.Sheets = {};
+    workbook.Sheets.Sheet1 = {};
+    workbook.Sheets.Sheet1.B2 = { f: '=average(C:$F)&"A:A" + $A$1 + A$1 + average(A1:$B1)' };
+    let aCalc = new Calc();
+    aCalc.calculateWorkbook(workbook);
+    assert.equal(workbook.Sheets.Sheet1.B2.v.toString(), ERROR_DIV0);
+    let aRefactor = new UserMoveRefactorBhv( [[1, 1]],[1,1],[[1,1],[1,1]])
+    let resString2 = aCalc.calcWorkbookProxy.getCellByName("Sheet1", "B2").getFormulaStringByRefactor(aRefactor)
+    assert.equal(resString2, 'average(D:$F)&"A:A"+ $A$1 + B$1 +  average(B2:$B2)')
+  });
 
 
   it('circular', function () { // 检查循环依赖的判定;

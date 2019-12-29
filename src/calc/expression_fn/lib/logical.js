@@ -1,7 +1,7 @@
 import {ERROR_NA, ERROR_VALUE, errorObj} from '../../calc_utils/error_config'
 import * as utils from '../../calc_utils/helper'
 import * as information from './information'
-import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
+import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_warp";
 
 /**
  * 使用 AND 函数，它是一个逻辑函数，用于确定测试中的所有条件是否均为 TRUE。

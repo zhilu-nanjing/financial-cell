@@ -286,7 +286,9 @@ export class CellVArray {
   }
   to2DArray(aArray){
     if(typeof aArray[0][0] === "undefined"){
-      return Array(1).push(aArray)
+      let newArray = []
+      newArray.push(aArray)
+      return newArray
     }
     else {
       return aArray

@@ -10,7 +10,7 @@ import {
     CellVEmpty,
     convertToCellV
 } from '../cell_value_type/cell_value';
-import { TwoArgOperatorColl } from './two_arg_operator';
+import { TwoArgOperatorColl } from './operator_coll';
 import {MatrixValue} from './matrix_math';
 import {UserFnExecutor} from './exp_fn_executor';
 
@@ -46,7 +46,7 @@ export class StructuralExp {
         }
     }
 
-    exeOperatorForArrayAndSingle(a,b,op){
+    exeOperatorForArrayAndSingle(a,b,op){ // 如果是矩阵参与运算做特殊处理
         let arg, newArg
         let hasMatrix = false
         for(arg of [a,b]) { // 有任何一个是矩阵，会执行矩阵运算

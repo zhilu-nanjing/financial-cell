@@ -14,7 +14,7 @@ import {
   opMultiply,
   opPower,
   opSubtract
-} from './operator';
+} from './operator_single_func';
 
 // 特殊转换
 

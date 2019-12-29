@@ -3,7 +3,7 @@ import * as utils from '../../calc_utils/helper'
 import {ERROR_DIV0, ERROR_NUM, ERROR_VALUE, errorObj} from '../../calc_utils/error_config'
 import * as statistical from './statistical'
 import * as information from './information'
-import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_proxy";
+import {OnlyNumberExpFunction} from "../../calc_data_proxy/exp_function_warp";
 import {parseNumber, parseNumberArray, parseMatrix} from "../../calc_utils/parse_helper";
 import {flatten, anyIsError} from '../../calc_utils/helper'
 
