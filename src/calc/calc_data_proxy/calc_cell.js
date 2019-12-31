@@ -73,6 +73,12 @@ export class CalcCell{
     this.cellStatus = FORMULA_STATUS.solved; // 更新了之后，状态变为done
   }
 
+  getRefSyntaxUnitArray(){
+    let allUnitArray = this.rootSyntaxUnit.getAllBaseSyntaxUnit()
+    let refUnitArray = allUnitArray.filter(aUnit => aUnit.isReferUnit())
+    return refUnitArray
+  }
+
   getFormulaStringByRefactor(aRefactorBhv){
     let allUnitArray = this.rootSyntaxUnit.getAllBaseSyntaxUnit()
     let theFunc = new BaseRefactorProxy(aRefactorBhv).getTheFunc()

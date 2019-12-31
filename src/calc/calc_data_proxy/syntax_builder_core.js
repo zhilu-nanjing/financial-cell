@@ -60,6 +60,11 @@ export class MultiSyntaxUnitProxy { // 复合型节点
     })
     return syntaxUnitArray
   }
+
+  getRefSyntaxUnit(){
+
+  }
+
 }
 
 
@@ -78,7 +83,7 @@ export class BaseSyntaxUnitProxy {
   }
 
   getParser() {
-    return new Error('NotImplement');
+    return null;
   }
 
 

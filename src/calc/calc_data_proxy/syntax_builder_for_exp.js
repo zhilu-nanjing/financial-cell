@@ -25,4 +25,12 @@ export class ExpSyntaxUnitProxy extends BaseSyntaxUnitProxy {
     aParser.parseRefString();
     return aParser;
   }
+
+  /**
+   * 判定是否是一个引用单元
+   * @return {Boolean}
+   */
+  isReferUnit(){
+    return this.typeArray.isIncludeType(SINGLE_REF) ||  this.typeArray.isIncludeType(RANG_REF)
+  }
 }

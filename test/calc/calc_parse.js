@@ -164,7 +164,10 @@ describe('新的解析算法', function () {
     aCalc.calculateWorkbook(workbook);
     assert.equal(workbook.Sheets.Sheet1.B2.v.toString(), ERROR_DIV0);
     let aRefactor = new NewLocRefactorBhv( [[0, 6]],[0,2],[[0,2],[3,8]])
-    let resString2 = aCalc.calcWorkbookProxy.getCellByName("Sheet1", "B2").getFormulaStringByRefactor(aRefactor)
+    let theCell =  aCalc.calcWorkbookProxy.getCellByName("Sheet1", "B2")
+    let refUnitArray = theCell.getRefSyntaxUnitArray()
+    assert.equal(refUnitArray.map(f=>f.wholeStr),["C:$F","A1","$A1:B1"]) // associatedValue不对
+    let resString2 = theCell.getFormulaStringByRefactor(aRefactor)
     assert.equal(resString2, 'average(A:$G)&"A:A"+A3+average($A4:C9)')
   });
 // 提供公式中的引用，绝对引用不发生变化。例如本单元格被剪切黏贴

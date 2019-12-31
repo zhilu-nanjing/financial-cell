@@ -377,6 +377,8 @@ export function convertToCellV(originValue) {
     return new CellVBool(originValue);
   } else if (originValue instanceof Error) { // 错误类型
     return new CellVError(originValue);
+  } else if (originValue.cellVTypeName === CellVTypeObj.CellVEmpty){ // 空类型转化为0
+    return new CellVNumber(0)
   }
   if (originValue.isCellV === true) {
     return originValue; // 不进行转换

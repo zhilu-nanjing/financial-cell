@@ -104,7 +104,6 @@ export class SingleCellRefer { // 对应一个对单元格的引用，考虑绝�
     this.isAbosulte = false;
     this.cellRowNameParser = null;
     this.cellColNameParser = null;
-
   }
   isLeftTopToOther(other){
     return this.cellRowNameParser.getNumber() < other.cellRowNameParser.getNumber() && this.cellColNameParser.getNumber() < other.cellColNameParser.getNumber()
