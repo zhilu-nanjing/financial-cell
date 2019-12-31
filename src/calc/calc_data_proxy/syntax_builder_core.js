@@ -48,7 +48,7 @@ export class MultiSyntaxUnitProxy { // 复合型节点
   updateByNewLoc(newCol, newRow) {
     this.childrenSynUnit.map((child) => child.updateByNewLoc(newCol, newRow));
   }
-  getAllBaseSyntaxUnit(){ // 获取所有基本单元
+  getAllBaseSyntaxUnit(isSort = true){ // 获取所有基本单元
     let syntaxUnitArray = []
     this.childrenSynUnit.map(child =>{
       if(child instanceof MultiSyntaxUnitProxy){
@@ -58,12 +58,12 @@ export class MultiSyntaxUnitProxy { // 复合型节点
         syntaxUnitArray.push(child)
       }
     })
+    if(isSort){
+      syntaxUnitArray.sort((a,b) => a.pstID - b.pstID)
+    }
     return syntaxUnitArray
   }
 
-  getRefSyntaxUnit(){
-
-  }
 
 }
 
