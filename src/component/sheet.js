@@ -714,16 +714,18 @@ function editorSet() {
 }
 
 function footerContainerIsShow(distance) {
-    let {data} = this;
+    let {data, footEl} = this;
+    if (!footEl) {
+        return;
+    }
     let {footerContainerHeight} = data.settings;
-    let el = document.getElementById("foot-container");
     let offset = footerContainerHeight - 20;
 
     if (data.viewHeight() + distance - footerContainerHeight >= data.rows.totalHeight() - offset) {
-        el.style['display'] = 'block';
-        el.style['top'] = data.viewHeight() - (data.viewHeight() + distance - footerContainerHeight - data.rows.totalHeight() + offset) + "px";
+        footEl.style['display'] = 'block';
+        footEl.style['top'] = data.viewHeight() - (data.viewHeight() + distance - footerContainerHeight - data.rows.totalHeight() + offset) + "px";
     } else {
-        el.style['display'] = 'none';
+        footEl.style['display'] = 'none';
     }
 }
 
@@ -1793,7 +1795,7 @@ export default class Sheet {
     }
 
     insertRows(len) {
-        let {data, verticalScrollbar } = this;
+        let {data, verticalScrollbar} = this;
         let {rows} = data;
         data.insert('row', len * 1);
         sheetReset.call(this);
