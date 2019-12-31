@@ -6,6 +6,7 @@ import { MS_PER_DAY } from '../../src/calc/calc_utils/config';
 import { CellVDateTime, CellVNumber } from '../../src/calc/cell_value_type/cell_value';
 import { compareFloat } from '../../src/calc/calc_utils/helper';
 import { ERROR_DIV0, ERROR_NA } from '../../src/calc/calc_utils/error_config';
+import { assertArrayEqual } from '../../src/utils/compare';
 
 it('date', function () { // 检查符号的判定
   let dayNum = 400;
@@ -167,7 +168,8 @@ describe('新的解析算法', function () {
     let theCell =  aCalc.calcWorkbookProxy.getCellByName("Sheet1", "B2")
     let refUnitArray = theCell.getRefSyntaxUnitArray()
     let expectedArray = ["C:$F","A1","$A1:B1"]
-    refUnitArray.map((val, index)=> assert.equal(val.wholeStr,expectedArray[index]))
+    // refUnitArray.map((val, index)=> assert.equal(val.wholeStr,expectedArray[index]))
+    assertArrayEqual(refUnitArray.map(f=>f.wholeStr), expectedArray) // 比较两个数组
     let resString2 = theCell.getFormulaStringByRefactor(aRefactor)
     assert.equal(resString2, 'average(A:$G)&"A:A"+A3+average($A4:C9)')
   });
