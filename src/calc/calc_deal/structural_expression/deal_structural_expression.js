@@ -73,6 +73,7 @@ export class StructuralExpressionBuilder {
     this.multiCollFn = multiCollFn;
     this.calcCell = calcCell;
     this.root_exp = new StructuralExp(calcCell);  // 封装公式实例
+    this.root_exp.isRoot = true
     // 下面应该是状态
     this.curExpression = this.root_exp;
     this.buffer = '';
@@ -352,7 +353,7 @@ export class StructuralExpressionBuilder {
       .match(/^[A-Z]+[0-9]+:[A-Z]+[0-9]+$/)) {
       this.lastUnitTypeArray = [RANG_REF, A1A2];
       v = new SUnitRangeRef(trimmedStrDetailObj.trimmedStr
-        .replace(/\$/g, ''), calcCell, position_i); // todo: 把绝对引用去掉了
+        .replace(/\$/g, ''), calcCell, position_i);
 
     } else if (trimmedStrDetailObj.trimmedStr // 跨sheet引用的Range
       .replace(/\$/g, '')
@@ -400,18 +401,18 @@ export class StructuralExpressionBuilder {
   }
 
   push2ExpArgs(structuralExp, toAddUnit, position_i) { // 这个使用来做解析； todo：考虑把这个转移
-    let self = structuralExp;
+    let curExp = structuralExp;
     if (toAddUnit !== '') {
       let v = toAddUnit;
       if (!isNaN(toAddUnit)) { // 数字
         v = new RawValue(+toAddUnit);
       } else if (typeof toAddUnit === 'string') {
-        v = this.str2Value(toAddUnit, self.calcCell, position_i);
+        v = this.str2Value(toAddUnit, curExp.calcCell, position_i);
       } else {
         v = toAddUnit;
       }
-      self.args.push(v); // 只有运算符号保持string形式
-      self.last_arg = v;
+      curExp.args.push(v); // 只有运算符号保持string形式
+      this.last_arg = v;
     }
   }
 

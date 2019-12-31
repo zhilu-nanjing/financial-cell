@@ -5,7 +5,7 @@ import { NewLocRefactorBhv, calc, UserMoveRefactorBhv } from '../../src/calc';
 import { MS_PER_DAY } from '../../src/calc/calc_utils/config';
 import { CellVDateTime, CellVNumber } from '../../src/calc/cell_value_type/cell_value';
 import { compareFloat } from '../../src/calc/calc_utils/helper';
-import { ERROR_DIV0 } from '../../src/calc/calc_utils/error_config';
+import { ERROR_DIV0, ERROR_NA } from '../../src/calc/calc_utils/error_config';
 
 it('date', function () { // 检查符号的判定
   let dayNum = 400;
@@ -166,7 +166,8 @@ describe('新的解析算法', function () {
     let aRefactor = new NewLocRefactorBhv( [[0, 6]],[0,2],[[0,2],[3,8]])
     let theCell =  aCalc.calcWorkbookProxy.getCellByName("Sheet1", "B2")
     let refUnitArray = theCell.getRefSyntaxUnitArray()
-    assert.equal(refUnitArray.map(f=>f.wholeStr),["C:$F","A1","$A1:B1"]) // associatedValue不对
+    let expectedArray = ["C:$F","A1","$A1:B1"]
+    refUnitArray.map((val, index)=> assert.equal(val.wholeStr,expectedArray[index]))
     let resString2 = theCell.getFormulaStringByRefactor(aRefactor)
     assert.equal(resString2, 'average(A:$G)&"A:A"+A3+average($A4:C9)')
   });
@@ -199,4 +200,50 @@ describe('新的解析算法', function () {
     calc.calculateWorkbook(workbook);
     assert.equal(workbook.Sheets.Sheet1.A5.w, '#CIRCULA!');
   });
+
+  it('IF - VLOOKUP', function() {
+    let calc = new Calc()
+    let workbook = {};
+    workbook.Sheets = {};
+    workbook.Sheets.Sheet1 = {};
+    workbook.Sheets.Sheet1.A811 = {f: '101'};
+    workbook.Sheets.Sheet1.A812 = {f: '102'};
+    workbook.Sheets.Sheet1.A813 = {f: '103'};
+    workbook.Sheets.Sheet1.A814 = {f: '104'};
+    workbook.Sheets.Sheet1.A815 = {f: '105'};
+    workbook.Sheets.Sheet1.A816 = {f: '106'};
+
+    workbook.Sheets.Sheet1.B811 = {f: '康'};
+    workbook.Sheets.Sheet1.B812 = {f: '袁'};
+    workbook.Sheets.Sheet1.B813 = {f: '牛'};
+    workbook.Sheets.Sheet1.B814 = {f: '宋'};
+    workbook.Sheets.Sheet1.B815 = {f: '谢'};
+    workbook.Sheets.Sheet1.B816 = {f: '廖'};
+
+    workbook.Sheets.Sheet1.C811 = {f: '霓'};
+    workbook.Sheets.Sheet1.C812 = {f: '洛'};
+    workbook.Sheets.Sheet1.C813 = {f: '娇'};
+    workbook.Sheets.Sheet1.C814 = {f: '臻'};
+    workbook.Sheets.Sheet1.C815 = {f: '德'};
+    workbook.Sheets.Sheet1.C816 = {f: '磊'};
+
+    workbook.Sheets.Sheet1.D811 = {f: '销售代表'};
+    workbook.Sheets.Sheet1.D812 = {f: '销售副总裁'};
+    workbook.Sheets.Sheet1.D813 = {f: '销售代表'};
+    workbook.Sheets.Sheet1.D814 = {f: '销售代表'};
+    workbook.Sheets.Sheet1.D815 = {f: '销售经理'};
+    workbook.Sheets.Sheet1.D816 = {f: '销售代表'};
+
+    workbook.Sheets.Sheet1.E811 = {f: '1968/12/8'};
+    workbook.Sheets.Sheet1.E812 = {f: '1962/2/19'};
+    workbook.Sheets.Sheet1.E813 = {f: '1963/8/30'};
+    workbook.Sheets.Sheet1.E814 = {f: '1958/9/19'};
+    workbook.Sheets.Sheet1.E815 = {f: '1955/3/4'};
+    workbook.Sheets.Sheet1.E816 = {f: '1953/7/2'};
+    workbook.Sheets.Sheet1.A11 = {f: '=IF(VLOOKUP(103,A811:E816,2,FALSE)="夏","是夏","不是夏")'};
+    calc.calculateWorkbook(workbook);
+    console.log(workbook.Sheets.Sheet1.A11.v)
+    assert.equal(workbook.Sheets.Sheet1.A11.v, "不是夏");
+  });
+
 });

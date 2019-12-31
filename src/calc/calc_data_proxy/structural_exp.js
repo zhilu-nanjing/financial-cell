@@ -28,6 +28,7 @@ export class StructuralExp {
         this.calcCell = calcCell;
         this.last_arg = "";
         this.twoArgOperator = new TwoArgOperatorColl()
+        this.isRoot = false
     }
 
     isEmpty(value) {
@@ -155,7 +156,8 @@ export class StructuralExp {
 
     convertToFinalValue(res){
         let res2 = convertToCellV(res); // 确保返回的都是封装过的值
-        if(res2.cellVTypeName === CellVTypeObj.CellVEmpty){
+        // 最终单元格返回的值中需要转化CellVEmpty
+        if(this.isRoot === true && res2.cellVTypeName === CellVTypeObj.CellVEmpty){
             res2 = new CellVNumber(0)
         }
         return res2

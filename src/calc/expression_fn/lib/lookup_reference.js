@@ -1,4 +1,4 @@
-import {errorObj} from '../../calc_utils/error_config';
+import { ERROR_NA, errorObj } from '../../calc_utils/error_config';
 import utils from '../../calc_utils/helper';
 function match_less_than_or_equal(matrix, lookupValue) {
   let index;
@@ -117,33 +117,34 @@ exports.MATCH = function (lookupValue, matrix, matchType) {
 }
 //XW: vlookup函数实现
 exports.VLOOKUP = function (key, matrix, return_index, cumulative) {
-  if(typeof cumulative == 'string' && !(cumulative == 'FALSE' || cumulative == 'TRUE')){
+  if(typeof cumulative === 'string' && !(cumulative === 'FALSE' || cumulative === 'TRUE')){
     return errorObj.ERROR_VALUE;
   }
-  if (cumulative == 'FALSE') {
-    cumulative = false
-  }else{
-    cumulative = true
-  }
+  cumulative = cumulative !== 'FALSE';
+  let res
   for (let i = 0; i < matrix.length; i++) {
-    if (matrix[i][0] == key) {
-      return matrix[i][return_index - 1];
+    if (matrix[i][0] === key) {
+      res = matrix[i][return_index - 1] // index不合法
+      if(typeof res === "undefined"){
+        break
+      }
+      return res;
     }
   }
-  return errorObj.ERROR_NA;
+  return new  Error(ERROR_NA);
 };
 //XW：end
 
 
 //XW:hlookup函数实现
 exports.HLOOKUP = function (needle, table, index, exactmatch) {
-  if (exactmatch == 'TRUE'){
+  if (exactmatch === 'TRUE'){
     exactmatch = true
   }
-  if (exactmatch == 'FALSE'){
+  if (exactmatch === 'FALSE'){
     exactmatch = false
   }
-  if (typeof table == 'string' && table.indexOf('{') >=0){
+  if (typeof table === 'string' && table.indexOf('{') >=0){
     table = utils.strToMatrix(table)
   }
   if (typeof needle === "undefined" || table[0].indexOf(needle) < 0) {

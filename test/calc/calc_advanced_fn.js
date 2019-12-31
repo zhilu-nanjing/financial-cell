@@ -1,5 +1,6 @@
 import assert from 'assert'
 import { Calc } from '../../src/calc/calc_cmd/calc';
+import { ERROR_NA } from '../../src/calc/calc_utils/error_config';
 // todo: 除了旺旺那边的20个函数以外，其他的函数都应该写对
 describe('expression_fn integration', function() {
   describe('calculateWorkbook.import_functions()', function() {
@@ -146,40 +147,40 @@ describe('expression_fn integration', function() {
       workbook.Sheets = {};
       workbook.Sheets.Sheet1 = {};
       workbook.Sheets.Sheet2 = {};
-      workbook.Sheets.Sheet1.A811 = {v: '101'};
-      workbook.Sheets.Sheet1.A812 = {v: '102'};
-      workbook.Sheets.Sheet1.A813 = {v: '103'};
-      workbook.Sheets.Sheet1.A814 = {v: '104'};
-      workbook.Sheets.Sheet1.A815 = {v: '105'};
-      workbook.Sheets.Sheet1.A816 = {v: '106'};
+      workbook.Sheets.Sheet1.A811 = {f: '101'};
+      workbook.Sheets.Sheet1.A812 = {f: '102'};
+      workbook.Sheets.Sheet1.A813 = {f: '103'};
+      workbook.Sheets.Sheet1.A814 = {f: '104'};
+      workbook.Sheets.Sheet1.A815 = {f: '105'};
+      workbook.Sheets.Sheet1.A816 = {f: '106'};
 
-      workbook.Sheets.Sheet1.B811 = {v: '康'};
-      workbook.Sheets.Sheet1.B812 = {v: '袁'};
-      workbook.Sheets.Sheet1.B813 = {v: '牛'};
-      workbook.Sheets.Sheet1.B814 = {v: '宋'};
-      workbook.Sheets.Sheet1.B815 = {v: '谢'};
-      workbook.Sheets.Sheet1.B816 = {v: '廖'};
+      workbook.Sheets.Sheet1.B811 = {f: '康'};
+      workbook.Sheets.Sheet1.B812 = {f: '袁'};
+      workbook.Sheets.Sheet1.B813 = {f: '牛'};
+      workbook.Sheets.Sheet1.B814 = {f: '宋'};
+      workbook.Sheets.Sheet1.B815 = {f: '谢'};
+      workbook.Sheets.Sheet1.B816 = {f: '廖'};
 
-      workbook.Sheets.Sheet1.C811 = {v: '霓'};
-      workbook.Sheets.Sheet1.C812 = {v: '洛'};
-      workbook.Sheets.Sheet1.C813 = {v: '娇'};
-      workbook.Sheets.Sheet1.C814 = {v: '臻'};
-      workbook.Sheets.Sheet1.C815 = {v: '德'};
-      workbook.Sheets.Sheet1.C816 = {v: '磊'};
+      workbook.Sheets.Sheet1.C811 = {f: '霓'};
+      workbook.Sheets.Sheet1.C812 = {f: '洛'};
+      workbook.Sheets.Sheet1.C813 = {f: '娇'};
+      workbook.Sheets.Sheet1.C814 = {f: '臻'};
+      workbook.Sheets.Sheet1.C815 = {f: '德'};
+      workbook.Sheets.Sheet1.C816 = {f: '磊'};
 
-      workbook.Sheets.Sheet1.D811 = {v: '销售代表'};
-      workbook.Sheets.Sheet1.D812 = {v: '销售副总裁'};
-      workbook.Sheets.Sheet1.D813 = {v: '销售代表'};
-      workbook.Sheets.Sheet1.D814 = {v: '销售代表'};
-      workbook.Sheets.Sheet1.D815 = {v: '销售经理'};
-      workbook.Sheets.Sheet1.D816 = {v: '销售代表'};
+      workbook.Sheets.Sheet1.D811 = {f: '销售代表'};
+      workbook.Sheets.Sheet1.D812 = {f: '销售副总裁'};
+      workbook.Sheets.Sheet1.D813 = {f: '销售代表'};
+      workbook.Sheets.Sheet1.D814 = {f: '销售代表'};
+      workbook.Sheets.Sheet1.D815 = {f: '销售经理'};
+      workbook.Sheets.Sheet1.D816 = {f: '销售代表'};
 
-      workbook.Sheets.Sheet1.E811 = {v: '1968/12/8'};
-      workbook.Sheets.Sheet1.E812 = {v: '1962/2/19'};
-      workbook.Sheets.Sheet1.E813 = {v: '1963/8/30'};
-      workbook.Sheets.Sheet1.E814 = {v: '1958/9/19'};
-      workbook.Sheets.Sheet1.E815 = {v: '1955/3/4'};
-      workbook.Sheets.Sheet1.E816 = {v: '1953/7/2'};
+      workbook.Sheets.Sheet1.E811 = {f: '1968/12/8'};
+      workbook.Sheets.Sheet1.E812 = {f: '1962/2/19'};
+      workbook.Sheets.Sheet1.E813 = {f: '1963/8/30'};
+      workbook.Sheets.Sheet1.E814 = {f: '1958/9/19'};
+      workbook.Sheets.Sheet1.E815 = {f: '1955/3/4'};
+      workbook.Sheets.Sheet1.E816 = {f: '1953/7/2'};
       workbook.Sheets.Sheet1.A11 = {f: '=VLOOKUP(B812,B811:E816,2,FALSE)'};
       calc.calculateWorkbook(workbook);
       assert.equal(workbook.Sheets.Sheet1.A11.v, '洛');
@@ -191,7 +192,7 @@ describe('expression_fn integration', function() {
       workbook.Sheets.Sheet1.A11 = {f: '=IF(VLOOKUP(103,A811:E816,2,FALSE)="夏","位置","未找到")'};
       calc.calculateWorkbook(workbook);
       console.log(workbook.Sheets.Sheet1.A11.v)
-      assert.equal(workbook.Sheets.Sheet1.A11.v, '未找到');
+      assert.equal(workbook.Sheets.Sheet1.A11.v, ERROR_NA);
     });
 
 

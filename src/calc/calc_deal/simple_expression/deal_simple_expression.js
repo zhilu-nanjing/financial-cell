@@ -15,7 +15,7 @@ export class SimpleExpressionBuilder { // 解析不含等号的那些表达式
    */
   constructor(calcCell) {
     this.parseArray = [ForceString, BoolParser, DateTimeParser, MoneyParser, NumberParser]; // 需要遍历的解析器
-    this.rootExp = new SimpleExpression(this.calcCell); // 出是话是一个空的
+    this.rootExp = new SimpleExpression(this.calcCell); // 初始化是一个空的
     this.calcCell = calcCell;
   }
 

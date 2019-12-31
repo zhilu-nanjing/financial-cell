@@ -39,7 +39,7 @@ export class BaseExpFunction { // 默认行为; 如果不符合默认行为的�
       errorArg = this.errorArg;
     if (typeof this.expFnArgConfig === 'undefined') { // 没有类型转换方式配置
       newArgs = solvedArgs.map(arg => {
-        if (arg instanceof Error === true) {
+        if (arg instanceof Error === true) { // 错误的话直接处理
           errorArg = arg;
           return arg
         } else {

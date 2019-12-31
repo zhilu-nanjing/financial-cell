@@ -47,7 +47,7 @@ export class SUnitRangeRef{
             max_row = parseInt(str_max_row)
         }
         let min_col = new ColIndexProxy(arr[0]).colNum;
-        let max_col = new ColIndexProxy(arr[0]).colNum;
+        let max_col = new ColIndexProxy(arr[1]).colNum;
         let matrix = [];
         for (let i = min_row; i <= max_row; i++) { // 这里的i是row index， j 是col index
             let row = [];
