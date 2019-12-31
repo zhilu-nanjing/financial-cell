@@ -1,5 +1,5 @@
 "use strict";
-import { FORMULA_STATUS, MARK_OBJ } from '../calc_utils/config';
+import { CellVTypeObj, FORMULA_STATUS, MARK_OBJ } from '../calc_utils/config';
 import { RawValue } from './syntax_unit_raw_value.js';
 import {SUnitRefValue} from './syntax_unit_ref_value';
 import { SUnitRangeRef } from './syntax_unit_range.js';
@@ -7,7 +7,7 @@ import { errorMsgArr, errorObj, ERROR_SYNTAX } from '../calc_utils/error_config'
 import {
     CellVArray,
     CellVDateTime,
-    CellVEmpty,
+    CellVEmpty, CellVNumber,
     convertToCellV
 } from '../cell_value_type/cell_value';
 import { TwoArgOperatorColl } from './operator_coll';
@@ -149,8 +149,16 @@ export class StructuralExp {
             return arg.cellObj.v;
         } else {
             let res = arg.solveExpression()
-            return convertToCellV(res); // 确保返回的都是封装过的值
+            return this.convertToFinalValue(res)
         }
+    }
+
+    convertToFinalValue(res){
+        let res2 = convertToCellV(res); // 确保返回的都是封装过的值
+        if(res2.cellVTypeName === CellVTypeObj.CellVEmpty){
+            res2 = new CellVNumber(0)
+        }
+        return res2
     }
 
     solveExpression() { // 核心方法
