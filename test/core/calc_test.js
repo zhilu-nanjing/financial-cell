@@ -44,7 +44,6 @@ describe('calc', () => {
             newCell: data.rows.eachRange(new CellRange(0, 0, 0, 0))
         }, data);
 
-        data.calc.calculateRows(data.rows, changeDataForCalc);
 
         let cell2 = new Cell();
         cell2.setCell({text: "=A1", formulas: "=A1", depend: ['C3']})
@@ -55,17 +54,49 @@ describe('calc', () => {
         data.rows.setCell(2, 2, cell3, 'all');
 
         data.calc.calculateRows(data.rows, changeDataForCalc);
+        data.rows.setCell(0, 0, {text: "2", formulas: "2", depend: ['B2']}, 'all');
+        changeDataForCalc = new PreAction({
+            type: 1,
+            ri: 0,
+            ci: 0,
+            action: "在A1中键入1",
+            oldCell:data.rows.eachRange(new CellRange(0, 0, 0, 0)),
+            newCell: data.rows.eachRange(new CellRange(0, 0, 0, 0))
+        }, data);
+        data.calc.calculateRows(data.rows, changeDataForCalc);
 
         cell2 = data.rows.getCell(1,1);
         cell3 = data.rows.getCell(2, 2);
 
-        assert.equal(cell2.text, '1');
-        assert.equal(cell2.formula, '1');
-        assert.equal(cell3.text, '1');
-        assert.equal(cell3.formula, '1');
+        assert.equal(cell2.text, '2');
+        assert.equal(cell2.formula, '2');
+        assert.equal(cell3.text, '2');
+        assert.equal(cell3.formula, '2');
 
-        // console.log(data.rows.getCell(0, 0));
-        // console.log(data.rows.getCell(1,1));
-        // console.log(data.rows.getCell(2, 2));
+        console.log(data.rows.getCell(0, 0));
+        console.log(data.rows.getCell(1,1));
+        console.log(data.rows.getCell(2, 2));
+    });
+
+    it(' bug3 ', function () {
+        let cell2 = new Cell();
+        cell2.setCell({text: "=A1", formulas: "=A1"})
+        data.rows.setCell(1, 1, cell2, 'all');
+
+        data.calc.calculateRows(data.rows, changeDataForCalc);
+        cell2 = data.rows.getCell(1,1);
+
+        let changeDataForCalc = new PreAction({
+            type: 11,
+            ri: -1,
+            ci: -1,
+            oldCell:data.rows.eachRange(new CellRange(0, 0, 10, 10)),
+            newCell: data.rows.eachRange(new CellRange(0, 0, 10, 10))
+        }, data);
+        data.calc.calculateRows(data.rows, changeDataForCalc);
+        data.calc.calculateRows(data.rows, changeDataForCalc);
+
+        assert.equal(cell2.text, '0');
+        assert.equal(cell2.formula, '=A1');
     });
 });
