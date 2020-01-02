@@ -73,8 +73,8 @@ export class CalcCell{
     this.cellStatus = FORMULA_STATUS.solved; // 更新了之后，状态变为done
   }
 
-  getRefSyntaxUnitArray(){
-    let allUnitArray = this.rootSyntaxUnit.getAllBaseSyntaxUnit()
+  getRefSyntaxUnitArray(isSort = true){
+    let allUnitArray = this.rootSyntaxUnit.getAllBaseSyntaxUnit(isSort)
     let refUnitArray = allUnitArray.filter(aUnit => aUnit.isReferUnit())
     return refUnitArray
   }
