@@ -1368,7 +1368,9 @@ describe('qq', () => {
         });
     });
 
-    describe(' insert/delete rows/cols ', () => { // 具体数据可以在获取： /test/core/runTest/html/test1.html
+    describe(' insert/delete rows/cols ', () => {
+        // 具体数据可以在获取： /test/core/runTest/html/test1.html
+        //  通过preAction传递。  type=13为插入行/列，type=14为删除行/列，ri, ci为从哪里插入, property在config.js中定义，如下图， action为辅助说明。
         it('  insert ', () => { //在行/列插入
             data.calc.calculateRows(data.rows, null);
 
