@@ -1730,7 +1730,6 @@ export default class Sheet {
 
     setCellRange(reference, tableProxy, styleBool, cellRange) {
         let {data} = this;
-        data.paste(cellRange);
         for (let i = 0; i < reference.length; i++) {
             let {ri, ci} = reference[i];
             let cell = deepCopy(tableProxy.rows.getCellOrNew(ri, ci));
@@ -1740,6 +1739,7 @@ export default class Sheet {
             selectorCellText.call(this, ri, ci, cell, 'style');
             selectorSet.call(this, true, ri, ci, true, true);
         }
+        data.paste(cellRange);
     }
 
     selectorEditorReset(ri, ci) {
@@ -1752,8 +1752,6 @@ export default class Sheet {
 
     loadData(data) {
         this.data.setData(data, this);
-        // 把所有后端计算的公式过滤出来
-        // this.editorProxy.associatedArr(this.data.rows);
         sheetReset.call(this);
         return this;
     }
@@ -1797,7 +1795,7 @@ export default class Sheet {
     insertRows(len) {
         let {data, verticalScrollbar} = this;
         let {rows} = data;
-        data.insert('row', len * 1);
+        data.insert('row', len * 1, data.cols.len);
         sheetReset.call(this);
         verticalScrollbar.move({top: rows.totalHeight()});
         // verticalScrollbarMove.call(this, data.rows.totalHeight() - data.viewHeight()  );

@@ -97,6 +97,7 @@ class Spreadsheet {
     }
 
     initFinancialCellFooter() {
+        let xs = this;
         let footComp = Vue.extend({
             template: `<div id="foot-container" @click.stop @mousedown.stop @mouseup.stop @keydown.stop @keyup.stop @copy.stop @paste.stop
              style="height: 1000px; display: none; width: 100%; position: absolute; ">

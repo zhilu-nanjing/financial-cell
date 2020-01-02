@@ -1,16 +1,14 @@
 /* global document */
 
-import {calc}  from '../../src/calc';
-// import { MockCalc } from '../calc/calc_cmd/mock_calc';
-
+import {calc} from '../../src/calc';
 import Selector from './selector';
 import Scroll from './scroll';
 import Clipboard from './clipboard';
 import AutoFilter from './auto_filter';
 import {Merges} from './merge';
+import * as helper from '../helper/dataproxy_helper';
 import {isNumber} from '../helper/dataproxy_helper';
 import {isHave} from '../helper/check_value';
-import * as helper from '../helper/dataproxy_helper';
 import {isFormula, Rows} from './row';
 import {Cols} from './col';
 import {Validations} from './validation';
@@ -30,6 +28,9 @@ import CellProxy from "./cell_proxy";
 import CellProp from "../model/cell_prop";
 import PaintFormat from "../model/paint_format";
 import Chart from "../chart/chart_cmd/chart";
+import {DELETE, INSERT} from "../config";
+import Cell from "../model/cell";
+// import { MockCalc } from '../calc/calc_cmd/mock_calc';
 // private methods
 /*
  * {
@@ -865,7 +866,7 @@ export default class DataProxy {
 
     paintFormatChange(cb) {
         this.changeData(() => {
-            let {clipboard,   selector} = this;
+            let {clipboard, selector} = this;
             let {range} = clipboard;
             let sri = selector.ri;
             let sci = selector.ci;
@@ -1100,7 +1101,7 @@ export default class DataProxy {
         }
     }
 
-    changeToHistory({ri, type, ci, cellRange, property, value, oldCell, oldMergesData}, oldStep) {
+    changeToHistory({ri, type, ci, cellRange, property, value, oldCell, oldMergesData, len}, oldStep) {
         if (type === -1) {
             return {"state": false,}
         }
@@ -1118,7 +1119,7 @@ export default class DataProxy {
             ci,
             cellRange: cellRange,
         });
-        multiPreAction.addStep(step, {oldCell, oldMergesData, newMergesData: this.merges.getData(), oldStep,});
+        multiPreAction.addStep(step, {oldCell, oldMergesData, newMergesData: this.merges.getData(), oldStep,  len,});
         return {
             "state": true
         }
@@ -1411,9 +1412,9 @@ export default class DataProxy {
         } else if ('column') {
             begin = begin !== -1 ? begin : sci;
         }
+        let si = begin;
 
         this.changeData(() => {
-            let si = begin;
             if (type === 'row') {
                 rows.insert(begin, n);
             } else if (type === 'column') {
@@ -1426,19 +1427,28 @@ export default class DataProxy {
                 cell.merge[0] += rn;
                 cell.merge[1] += cn;
             });
-        }, {type: 13, data: this.getData(), property: "insert"});
+        }, {
+            type: 13,
+            data: this.getData(),
+            ri: begin !== -1 ? begin : sri,
+            ci: begin !== -1 ? begin : sci,
+            len: 1,
+            property: type === 'row' ? INSERT.ROW : INSERT.COL
+        });
     }
 
     // type: row | column
     delete(type) {
+        const {
+            rows, merges, selector, cols,
+        } = this;
+
+        const {range} = selector;
+        const {
+            sri, sci, eri, eci,
+        } = selector.range;
+
         this.changeData(() => {
-            const {
-                rows, merges, selector, cols,
-            } = this;
-            const {range} = selector;
-            const {
-                sri, sci, eri, eci,
-            } = selector.range;
             const [rsize, csize] = selector.range.size();
             let si = sri;
             let size = rsize;
@@ -1460,6 +1470,13 @@ export default class DataProxy {
                     delete cell.merge;
                 }
             });
+        }, {
+            type: 14,
+            data: this.getData(),
+            ri: sri,
+            ci: sci,
+            len: 1,
+            property: type === 'row' ? `${DELETE.ROW}` : `${DELETE.COL}`
         });
     }
 
@@ -1625,7 +1642,9 @@ export default class DataProxy {
             } else if (state === 'style') {
                 rows.setCellText(ri, ci, {text, style}, 'style');
             } else {
-                rows.setCellText(ri, ci, {text});
+                let cell = new Cell();
+                cell.setCell({'text': text, 'formulas': text});
+                rows.setCell(ri, ci, cell);
                 // rows.
             }
             // 不应该没打开一个单元格就 change一次
@@ -1829,7 +1848,7 @@ export default class DataProxy {
         return lastStep;
     }
 
-    changeData(cb, {type = -1, ri = -1, ci = -1, cellRange = "", property = "", value = ""} = -1) {
+    changeData(cb, {type = -1, ri = -1, ci = -1, cellRange = "", property = "", value = "", len = -1} = -1) {
         if (this.settings.showEditor === false) {
             return;
         }
@@ -1855,7 +1874,18 @@ export default class DataProxy {
             oldCell = multiPreAction.eachRange(cellRange);
         }
         cb();
-        this.changeToHistory({type, ri, ci, cellRange, property, value, oldCell, oldMergesData, newData: this.getData(), }, step);
+        this.changeToHistory({
+            type,
+            ri,
+            ci,
+            cellRange,
+            property,
+            value,
+            oldCell,
+            len,
+            oldMergesData,
+            newData: this.getData(),
+        }, step);
         this.changeDataForCalc = this.getChangeDataToCalc();
 
         this.change(this.getData());

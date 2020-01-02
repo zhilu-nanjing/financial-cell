@@ -1111,88 +1111,88 @@ class Rows {
         // this._ = ncellmm;
     }
 
-    insert(sri, n = 1) {
+    insert(sri, n = 1) {    // n 是要插入的行数
         const ndata = {};
-        let cells = [];
+        // let cells = [];
         this.each((ri, row) => {
             let nri = parseInt(ri, 10);
             if (nri >= sri) {
                 nri += n;
-                this.eachCells(ri, (ci, cell) => {
-                    if (isHave(cell) && isHave(cell.formulas) && this.isFormula(cell.formulas)) {
-                        let {bad, result, enter} = this.getCellTextByShift(splitStr(cell.formulas), 0, n, true, true, sri, true);
-                        if (enter && !bad) {
-                            cells.push({ri: nri, ci: ci, cell: {text: result, formulas: result}});
-                        }
-                    }
-                });
+                // this.eachCells(ri, (ci, cell) => {
+                //     if (isHave(cell) && isHave(cell.formulas) && this.isFormula(cell.formulas)) {
+                //         let {bad, result, enter} = this.getCellTextByShift(splitStr(cell.formulas), 0, n, true, true, sri, true);
+                //         if (enter && !bad) {
+                //             cells.push({ri: nri, ci: ci, cell: {text: result, formulas: result}});
+                //         }
+                //     }
+                // });
             }
 
             ndata[nri] = row;
         });
 
         this._ = ndata;
-        for (let i = 0; i < cells.length; i++) {
-            let {ri, ci, cell} = cells[i];
-            this.setCell(ri, ci, cell, 'all');
-        }
+        // for (let i = 0; i < cells.length; i++) {
+        //     let {ri, ci, cell} = cells[i];
+        //     this.setCell(ri, ci, cell, 'all');
+        // }
         this.len += n;
     }
 
     delete(sri, eri) {
         const n = eri - sri + 1;
         const ndata = {};
-        let cells = [];
         this.each((ri, row) => {
             const nri = parseInt(ri, 10);
             if (nri < sri) {
                 ndata[nri] = row;
             } else if (ri > eri) {
                 ndata[nri - n] = row;
-
-                this.eachCells(ri, (ci, cell) => {
-                    if (isHave(cell) && isHave(cell.formulas) && this.isFormula(cell.formulas)) {
-                        let {bad, result, enter} = this.getCellTextByShift(splitStr(cell.formulas), 0, n * -1, true, false, sri, true);
-                        if (enter && !bad) {
-                            cells.push({ri: nri - n, ci: ci, cell: {text: result, formulas: result}});
-                        }
-                    }
-                });
             }
         });
         this._ = ndata;
-        for (let i = 0; i < cells.length; i++) {
-            let {ri, ci, cell} = cells[i];
-            this.setCell(ri, ci, cell, 'all');
-        }
         this.len -= n;
     }
 
+    // insertColumn(sci, n = 1) {
+    //     let cells = [];
+    //     this.each((ri, row) => {
+    //         const rndata = {};
+    //         this.eachCells(ri, (ci, cell) => {
+    //             let nci = parseInt(ci, 10);
+    //             if (nci >= sci) {
+    //                 nci += n;
+    //
+    //                 if (isHave(cell) && isHave(cell.formulas) && this.isFormula(cell.formulas)) {
+    //                     let {bad, result, enter} = this.getCellTextByShift(splitStr(cell.formulas), n, 0, true, true, sci, false);
+    //                     if (enter && !bad) {
+    //                         cells.push({ri: ri, ci: nci, cell: {text: result, formulas: result}});
+    //                     }
+    //                 }
+    //             }
+    //             rndata[nci] = cell;
+    //         });
+    //         row.cells = rndata;
+    //     });
+    //
+    //     for (let i = 0; i < cells.length; i++) {
+    //         let {ri, ci, cell} = cells[i];
+    //         this.setCell(ri, ci, cell, 'all');
+    //     }
+    // }
+
     insertColumn(sci, n = 1) {
-        let cells = [];
         this.each((ri, row) => {
             const rndata = {};
             this.eachCells(ri, (ci, cell) => {
                 let nci = parseInt(ci, 10);
                 if (nci >= sci) {
                     nci += n;
-
-                    if (isHave(cell) && isHave(cell.formulas) && this.isFormula(cell.formulas)) {
-                        let {bad, result, enter} = this.getCellTextByShift(splitStr(cell.formulas), n, 0, true, true, sci, false);
-                        if (enter && !bad) {
-                            cells.push({ri: ri, ci: nci, cell: {text: result, formulas: result}});
-                        }
-                    }
                 }
                 rndata[nci] = cell;
             });
             row.cells = rndata;
         });
-
-        for (let i = 0; i < cells.length; i++) {
-            let {ri, ci, cell} = cells[i];
-            this.setCell(ri, ci, cell, 'all');
-        }
     }
 
     deleteColumn(sci, eci) {

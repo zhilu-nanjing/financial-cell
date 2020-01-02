@@ -99,4 +99,6 @@ describe('calc', () => {
         assert.equal(cell2.text, '0');
         assert.equal(cell2.formula, '=A1');
     });
+
+
 });

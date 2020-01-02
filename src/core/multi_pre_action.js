@@ -15,7 +15,7 @@ export default class MultiPreAction {
         this.data = data;
     }
 
-    addStep({type, action, ri, ci, expr, cellRange, cells, height, width, property, value, oldData}, {oldCell, newCell, oldMergesData, newMergesData, oldStep}) {
+    addStep({type, action, ri, ci, expr, cellRange, cells, height, width, property, value, oldData}, {oldCell, len, newCell, oldMergesData, newMergesData, oldStep}) {
         let preAction = "";
 
         if(type === 1) {
@@ -30,10 +30,10 @@ export default class MultiPreAction {
                 action, cellRange,  oldCell, newCell: cells
             }, this.data);
             operationItem.call(this, preAction);
-        } else if(type === 13) {
+        } else if(type === 13 || type === 14) {
             preAction = new PreAction({
                 type, oldData, newData: oldStep.oldData,
-                action,
+                action, property, len, ri, ci
             }, this.data);
             operationItem.call(this, preAction);
         } else if(type === 3) {
@@ -114,10 +114,17 @@ export default class MultiPreAction {
             str = '插入单元格';
 
             return {
-                action: str,
+                action: str, property, ri, ci,
                 type, oldData: this.data.getData(),
             };
-        }else if(type === 11) {
+        } else if(type === 14) {
+            str = '删除单元格';
+
+            return {
+                action: str, property,   ri, ci,
+                type, oldData: this.data.getData(),
+            };
+        } else if(type === 11) {
             if (property === 'font-bold' || property === 'font-italic'
                 || property === 'font-name' || property === 'font-size' || property === 'color') {
                 str = "字体";

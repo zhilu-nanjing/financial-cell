@@ -5,7 +5,7 @@ import {expr2xy, xy2expr} from "../utils/alphabet";
 function getCellDepend(cells) {
     let arr = [];
     for (let i = 0; i < cells.length; i++) {
-        if(isHave(cells[i]) && isHave(cells[i].expr)) {
+        if (isHave(cells[i]) && isHave(cells[i].expr)) {
             arr.push(cells[i].expr);
         }
 
@@ -13,7 +13,7 @@ function getCellDepend(cells) {
             arr.push(...cells[i].cell.depend);
         }
 
-        if(isHave(cells[i]) && isHave(cells[i].cell) && isHave(cells[i].cell.multivalueRefsCell)) {
+        if (isHave(cells[i]) && isHave(cells[i].cell) && isHave(cells[i].cell.multivalueRefsCell)) {
             arr.push(cells[i].cell.multivalueRefsCell);
         }
     }
@@ -21,8 +21,36 @@ function getCellDepend(cells) {
     return arr;
 }
 
+function getDependOfDepend(dependList, changeArr) {
+    if (!dependList || dependList.length <= 0) {
+        return {
+            "status": false,
+        };
+    }
+    let {data} = this;
+    let status = false;
+
+    for (let i = 0; i < dependList.length; i++) {
+        let depend = dependList[i];
+
+        let [ci, ri] = expr2xy(depend);
+        let cell = data.rows.getCell(ri, ci);
+        if (isHave(cell) && isHave(cell['depend']) && cell['depend'].length > 0) {
+            for(let j = 0; j < cell['depend'].length; j++) {
+                if(changeArr.indexOf(cell['depend'][j]) === -1) {
+                    changeArr.push(cell['depend'][j]);
+                    status = true;
+                }
+            }
+        }
+    }
+    return {
+        "state": status,
+    }
+}
+
 export default class PreAction {
-    constructor({type = -1, action = "",  ri = -1, ci = -1, oldData = "", newData = "", expr = "", oldStep = "", cellRange = "", cells = {}, height = -1, width = -1, oldCell = {}, newCell = {}, newMergesData = "", oldMergesData = "", property = "", value = ""}, data) {
+    constructor({type = -1, action = "", ri = -1, ci = -1, oldData = "", len = -1, newData = "", expr = "", oldStep = "", cellRange = "", cells = {}, height = -1, width = -1, oldCell = {}, newCell = {}, newMergesData = "", oldMergesData = "", property = "", value = ""}, data) {
         this.type = type;
         this.action = action;
         this.ri = ri;
@@ -32,6 +60,7 @@ export default class PreAction {
         this.cells = cells;
         this.height = height;
         this.width = width;
+        this.len = len;
         this.oldCell = oldCell;
         this.newCell = newCell; // 一个Object记录，更新的值
         this.oldMergesData = oldMergesData;
@@ -48,11 +77,11 @@ export default class PreAction {
      * 获取所有需要计算的单元格列表
      * @returns {Array}
      */
-    isRefresh(){ // jobs; 我加的，判定是否是全量更新
+    isRefresh() { // jobs; 我加的，判定是否是全量更新
         return this.type === 999;
     }
 
-    isDelete(){
+    isDelete() {
         return this.type === 2 // jobs; 我加的，判定是否是删除
     }
 
@@ -65,6 +94,10 @@ export default class PreAction {
             changeArr.push(xy2expr(ci, ri));
         }
         changeArr = distinct(changeArr);
+        let args = getDependOfDepend.call(this, changeArr, changeArr);
+        while (args['status']) {
+            args = getDependOfDepend.call(this, args['data'], changeArr);
+        }
         return changeArr;
     }
 
@@ -85,7 +118,7 @@ export default class PreAction {
                 data.rows.setCellText(ri, ci, cell, 'cell');
             }
 
-        } else if(type === 13) {
+        } else if (type === 13 || type === 14) {
             let {oldData, newData} = this;
             let _data = "";
             if (isRedo === 1) {
@@ -95,7 +128,7 @@ export default class PreAction {
             }
 
             data.setData(_data);
-        } else if (type === 2 || type === 5 || type === 6 || type === 11 || type === 12) {
+        }  else if (type === 2 || type === 5 || type === 6 || type === 11 || type === 12) {
             let {newCell, oldCell, oldMergesData, newMergesData, cellRange, property, value} = this;
             let _cells = "";
             if (isRedo === 1) {

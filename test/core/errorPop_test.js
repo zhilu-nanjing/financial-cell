@@ -1368,38 +1368,55 @@ describe('qq', () => {
         });
     });
 
-    describe(' insert/delete rows/cols ', () => {
-        it('  insert ', () => {
+    describe(' insert/delete rows/cols ', () => { // 具体数据可以在获取： /test/core/runTest/html/test1.html
+        it('  insert ', () => { //在行/列插入
+            data.calc.calculateRows(data.rows, null);
+
             data.rows.setData({
                 1: {
                     cells: {
                         0: {"text": "A2", "formulas": "A2"},
-                        1: {"text": "=A3", "formulas": "=A3"},
+                        1: {"text": "=A3", "formulas": "=A3", },
+                        // 1: {"text": "=A3", "formulas": "=A3", "merge": [1, 0]},
                         2: {"text": "=A1:A2", "formulas": "=A1:A2"},
                         3: {"text": "=$A3:A5", "formulas": "=$A3:A5"},
                         4: {"text": "=abs(A4)", "formulas": "=abs(A4)"},
                         5: {"text": "=abs($A4)", "formulas": "=abs($A4)"},
+                        6: {"text": '=add("A1" + A3:A5 + $A2:A$3)', "formulas": '=add("A1" + A3:A5 + $A2:A$3)', },
+                        // 6: {"text": '=add("A1" + A3:A5 + $A2:A$3)', "formulas": '=add("A1" + A3:A5 + $A2:A$3)', "merge": [0, 2]},
                     }
                 },
             });
+            // data.merges.setData([
+            //     'B2:B3', 'G2:I2'
+            // ]);
 
-            data.rows.insert(0, 1);
+            data.insert('row', 1, 0); // 在第一行插入一行
+            console.log(data.changeDataForCalc);
+            data.calc.calculateRows(data.rows, data.rows._);
+
+            assert.equal(data.rows.getCell(2, 0).formulas, "A2");
             assert.equal(data.rows.getCell(2, 1).formulas, "=A4");
             assert.equal(data.rows.getCell(2, 2).formulas, "=A2:A3");
             assert.equal(data.rows.getCell(2, 3).formulas, "=$A4:A6");
             assert.equal(data.rows.getCell(2, 4).formulas, "=ABS(A5)");
             assert.equal(data.rows.getCell(2, 5).formulas, "=ABS($A5)");
+            assert.equal(data.rows.getCell(2, 6).formulas, '=add("A1" + A3:A5 + $A2:A$3)');
 
-            data.rows.insertColumn(0, 1);
+            data.insert('column', 1, 0);   // 在第一列插入一列
+            data.calc.calculateRows(data.rows, data.changeDataForCalc);
             assert.equal(data.rows.getCell(2, 1).formulas, "A2");
             assert.equal(data.rows.getCell(2, 2).formulas, "=B4");
             assert.equal(data.rows.getCell(2, 3).formulas, "=B2:B3");
             assert.equal(data.rows.getCell(2, 4).formulas, "=$B4:B6");
             assert.equal(data.rows.getCell(2, 5).formulas, "=ABS(B5)");
             assert.equal(data.rows.getCell(2, 6).formulas, "=ABS($B5)");
+            assert.equal(data.rows.getCell(2, 7).formulas, '=add("A1" + B3:B5 + $B2:B$3)');
         });
 
-        it('  insert  ', function () {
+        it('  insert2  ', function () {
+            data.calc.calculateRows(data.rows, null);
+
             data.rows.setData({
                 4: {
                     cells: {
@@ -1415,17 +1432,63 @@ describe('qq', () => {
             });
             data.selector.range.sri = 2;
             data.selector.range.sci = 1;
-            data.insert('row', 1);
+            data.insert('row', 1);      // 在第三行插入一行
+            data.calc.calculateRows(data.rows, data.changeDataForCalc["data"]);
+            assert.equal(data.rows.getCell(5, 0).formulas, 'A2');
             assert.equal(data.rows.getCell(5, 1).formulas, '=A4');
             assert.equal(data.rows.getCell(5, 2).formulas, '=A1:A2');
             assert.equal(data.rows.getCell(5, 3).formulas, '=$A4:A6');
             assert.equal(data.rows.getCell(5, 4).formulas, '=ABS(A5)');
             assert.equal(data.rows.getCell(5, 5).formulas, '=ABS($A5)');
+            assert.equal(data.rows.getCell(5, 6).formulas, '=ABS($A5)');
 
-            data.insert('column', 1);
+            data.insert('column', 1);  // 在第二列插入一列
+            data.calc.calculateRows(data.rows, data.changeDataForCalc["data"]);
+            assert.equal(data.rows.getCell(5, 0).formulas, 'A2');
+            assert.equal(data.rows.getCell(5, 1).formulas, '');
             assert.equal(data.rows.getCell(5, 2).formulas, '=A4');
             assert.equal(data.rows.getCell(5, 3).formulas, '=A1:A2');
+            assert.equal(data.rows.getCell(5, 4).formulas, '=$A4:A6');
+            assert.equal(data.rows.getCell(5, 5).formulas, '=ABS(A5)');
+            assert.equal(data.rows.getCell(5, 6).formulas, '=ABS($A5)');
             assert.equal(data.rows.getCell(5, 7).formulas, '=ABS($D5)');
+        });
+
+        it(' delete ', function () {
+            data.calc.calculateRows(data.rows, null);
+
+            data.rows.setData({
+                1: {
+                    cells: {
+                        0: {"text": "A2", "formulas": "A2", "style": 3},
+                        1: {"text": "=A3", "formulas": "=A3"},
+                        2: {"text": "=A1:A2", "formulas": "=A1:A2"},
+                        3: {"text": "=$A3:A5", "formulas": "=$A3:A5", "style": 1},
+                        4: {"text": "=abs(A4)", "formulas": "=abs(A4)"},
+                        5: {"text": "=abs($A4)", "formulas": "=abs($A4)"},
+                        6: {"text": '=add("A1" + A3:A5 + $A2:A$3)', "formulas": '=add("A1" + A3:A5 + $A2:A$3)', },
+                    }
+                },
+            });
+            data.delete('row', 1, 0); // 在第一行删除一行
+            data.calc.calculateRows(data.rows, data.changeDataForCalc);
+
+            assert.equal(data.rows.getCell(0, 0).formulas, "A2");
+            assert.equal(data.rows.getCell(0, 1).formulas, "=A2");
+            assert.equal(data.rows.getCell(0, 2).formulas, "=A1:A1");
+            assert.equal(data.rows.getCell(0, 3).formulas, "=$A2:A4");
+            assert.equal(data.rows.getCell(0, 4).formulas, "=ABS(A3)");
+            assert.equal(data.rows.getCell(0, 5).formulas, "=ABS($A3)");
+            assert.equal(data.rows.getCell(0, 6).formulas, '=add("A1" + A2:A4 + $A1:A$2)');
+
+            data.delete('column', 1, 0); // 在第一列删除一列
+            data.calc.calculateRows(data.rows, data.changeDataForCalc);
+            assert.equal(data.rows.getCell(0, 0).formulas, "=#REF!");
+            assert.equal(data.rows.getCell(0, 1).formulas, "=#REF!");
+            assert.equal(data.rows.getCell(0, 2).formulas, "=#REF!");
+            assert.equal(data.rows.getCell(0, 3).formulas, "=ABS(#REF!)");
+            assert.equal(data.rows.getCell(0, 4).formulas, "=ABS(#REF!)");
+            assert.equal(data.rows.getCell(0, 5).formulas, '=add("A1" +#REF! +#REF!)');
         });
     });
 
