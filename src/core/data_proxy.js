@@ -502,6 +502,13 @@ function getCellRowByY(y, scrollOffsety) {
     return {ri: ri - 1, top, height};
 }
 
+function textWrapHeight(ri, ci) {
+    let {rows} = this;
+    let height = rows.getHeight(ri);
+
+    console.log(rows.get(ri));
+}
+
 function getCellColByX(x, scrollOffsetx) {
     const {cols} = this;
     const fsw = this.freezeTotalWidth();
@@ -1040,7 +1047,12 @@ export default class DataProxy {
                         }
                         cstyle[property] = value;
                         cell.style = this.addStyle(cstyle);
-                    } else if (property === 'strike' || property === 'textwrap'
+                    } else if ( property === 'textwrap') {
+                        textWrapHeight.call(this, ri, ci);
+
+                        cstyle[property] = value;
+                        cell.style = this.addStyle(cstyle);
+                    } else if (property === 'strike'
                         || property === 'underline'
                         || property === 'align' || property === 'valign'
                         || property === 'color' || property === 'bgcolor') {
@@ -1119,7 +1131,7 @@ export default class DataProxy {
             ci,
             cellRange: cellRange,
         });
-        multiPreAction.addStep(step, {oldCell, oldMergesData, newMergesData: this.merges.getData(), oldStep,  len,});
+        multiPreAction.addStep(step, {oldCell, oldMergesData, newMergesData: this.merges.getData(), oldStep, len,});
         return {
             "state": true
         }
@@ -1642,9 +1654,7 @@ export default class DataProxy {
             } else if (state === 'style') {
                 rows.setCellText(ri, ci, {text, style}, 'style');
             } else {
-                let cell = new Cell();
-                cell.setCell({'text': text, 'formulas': text});
-                rows.setCell(ri, ci, cell);
+                rows.setCellText(ri, ci, {text});
                 // rows.
             }
             // 不应该没打开一个单元格就 change一次
