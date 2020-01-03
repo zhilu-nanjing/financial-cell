@@ -1,41 +1,39 @@
 import {rootPath} from "./util";
-
-let fs = require('fs');
-let url = require('url');
-let path = require("path");
-let http = require('http');
+const express = require('express');
+const app =  express();
+const bodyParser = require("body-parser");
+const fs = require('fs');
 const puppeteer = require('/Users/wen/Downloads/incubator-echarts/node_modules/puppeteer');
 
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 
-http.createServer(function (req, res) {
-    let pathobj = url.parse(req.url, true)
-    res.setHeader("Access-Control-Allow-Origin", "*"); // 设置可访问的源
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-    res.setHeader("content-type", "application/json");
-    let data = '';
-    console.log(req.url)
-
-    req.on('data', function (chunk) {
-        data = chunk;
-    });
-
-    req.on('end', async function () {
-
-            switch (req.url) {
-                case '/':
-                    await runAction();
-                    res.write("爬虫成功");
-                    break;
-                case "/save":
-                    console.log(data, JSON.parse(data));
-                    save(data, "test.html");
-                    break;
-            }
+app.use(bodyParser.json({limit : "2100000kb"}));
 
 
-        res.end();
-    });
-}).listen(1001);
+
+app.use(bodyParser.json());
+//设置跨域访问
+app.all('*',function(req,res,next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Methods', '*');
+    res.header('Content-Type', 'application/json;charset=utf-8');
+    next();
+})
+
+app.post("/save", (req, res) => {
+    console.log(req.body);
+    save(req.body['data'], "test.html");
+});
+
+app.get('/', async (req, res) => {
+    await runAction();
+});
+
+app.listen(1001);
+
 
 async function runAction() {
     const browser = await puppeteer.launch({headless: false, defaultViewport: {width: 1500, height: 1500}});
@@ -58,12 +56,9 @@ async function runAction() {
             tmpNode.appendChild(tableDom[0]);
             console.log(tmpNode, tableDom);
             str = tmpNode.innerHTML;
-            console.log({
-                data: JSON.stringify(str)
-            });
 
-            axios.post("http://127.0.0.1:1001/save", {
-                data: JSON.stringify(str)
+            axios.post("http://127.0.0.1:1001/save",  {
+                data: str
             });
         }
     });
